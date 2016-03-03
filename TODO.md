@@ -1,2 +1,2 @@
-- TypedDataSet ? DataSet.row method ?
+- TypedDataSet ? DataSet.row method?
 - Final round of documentation before release
