@@ -1,4 +1,4 @@
 language: java
-script: mvn test
+script: mvn -Prelease package
 jdk:
   - oraclejdk8
