@@ -103,9 +103,7 @@ public class Delta {
    * @throws DeltaAssertionError in case the row is still defined.
    *          
    */
-  @SafeVarargs
-  public final Delta before(Object... row) 
-      throws DeltaAssertionError {
+  public Delta before(Object... row) throws DeltaAssertionError {
     before(new RowImpl(row));
     return this;
   }
@@ -117,9 +115,7 @@ public class Delta {
    * @return The delta object instance (for chained calls).
    * @throws DeltaAssertionError in case the new row is not defined.
    */
-  @SafeVarargs
-  public final Delta after(Object... row)
-      throws DeltaAssertionError {
+  public Delta after(Object... row) throws DeltaAssertionError {
     after(new RowImpl(row));
     return this;
   }
