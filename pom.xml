@@ -26,6 +26,14 @@
 		<developerConnection>scm:git:git@github.com:edrdo/jdbdt.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/edrdo/jdbdt/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>Travis</system>
+		<url>https://travis-ci.org/edrdo/jdbdt</url>
+	</ciManagement>
 	<developers>
 		<developer>
 			<id>edrdo</id>
