@@ -39,7 +39,7 @@ public final class TypedDelta<T> extends Delta {
    * @throws DeltaAssertionError in case one of the rows
    *         is still defined.
    */
-  public final TypedDelta<T> before(T row) throws DeltaAssertionError {
+  public TypedDelta<T> before(T row) throws DeltaAssertionError {
     super.before(applyConv(row));
     return this;
   }
@@ -66,7 +66,7 @@ public final class TypedDelta<T> extends Delta {
    * @throws DeltaAssertionError in case one of the rows
    *         is still defined   
    */
-  public final TypedDelta<T> before(Collection<? extends T> rows) 
+  public TypedDelta<T> before(Collection<? extends T> rows) 
   throws DeltaAssertionError {
     for (T r : rows) {
       super.before(applyConv(r));
@@ -82,7 +82,7 @@ public final class TypedDelta<T> extends Delta {
    * @throws DeltaAssertionError in case one of the rows
    *         is still not defined     
    */
-  public final TypedDelta<T> after(Collection<? extends T> rows) 
+  public TypedDelta<T> after(Collection<? extends T> rows) 
   throws DeltaAssertionError {
     for (T v : rows) {
       super.after(applyConv(v));
