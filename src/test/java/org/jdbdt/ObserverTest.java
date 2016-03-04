@@ -6,7 +6,7 @@ import static org.jdbdt.JDBDT.observe;
 import static org.jdbdt.JDBDT.logErrorsTo;
 import static org.jdbdt.JDBDT.selectFrom;
 import static org.jdbdt.JDBDT.table;
-import static org.jdbdt.JDBDT.verify;
+import static org.jdbdt.JDBDT.delta;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -69,7 +69,7 @@ public class ObserverTest extends DBTestCase {
   
   @Test
   public void testNoChanges() {
-    verify(theSUT).end();
+    delta(theSUT).end();
   }
   
   @Test
@@ -99,7 +99,7 @@ public class ObserverTest extends DBTestCase {
   public void testSuccessInsertCase() throws SQLException {
     User u = new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01"));
     getDAO().doInsert(u);
-    verify(theSUT)
+    delta(theSUT)
       .after(u.getLogin(), u.getName(), u.getPassword(), u.getCreated())
       .end();
   }
@@ -108,7 +108,7 @@ public class ObserverTest extends DBTestCase {
   public void testSuccessDeleteCase() throws SQLException {
     User u = getTestData(EXISTING_DATA_ID1);
     getDAO().doDelete(EXISTING_DATA_ID1);
-    verify(theSUT)
+    delta(theSUT)
       .before(EXISTING_DATA_ID1, u.getName(), u.getPassword(), u.getCreated())
       .end();
   }
@@ -118,7 +118,7 @@ public class ObserverTest extends DBTestCase {
     User u1 = getDAO().query(EXISTING_DATA_ID1);
     User u2 = new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-11-11"));
     getDAO().doUpdate(u2);
-    verify(theSUT)
+    delta(theSUT)
       .before(EXISTING_DATA_ID1, u1.getName(), u1.getPassword(), u1.getCreated())
       .after(EXISTING_DATA_ID1, u2.getName(), u2.getPassword(), u2.getCreated())
       .end();

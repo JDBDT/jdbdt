@@ -301,7 +301,7 @@ public final class JDBDT {
    * @param obs Observer.
    * @return A new {@link Delta} object.
    */
-  public static Delta verify(Observer obs) {
+  public static Delta delta(Observer obs) {
     return obs.getDelta();
   }
   
@@ -318,7 +318,7 @@ public final class JDBDT {
    * @param observer Observer.
    * @return A new {@link TypedDelta} object. 
    */
-  public static <T> TypedDelta<T> verify(TypedObserver<T> observer) {
+  public static <T> TypedDelta<T> delta(TypedObserver<T> observer) {
     return observer.getDelta();
   }
 
@@ -327,7 +327,7 @@ public final class JDBDT {
    * 
    * <p>
    * A call to this method is shorthand for
-   * <code>verify(obs).end()</code>.
+   * <code>delta(obs).end()</code>.
    * </p>
    * 
    * @param obs Observer.
@@ -338,7 +338,7 @@ public final class JDBDT {
    * @see Delta#end()
    */
   public static void assertNoChanges(Observer obs) throws DeltaAssertionError {
-    verify(obs).end(); 
+    delta(obs).end(); 
   }
   
   /**
@@ -347,7 +347,7 @@ public final class JDBDT {
    * 
    * <p>
    * A call to this method is shorthand for
-   * <code>verify(obs).before(ds).end()</code>.
+   * <code>delta(obs).before(ds).end()</code>.
    * </p>
    * 
    * @param obs Observer.
@@ -359,7 +359,7 @@ public final class JDBDT {
    * @see Delta#end()
    */
   public static void assertDeleted(Observer obs, DataSet ds) throws DeltaAssertionError {
-    verify(obs).before(ds).end(); 
+    delta(obs).before(ds).end(); 
   }
   
   /**
@@ -368,7 +368,7 @@ public final class JDBDT {
    * 
    * <p>
    * A call to this method is shorthand for
-   * <code>verify(obs).after(ds).end()</code>.
+   * <code>delta(obs).after(ds).end()</code>.
    * </p>
    * 
    * @param obs Observer.
@@ -380,7 +380,7 @@ public final class JDBDT {
    * @see Delta#end()
    */
   public static void assertInserted(Observer obs, DataSet ds) throws DeltaAssertionError {
-    verify(obs).after(ds).end(); 
+    delta(obs).after(ds).end(); 
   }
   
   /**
@@ -389,7 +389,7 @@ public final class JDBDT {
    * 
    * <p>
    * A call to this method is shorthand for
-   * <code>verify(obs).after(a).before(b).end()</code>.
+   * <code>delta(obs).after(a).before(b).end()</code>.
    * </p>
    * 
    * @param obs Observer.
@@ -403,7 +403,7 @@ public final class JDBDT {
    * @see Delta#end()
    */
   public static void assertChanged(Observer obs, DataSet a, DataSet b) throws DeltaAssertionError {
-    verify(obs).after(a).before(b).end(); 
+    delta(obs).after(a).before(b).end(); 
   }
   
   
@@ -412,7 +412,7 @@ public final class JDBDT {
    * 
    * <p>
    * A call to this method is shorthand for
-   * <code>verify(obs).end()</code>.
+   * <code>delta(obs).end()</code>.
    * </p>
    * 
    * @param obs Typed observer.
@@ -420,7 +420,7 @@ public final class JDBDT {
    * @see TypedDelta#end()
    */
   public static void assertNoChanges(TypedObserver<?> obs) {
-    verify(obs).end(); 
+    delta(obs).end(); 
   }
 
   /**

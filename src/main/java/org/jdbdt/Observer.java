@@ -143,8 +143,8 @@ public class Observer {
    * 
    * <p>
    * Unless you wish to use the observer in a specific context,
-   * you should use the <code>verify(obsInstance)</code>
-   * idiom (see {@link JDBDT#verify(Observer)}) 
+   * you should use the <code>delta(obsInstance)</code>
+   * idiom (see {@link JDBDT#delta(Observer)}) 
    * instead of calling this method directly.
    * </p>
    * 

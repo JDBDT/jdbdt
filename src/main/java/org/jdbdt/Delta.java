@@ -6,7 +6,7 @@ package org.jdbdt;
  * 
  * <p>
  * A delta object is derived from an {@link Observer} instance
- * with a call to {@link JDBDT#verify(Observer)}. 
+ * with a call to {@link JDBDT#delta(Observer)}. 
  * The delta will reflect the changes to database state
  * that the observer relates to (a table or a query).
  * These changes may be verified using a sequence of
@@ -15,7 +15,7 @@ package org.jdbdt;
  * followed by a final call to {@link #end()}.
  * </p>
  * 
- * @see JDBDT#verify(Observer)
+ * @see JDBDT#delta(Observer)
  * @see TypedDelta
  * @since 0.1
  * 

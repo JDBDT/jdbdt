@@ -9,8 +9,8 @@ package org.jdbdt;
  * 
  * @see Delta
  * @see TypedDelta
- * @see JDBDT#verify(Observer)
- * @see JDBDT#verify(TypedObserver)
+ * @see JDBDT#delta(Observer)
+ * @see JDBDT#delta(TypedObserver)
  * 
  * @since 0.1
  */

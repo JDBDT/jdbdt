@@ -64,7 +64,7 @@ public class IntegrationTest {
   public void testUserInsertion() throws SQLException {
     User u = new User("new user", "Name", "pass", Date.valueOf("2015-01-01"));
     sut.doInsert(u);
-    verify(obs).after(u);
+    delta(obs).after(u);
   }
 
   @Test
@@ -83,7 +83,7 @@ public class IntegrationTest {
   public void testUserRemoval() throws SQLException {
     int n = sut.doDelete(EXISTING_USER.getLogin());
     assertEquals(1, n);
-    verify(obs).before(EXISTING_USER);
+    delta(obs).before(EXISTING_USER);
   }
 
   @Test
@@ -99,9 +99,10 @@ public class IntegrationTest {
     u.setPassword("new password");
     int n = sut.doUpdate(u);
     assertEquals(1, n);
-    verify(obs)
+    delta(obs)
       .before(EXISTING_USER)
-      .after(u);
+      .after(u)
+      .end();
   }
   @Test
   public void testNonUserUpdate() throws SQLException {
