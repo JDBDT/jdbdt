@@ -7,7 +7,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @SuppressWarnings("javadoc")
 @RunWith(Suite.class)
-@SuiteClasses({ MemDBTest.class })
+@SuiteClasses({ MemDBTest.class, FileDBTest.class })
 public class H2Suite {
   @BeforeClass 
   public static void setup() throws ClassNotFoundException { 
