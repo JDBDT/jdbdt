@@ -68,19 +68,19 @@ public final class TypedTableQuery<T> extends TableQuery {
   }
 
   @Override
-  public final TypedTableQuery<T> where(String clause) {
+  public TypedTableQuery<T> where(String clause) {
     super.where(clause);
     return this;
   }
 
   @Override
-  public final TypedTableQuery<T>  groupBy(String... fields) {
+  public TypedTableQuery<T>  groupBy(String... fields) {
     super.groupBy(fields);
     return this;
   }
 
   @Override
-  public final TypedTableQuery<T>  having(String clause) {
+  public TypedTableQuery<T>  having(String clause) {
     super.having(clause);
     return this;
   }
