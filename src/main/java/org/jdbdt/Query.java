@@ -5,51 +5,21 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * Base class for database queries.
+ * Abstract parent class for database queries.
  * 
  * <p>
- * Instances of this type are created as follows:
- * <ul>
- * <li>
- * Table queries in untyped or typed form, ({@link TableQuery} and {@link TypedTableQuery})
+ * Concrete instance of this type, ({@link TableQuery} and {@link TypedTableQuery})
  * are created respectively through {@link JDBDT#selectFrom(Table)}
  * and {@link JDBDT#selectFrom(TypedTable)}. 
- * In principle, table queries should be suitable for most cases.
- * </li>
- * <li>
- * Direct instances of this class can be created
- * from custom SQL statements through {@link JDBDT#selectUsing(PreparedStatement)},
- * as shown in the example below.
- * </li>
- * <li> 
- * A {@link TypedCustomQuery} for custom SQL statements is created through 
- * {@link JDBDT#selectUsing(PreparedStatement,Conversion)}.
- * </li>
- * </ul>
- * 
- * <p><b>Example - creation of untyped query from custom SQL statements</b></p>
- * <blockquote><pre>
- * import static org.jdbdt.JDBDT.*;
- * import org.jdbdt.Query;
- * import java.sql.Connection;
- * ...
- * Connection conn = ...;
- * String customSql = ...;
- * Query q = selectUsing(conn.prepareStament(customSql));
- * </pre></blockquote>
- * <p>For examples of "standard" table queries, check the documentation
- * of {@link TableQuery} and {@link TypedTableQuery}.
  * </p>
- * 
  * 
  * @see TableQuery
  * @see TypedTableQuery
- * @see TypedCustomQuery
  * 
  * @since 0.1
  *
  */
-public class Query {
+public abstract class Query {
 
   /**
    * Compiled statement.
@@ -82,7 +52,7 @@ public class Query {
    * </p>
    * @return Compiled statement for the query.
    */
-  public PreparedStatement getStatement() {
+  PreparedStatement getStatement() {
     checkCompiled();
     return compiledStmt;
   }

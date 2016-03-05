@@ -40,9 +40,7 @@ package org.jdbdt;
  * 
  * @since 0.1
  */
-public final class TypedTableQuery<T>
-extends TableQuery 
-implements TypedQuery<T> {
+public final class TypedTableQuery<T> extends TableQuery {
 
   /**
    * Constructs a new type query.
@@ -65,8 +63,7 @@ implements TypedQuery<T> {
    * Get conversion function
    * @return Conversion function.
    */
-  @Override
-  public Conversion<T> conversion() {
+  Conversion<T> conversion() {
     return getTable().conversion();
   }
 

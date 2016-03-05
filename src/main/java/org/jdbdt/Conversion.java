@@ -7,9 +7,7 @@ package org.jdbdt;
  * <p>
  * Implementations of this interface are used to define
  * {@link TypedTable} instances through 
- * the {@link JDBDT#table(String,Conversion)}, and
- * custom queries through 
- * {@link JDBDT#selectUsing(java.sql.PreparedStatement, Conversion)}.
+ * the {@link JDBDT#table(String,Conversion)} method.
  * </p>
  * 
  * <p>
@@ -29,7 +27,6 @@ package org.jdbdt;
  * 
  * @see TypedTable
  * @see JDBDT#table(String,Conversion)
- * @see JDBDT#selectUsing(java.sql.PreparedStatement, Conversion)
  * 
  * @since 0.1
  */

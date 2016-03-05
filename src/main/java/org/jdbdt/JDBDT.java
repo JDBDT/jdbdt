@@ -86,26 +86,6 @@ public final class JDBDT {
   public static <T> TypedTableQuery<T> selectFrom(TypedTable<T> t) {
     return new TypedTableQuery<>(t); 
   }
-  
-  /**
-   * Create query from a previously prepared statement.
-   * @param stmt Prepared statement.
-   * @return A new {@link Query} object.
-   */
-  public static Query selectUsing(PreparedStatement stmt) {
-    return new Query(stmt); 
-  }
-  
-  /**
-   * Create typed query from a previously prepared statement.
-   * @param <T> Type of objects.
-   * @param stmt Prepared statement.
-   * @param conv Object conversion function.
-   * @return A new {@link TypedQuery} object.
-   */
-  public static <T> TypedQuery<T> selectUsing(PreparedStatement stmt, Conversion<T> conv) {
-    return new TypedCustomQuery<T>(stmt, conv);
-  }
 
   /**
    * Create an observer for the given table.
