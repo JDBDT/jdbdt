@@ -128,6 +128,9 @@
 				<version>2.18</version>
 				<configuration>
 					<workingDirectory>${project.basedir}</workingDirectory>
+					<includes>
+						<include>**/AllTests.java</include>
+					</includes>
 				</configuration>
 			</plugin>
 			<plugin>
