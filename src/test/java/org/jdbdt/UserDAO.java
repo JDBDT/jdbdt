@@ -29,7 +29,7 @@ public class UserDAO {
     } catch(SQLException e) { }
     stmts[1] = Op.CREATE.compile(c);
     stmts[1].execute();
-    for (int i = 1; i < ops.length; i++) {
+    for (int i = 2; i < ops.length; i++) {
       stmts[i] = ops[i].compile(c);
     }
   }
