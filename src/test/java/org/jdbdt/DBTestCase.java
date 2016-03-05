@@ -18,15 +18,13 @@ import org.junit.BeforeClass;
 @SuppressWarnings("javadoc")
 public class DBTestCase {
 
-  private static final String DB_URL = 
-      "jdbc:hsqldb:mem:jdbdt-test;shutdown=true";
-
   private static Connection gConn;
   private static UserDAO gDAO;
 
   @BeforeClass
   public static void setupDB() throws Exception {
-    gConn = DriverManager.getConnection(DB_URL);
+    String dbURL = System.getProperty(DBEngineTestSuite.DB_URL_PROP);
+    gConn = DriverManager.getConnection(dbURL);
     gConn.setAutoCommit(true);
     gDAO = new UserDAO(getConnection());
   }
@@ -65,17 +63,6 @@ public class DBTestCase {
   
   protected static final String EXISTING_DATA_ID3 =
       INITIAL_DATA[INITIAL_DATA.length-1].getLogin();
-
-
-  
-  static {
-    try {
-      Class.forName("org.hsqldb.jdbcDriver");
-    } catch(Throwable e) {
-      throw new Error(e);
-    }
-  }
-  
  
   protected static User getTestData(String id) {
     for (User u : INITIAL_DATA) {
