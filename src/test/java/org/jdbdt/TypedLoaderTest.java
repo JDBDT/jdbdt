@@ -7,7 +7,6 @@ import static org.junit.Assert.fail;
 
 import java.sql.Date;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Arrays;
 
 import org.junit.BeforeClass;
@@ -73,9 +72,9 @@ public class TypedLoaderTest extends DBTestCase {
   public void testInsert4() throws SQLException {
     try {
       insertInto(userTable).row(getTestData(EXISTING_DATA_ID1));
-      fail("expected " + SQLIntegrityConstraintViolationException.class);
+      fail("expected " + SQLException.class);
     } 
-    catch(SQLIntegrityConstraintViolationException e) {}
+    catch(SQLException e) {}
   }
   
   @Test 
@@ -85,9 +84,9 @@ public class TypedLoaderTest extends DBTestCase {
       insertInto(userTable)
          .row(u)
          .row(getTestData(EXISTING_DATA_ID1));
-      fail("expected " + SQLIntegrityConstraintViolationException.class);
+      fail("expected " + SQLException.class);
     } 
-    catch(SQLIntegrityConstraintViolationException e) { }
+    catch(SQLException e) { }
     assertEquals(u, getDAO().query(u.getLogin()));
   }
   
