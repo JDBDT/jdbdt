@@ -7,7 +7,7 @@
 	<url>http://jdbdt.org/</url>
 	<groupId>org.jdbdt</groupId>
 	<artifactId>jdbdt</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<organization>
 		<name>JDBDT</name>

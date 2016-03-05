@@ -28,7 +28,7 @@ public final class JDBDT {
   /**
    * Version identifier.
    */
-  private static final String VERSION = "0.1";
+  private static final String VERSION = "0.1.0-SNAPSHOT";
   
   /**
    * Get JDBDT version.
