@@ -60,21 +60,16 @@ public class Table {
    * Connection to which the table is bound.
    */
   private Connection connection = null;
-  
+
   /**
    * Selection query for the table (set once when table is bound).
    */
   private PreparedStatement queryStmt = null;
-  
+
   /**
    * Meta-data for query statement (set once when table is bound).
    */
   private MetaData metaData = null;
-  
-  /**
-   * Insertion statement for the table (set up on the first insertion).
-   */
-  private PreparedStatement insertStmt = null;
 
   /**
    * Constructor.
@@ -85,7 +80,7 @@ public class Table {
   Table(String tableName) {
     this.tableName = tableName;
   }
-  
+
   /**
    * Get table name.
    * @return The name of the table.
@@ -170,7 +165,7 @@ public class Table {
     checkIfBound();
     return connection;
   }
-  
+
   /**
    * Get query statement for the table.
    * @return The query statement for the table.
@@ -208,7 +203,7 @@ public class Table {
       throw new InvalidUsageException("Table is already bound to a connection.");
     }
   }
-  
+
   /**
    * Insert a row into the table.
    * @param row Row to insert.
@@ -220,17 +215,13 @@ public class Table {
     final int n = getColumnCount();
     if ( row.length != n) {
       throw new InvalidUsageException("Expected "+ n + 
-                                     " column values, got " +  row.length);  
+          " column values, got " +  row.length);  
     }
-    if (insertStmt == null) {
-      insertStmt = StatementPool.insert(this);
-    }
+    PreparedStatement  insertStmt = StatementPool.insert(this);
     for (int i = 1; i <= n; i++) {
       insertStmt.setObject(i, row[i-1]);
     }
     insertStmt.execute();
+    insertStmt.clearParameters();
   }
-
- 
-
 }
