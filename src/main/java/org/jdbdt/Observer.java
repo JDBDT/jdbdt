@@ -22,17 +22,17 @@ public class Observer {
    * Prepared statement for query.
    */
   private final PreparedStatement queryStmt;
-  
+
   /**
    * Query arguments.
    */
   private final Object[] queryArgs;
-  
+
   /**
    * Meta-data for statement.
    */
   private final MetaData metaData;
-  
+
   /**
    * Last observed state.
    */
@@ -55,7 +55,7 @@ public class Observer {
   Observer(Table t, RowSet initial) {
     this(t.getQuery(), t.getMetaData(), null, initial);
   }
-  
+
   /**
    * Constructs a observer for a given query.
    * If the given row set is non-null it will be assumed 
@@ -69,7 +69,7 @@ public class Observer {
   Observer(Query query, Object[] queryArgs, RowSet initial) {
     this(query.getStatement(), new MetaData(query.getStatement()), queryArgs, initial);
   }
-  
+
   /**
    * Constructs an observer for a given query.
    * @param queryStmt Query statement.
@@ -94,7 +94,7 @@ public class Observer {
   MetaData getMetaData() {
     return metaData;
   }
-  
+
   /**
    * Get error log (if set).
    * @return A log instance or null if logging is not enabled.
@@ -102,7 +102,7 @@ public class Observer {
   Log getErrorLog() {
     return errorLog;
   }
-  
+
   /**
    * Get row set for last observation.
    * @return The set of rows corresponding to the last executed query.
@@ -110,7 +110,7 @@ public class Observer {
   RowSet getLastObservation() {
     return lastObserved;
   }
-  
+
   /**
    * Enable assertion error logging.
    * 
@@ -156,7 +156,7 @@ public class Observer {
     Delta delta = new Delta(this, previous, lastObserved);
     return delta;
   }
-  
+
   /**
    * Refresh observation state, by re-executing the query.
    * yielding a new data set.
@@ -169,16 +169,21 @@ public class Observer {
         }
       }
       ResultSet rs = queryStmt.executeQuery();
-      int colCount = metaData.getColumnCount();
-      RowSet ds = new RowSet();  
-      while (rs.next()) {
-        Object[] data = new Object[colCount];
-        for (int i = 0; i < colCount; i++) {          
-          data[i] = rs.getObject(i+1);
+      try {
+        int colCount = metaData.getColumnCount();
+        RowSet ds = new RowSet();  
+        while (rs.next()) {
+          Object[] data = new Object[colCount];
+          for (int i = 0; i < colCount; i++) {          
+            data[i] = rs.getObject(i+1);
+          }
+          ds.addRow(new RowImpl(data));
         }
-        ds.addRow(new RowImpl(data));
+        lastObserved = ds;
       }
-      lastObserved = ds;
+      finally {
+        rs.close();
+      }
     } 
     catch(SQLException e) {
       throw new UnexpectedDatabaseException(e);
