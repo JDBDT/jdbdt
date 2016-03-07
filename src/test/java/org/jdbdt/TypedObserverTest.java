@@ -31,7 +31,8 @@ public class TypedObserverTest extends DBTestCase {
 
 
   @Rule public TestName testName = new TestName();
-
+  private static final boolean DEBUG = false;
+  
   private TypedObserver<User> theSUT;
 
   private static TypedTable<User> table;
@@ -68,7 +69,8 @@ public class TypedObserverTest extends DBTestCase {
     } else {
       theSUT = observe(selectFrom(table).where(whereClause), queryArgs);
     }
-    logErrorsTo(System.err);
+    if (DEBUG)
+      logErrorsTo(System.err);
   }
 
 

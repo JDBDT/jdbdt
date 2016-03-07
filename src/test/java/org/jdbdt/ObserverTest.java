@@ -40,6 +40,7 @@ public class ObserverTest extends DBTestCase {
   }
 
   @Rule public TestName testName = new TestName();
+  private static final boolean DEBUG = false;
   private static Table table;
   private Observer theSUT;
   
@@ -64,7 +65,8 @@ public class ObserverTest extends DBTestCase {
     } else {
       theSUT = observe(selectFrom(table).where(whereClause), queryArgs);
     }
-    logErrorsTo(System.err);
+    if (DEBUG) 
+      logErrorsTo(System.err);
   }
   
   @Test
