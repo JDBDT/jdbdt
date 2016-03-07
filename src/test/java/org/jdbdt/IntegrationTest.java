@@ -1,77 +1,74 @@
 package org.jdbdt;
 
-import static org.junit.Assert.*;
-import static org.jdbdt.JDBDT.*;
+import static org.jdbdt.JDBDT.assertNoChanges;
+import static org.jdbdt.JDBDT.deleteAll;
+import static org.jdbdt.JDBDT.delta;
+import static org.jdbdt.JDBDT.observe;
+import static org.jdbdt.JDBDT.table;
+import static org.jdbdt.JDBDT.truncate;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Arrays;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runners.MethodSorters;
 
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class IntegrationTest {
+public class IntegrationTest extends DBTestCase{
   
-  static final User[] INITIAL_DATA = {
-    new User("linus", "Linus Torvalds", "linux", Date.valueOf("2015-01-01")),
-    new User("steve", "Steve Hobs", "macos", Date.valueOf("2015-12-31")),
-    new User("bill", "Bill Gates", "windows", Date.valueOf("2015-09-12"))
-  };
-  static User EXISTING_USER = INITIAL_DATA[1];
-  static Connection conn;
+
   static TypedTable<User> table;
-  static UserDAO sut;
-
-  @BeforeClass
-  public static void globalSetup() throws Exception {
-    Class.forName("org.hsqldb.jdbcDriver");
-    conn = DriverManager.getConnection("jdbc:hsqldb:mem:jdbdt-intg-test;shutdown=true");
-    conn.setAutoCommit(true);
-    sut = new UserDAO(conn);
-    table = 
-        table(UserDAO.TABLE_NAME, DBTestCase.getConversion())
-        .columns(UserDAO.COLUMNS)
-        .boundTo(conn);
-  }
-
-  @AfterClass
-  public static void globalTeardown() throws SQLException {
-    conn.close();
-  }
-
+  
   TypedObserver<User> obs;
 
+  @BeforeClass
+  public static void globalSetup() throws SQLException {
+    table = table(UserDAO.TABLE_NAME, getConversion()).boundTo(getConnection());
+  }
   @Before
   public void setUp() throws Exception {
-    insertInto(table).rows(INITIAL_DATA);
     obs = observe(table);
   }
 
-  @After
-  public void tearDown() throws Exception {
+  @Test @Category(TruncateSupportEnabled.class)
+  public void testTruncate() throws Exception {
     truncate(table);
+    assertEquals(0, getDAO().count());
+  }
+
+  @Test @Category(TruncateSupportEnabled.class)
+  public void testDeleteAll() throws Exception {
+    deleteAll(table);
+    assertEquals(0, getDAO().count());
+  }
+  
+  @Test
+  public void testUserInsertion1() throws SQLException {
+    User u = new User("new user", "Name", "pass",Date.valueOf("2015-01-01"));
+    getDAO().doInsert(u);
+    delta(obs).after(u).end();
   }
 
   @Test
-  public void testUserInsertion() throws SQLException {
-    User u = new User("new user", "Name", "pass", Date.valueOf("2015-01-01"));
-    sut.doInsert(u);
-    delta(obs).after(u);
+  public void testUserInsertion2() throws SQLException {
+    User u = new User("new user", "Name", "pass", null);
+    getDAO().doInsert(u);
+    delta(obs).after(u).end();
   }
 
   @Test
   public void testInvalidUserInsertion()  {
     User u = new User(null, "Name", "pass", Date.valueOf("2015-01-01"));
     try {
-      sut.doInsert(u);
+      getDAO().doInsert(u);
       fail("Expected SQLException");
     }
     catch (SQLException e) {
@@ -81,34 +78,41 @@ public class IntegrationTest {
 
   @Test
   public void testUserRemoval() throws SQLException {
-    int n = sut.doDelete(EXISTING_USER.getLogin());
-    assertEquals(1, n);
-    delta(obs).before(EXISTING_USER);
+    User u1 = getDAO().query(EXISTING_DATA_ID1);
+    User u2 = getDAO().query(EXISTING_DATA_ID2);
+    User u3 = getDAO().query(EXISTING_DATA_ID3);
+
+    int n = getDAO().doDelete(EXISTING_DATA_ID1, 
+                         EXISTING_DATA_ID2, 
+                         EXISTING_DATA_ID3);
+    assertEquals(3, n);
+    delta(obs).before(Arrays.asList(u1, u2, u3)).end();
   }
 
   @Test
   public void testInvalidUserRemoval() throws SQLException {
-    int n = sut.doDelete("NoSuchUser");
+    int n = getDAO().doDelete("NoSuchUser");
     assertEquals(0, n);
     assertNoChanges(obs);
   }
 
   @Test
   public void testUserUdate() throws SQLException {
-    User u = EXISTING_USER.clone();
-    u.setPassword("new password");
-    int n = sut.doUpdate(u);
+    User u1 = getDAO().query(EXISTING_DATA_ID1);
+    User u2 = u1.clone();
+    u2.setPassword("new password");
+    int n = getDAO().doUpdate(u2);
     assertEquals(1, n);
     delta(obs)
-      .before(EXISTING_USER)
-      .after(u)
+      .before(u1)
+      .after(u2)
       .end();
   }
   @Test
   public void testNonUserUpdate() throws SQLException {
-    User u = EXISTING_USER.clone();
+    User u = getDAO().query(EXISTING_DATA_ID1).clone();
     u.setLogin(u.getLogin()+"#");
-    int n = sut.doUpdate(u);
+    int n = getDAO().doUpdate(u);
     assertEquals(0, n);
     assertNoChanges(obs);
   }
@@ -116,9 +120,9 @@ public class IntegrationTest {
   @Test
   public void testInvalidUserUpdate() {
     try {
-      User u = EXISTING_USER.clone();
+      User u = getDAO().query(EXISTING_DATA_ID1).clone();
       u.setPassword(null);
-      sut.doUpdate(u);
+      getDAO().doUpdate(u);
       fail("Expected " + SQLException.class);
     }
     catch (SQLException e) {
