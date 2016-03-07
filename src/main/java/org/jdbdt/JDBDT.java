@@ -521,6 +521,24 @@ public final class JDBDT {
   }
   
   /**
+   * Disable statement pooling.
+   * 
+   * <p>
+   * JDBDT uses an internal statement pool to re-use
+   * compiled SQL statements.
+   * The pooling scheme is enabled by default, but
+   * for some JDBC drivers (e.g. SQLite) re-using
+   * SQL statements may cause problems. 
+   * In those cases, pooling should be turned off
+   * explicitly using this method.
+   * </p> 
+   * 
+   */
+  public static void disableStatementPooling() {
+    StatementPool.disablePooling();
+  }
+  
+  /**
    * Create a log that is written to a file.
    * 
    * <p>
