@@ -18,9 +18,9 @@ import org.junit.runners.Suite.SuiteClasses;
   DataSetFillersTest.class,
   DataSetSequenceFillersTest.class,
   DataSetRandomFillersTest.class,
-  IntegrationTest.class
+//  IntegrationTest.class
 })
 public class DBEngineTestSuite {
-
-  public static final String DB_URL_PROP = "org.jdbdt.TEST_DB";
+  public static final String DB_URL_PROP = "org.jdbdt.test.DB_URL";
+  public static final String DB_DATE_UNSUPPORTED_PROP = "org.jdbdt.test.DATA_UNSUPPORTED";
 }

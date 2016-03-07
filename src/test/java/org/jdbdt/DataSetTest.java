@@ -98,7 +98,7 @@ public class DataSetTest extends DBTestCase {
   @Test
   public void testAllFillersSet() throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
-    Object[] row = User.CONVERSION.convert(u);
+    Object[] row = getConversion().convert(u);
     for (int c = 0; c < row.length; c++) {
       theSUT.value(UserDAO.COLUMNS[c], row[c]);
     }
@@ -128,7 +128,7 @@ public class DataSetTest extends DBTestCase {
   @Test
   public void testMissingFillersAllButOne() throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
-    Object[] row = User.CONVERSION.convert(u);
+    Object[] row = getConversion().convert(u);
     for (int c = 0; c < row.length-1; c++) {
       theSUT.value(UserDAO.COLUMNS[c], row[c]);
     }
@@ -137,7 +137,7 @@ public class DataSetTest extends DBTestCase {
   @Test
   public void testGenerate0() throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
-    Object[] row = User.CONVERSION.convert(u);
+    Object[] row = getConversion().convert(u);
     for (int c = 0; c < row.length; c++) {
       theSUT.value(UserDAO.COLUMNS[c], row[c]);
     }
@@ -154,7 +154,7 @@ public class DataSetTest extends DBTestCase {
   @Test
   public void testGenerateMinus1() throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
-    Object[] row = User.CONVERSION.convert(u);
+    Object[] row = getConversion().convert(u);
     for (int c = 0; c < row.length; c++) {
       theSUT.value(UserDAO.COLUMNS[c], row[c]);
     }
@@ -170,7 +170,7 @@ public class DataSetTest extends DBTestCase {
   
   private void testSimpleGeneration(final int N) throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
-    Object[] rowData = User.CONVERSION.convert(u);
+    Object[] rowData = getConversion().convert(u);
     RowSet expectedRows = new RowSet();
     for (int i=0; i < N; i++) {
       expectedRows.addRow(new RowImpl(rowData));

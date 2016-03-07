@@ -5,14 +5,6 @@ import java.sql.Date;
 @SuppressWarnings("javadoc")
 public final class User implements Cloneable {
 
-  public static final Conversion<User> CONVERSION = 
-     u -> new Object[] {
-          u.getLogin(), 
-          u.getName(), 
-          u.getPassword(), 
-          u.getCreated() 
-     };
-    
   private String login;
   private String name;
   private String password;

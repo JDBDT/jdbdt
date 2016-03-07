@@ -42,9 +42,7 @@ public class LoaderTest extends DBTestCase {
                        Date.valueOf("2015-01-01"));
   }
   private static Object[] dataFor(User u) {
-    return new Object[] {
-        u.getLogin(), u.getName(), u.getPassword(), u.getCreated()
-    };
+    return getConversion().convert(u);
   }
 
   @Test 

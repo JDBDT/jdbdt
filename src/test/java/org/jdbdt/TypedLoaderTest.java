@@ -28,7 +28,7 @@ public class TypedLoaderTest extends DBTestCase {
   @BeforeClass
   public static void globalSetup() throws SQLException {
     userTable = 
-        table(UserDAO.TABLE_NAME, User.CONVERSION)
+        table(UserDAO.TABLE_NAME, getConversion())
         .columns(UserDAO.COLUMNS)
         .boundTo(getConnection());
   }
@@ -90,5 +90,4 @@ public class TypedLoaderTest extends DBTestCase {
     assertEquals(u, getDAO().query(u.getLogin()));
   }
   
-
 }

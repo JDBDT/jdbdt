@@ -20,14 +20,45 @@ public class DBTestCase {
 
   private static Connection gConn;
   private static UserDAO gDAO;
-
+  private static Conversion<User> gConversion;
+  
+  protected static final 
+  Conversion<User> STD_CONVERSION = 
+     u -> new Object[] {
+        u.getLogin(), 
+        u.getName(), 
+        u.getPassword(), 
+        u.getCreated()
+     };
+  // Conversion when DATE is not supported (e.g. for SQLite)
+  protected static final 
+  Conversion<User> ALT_CONVERSION = 
+      u -> new Object[] {
+         u.getLogin(), 
+         u.getName(), 
+         u.getPassword(), 
+         u.getCreated() != null ? u.getCreated().getTime() : null
+  };
+  
+  protected static Conversion<User> getConversion() {
+    return gConversion;
+  }
+  protected static Object dateValue(Date d) {
+    return gConversion == STD_CONVERSION ?  d : d.getTime();
+  }
+      
   @BeforeClass
   public static void setupDB() throws Exception {
     String dbURL = System.getProperty(DBEngineTestSuite.DB_URL_PROP);
     gConn = DriverManager.getConnection(dbURL);
     gConn.setAutoCommit(true);
     gDAO = new UserDAO(getConnection());
+    gConversion = 
+        System.getProperty(DBEngineTestSuite.DB_DATE_UNSUPPORTED_PROP) == null ?
+          STD_CONVERSION : ALT_CONVERSION;
   }
+  
+ 
   
   @AfterClass
   public static void teardownDB() throws SQLException {
@@ -41,7 +72,9 @@ public class DBTestCase {
   protected static UserDAO getDAO() {
     return gDAO;
   }
-  
+
+
+ 
   @Before
   public void setup() throws SQLException {
     getDAO().doDeleteAll();

@@ -37,7 +37,7 @@ public class IntegrationTest {
     conn.setAutoCommit(true);
     sut = new UserDAO(conn);
     table = 
-        table(UserDAO.TABLE_NAME,User.CONVERSION)
+        table(UserDAO.TABLE_NAME, DBTestCase.getConversion())
         .columns(UserDAO.COLUMNS)
         .boundTo(conn);
   }

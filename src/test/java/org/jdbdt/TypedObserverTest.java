@@ -39,7 +39,7 @@ public class TypedObserverTest extends DBTestCase {
   @BeforeClass
   public static void globalSetup() throws SQLException {
     table = 
-        table(UserDAO.TABLE_NAME, User.CONVERSION)
+        table(UserDAO.TABLE_NAME, getConversion())
         .columns(UserDAO.COLUMNS)
         .boundTo(getConnection());
   }

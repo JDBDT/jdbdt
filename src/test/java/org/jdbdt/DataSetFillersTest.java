@@ -42,7 +42,7 @@ public class DataSetFillersTest extends DBTestCase {
     theSUT.value("login", BASE_DATA.getLogin())
           .value("name", BASE_DATA.getName())
           .value("password", BASE_DATA.getPassword())
-          .value("created",  BASE_DATA.getCreated()); 
+          .value("created",  dateValue(BASE_DATA.getCreated())); 
   }
   
   interface UserGenerator {
@@ -51,7 +51,7 @@ public class DataSetFillersTest extends DBTestCase {
   private static void gen(RowSet rs, UserGenerator g, int n) {
     for (int i=0; i < n; i++) {
       User data = g.next(BASE_DATA, i);
-      rs.addRow(new RowImpl(User.CONVERSION.convert(data)));
+      rs.addRow(new RowImpl(getConversion().convert(data)));
     }
   }
   private static RowSet deriveRowSet(int n, UserGenerator ug) {

@@ -10,10 +10,12 @@ import java.sql.SQLException;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runners.MethodSorters;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @SuppressWarnings("javadoc")
+@Category(StatementPoolingEnabled.class)
 public class StatementPoolTest extends DBTestCase {
 
   private static Table table;
@@ -25,7 +27,8 @@ public class StatementPoolTest extends DBTestCase {
         table(UserDAO.TABLE_NAME)
           .columns(UserDAO.COLUMNS)
           .boundTo(getConnection());
-    typedTable = table(UserDAO.TABLE_NAME,User.CONVERSION).columns(UserDAO.COLUMNS).boundTo(getConnection());
+    typedTable = table(UserDAO.TABLE_NAME, getConversion())
+                .columns(UserDAO.COLUMNS).boundTo(getConnection());
   }
   
   @Test
@@ -95,7 +98,7 @@ public class StatementPoolTest extends DBTestCase {
     assertSame(s1, s2);
   }
   
-  @Test
+  @Test @Category(TruncateSupportEnabled.class)
   public void test10() throws SQLException {
     PreparedStatement s1 = StatementPool.truncate(table);
     PreparedStatement s2 = StatementPool.truncate(typedTable);

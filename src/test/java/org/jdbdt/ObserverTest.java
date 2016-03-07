@@ -100,7 +100,7 @@ public class ObserverTest extends DBTestCase {
     User u = new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01"));
     getDAO().doInsert(u);
     delta(theSUT)
-      .after(u.getLogin(), u.getName(), u.getPassword(), u.getCreated())
+      .after(u.getLogin(), u.getName(), u.getPassword(), dateValue(u.getCreated()))
       .end();
   }
   
@@ -108,9 +108,9 @@ public class ObserverTest extends DBTestCase {
   public void testSuccessDeleteCase() throws SQLException {
     User u = getTestData(EXISTING_DATA_ID1);
     getDAO().doDelete(EXISTING_DATA_ID1);
-    delta(theSUT)
-      .before(EXISTING_DATA_ID1, u.getName(), u.getPassword(), u.getCreated())
-      .end();
+        delta(theSUT)
+        .before(EXISTING_DATA_ID1, u.getName(), u.getPassword(), dateValue(u.getCreated()))
+        .end();
   }
   
   @Test
@@ -119,8 +119,8 @@ public class ObserverTest extends DBTestCase {
     User u2 = new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-11-11"));
     getDAO().doUpdate(u2);
     delta(theSUT)
-      .before(EXISTING_DATA_ID1, u1.getName(), u1.getPassword(), u1.getCreated())
-      .after(EXISTING_DATA_ID1, u2.getName(), u2.getPassword(), u2.getCreated())
+      .before(EXISTING_DATA_ID1, u1.getName(), u1.getPassword(), dateValue(u1.getCreated()))
+      .after(EXISTING_DATA_ID1, u2.getName(), u2.getPassword(), dateValue(u2.getCreated()))
       .end();
   }
   
