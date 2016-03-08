@@ -95,7 +95,7 @@ public class Table {
    * @param columnNames Column names.
    * @return The table instance (for chained calls).
    */
-  public  Table columns(String... columnNames) {
+  public Table columns(String... columnNames) {
     checkIfNotBound();
     if (this.columnNames != null) {
       throw new InvalidUsageException("Columns are already defined.");
