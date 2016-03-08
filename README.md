@@ -22,7 +22,7 @@ JDBDT is open-source software under the terms of the
 
 # Status
 
-The current release is 0.1 (initial development - http://semver.org).
+The current release is 0.1 (initial development status).
 The first stable version (1.0.0) is expected to be released soon.
 
 # Requirements
