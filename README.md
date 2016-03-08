@@ -41,5 +41,5 @@ The JDBDT build currently tests integration with the following engines:
 * [H2](http://www.h2database.com)
 * [HSQLDB](http://hsqldb.org)
 * [PostgreSQL](http://postgresql.org) 
-* [SQLite](https://www.sqlite.org) through [xerial's JDBC driver driver](https://github.com/xerial/sqlite-jdbc)
+* [SQLite](https://www.sqlite.org) through [xerial's JDBC driver](https://github.com/xerial/sqlite-jdbc)
 
