@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import org.jdbdt.DBEngineTestSuite;
-import org.jdbdt.JDBDT;
 import org.jdbdt.StatementPoolingEnabled;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -39,7 +38,6 @@ public class PostgreSQLSuite extends DBEngineTestSuite {
             config.storage().dbName());
     Class.forName("org.postgresql.Driver");
     System.setProperty(DB_URL_PROP, url);
-    JDBDT.disableStatementPooling();
   }
   @AfterClass
   public static void teardown() {
