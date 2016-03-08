@@ -44,7 +44,7 @@ public class IntegrationTest extends DBTestCase{
     assertEquals(0, getDAO().count());
   }
 
-  @Test @Category(TruncateSupportEnabled.class)
+  @Test 
   public void testDeleteAll() throws Exception {
     deleteAll(table);
     assertEquals(0, getDAO().count());
