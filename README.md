@@ -35,10 +35,10 @@ The first stable version (1.0.0) is expected to be released soon.
 ## Database engines
 
 JDBDT is expected to work with any database engine with a JDBC driver.
-The JDBDT build tests currently cover the following engines:
+The JDBDT build currently tests integration with the following engines:
 
 * [Derby](https://db.apache.org/derby) 
 * [H2](http://www.h2database.com)
 * [HSQLDB](http://hsqldb.org)
-* [SQLlite](https://www.sqlite.org) w/ [xerial's JDBC driver driver](https://github.com/xerial/sqlite-jdbc)
+* [SQLite](https://www.sqlite.org) through [xerial's JDBC driver driver](https://github.com/xerial/sqlite-jdbc)
 
