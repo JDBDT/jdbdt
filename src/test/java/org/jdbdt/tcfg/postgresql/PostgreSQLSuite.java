@@ -4,12 +4,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import org.jdbdt.DBEngineTestSuite;
-import org.jdbdt.StatementPoolingEnabled;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.experimental.categories.Categories;
-import org.junit.experimental.categories.Categories.ExcludeCategory;
-import org.junit.runner.RunWith;
 
 import ru.yandex.qatools.embed.postgresql.PostgresExecutable;
 import ru.yandex.qatools.embed.postgresql.PostgresProcess;
@@ -17,10 +13,6 @@ import ru.yandex.qatools.embed.postgresql.PostgresStarter;
 import ru.yandex.qatools.embed.postgresql.config.PostgresConfig;
 
 @SuppressWarnings("javadoc")
-@RunWith(Categories.class)
-@ExcludeCategory({
-  StatementPoolingEnabled.class
-})
 public class PostgreSQLSuite extends DBEngineTestSuite {
   
   private static PostgresProcess process;
