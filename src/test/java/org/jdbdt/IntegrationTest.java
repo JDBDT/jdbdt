@@ -118,10 +118,10 @@ public class IntegrationTest extends DBTestCase{
   }
   
   @Test
-  public void testInvalidUserUpdate() {
+  public void testInvalidUserUpdate() throws SQLException {
+    User u = getDAO().query(EXISTING_DATA_ID1).clone();
+    u.setPassword(null);
     try {
-      User u = getDAO().query(EXISTING_DATA_ID1).clone();
-      u.setPassword(null);
       getDAO().doUpdate(u);
       fail("Expected " + SQLException.class);
     }
