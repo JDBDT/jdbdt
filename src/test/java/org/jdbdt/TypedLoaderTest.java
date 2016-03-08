@@ -76,18 +76,4 @@ public class TypedLoaderTest extends DBTestCase {
     } 
     catch(SQLException e) {}
   }
-  
-  @Test 
-  public void testInsert5() throws SQLException {
-    User u = createNewUser();
-    try {
-      insertInto(userTable)
-         .row(u)
-         .row(getTestData(EXISTING_DATA_ID1));
-      fail("expected " + SQLException.class);
-    } 
-    catch(SQLException e) { }
-    assertEquals(u, getDAO().query(u.getLogin()));
-  }
-  
 }
