@@ -1,5 +1,5 @@
 # JDBDT  
-[![Build status]](https://api.travis-ci.org/edrdo/jdbdt.png?branch=master)
+[![Build status](https://api.travis-ci.org/edrdo/jdbdt.png?branch=master)
 
 JDBDT (Java Database Delta Testing) is a library for 
 Java database application testing.
