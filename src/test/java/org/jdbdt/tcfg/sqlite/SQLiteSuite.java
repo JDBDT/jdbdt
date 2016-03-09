@@ -17,7 +17,7 @@ import org.junit.experimental.categories.Categories.ExcludeCategory;
 })
 public class SQLiteSuite extends DBEngineTestSuite {
   @BeforeClass 
-  public static void setup() throws ClassNotFoundException, InstantiationException, IllegalAccessException { 
+  public static void setup() throws ClassNotFoundException { 
     Class.forName("org.sqlite.JDBC");
     System.setProperty(DB_URL_PROP, "jdbc:sqlite:jdbdt-sqlite-test.db");
     System.setProperty(DB_DATE_UNSUPPORTED_PROP, "true");
