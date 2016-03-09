@@ -1,7 +1,6 @@
 package org.jdbdt.tcfg.postgresql;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import org.jdbdt.DBEngineTestSuite;
 import org.junit.AfterClass;
@@ -15,24 +14,32 @@ import ru.yandex.qatools.embed.postgresql.config.PostgresConfig;
 @SuppressWarnings("javadoc")
 public class PostgreSQLSuite extends DBEngineTestSuite {
   
-  private static PostgresProcess process;
-  
   @BeforeClass 
-  public static void setup() throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException, SQLException { 
+  public static void setup() throws ClassNotFoundException, IOException { 
+    Class.forName("org.postgresql.Driver");
+    String url = startDatabase();
+    System.setProperty(DB_URL_PROP, url);
+  }
+  
+  @AfterClass
+  public static void teardown() {
+    stopDatabase();
+  }
+  
+  private static PostgresProcess process;
+
+  private static String startDatabase() throws IOException {
     PostgresStarter<PostgresExecutable, PostgresProcess> runtime = PostgresStarter.getDefaultInstance();
     final PostgresConfig config = PostgresConfig.defaultWithDbName("test");
     PostgresExecutable exec = runtime.prepare(config);
     process = exec.start();
-    // connecting to a running Postgres
-    String url = String.format("jdbc:postgresql://%s:%s/%s",
+    return String.format("jdbc:postgresql://%s:%s/%s",
             config.net().host(),
             config.net().port(),
             config.storage().dbName());
-    Class.forName("org.postgresql.Driver");
-    System.setProperty(DB_URL_PROP, url);
   }
-  @AfterClass
-  public static void teardown() {
+  
+  private static void stopDatabase() {
     process.stop();
   }
 }
