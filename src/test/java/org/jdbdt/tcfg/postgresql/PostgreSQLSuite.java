@@ -30,7 +30,7 @@ public class PostgreSQLSuite extends DBEngineTestSuite {
 
   private static String startDatabase() throws IOException {
     PostgresStarter<PostgresExecutable, PostgresProcess> runtime = PostgresStarter.getDefaultInstance();
-    final PostgresConfig config = PostgresConfig.defaultWithDbName("test");
+    final PostgresConfig config = PostgresConfig.defaultWithDbName("jdbdt-postgresql-test");
     PostgresExecutable exec = runtime.prepare(config);
     process = exec.start();
     return String.format("jdbc:postgresql://%s:%s/%s",
