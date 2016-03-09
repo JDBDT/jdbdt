@@ -5,8 +5,8 @@ package org.jdbdt;
  * of an observer's state.
  * 
  * <p>
- * A delta object is derived from an {@link Observer} instance
- * with a call to {@link JDBDT#delta(Observer)}. 
+ * A delta object is derived from an {@link Snapshot} instance
+ * with a call to {@link JDBDT#delta(Snapshot)}. 
  * The delta will reflect the changes to database state
  * that the observer relates to (a table or a query).
  * These changes may be verified using a sequence of
@@ -15,7 +15,7 @@ package org.jdbdt;
  * followed by a final call to {@link #end()}.
  * </p>
  * 
- * @see JDBDT#delta(Observer)
+ * @see JDBDT#delta(Snapshot)
  * @see TypedDelta
  * @since 0.1
  * 
@@ -24,7 +24,7 @@ public class Delta {
   /**
    * Observer instance. 
    */
-  private final Observer obs;
+  private final Snapshot obs;
 
   /**
    * Rows no longer seen.
@@ -43,7 +43,7 @@ public class Delta {
    * @param oldDS Old data set.
    * @param newDS New data set.
    */
-  Delta(Observer obs, RowSet oldDS, RowSet newDS) {
+  Delta(Snapshot obs, RowSet oldDS, RowSet newDS) {
     this.obs = obs;
     beforeSet = oldDS.diff(newDS);
     afterSet = newDS.diff(oldDS);
@@ -53,7 +53,7 @@ public class Delta {
    * Get observer.
    * @return the observer associated to this delta.
    */
-  Observer getObserver() {
+  Snapshot getObserver() {
     return obs;
   }
   

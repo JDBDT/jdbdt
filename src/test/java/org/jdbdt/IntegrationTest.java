@@ -3,7 +3,7 @@ package org.jdbdt;
 import static org.jdbdt.JDBDT.assertNoChanges;
 import static org.jdbdt.JDBDT.deleteAll;
 import static org.jdbdt.JDBDT.delta;
-import static org.jdbdt.JDBDT.observe;
+import static org.jdbdt.JDBDT.snapshot;
 import static org.jdbdt.JDBDT.table;
 import static org.jdbdt.JDBDT.truncate;
 import static org.junit.Assert.assertEquals;
@@ -27,7 +27,7 @@ public class IntegrationTest extends DBTestCase{
 
   static TypedTable<User> table;
   
-  TypedObserver<User> obs;
+  TypedSnapshot<User> obs;
 
   @BeforeClass
   public static void globalSetup() throws SQLException {
@@ -35,7 +35,7 @@ public class IntegrationTest extends DBTestCase{
   }
   @Before
   public void setUp() throws Exception {
-    obs = observe(table);
+    obs = snapshot(table);
   }
 
   @Test @Category(TruncateSupportEnabled.class)

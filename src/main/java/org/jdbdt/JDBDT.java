@@ -88,218 +88,210 @@ public final class JDBDT {
   }
 
   /**
-   * Create an observer for the given table.
-   * <p>
-   * The observer will monitor all entries in the database table.
-   * A call to this method is functionally equivalent to
-   * <code>observe(selectFrom(t))</code>.
-   * </p>
+   * Get a database snapshot for a given table.
+   * 
    * @param t Table.
-   * @return A new {@link Observer} instance.
+   * @return A new {@link Snapshot} instance.
    * @throws SQLException If an SQL error occurs.
-   * @see #observe(Query,Object...)
-   * @see #observe(TypedTable)
-   * @see #observe(Table, DataSet)
+   * @see #snapshot(TableQuery,Object...)
+   * @see #snapshot(TypedTable)
+   * @see #snapshot(DataSet)
    */
-  public static Observer
-  observe(Table t) throws SQLException {
-    return logSetup(new Observer(t, null));
+  public static Snapshot
+  snapshot(Table t) throws SQLException {
+    return logSetup(new Snapshot(t, null));
   }
   
   /**
-   * Create an observer for the given table, assuming
-   * an initial data set as observation state.
+   * Create a snapshot based on a data set.
    * 
    * <p>
    * This method should be used for optimization purposes, 
    * whenever the database table has been  
    * previously setup using the given data set
    * by executing <code>insertInto.rows(ds)</code>. 
-   * In this manner, an initial database query 
-   * will not be issued during observer creation.
+   * In this manner, a database query 
+   * will not be issued for the snapshot's creation.
    * </p>
    * 
-   * @param t Table.
    * @param ds Data set.
-   * @return A new {@link Observer} instance.
+   * @return A new {@link Snapshot} instance.
    * @throws SQLException If an SQL error occurs.
-   * @see #observe(Table)
+   * @see #snapshot(Table)
    * @see #insertInto(Table)
    * @see Loader#rows(DataSet)
    */
-  public static Observer
-  observe(Table t, DataSet ds) throws SQLException {
+  public static Snapshot
+  snapshot(DataSet ds) throws SQLException {
     if (ds == null) {
       throw new InvalidUsageException("Null data set.");
     }
-    return logSetup(new Observer(t, ds.getRowSet()));
+    return logSetup(new Snapshot(ds.getTable(), ds.getRowSet()));
   }
   
   /**
-   * Create an observer for the given query.
-   * 
-   * <p>
-   * The observer will monitor database entries 
-   * returned by the database query.
-   * </p>
+   * Get a database snapshot for the given query.
    * 
    * @param q Query.
    * @param args Optional query arguments.
-   * @return A new {@link Observer} instance.
+   * @return A new {@link Snapshot} instance.
    * @throws SQLException If an SQL error occurs.
-   * @see #observe(Table)
+   * @see #snapshot(Table)
    */
   @SafeVarargs
-  public static Observer
-  observe(Query q, Object... args) throws SQLException {
-    return logSetup(new Observer(q, args, null));
+  public static Snapshot
+  snapshot(TableQuery q, Object... args) throws SQLException {
+    return logSetup(new Snapshot(q, args, null));
   }
   
   /**
-   * Create an observer for the given query, assuming
-   * an initial data set as observation state.
+   * Create a snapshot for a query, assuming
+   * the given data set as the current database state.
    * 
    * <p>
-   * This method should be used for optimization purposes, 
+   * This is a convenience method to be used for optimization purposes, 
    * whenever the database table has been  
    * previously setup using the given data set
    * by executing <code>insertInto.rows(ds)</code>. 
-   * In this manner, the database query 
-   * will not be executed initially during observer creation.
+   * In this manner, a database query 
+   * will not be executed for the snapshot's creation.
    * </p>
    * 
    * @param q Query.
    * @param ds Data set.
    * @param args Optional query arguments.
-   * @return A new {@link Observer} instance.
+   * @return A new {@link Snapshot} instance.
    * @throws SQLException If an SQL error occurs.
-   * @see #observe(Table)
+   * @see #snapshot(Table)
    * @see #insertInto(Table)
    * @see Loader#rows(DataSet)
    */
   @SafeVarargs
-  public static Observer
-  observe(Query q, DataSet ds, Object... args) throws SQLException {
+  public static Snapshot
+  snapshot(TableQuery q, DataSet ds, Object... args) throws SQLException {
     if (ds == null) {
       throw new InvalidUsageException("Null data set.");
     }
-    return logSetup(new Observer(q, args,  ds.getRowSet()));
+    return logSetup(new Snapshot(q, args,  ds.getRowSet()));
   }
   
   /**
-   * Create an observer for a typed table.
+   * Get a database snapshot for a typed table.
    * 
-   * <p>
-   * The observer will monitor all entries in the database table.
-   * A call to this method is functionally equivalent to
-   * <code>observe(selectFrom(t))</code>.
-   * </p>
    * @param <T> Type of objects.
    * @param t Table.
-   * @return A new {@link TypedObserver} instance.
+   * @return A new {@link TypedSnapshot} instance.
    * @throws SQLException If an SQL error occurs.
    * 
-   * @see #observe(Table)
+   * @see #snapshot(Table)
    * @see #selectFrom(TypedTable)
-   * @see #observe(TypedTableQuery,Object...)
+   * @see #snapshot(TypedTableQuery,Object...)
    */
-  public static <T> TypedObserver<T>
-  observe(TypedTable<T> t) throws SQLException {
-    return logSetup(new TypedObserver<T>(t, null));
+  public static <T> TypedSnapshot<T>
+  snapshot(TypedTable<T> t) throws SQLException {
+    return logSetup(new TypedSnapshot<T>(t, null));
   }
   
   /**
-   * Create an observer for the given typed table, assuming
-   * an initial data set as observation state.
+   * Create a database snapshot for a typed table, 
+   * assuming a given data set as the current database state.
    * 
    * <p>
-   * This method is the typed variant of {@link #observe(Table,DataSet)}.
+   * This is a convenience method to be used for optimization purposes, 
+   * whenever the database table has been  
+   * previously setup using the given data set
+   * by executing <code>insertInto.rows(ds)</code>. 
+   * In this manner, a database query 
+   * will not be executed for the snapshot's creation.
    * </p>
    * 
    * @param <T> Type of objects.
    * @param t Table.
    * @param ds Data set.
-   * @return A new {@link Observer} instance.
+   * @return A new {@link Snapshot} instance.
    * @throws SQLException If an SQL error occurs.
-   * @see #observe(Table,DataSet)
+   * @see #snapshot(DataSet)
    * @see #insertInto(TypedTable)
    */
-  public static <T> TypedObserver<T>
-  observe(TypedTable<T> t, DataSet ds) throws SQLException {
+  public static <T> TypedSnapshot<T>
+  snapshot(TypedTable<T> t, DataSet ds) throws SQLException {
     if (ds == null) {
       throw new InvalidUsageException("Null data set.");
     }
-    return logSetup(new TypedObserver<T>(t, ds.getRowSet()));
+    return logSetup(new TypedSnapshot<T>(t, ds.getRowSet()));
   }
   
   
   /**
-   * Create an observer for the given typed table query.
-   * The observer will monitor database entries returned by the database query.
+   * Create a snapshot for a typed table query.
+   *
    * @param <T> Object type associated to the query.
    * @param tq Typed table query.
    * @param args Optional query arguments.
-   * @return A new {@link TypedObserver} instance.
+   * @return A new {@link TypedSnapshot} instance.
    * @throws SQLException If an SQL error occurs.
    */
-  public static <T> TypedObserver<T> 
-  observe(TypedTableQuery<T> tq, Object... args) throws SQLException {
-    return logSetup(new TypedObserver<>(tq, args, null));
+  public static <T> TypedSnapshot<T> 
+  snapshot(TypedTableQuery<T> tq, Object... args) throws SQLException {
+    return logSetup(new TypedSnapshot<>(tq, args, null));
   }
   
   /**
-   * Create an observer for the given typed table query,
-   * assuming an initial data set as observation state.
+   * Create a snapshot for the given typed table query,
+   * assuming a given data set as the current database state.
    * 
    * <p>
-   * This method is the typed variant of {@link #observe(Query,DataSet,Object...)}.
+   * This method is a typed variant of {@link #snapshot(TableQuery,DataSet,Object...)}.
    * </p>
+   * 
    * @param <T> Object type associated to the query.
    * @param tq Typed table query.
    * @param ds Data set.
    * @param args Optional query arguments.
-   * @return A new {@link TypedObserver} instance.
+   * @return A new {@link TypedSnapshot} instance.
    * @throws SQLException If an SQL error occurs.
    */
-  public static <T> TypedObserver<T> 
-  observe(TypedTableQuery<T> tq, DataSet ds, Object... args) throws SQLException {
+  public static <T> TypedSnapshot<T> 
+  snapshot(TypedTableQuery<T> tq, DataSet ds, Object... args) throws SQLException {
     if (ds == null) {
       throw new InvalidUsageException("Null data set.");
     }
-    return logSetup(new TypedObserver<>(tq, args, ds.getRowSet()));
+    return logSetup(new TypedSnapshot<>(tq, args, ds.getRowSet()));
   }
   
   /**
-   * Refresh observer state and obtain delta for verification.
+   * Obtain delta for verification.
    * 
    * <p>
-   * A new query will be issued by the observer,
-   * and the resulting delta will reflect the database changes
-   * that took place.
+   * A new query will be issued for the table or query the
+   * snapshot refers to, and the resulting delta will reflect 
+   * the difference between the snapshot and the current
+   * database state.
    * </p>
    * 
-   * @param obs Observer.
+   * @param s Snapshot.
    * @return A new {@link Delta} object.
    */
-  public static Delta delta(Observer obs) {
-    return obs.getDelta();
+  public static Delta delta(Snapshot s) {
+    return s.getDelta();
   }
   
   /**
-   * Refresh typed observer state and obtain delta for verification.
+   * Obtain typed delta for verification.
    * 
    * <p>
-   * A new query will be issued by the observer,
-   * and the resulting delta will reflect the database changes
-   * that took place.
+   * A new query will be issued for the table or query the
+   * snapshot refers to, and the resulting delta will reflect 
+   * the difference between the snapshot and the current
+   * database state.
    * </p>
    * 
-   * @param <T> Type of objects associated to the observer.
-   * @param observer Observer.
+   * @param <T> Type of objects associated to the snapshot.
+   * @param s Typed snapshot.
    * @return A new {@link TypedDelta} object. 
    */
-  public static <T> TypedDelta<T> delta(TypedObserver<T> observer) {
-    return observer.getDelta();
+  public static <T> TypedDelta<T> delta(TypedSnapshot<T> s) {
+    return s.getDelta();
   }
 
   /**
@@ -307,18 +299,19 @@ public final class JDBDT {
    * 
    * <p>
    * A call to this method is shorthand for
-   * <code>delta(obs).end()</code>.
+   * <code>delta(s).end()</code>.
    * </p>
    * 
-   * @param obs Observer.
-   * @throws DeltaAssertionError if the observer yields a non-empty delta.
-   * @see #assertChanged(Observer,DataSet,DataSet)
-   * @see #assertDeleted(Observer,DataSet)
-   * @see #assertInserted(Observer,DataSet)
+   * @param s Snapshot.
+   * @throws DeltaAssertionError 
+   *         if there are unverified changes for the delta
+   * @see #assertChanged(Snapshot,DataSet,DataSet)
+   * @see #assertDeleted(Snapshot,DataSet)
+   * @see #assertInserted(Snapshot,DataSet)
    * @see Delta#end()
    */
-  public static void assertNoChanges(Observer obs) throws DeltaAssertionError {
-    delta(obs).end(); 
+  public static void assertNoChanges(Snapshot s) throws DeltaAssertionError {
+    delta(s).end(); 
   }
   
   /**
@@ -327,19 +320,19 @@ public final class JDBDT {
    * 
    * <p>
    * A call to this method is shorthand for
-   * <code>delta(obs).before(ds).end()</code>.
+   * <code>delta(s).before(ds).end()</code>.
    * </p>
    * 
-   * @param obs Observer.
+   * @param s Snapshot.
    * @param ds data set.
    * @throws DeltaAssertionError if the assertion fails.
-   * @see #assertNoChanges(Observer)
-   * @see #assertDeleted(Observer,DataSet)
-   * @see #assertInserted(Observer,DataSet)
+   * @see #assertNoChanges(Snapshot)
+   * @see #assertDeleted(Snapshot,DataSet)
+   * @see #assertInserted(Snapshot,DataSet)
    * @see Delta#end()
    */
-  public static void assertDeleted(Observer obs, DataSet ds) throws DeltaAssertionError {
-    delta(obs).before(ds).end(); 
+  public static void assertDeleted(Snapshot s, DataSet ds) throws DeltaAssertionError {
+    delta(s).before(ds).end(); 
   }
   
   /**
@@ -348,19 +341,19 @@ public final class JDBDT {
    * 
    * <p>
    * A call to this method is shorthand for
-   * <code>delta(obs).after(ds).end()</code>.
+   * <code>delta(s).after(ds).end()</code>.
    * </p>
    * 
-   * @param obs Observer.
+   * @param s Snapshot.
    * @param ds data set.
    * @throws DeltaAssertionError if the assertion fails.
-   * @see #assertNoChanges(Observer)
-   * @see #assertDeleted(Observer,DataSet)
-   * @see #assertChanged(Observer,DataSet,DataSet)
+   * @see #assertNoChanges(Snapshot)
+   * @see #assertDeleted(Snapshot,DataSet)
+   * @see #assertChanged(Snapshot,DataSet,DataSet)
    * @see Delta#end()
    */
-  public static void assertInserted(Observer obs, DataSet ds) throws DeltaAssertionError {
-    delta(obs).after(ds).end(); 
+  public static void assertInserted(Snapshot s, DataSet ds) throws DeltaAssertionError {
+    delta(s).after(ds).end(); 
   }
   
   /**
@@ -369,40 +362,23 @@ public final class JDBDT {
    * 
    * <p>
    * A call to this method is shorthand for
-   * <code>delta(obs).after(a).before(b).end()</code>.
+   * <code>delta(s).before(b).after(a).end()</code>.
    * </p>
    * 
-   * @param obs Observer.
+   * @param s Snapshot.
    * @param a 'after' set.
    * @param b 'before' set.
    * @throws DeltaAssertionError if the assertion fails.
    *
-   * @see #assertNoChanges(Observer)
-   * @see #assertDeleted(Observer,DataSet)
-   * @see #assertInserted(Observer,DataSet)
+   * @see #assertNoChanges(Snapshot)
+   * @see #assertDeleted(Snapshot,DataSet)
+   * @see #assertInserted(Snapshot,DataSet)
    * @see Delta#end()
    */
-  public static void assertChanged(Observer obs, DataSet a, DataSet b) throws DeltaAssertionError {
-    delta(obs).after(a).before(b).end(); 
+  public static void assertChanged(Snapshot s, DataSet a, DataSet b) throws DeltaAssertionError {
+    delta(s).before(b).after(a).end(); 
   }
   
-  
-  /**
-   * Assert no changes were made to the database. 
-   * 
-   * <p>
-   * A call to this method is shorthand for
-   * <code>delta(obs).end()</code>.
-   * </p>
-   * 
-   * @param obs Typed observer.
-   * @throws DeltaAssertionError if the observer yields a non-empty delta.
-   * @see TypedDelta#end()
-   */
-  public static void assertNoChanges(TypedObserver<?> obs) {
-    delta(obs).end(); 
-  }
-
   /**
    * Create a database loader to insert data onto a table.
    * 
@@ -592,16 +568,17 @@ public final class JDBDT {
    * </p>
    * 
    * <p>
-   * To configure logging per observer, use {@link Observer#logErrorsTo(Log)}
-   * instead.
+   * To configure logging for deltas associated to a particular snapshot instance, 
+   * use {@link Snapshot#logErrorsTo(Log)} instead.
    * </p>
+   * 
    * @param out Output log.
    *
    * @see #logErrorsTo(PrintStream)
    * @see #log(File)
    * @see #log(PrintStream)
    * @see Log#close()
-   * @see Observer#logErrorsTo(Log)
+   * @see Snapshot#logErrorsTo(Log)
    */
   public static void logErrorsTo(Log out) {
     if (errorLog != null) {
@@ -621,7 +598,7 @@ public final class JDBDT {
    * @see #logErrorsTo(Log)
    * @see #log(PrintStream)
    * @see #log(File)
-   * @see Observer#logErrorsTo(Log)
+   * @see Snapshot#logErrorsTo(Log)
    */
   public static void logErrorsTo(PrintStream out) {
     logErrorsTo(log(out));
@@ -633,10 +610,10 @@ public final class JDBDT {
   private static Log errorLog = null;
 
   @SuppressWarnings("javadoc")
-  private static <T extends Observer> T logSetup(T obs) {
+  private static <S extends Snapshot> S logSetup(S s) {
     if (errorLog != null) {
-      obs.logErrorsTo(errorLog);
+      s.logErrorsTo(errorLog);
     }
-    return obs;
+    return s;
   }
 }

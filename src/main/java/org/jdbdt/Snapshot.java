@@ -16,7 +16,7 @@ import java.sql.SQLException;
  *
  * @since 0.1
  */
-public class Observer {
+public class Snapshot {
 
   /**
    * Prepared statement for query.
@@ -52,7 +52,7 @@ public class Observer {
    * @param t Table.
    * @param initial Initial row set to assume (ignored if null).
    */
-  Observer(Table t, RowSet initial) {
+  Snapshot(Table t, RowSet initial) {
     this(t.getQuery(), t.getMetaData(), null, initial);
   }
 
@@ -66,7 +66,7 @@ public class Observer {
    * @param queryArgs Query arguments.
    * @param initial Initial row set to assume (ignored if null).
    */
-  Observer(Query query, Object[] queryArgs, RowSet initial) {
+  Snapshot(Query query, Object[] queryArgs, RowSet initial) {
     this(query.getStatement(), new MetaData(query.getStatement()), queryArgs, initial);
   }
 
@@ -77,7 +77,7 @@ public class Observer {
    * @param queryArgs Query arguments.
    * @param initial Initial row set to assume.
    */
-  private Observer(PreparedStatement queryStmt, MetaData queryMD, Object[] queryArgs, RowSet initial) {
+  private Snapshot(PreparedStatement queryStmt, MetaData queryMD, Object[] queryArgs, RowSet initial) {
     this.queryStmt = queryStmt;
     this.queryArgs = queryArgs;
     this.metaData = queryMD;
@@ -144,7 +144,7 @@ public class Observer {
    * <p>
    * Unless you wish to use the observer in a specific context,
    * you should use the <code>delta(obsInstance)</code>
-   * idiom (see {@link JDBDT#delta(Observer)}) 
+   * idiom (see {@link JDBDT#delta(Snapshot)}) 
    * instead of calling this method directly.
    * </p>
    * 

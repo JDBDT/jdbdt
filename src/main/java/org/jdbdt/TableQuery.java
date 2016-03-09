@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
  *
  * <p>
  * A table query is created using {@link JDBDT#selectFrom(Table)}
- * or implicitly through {@link JDBDT#observe(Table)}.
+ * or implicitly through {@link JDBDT#snapshot(Table)}.
  * It has an associate {@link Table} instance, set at creation time, plus
  * optional WHERE, GROUP BY and HAVING clauses. The optional
  * statements may be set using {@link #where(String)}, {@link #groupBy(String...)}),

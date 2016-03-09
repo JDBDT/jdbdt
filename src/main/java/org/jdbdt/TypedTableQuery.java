@@ -7,7 +7,7 @@ package org.jdbdt;
  * <p>
  * A {@link TableQuery} represents a typed table query, created
  * using {@link JDBDT#selectFrom(TypedTable)} or
- * or implicitly through {@link JDBDT#observe(TypedTable)}.
+ * or implicitly through {@link JDBDT#snapshot(TypedTable)}.
  * It has an associate {@link TypedTable} instance, set at creation time, plus,
  * just like {@link TableQuery} instances,
  * optional WHERE, GROUP BY and HAVING statements, 

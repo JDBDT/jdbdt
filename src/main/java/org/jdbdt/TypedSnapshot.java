@@ -5,7 +5,7 @@ package org.jdbdt;
  * 
  * @param <T> Type of objects for the observer.
  */
-public final class TypedObserver<T> extends Observer {
+public final class TypedSnapshot<T> extends Snapshot {
 
   /**
    * Conversion function.
@@ -21,7 +21,7 @@ public final class TypedObserver<T> extends Observer {
    * @param t Table.
    * @param initial Initial row set to assume (ignored if null).
    */
-  TypedObserver(TypedTable<T> t, RowSet initial) {
+  TypedSnapshot(TypedTable<T> t, RowSet initial) {
     super(t, initial);
     conv = t.conversion();
   }
@@ -44,7 +44,7 @@ public final class TypedObserver<T> extends Observer {
    * @param queryArgs Query arguments.
    * @param initial Initial row set to assume (ignored if null).
    */
-  TypedObserver(TypedTableQuery<T> query, Object[] queryArgs, RowSet initial) {
+  TypedSnapshot(TypedTableQuery<T> query, Object[] queryArgs, RowSet initial) {
     super(query, queryArgs, initial);
     this.conv = query.conversion();
   }

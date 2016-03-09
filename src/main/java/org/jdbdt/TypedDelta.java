@@ -16,14 +16,14 @@ public final class TypedDelta<T> extends Delta {
    * @param oldDS Old data set.
    * @param newDS New data set.
    */
-  TypedDelta(TypedObserver<T> obs, RowSet oldDS, RowSet newDS) {
+  TypedDelta(TypedSnapshot<T> obs, RowSet oldDS, RowSet newDS) {
     super(obs, oldDS, newDS);
   }
   
   @SuppressWarnings("unchecked")
   @Override
-  public TypedObserver<T> getObserver() {
-    return (TypedObserver<T>) super.getObserver();
+  public TypedSnapshot<T> getObserver() {
+    return (TypedSnapshot<T>) super.getObserver();
   }
   
   @SuppressWarnings("javadoc")

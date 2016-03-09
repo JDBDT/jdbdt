@@ -7,10 +7,10 @@ package org.jdbdt;
  * Exceptions of this type are thrown when a delta assertion fails.
  * </p>
  * 
+ * @see JDBDT#delta(Snapshot)
+ * @see JDBDT#delta(TypedSnapshot)
  * @see Delta
  * @see TypedDelta
- * @see JDBDT#delta(Observer)
- * @see JDBDT#delta(TypedObserver)
  * 
  * @since 0.1
  */
