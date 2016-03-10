@@ -1,8 +1,6 @@
 package org.jdbdt;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 
 /**
@@ -67,7 +65,7 @@ public class Snapshot {
    * @param initial Initial row set to assume (ignored if null).
    */
   Snapshot(Query query, Object[] queryArgs, RowSet initial) {
-    this(query.getStatement(), new MetaData(query.getStatement()), queryArgs, initial);
+    this(query.getStatement(), query.getMetaData(), queryArgs, initial);
   }
 
   /**
@@ -162,31 +160,8 @@ public class Snapshot {
    * yielding a new data set.
    */
   final void refresh() {
-    try { 
-      if (queryArgs != null && queryArgs.length > 0) {
-        for (int i=0; i < queryArgs.length; i++) {
-          queryStmt.setObject(i + 1, queryArgs[i]);
-        }
-      }
-      ResultSet rs = queryStmt.executeQuery();
-      try {
-        int colCount = metaData.getColumnCount();
-        RowSet ds = new RowSet();  
-        while (rs.next()) {
-          Object[] data = new Object[colCount];
-          for (int i = 0; i < colCount; i++) {          
-            data[i] = rs.getObject(i+1);
-          }
-          ds.addRow(new RowImpl(data));
-        }
-        lastObserved = ds;
-      }
-      finally {
-        rs.close();
-      }
-    } 
-    catch(SQLException e) {
-      throw new UnexpectedDatabaseException(e);
-    }
+    RowSet ds = new RowSet();  
+    Query.executeQuery(queryStmt, metaData, queryArgs, r -> ds.addRow(r) );
+    lastObserved = ds;
   }
 }

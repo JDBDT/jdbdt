@@ -98,10 +98,18 @@ public final class JDBDT {
    * @see #snapshot(DataSet)
    */
   public static Snapshot
-  snapshot(Table t) throws SQLException {
+  snapshot(Table t) {
     return logSetup(new Snapshot(t, null));
   }
   
+  public static void
+  snapshot0(Table t) throws SQLException {
+    t.executeQuery(true);
+  }
+  
+  public Delta delta0(Table t) {
+    return new Delta(t.getMetaData(), t.getSnapshot(), t.executeQuery(false));
+  }
   /**
    * Create a snapshot based on a data set.
    * 

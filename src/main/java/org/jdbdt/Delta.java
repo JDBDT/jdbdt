@@ -24,7 +24,7 @@ public class Delta {
   /**
    * Observer instance. 
    */
-  private final Snapshot obs;
+  private final MetaData metaData;
 
   /**
    * Rows no longer seen.
@@ -39,30 +39,23 @@ public class Delta {
   /**
    * Constructs a new database delta.
    * 
-   * @param obs observer instance.
+   * @param md Meta-data.
    * @param oldDS Old data set.
    * @param newDS New data set.
    */
-  Delta(Snapshot obs, RowSet oldDS, RowSet newDS) {
-    this.obs = obs;
+  Delta(MetaData md, RowSet oldDS, RowSet newDS) {
+    metaData = md;
     beforeSet = oldDS.diff(newDS);
     afterSet = newDS.diff(oldDS);
   }
 
-  /**
-   * Get observer.
-   * @return the observer associated to this delta.
-   */
-  Snapshot getObserver() {
-    return obs;
-  }
   
   /**
    * Get meta-data.
    * @return the meta-data associated to this delta.
    */
-  MetaData getMetaData() {
-    return obs.getMetaData();
+  final MetaData getMetaData() {
+    return metaData;
   }
 
   /**
@@ -75,7 +68,7 @@ public class Delta {
    * @return The size of the delta left to verify (0 if all
    * changes were verified).
    */
-  public int size() {
+  public final int size() {
     return beforeSet.size() + afterSet.size();
   }
 
@@ -83,7 +76,7 @@ public class Delta {
    * Get 'before'-set.
    * @return The 'before' set of rows left to verify. 
    */
-  RowSet getBeforeSet() {
+  final RowSet getBeforeSet() {
     return beforeSet;
   }
 
@@ -91,7 +84,7 @@ public class Delta {
    * Get 'after'-set.
    * @return The 'after' set of rows left to verify. 
    */
-  RowSet getAfterSet() {
+  final RowSet getAfterSet() {
     return afterSet;
   }
 
@@ -192,10 +185,11 @@ public class Delta {
    * @throws DeltaAssertionError in any case (unconditionally).
    */
   private void throwDeltaAssertionError(String msg) {
-    Log errorLog = obs.getErrorLog();
-    if (errorLog != null) {
-      errorLog.write(this);
-    }
-    throw new DeltaAssertionError(msg);
+    // TODO
+//    Log errorLog = obs.getErrorLog();
+//    if (errorLog != null) {
+//      errorLog.write(this);
+//    }
+//    throw new DeltaAssertionError(msg);
   }
 }

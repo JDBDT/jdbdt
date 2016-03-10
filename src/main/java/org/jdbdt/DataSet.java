@@ -82,12 +82,27 @@ import java.util.function.Function;
  * @see Log#write(DataSet)
  *
  */
-public final class DataSet implements Iterable<Row> {
+public class DataSet implements Iterable<Row> {
 
+  /**
+   * Row supplier interface.
+   */
+  private interface RowSupplier {
+    /**
+     * Get row count.
+     * @return The number of rows supplied.
+     */
+    int rowCount();
+    /**
+     * Supply rows.
+     * @param rs Row set.
+     */
+    void supply(RowSet rs);
+  }
   /**
    * Row generator.
    */
-  private static class Generator {
+  private class Generator implements RowSupplier {
     /**
      * Fillers.
      */
@@ -106,20 +121,21 @@ public final class DataSet implements Iterable<Row> {
       this.rowCount = rowCount;
     }
 
-    /**
-     * Get row count.
-     * @return The number of rows to be generated.
-     */
-    int rowCount() {
+    @Override
+    public int rowCount() {
       return rowCount;
     }
 
-    /**
-     * Get fillers.
-     * @return The filler configuration.
-     */
-    ColumnFiller<?>[] fillers() {
-      return fillers;
+    @Override
+    public void supply(RowSet rs) {
+      final String[] colNames = table.getColumnNames();
+      for (int r=0; r < rowCount; r++) {
+        final Object[] colData = new Object[colNames.length];
+        for (int c = 0; c < colNames.length; c++) {
+          colData[c] = fillers[c].next();
+        }
+        rs.addRow(new RowImpl(colData));
+      }
     }
   }
 
@@ -141,7 +157,7 @@ public final class DataSet implements Iterable<Row> {
   /**
    * List of row generators.
    */
-  private final ArrayList<Generator> generators = new ArrayList<>();
+  private final ArrayList<RowSupplier> suppliers = new ArrayList<>();
 
   /**
    * Map of database column names to column indexes
@@ -219,7 +235,7 @@ public final class DataSet implements Iterable<Row> {
   @SuppressWarnings("javadoc")
   private void addGenerator(ColumnFiller<?>[] fillers, int rows) {
     theRows = null; // cached rows (if defined) are no longer valid
-    generators.add(new Generator(fillers.clone(), rows));
+    suppliers.add(new Generator(fillers.clone(), rows));
     rowCount += rows;
   }
 
@@ -262,8 +278,7 @@ public final class DataSet implements Iterable<Row> {
   public int size() {
     return rowCount;
   }
-
-
+ 
   /**
    * Get table associated to this data set.
    * @return A able instance.
@@ -299,17 +314,8 @@ public final class DataSet implements Iterable<Row> {
     if (theRows == null) {
       final RowSet rows = new RowSet();
       rng.setSeed(RNG_SEED);
-      final String[] colNames = table.getColumnNames();
-      for (Generator g : generators) {
-        final ColumnFiller<?>[] fillers = g.fillers();
-        final int n = g.rowCount();
-        for (int r=0; r < n; r++) {
-          final Object[] colData = new Object[colNames.length];
-          for (int c = 0; c < colNames.length; c++) {
-            colData[c] = fillers[c].next();
-          }
-          rows.addRow(new RowImpl(colData));
-        }
+      for (RowSupplier rs : suppliers) {
+        rs.supply(rows);
       }
       theRows = rows;
     }

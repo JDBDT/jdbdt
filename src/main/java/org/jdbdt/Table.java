@@ -3,7 +3,6 @@ package org.jdbdt;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 
 
 /**
@@ -28,7 +27,7 @@ import java.util.List;
  * </li>
  * </ul>
  * 
- * <p><b>Illustration of use</b></p>
+ * <p><b>Illustration</b></p>
  * <blockquote><pre>
  * import static org.jdbdt.JDBDT.*;
  * import org.jdbdt.Table;
@@ -44,7 +43,7 @@ import java.util.List;
  * @see TypedTable
  * @since 0.1
  */
-public class Table {
+public class Table extends SnapshotProvider {
 
   /**
    * Table name.
@@ -61,15 +60,6 @@ public class Table {
    */
   private Connection connection = null;
 
-  /**
-   * Selection query for the table (set once when table is bound).
-   */
-  private PreparedStatement queryStmt = null;
-
-  /**
-   * Meta-data for query statement (set once when table is bound).
-   */
-  private MetaData metaData = null;
 
   /**
    * Constructor.
@@ -133,6 +123,12 @@ public class Table {
   public Table boundTo(Connection conn) throws SQLException {
     checkIfNotBound();
     connection = conn;
+    compileQuery();
+    return this;
+  }
+  
+  @Override
+  public String getSQLForQuery() {
     StringBuilder sql = new StringBuilder("SELECT\n ");
     if (columnNames ==  null) {
       sql.append('*');
@@ -143,48 +139,22 @@ public class Table {
       }
     }
     sql.append("\nFROM ").append(tableName);
-    queryStmt = StatementPool.compile(conn, sql.toString());
-    metaData = new MetaData(queryStmt);
-    if (columnNames == null) {
-      List<MetaData.ColumnInfo> columns = metaData.columns();
-      columnNames = new String[columns.size()];
-      for (int i=0; i <  columnNames.length ; i++) {
-        columnNames[i] = columns.get(i).label();
-      }
-    }
-    return this;
+    return sql.toString();
   }
-
+  
   /**
    * Get connection associated to this table.
    * 
    * @see #boundTo(Connection)
    * @return The database connection instance.
    */
+  @Override
   final Connection getConnection() {
     checkIfBound();
     return connection;
   }
 
-  /**
-   * Get query statement for the table.
-   * @return The query statement for the table.
-   */
-  PreparedStatement getQuery() {
-    checkIfBound();
-    return queryStmt;
-  }
-  /**
-   * Get meta-data associated to this table.
-   * 
-   * @see #boundTo(Connection)
-   * @return The database connection instance, if set.
-   */
-  final MetaData getMetaData() {
-    checkIfBound();
-    return metaData;
-  }
-
+ 
   /**
    * Ensure table is bound to a connection,
    * otherwise throw {@link InvalidUsageException}.
@@ -203,7 +173,7 @@ public class Table {
       throw new InvalidUsageException("Table is already bound to a connection.");
     }
   }
-
+ 
   /**
    * Insert a row into the table.
    * @param row Row to insert.
@@ -224,4 +194,6 @@ public class Table {
     insertStmt.execute();
     insertStmt.clearParameters();
   }
+
+ 
 }

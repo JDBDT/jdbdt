@@ -11,24 +11,26 @@ import java.util.Collection;
 public final class TypedDelta<T> extends Delta {
 
   /**
+   * Conversion function.
+   */
+  private final Conversion<T> conv;
+
+  /**
    * Constructs a typed delta.
-   * @param obs Observer instance.
+   * @param md Meta-data.
    * @param oldDS Old data set.
    * @param newDS New data set.
+   * @param conv Conversion function.
    */
-  TypedDelta(TypedSnapshot<T> obs, RowSet oldDS, RowSet newDS) {
-    super(obs, oldDS, newDS);
+  TypedDelta(MetaData md, RowSet oldDS, RowSet newDS, Conversion<T> conv) {
+    super(md, oldDS, newDS);
+    this.conv = conv;
   }
   
-  @SuppressWarnings("unchecked")
-  @Override
-  public TypedSnapshot<T> getObserver() {
-    return (TypedSnapshot<T>) super.getObserver();
-  }
   
   @SuppressWarnings("javadoc")
   private Object[] applyConv(T obj) {
-    return getObserver().conversion().convert(obj);
+    return conv.convert(obj);
   }
   
   /**

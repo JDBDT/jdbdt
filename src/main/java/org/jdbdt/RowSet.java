@@ -47,6 +47,13 @@ final class RowSet implements Iterable<Row> {
   }
   
   /**
+   * Clear contents.
+   */
+  void clear() {
+    rows.clear();
+  }
+  
+  /**
    * Get set view of the rows.
    * @return The rows in this set as a set view.
    */
@@ -151,4 +158,6 @@ final class RowSet implements Iterable<Row> {
       }
     };
   }
+
+
 }

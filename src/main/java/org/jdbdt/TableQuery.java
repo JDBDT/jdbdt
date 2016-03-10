@@ -1,6 +1,6 @@
 package org.jdbdt;
 
-import java.sql.PreparedStatement;
+import java.sql.Connection;
 
 /**
  * Representation of a table query.
@@ -72,7 +72,7 @@ import java.sql.PreparedStatement;
  * 
  * @since 0.1
  */
-public class TableQuery extends Query {
+public class TableQuery extends SnapshotProvider {
 
   /**
    * Table.
@@ -161,30 +161,13 @@ public class TableQuery extends Query {
     return this;
   }
   
-
-  /**
-   * Get compiled statement for the query.
-   * 
-   * The returned statement is compiled once at most,
-   * and cached thereafter for future calls to this method.
-   * 
-   * @return Compiled statement for query.
-   */
   @Override
-  public final PreparedStatement getStatement() {
-    if (!isCompiled()) {
-      super.compile(table.getConnection(), toString());
-    }
-    return super.getStatement();
+  Connection getConnection() {
+    return table.getConnection();
   }
   
-  /**
-   * Get textual representation in SQL terms for this query.
-   * This method may be useful for debugging.
-   * @return A string representing the SQL for the query.
-   */
   @Override
-  public String toString() {
+  public String getSQLForQuery() {
     StringBuilder sql = new StringBuilder("SELECT\n ");
     String[] columnNames = table.getColumnNames();
     if (columnNames ==  null) {
@@ -230,5 +213,7 @@ public class TableQuery extends Query {
   String havingClause() {
     return havingClause;
   }
+
+
  
 }
