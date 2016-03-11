@@ -124,6 +124,14 @@ public class Table extends DataSource {
     checkIfNotBound();
     connection = conn;
     compileQuery();
+    if (columnNames == null) {
+      MetaData md = getMetaData();
+      int nCols = md.getColumnCount();
+      columnNames = new String[nCols];
+      for (int i = 0; i < nCols; i++) {
+        columnNames[i] = md.getLabel(i);
+      }
+    }
     return this;
   }
   
