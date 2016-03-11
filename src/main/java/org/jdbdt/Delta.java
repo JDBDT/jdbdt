@@ -5,8 +5,7 @@ package org.jdbdt;
  * of an observer's state.
  * 
  * <p>
- * A delta object is derived from an {@link Snapshot} instance
- * with a call to {@link JDBDT#delta(Snapshot)}. 
+ * A delta object is created with a call to {@link JDBDT#delta(DataSource)}. 
  * The delta will reflect the changes to database state
  * that the observer relates to (a table or a query).
  * These changes may be verified using a sequence of
@@ -15,7 +14,7 @@ package org.jdbdt;
  * followed by a final call to {@link #end()}.
  * </p>
  * 
- * @see JDBDT#delta(Snapshot)
+ * @see JDBDT#delta(DataSource)
  * @see TypedDelta
  * @since 0.1
  * 

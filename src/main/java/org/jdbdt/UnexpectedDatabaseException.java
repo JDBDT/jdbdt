@@ -8,8 +8,7 @@ import java.sql.SQLException;
  * <p>
  * An exception of this type wraps a {@link SQLException}
  * (a checked exception type) that is not expected
- * to occur, for instance when an {@link Snapshot}
- * tries to execute a query and a {@link SQLException} occurs.
+ * to occur.
  * </p>
  * 
  * @since 0.1
