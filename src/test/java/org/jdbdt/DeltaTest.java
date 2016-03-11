@@ -42,7 +42,7 @@ public class DeltaTest extends DBTestCase {
   @Rule public TestName testName = new TestName();
   private static final boolean DEBUG = false;
   private static Table table;
-  private Snapshot theSUT;
+  private DataSource dataSource;
   
   @BeforeClass
   public static void globalSetup() throws SQLException {
@@ -59,49 +59,56 @@ public class DeltaTest extends DBTestCase {
   }
 
   @Before 
-  public void createObserver() throws SQLException {
+  public void takeSnapshot() throws SQLException {
     if (whereClause == null) {
-      theSUT = snapshot(table);
+      dataSource = table;
     } else {
-      theSUT = snapshot(selectFrom(table).where(whereClause), queryArgs);
+      TableQuery q = selectFrom(table).where(whereClause);
+      if (queryArgs != null) {
+        q.withArguments(queryArgs);
+      }
+      dataSource = q;
     }
+    snapshot(dataSource);
     if (DEBUG) 
       logErrorsTo(System.err);
   }
   
   @Test
   public void testNoChanges() {
-    delta(theSUT).end();
+    delta(dataSource).end();
   }
   
   @Test
   public void testNoChanges2() {
-    assertNoChanges(theSUT);
+    assertNoChanges(dataSource);
   }
   
   @Test(expected=DeltaAssertionError.class)
   public void testFailureInsertCase() throws SQLException {
     getDAO().doInsert(new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01")));
-    assertNoChanges(theSUT);
+    Delta d = delta(dataSource);
+    JDBDT.log(System.err).write(d);
+    d.end();
   }
   
   @Test(expected=DeltaAssertionError.class)
   public void testFailureDeleteCase() throws SQLException {
     getDAO().doDelete(EXISTING_DATA_ID1);
-    assertNoChanges(theSUT);
+    assertNoChanges(dataSource);
   }
   
   @Test(expected=DeltaAssertionError.class)
   public void testFailureUpdateCase() throws SQLException {
     getDAO().doUpdate(new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-01-01")));
-    assertNoChanges(theSUT);
+    assertNoChanges(dataSource);
   }
   
   @Test
   public void testSuccessInsertCase() throws SQLException {
     User u = new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01"));
     getDAO().doInsert(u);
-    delta(theSUT)
+    delta(dataSource)
       .after(u.getLogin(), u.getName(), u.getPassword(), dateValue(u.getCreated()))
       .end();
   }
@@ -110,7 +117,7 @@ public class DeltaTest extends DBTestCase {
   public void testSuccessDeleteCase() throws SQLException {
     User u = getTestData(EXISTING_DATA_ID1);
     getDAO().doDelete(EXISTING_DATA_ID1);
-        delta(theSUT)
+        delta(dataSource)
         .before(EXISTING_DATA_ID1, u.getName(), u.getPassword(), dateValue(u.getCreated()))
         .end();
   }
@@ -120,7 +127,7 @@ public class DeltaTest extends DBTestCase {
     User u1 = getDAO().query(EXISTING_DATA_ID1);
     User u2 = new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-11-11"));
     getDAO().doUpdate(u2);
-    delta(theSUT)
+    delta(dataSource)
       .before(EXISTING_DATA_ID1, u1.getName(), u1.getPassword(), dateValue(u1.getCreated()))
       .after(EXISTING_DATA_ID1, u2.getName(), u2.getPassword(), dateValue(u2.getCreated()))
       .end();

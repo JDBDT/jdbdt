@@ -2,7 +2,9 @@ package org.jdbdt;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.function.Consumer;
 
 /**
  * Abstract class for snapshot providers 
@@ -10,7 +12,7 @@ import java.sql.SQLException;
  * @since 0.1
  *
  */
-public abstract class SnapshotProvider {
+public abstract class DataSource {
 
   /**
    * Selection query for the table.
@@ -30,7 +32,7 @@ public abstract class SnapshotProvider {
   /**
    * Constructor.
    */
-  SnapshotProvider() {
+  DataSource() {
     queryStmt = null;
     metaData = null;
     snapshot = null;
@@ -107,14 +109,22 @@ public abstract class SnapshotProvider {
   abstract String getSQLForQuery();
   
   /**
+   * Get arguments for issuing query.
+   * @return Arguments to use for query, <code>null</code> otherwise.
+   */
+  abstract Object[] getQueryArguments();
+ 
+  /**
    * Execute query.
    * @param takeSnapshot Indicates that a snapshot should be taken.
    * @return Result of query.
    */
   final RowSet executeQuery(boolean takeSnapshot) {
-    checkCompiled();
+    if (queryStmt == null) {
+      compileQuery();
+    }
     RowSet rs = new RowSet();
-    Query.executeQuery(queryStmt, metaData, null, r -> rs.addRow(r));
+    executeQuery(queryStmt, metaData, getQueryArguments(), r -> rs.addRow(r));
     if (takeSnapshot) {
       setSnapshot(rs);
     }
@@ -143,4 +153,43 @@ public abstract class SnapshotProvider {
     snapshot = s;
   }
   
+  
+  /**
+   * Execute query.
+   * @param queryStmt Query statement.
+   * @param md Meta data.
+   * @param queryArgs Query arguments.
+   * @param c Row consumer.
+   */
+  static void executeQuery(PreparedStatement queryStmt, 
+                           MetaData md, 
+                           Object[] queryArgs, 
+                           Consumer<Row> c) {
+    try { 
+      if (queryArgs != null && queryArgs.length > 0) {
+        for (int i=0; i < queryArgs.length; i++) {
+          queryStmt.setObject(i + 1, queryArgs[i]);
+        }
+      }
+      ResultSet rs = queryStmt.executeQuery();
+      try {
+        int colCount = md.getColumnCount();
+        while (rs.next()) {
+          Object[] data = new Object[colCount];
+          for (int i = 0; i < colCount; i++) {          
+            data[i] = rs.getObject(i+1);
+          }
+          c.accept(new RowImpl(data));
+        }
+      }
+      finally {
+        rs.close();
+      }
+    } 
+    catch(SQLException e) {
+      throw new UnexpectedDatabaseException(e);
+    } 
+  }
+
+
 }

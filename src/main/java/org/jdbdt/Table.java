@@ -43,7 +43,7 @@ import java.sql.SQLException;
  * @see TypedTable
  * @since 0.1
  */
-public class Table extends SnapshotProvider {
+public class Table extends DataSource {
 
   /**
    * Table name.
@@ -142,18 +142,16 @@ public class Table extends SnapshotProvider {
     return sql.toString();
   }
   
-  /**
-   * Get connection associated to this table.
-   * 
-   * @see #boundTo(Connection)
-   * @return The database connection instance.
-   */
   @Override
   final Connection getConnection() {
     checkIfBound();
     return connection;
   }
 
+  @Override
+  final Object[] getQueryArguments() {
+    return null;
+  }
  
   /**
    * Ensure table is bound to a connection,

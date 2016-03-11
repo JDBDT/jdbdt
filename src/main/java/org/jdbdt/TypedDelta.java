@@ -17,16 +17,15 @@ public final class TypedDelta<T> extends Delta {
 
   /**
    * Constructs a typed delta.
-   * @param md Meta-data.
+   * @param sp Snapshot provider.
    * @param oldDS Old data set.
    * @param newDS New data set.
    * @param conv Conversion function.
    */
-  TypedDelta(MetaData md, RowSet oldDS, RowSet newDS, Conversion<T> conv) {
-    super(md, oldDS, newDS);
+  TypedDelta(DataSource sp, RowSet oldDS, RowSet newDS, Conversion<T> conv) {
+    super(sp, oldDS, newDS);
     this.conv = conv;
   }
-  
   
   @SuppressWarnings("javadoc")
   private Object[] applyConv(T obj) {

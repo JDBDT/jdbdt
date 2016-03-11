@@ -7,7 +7,7 @@ import java.sql.Connection;
  *
  * <p>
  * A table query is created using {@link JDBDT#selectFrom(Table)}
- * or implicitly through {@link JDBDT#snapshot(Table)}.
+ * or implicitly through {@link JDBDT#snapshot(DataSource)}.
  * It has an associate {@link Table} instance, set at creation time, plus
  * optional WHERE, GROUP BY and HAVING clauses. The optional
  * statements may be set using {@link #where(String)}, {@link #groupBy(String...)}),
@@ -44,8 +44,10 @@ import java.sql.Connection;
  * Table t = table("MyTable")
  *          .columns("A", "B", "C")
  *          .boundTo(conn);
+ * int lo = 0, hi = 100;     
  * TableQuery q = selectFrom(t)
- *               .where("A &gt; 10");         
+ *               .where("A &gt; ? AND A &lt; ?").
+ *               .withArguments(lo, hi);         
  * </pre></blockquote>
  * 
  * <p><b>Illustration 3 - query with WHERE, GROUP BY, and HAVING clauses</b></p>
@@ -72,7 +74,7 @@ import java.sql.Connection;
  * 
  * @since 0.1
  */
-public class TableQuery extends SnapshotProvider {
+public class TableQuery extends DataSource {
 
   /**
    * Table.
@@ -93,7 +95,12 @@ public class TableQuery extends SnapshotProvider {
    * HAVING clause for query (undefined if null).
    */
   private String havingClause = null;
-   
+  
+  /**
+   * Query arguments if any.
+   */
+  private Object[] queryArgs = null;
+  
   /**
    * Constructs a new query.
    * @param table Database table.
@@ -161,13 +168,35 @@ public class TableQuery extends SnapshotProvider {
     return this;
   }
   
+  /**
+   * Set query arguments.
+   * @param args Query arguments.
+   * @return The query instance for chained calls.
+   */
+  public TableQuery withArguments(Object... args) {
+    checkNotCompiled();
+    if (queryArgs != null) {
+      throw new InvalidUsageException("Query arguments are already set.");
+    }
+    if (args == null || args.length == 0) {
+      throw new InvalidUsageException("Invalid query arguments.");
+    }
+    queryArgs = args;
+    return this;
+  }
+  
   @Override
-  Connection getConnection() {
+  final Connection getConnection() {
     return table.getConnection();
   }
   
   @Override
-  public String getSQLForQuery() {
+  final Object[] getQueryArguments() {
+    return queryArgs;
+  }
+  
+  @Override
+  final String getSQLForQuery() {
     StringBuilder sql = new StringBuilder("SELECT\n ");
     String[] columnNames = table.getColumnNames();
     if (columnNames ==  null) {
@@ -213,6 +242,8 @@ public class TableQuery extends SnapshotProvider {
   String havingClause() {
     return havingClause;
   }
+  
+  
 
 
  

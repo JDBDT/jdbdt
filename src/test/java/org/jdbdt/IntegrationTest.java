@@ -27,7 +27,6 @@ public class IntegrationTest extends DBTestCase{
 
   static TypedTable<User> table;
   
-  TypedSnapshot<User> obs;
 
   @BeforeClass
   public static void globalSetup() throws SQLException {
@@ -35,7 +34,7 @@ public class IntegrationTest extends DBTestCase{
   }
   @Before
   public void setUp() throws Exception {
-    obs = snapshot(table);
+     snapshot(table);
   }
 
   @Test @Category(TruncateSupportEnabled.class)
@@ -54,14 +53,14 @@ public class IntegrationTest extends DBTestCase{
   public void testUserInsertion1() throws SQLException {
     User u = new User("new user", "Name", "pass",Date.valueOf("2015-01-01"));
     getDAO().doInsert(u);
-    delta(obs).after(u).end();
+    delta(table).after(u).end();
   }
 
   @Test
   public void testUserInsertion2() throws SQLException {
     User u = new User("new user", "Name", "pass", null);
     getDAO().doInsert(u);
-    delta(obs).after(u).end();
+    delta(table).after(u).end();
   }
 
   @Test
@@ -72,7 +71,7 @@ public class IntegrationTest extends DBTestCase{
       fail("Expected SQLException");
     }
     catch (SQLException e) {
-      assertNoChanges(obs);
+      assertNoChanges(table);
     }
   }
 
@@ -86,14 +85,14 @@ public class IntegrationTest extends DBTestCase{
                          EXISTING_DATA_ID2, 
                          EXISTING_DATA_ID3);
     assertEquals(3, n);
-    delta(obs).before(Arrays.asList(u1, u2, u3)).end();
+    delta(table).before(Arrays.asList(u1, u2, u3)).end();
   }
 
   @Test
   public void testInvalidUserRemoval() throws SQLException {
     int n = getDAO().doDelete("NoSuchUser");
     assertEquals(0, n);
-    assertNoChanges(obs);
+    assertNoChanges(table);
   }
 
   @Test
@@ -103,7 +102,7 @@ public class IntegrationTest extends DBTestCase{
     u2.setPassword("new password");
     int n = getDAO().doUpdate(u2);
     assertEquals(1, n);
-    delta(obs)
+    delta(table)
       .before(u1)
       .after(u2)
       .end();
@@ -114,7 +113,7 @@ public class IntegrationTest extends DBTestCase{
     u.setLogin(u.getLogin()+"#");
     int n = getDAO().doUpdate(u);
     assertEquals(0, n);
-    assertNoChanges(obs);
+    assertNoChanges(table);
   }
   
   @Test
@@ -126,7 +125,7 @@ public class IntegrationTest extends DBTestCase{
       fail("Expected " + SQLException.class);
     }
     catch (SQLException e) {
-      assertNoChanges(obs);
+      assertNoChanges(table);
     }
   }
 

@@ -269,4 +269,6 @@ public final class Log {
       throw new JDBDTInternalError(e);
     }
   }
+
+  
 }

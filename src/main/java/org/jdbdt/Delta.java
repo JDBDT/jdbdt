@@ -24,7 +24,7 @@ public class Delta {
   /**
    * Observer instance. 
    */
-  private final MetaData metaData;
+  private final DataSource provider;
 
   /**
    * Rows no longer seen.
@@ -39,12 +39,12 @@ public class Delta {
   /**
    * Constructs a new database delta.
    * 
-   * @param md Meta-data.
+   * @param sp Spapshot provider.
    * @param oldDS Old data set.
    * @param newDS New data set.
    */
-  Delta(MetaData md, RowSet oldDS, RowSet newDS) {
-    metaData = md;
+  Delta(DataSource sp, RowSet oldDS, RowSet newDS) {
+    provider = sp;
     beforeSet = oldDS.diff(newDS);
     afterSet = newDS.diff(oldDS);
   }
@@ -55,7 +55,7 @@ public class Delta {
    * @return the meta-data associated to this delta.
    */
   final MetaData getMetaData() {
-    return metaData;
+    return provider.getMetaData();
   }
 
   /**
@@ -190,6 +190,6 @@ public class Delta {
 //    if (errorLog != null) {
 //      errorLog.write(this);
 //    }
-//    throw new DeltaAssertionError(msg);
+      throw new DeltaAssertionError(msg);
   }
 }

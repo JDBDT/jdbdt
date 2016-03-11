@@ -87,239 +87,63 @@ public final class JDBDT {
     return new TypedTableQuery<>(t); 
   }
 
-  /**
-   * Get a database snapshot for a given table.
-   * 
-   * @param t Table.
-   * @return A new {@link Snapshot} instance.
-   * @throws SQLException If an SQL error occurs.
-   * @see #snapshot(TableQuery,Object...)
-   * @see #snapshot(TypedTable)
-   * @see #snapshot(DataSet)
-   */
-  public static Snapshot
-  snapshot(Table t) {
-    return logSetup(new Snapshot(t, null));
-  }
   
+
+  /**
+   * Take a database snapshot.
+   * 
+   * <p>
+   * The method takes a snapshot of the current database state
+   * for the given snapshot provider (e.g., a {@link Table} 
+   * or a {@link TableQuery} instance).
+   * </p>
+   * @param sp SnapshotProvider provider.
+   * @throws UnexpectedDatabaseException if a database error occurs 
+   *   
+   */
   public static void
-  snapshot0(Table t) throws SQLException {
-    t.executeQuery(true);
+  snapshot(DataSource sp)  {
+    sp.executeQuery(true);
   }
-  
-  public Delta delta0(Table t) {
-    return new Delta(t.getMetaData(), t.getSnapshot(), t.executeQuery(false));
-  }
-  /**
-   * Create a snapshot based on a data set.
-   * 
-   * <p>
-   * This method should be used for optimization purposes, 
-   * whenever the database table has been  
-   * previously setup using the given data set
-   * by executing <code>insertInto.rows(ds)</code>. 
-   * In this manner, a database query 
-   * will not be issued for the snapshot's creation.
-   * </p>
-   * 
-   * @param ds Data set.
-   * @return A new {@link Snapshot} instance.
-   * @throws SQLException If an SQL error occurs.
-   * @see #snapshot(Table)
-   * @see #insertInto(Table)
-   * @see Loader#rows(DataSet)
-   */
-  public static Snapshot
-  snapshot(DataSet ds) throws SQLException {
-    if (ds == null) {
-      throw new InvalidUsageException("Null data set.");
-    }
-    return logSetup(new Snapshot(ds.getTable(), ds.getRowSet()));
-  }
-  
-  /**
-   * Get a database snapshot for the given query.
-   * 
-   * @param q Query.
-   * @param args Optional query arguments.
-   * @return A new {@link Snapshot} instance.
-   * @throws SQLException If an SQL error occurs.
-   * @see #snapshot(Table)
-   */
-  @SafeVarargs
-  public static Snapshot
-  snapshot(TableQuery q, Object... args) throws SQLException {
-    return logSetup(new Snapshot(q, args, null));
-  }
-  
-  /**
-   * Create a snapshot for a query, assuming
-   * the given data set as the current database state.
-   * 
-   * <p>
-   * This is a convenience method to be used for optimization purposes, 
-   * whenever the database table has been  
-   * previously setup using the given data set
-   * by executing <code>insertInto.rows(ds)</code>. 
-   * In this manner, a database query 
-   * will not be executed for the snapshot's creation.
-   * </p>
-   * 
-   * @param q Query.
-   * @param ds Data set.
-   * @param args Optional query arguments.
-   * @return A new {@link Snapshot} instance.
-   * @throws SQLException If an SQL error occurs.
-   * @see #snapshot(Table)
-   * @see #insertInto(Table)
-   * @see Loader#rows(DataSet)
-   */
-  @SafeVarargs
-  public static Snapshot
-  snapshot(TableQuery q, DataSet ds, Object... args) throws SQLException {
-    if (ds == null) {
-      throw new InvalidUsageException("Null data set.");
-    }
-    return logSetup(new Snapshot(q, args,  ds.getRowSet()));
-  }
-  
-  /**
-   * Get a database snapshot for a typed table.
-   * 
-   * @param <T> Type of objects.
-   * @param t Table.
-   * @return A new {@link TypedSnapshot} instance.
-   * @throws SQLException If an SQL error occurs.
-   * 
-   * @see #snapshot(Table)
-   * @see #selectFrom(TypedTable)
-   * @see #snapshot(TypedTableQuery,Object...)
-   */
-  public static <T> TypedSnapshot<T>
-  snapshot(TypedTable<T> t) throws SQLException {
-    return logSetup(new TypedSnapshot<T>(t, null));
-  }
-  
-  /**
-   * Create a database snapshot for a typed table, 
-   * assuming a given data set as the current database state.
-   * 
-   * <p>
-   * This is a convenience method to be used for optimization purposes, 
-   * whenever the database table has been  
-   * previously setup using the given data set
-   * by executing <code>insertInto.rows(ds)</code>. 
-   * In this manner, a database query 
-   * will not be executed for the snapshot's creation.
-   * </p>
-   * 
-   * @param <T> Type of objects.
-   * @param t Table.
-   * @param ds Data set.
-   * @return A new {@link Snapshot} instance.
-   * @throws SQLException If an SQL error occurs.
-   * @see #snapshot(DataSet)
-   * @see #insertInto(TypedTable)
-   */
-  public static <T> TypedSnapshot<T>
-  snapshot(TypedTable<T> t, DataSet ds) throws SQLException {
-    if (ds == null) {
-      throw new InvalidUsageException("Null data set.");
-    }
-    return logSetup(new TypedSnapshot<T>(t, ds.getRowSet()));
-  }
-  
-  
-  /**
-   * Create a snapshot for a typed table query.
-   *
-   * @param <T> Object type associated to the query.
-   * @param tq Typed table query.
-   * @param args Optional query arguments.
-   * @return A new {@link TypedSnapshot} instance.
-   * @throws SQLException If an SQL error occurs.
-   */
-  public static <T> TypedSnapshot<T> 
-  snapshot(TypedTableQuery<T> tq, Object... args) throws SQLException {
-    return logSetup(new TypedSnapshot<>(tq, args, null));
-  }
-  
-  /**
-   * Create a snapshot for the given typed table query,
-   * assuming a given data set as the current database state.
-   * 
-   * <p>
-   * This method is a typed variant of {@link #snapshot(TableQuery,DataSet,Object...)}.
-   * </p>
-   * 
-   * @param <T> Object type associated to the query.
-   * @param tq Typed table query.
-   * @param ds Data set.
-   * @param args Optional query arguments.
-   * @return A new {@link TypedSnapshot} instance.
-   * @throws SQLException If an SQL error occurs.
-   */
-  public static <T> TypedSnapshot<T> 
-  snapshot(TypedTableQuery<T> tq, DataSet ds, Object... args) throws SQLException {
-    if (ds == null) {
-      throw new InvalidUsageException("Null data set.");
-    }
-    return logSetup(new TypedSnapshot<>(tq, args, ds.getRowSet()));
-  }
-  
+
   /**
    * Obtain delta for verification.
    * 
    * <p>
-   * A new query will be issued for the table or query the
-   * snapshot refers to, and the resulting delta will reflect 
-   * the difference between the snapshot and the current
-   * database state.
+   * A new query will be issued for the given 
+   * snapshot provider instance, and the resulting delta will reflect 
+   * the difference between the last snapshot (see {@link #snapshot(DataSource)})
+   * and the current database state.
    * </p>
    * 
-   * @param s Snapshot.
+   * @param source Data source.
    * @return A new {@link Delta} object.
+   * @see #snapshot(DataSource)
    */
-  public static Delta delta(Snapshot s) {
-    return s.getDelta();
+  public static Delta delta(DataSource source) {
+    return new Delta(source, source.getSnapshot(), source.executeQuery(false));
   }
   
-  /**
-   * Obtain typed delta for verification.
-   * 
-   * <p>
-   * A new query will be issued for the table or query the
-   * snapshot refers to, and the resulting delta will reflect 
-   * the difference between the snapshot and the current
-   * database state.
-   * </p>
-   * 
-   * @param <T> Type of objects associated to the snapshot.
-   * @param s Typed snapshot.
-   * @return A new {@link TypedDelta} object. 
-   */
-  public static <T> TypedDelta<T> delta(TypedSnapshot<T> s) {
-    return s.getDelta();
-  }
+
 
   /**
    * Assert that no changes were made to the database.
    * 
    * <p>
    * A call to this method is shorthand for
-   * <code>delta(s).end()</code>.
+   * <code>delta(sp).end()</code>.
    * </p>
    * 
-   * @param s Snapshot.
+   * @param sp SnapshotProvider provider.
    * @throws DeltaAssertionError 
    *         if there are unverified changes for the delta
-   * @see #assertChanged(Snapshot,DataSet,DataSet)
-   * @see #assertDeleted(Snapshot,DataSet)
-   * @see #assertInserted(Snapshot,DataSet)
+   * @see #assertChanged(DataSource,DataSet,DataSet)
+   * @see #assertDeleted(DataSource,DataSet)
+   * @see #assertInserted(DataSource,DataSet)
    * @see Delta#end()
    */
-  public static void assertNoChanges(Snapshot s) throws DeltaAssertionError {
-    delta(s).end(); 
+  public static void assertNoChanges(DataSource sp) throws DeltaAssertionError {
+    delta(sp).end(); 
   }
   
   /**
@@ -328,19 +152,19 @@ public final class JDBDT {
    * 
    * <p>
    * A call to this method is shorthand for
-   * <code>delta(s).before(ds).end()</code>.
+   * <code>delta(source).before(data).end()</code>.
    * </p>
    * 
-   * @param s Snapshot.
-   * @param ds data set.
+   * @param source Data source.
+   * @param data Data set.
    * @throws DeltaAssertionError if the assertion fails.
-   * @see #assertNoChanges(Snapshot)
-   * @see #assertDeleted(Snapshot,DataSet)
-   * @see #assertInserted(Snapshot,DataSet)
+   * @see #assertNoChanges(DataSource)
+   * @see #assertDeleted(DataSource,DataSet)
+   * @see #assertInserted(DataSource,DataSet)
    * @see Delta#end()
    */
-  public static void assertDeleted(Snapshot s, DataSet ds) throws DeltaAssertionError {
-    delta(s).before(ds).end(); 
+  public static void assertDeleted(DataSource source, DataSet data) throws DeltaAssertionError {
+    delta(source).before(data).end(); 
   }
   
   /**
@@ -352,15 +176,15 @@ public final class JDBDT {
    * <code>delta(s).after(ds).end()</code>.
    * </p>
    * 
-   * @param s Snapshot.
+   * @param s SnapshotProvider.
    * @param ds data set.
    * @throws DeltaAssertionError if the assertion fails.
-   * @see #assertNoChanges(Snapshot)
-   * @see #assertDeleted(Snapshot,DataSet)
-   * @see #assertChanged(Snapshot,DataSet,DataSet)
+   * @see #assertNoChanges(DataSource)
+   * @see #assertDeleted(DataSource,DataSet)
+   * @see #assertChanged(DataSource,DataSet,DataSet)
    * @see Delta#end()
    */
-  public static void assertInserted(Snapshot s, DataSet ds) throws DeltaAssertionError {
+  public static void assertInserted(DataSource s, DataSet ds) throws DeltaAssertionError {
     delta(s).after(ds).end(); 
   }
   
@@ -373,17 +197,17 @@ public final class JDBDT {
    * <code>delta(s).before(b).after(a).end()</code>.
    * </p>
    * 
-   * @param s Snapshot.
+   * @param s SnapshotProvider.
    * @param a 'after' set.
    * @param b 'before' set.
    * @throws DeltaAssertionError if the assertion fails.
    *
-   * @see #assertNoChanges(Snapshot)
-   * @see #assertDeleted(Snapshot,DataSet)
-   * @see #assertInserted(Snapshot,DataSet)
+   * @see #assertNoChanges(DataSource)
+   * @see #assertDeleted(DataSource,DataSet)
+   * @see #assertInserted(DataSource,DataSet)
    * @see Delta#end()
    */
-  public static void assertChanged(Snapshot s, DataSet a, DataSet b) throws DeltaAssertionError {
+  public static void assertChanged(DataSource s, DataSet a, DataSet b) throws DeltaAssertionError {
     delta(s).before(b).after(a).end(); 
   }
   
@@ -456,7 +280,7 @@ public final class JDBDT {
       throw new InvalidUsageException("WHERE clause is not set!");
     }
     PreparedStatement deleteStmt = 
-      StatementPool.compile(q.getStatement().getConnection(), 
+      StatementPool.compile(q.getConnection(), 
           "DELETE FROM " + q.getTable().getName() 
           + " WHERE " + whereClause);
     if (args != null && args.length > 0) {
@@ -577,7 +401,7 @@ public final class JDBDT {
    * 
    * <p>
    * To configure logging for deltas associated to a particular snapshot instance, 
-   * use {@link Snapshot#logErrorsTo(Log)} instead.
+   * use {@link DataSource#logErrorsTo(Log)} instead.
    * </p>
    * 
    * @param out Output log.
@@ -586,7 +410,7 @@ public final class JDBDT {
    * @see #log(File)
    * @see #log(PrintStream)
    * @see Log#close()
-   * @see Snapshot#logErrorsTo(Log)
+   * @see DataSource#logErrorsTo(Log)
    */
   public static void logErrorsTo(Log out) {
     if (errorLog != null) {
@@ -606,7 +430,7 @@ public final class JDBDT {
    * @see #logErrorsTo(Log)
    * @see #log(PrintStream)
    * @see #log(File)
-   * @see Snapshot#logErrorsTo(Log)
+   * @see DataSource#logErrorsTo(Log)
    */
   public static void logErrorsTo(PrintStream out) {
     logErrorsTo(log(out));
@@ -617,11 +441,12 @@ public final class JDBDT {
    */
   private static Log errorLog = null;
 
-  @SuppressWarnings("javadoc")
-  private static <S extends Snapshot> S logSetup(S s) {
-    if (errorLog != null) {
-      s.logErrorsTo(errorLog);
-    }
-    return s;
-  }
+  // TODO
+//  @SuppressWarnings("javadoc")
+//  private static <S extends SnapshotProvider> S logSetup(S s) {
+//    if (errorLog != null) {
+//      s.logErrorsTo(errorLog);
+//    }
+//    return s;
+//  }
 }
