@@ -42,7 +42,7 @@ public class StatementPoolTest extends DBTestCase {
   public void test02() throws SQLException {
     TableQuery q = selectFrom(table);
     PreparedStatement s1 = q.getQuery();
-    PreparedStatement s2 = compile(getConnection(), q.toString());
+    PreparedStatement s2 = compile(getConnection(), q.getSQLForQuery());
     assertSame(s1, s2);
   }
   
@@ -50,7 +50,7 @@ public class StatementPoolTest extends DBTestCase {
   public void test03() throws SQLException {
     TableQuery q = selectFrom(table);
     // Inverse order to test02
-    PreparedStatement s1 = compile(getConnection(), q.toString());
+    PreparedStatement s1 = compile(getConnection(), q.getSQLForQuery());
     PreparedStatement s2 = q.getQuery();
     assertSame(s1, s2);
   }
