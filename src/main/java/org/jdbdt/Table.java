@@ -136,7 +136,7 @@ public class Table extends DataSource {
   }
   
   @Override
-  public String getSQLForQuery() {
+  String getSQLForQuery() {
     StringBuilder sql = new StringBuilder("SELECT\n ");
     if (columnNames ==  null) {
       sql.append('*');

@@ -16,15 +16,21 @@ public final class TypedDelta<T> extends Delta {
   private final Conversion<T> conv;
 
   /**
-   * Constructs a typed delta.
-   * @param sp Snapshot provider.
-   * @param oldDS Old data set.
-   * @param newDS New data set.
-   * @param conv Conversion function.
+   * Constructs a typed delta for a typed query.
+   * @param q Query.
    */
-  TypedDelta(DataSource sp, RowSet oldDS, RowSet newDS, Conversion<T> conv) {
-    super(sp, oldDS, newDS);
-    this.conv = conv;
+  TypedDelta(TypedQuery<T> q) {
+    super(q);
+    this.conv = q.conversion();
+  }
+  
+  /**
+   * Constructs a typed delta for a typed table.
+   * @param t Table.
+   */
+  TypedDelta(TypedTable<T> t) {
+    super(t);
+    this.conv = t.conversion();
   }
   
   @SuppressWarnings("javadoc")

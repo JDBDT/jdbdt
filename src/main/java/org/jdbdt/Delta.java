@@ -23,7 +23,7 @@ public class Delta {
   /**
    * Observer instance. 
    */
-  private final DataSource provider;
+  private final DataSource source;
 
   /**
    * Rows no longer seen.
@@ -38,14 +38,14 @@ public class Delta {
   /**
    * Constructs a new database delta.
    * 
-   * @param sp Spapshot provider.
-   * @param oldDS Old data set.
-   * @param newDS New data set.
+   * @param s Data source.
    */
-  Delta(DataSource sp, RowSet oldDS, RowSet newDS) {
-    provider = sp;
-    beforeSet = oldDS.diff(newDS);
-    afterSet = newDS.diff(oldDS);
+  Delta(DataSource s) { 
+    RowSet pre = s.getSnapshot(),
+           post = s.executeQuery(false);
+    source = s;
+    beforeSet = pre.diff(post);
+    afterSet = post.diff(pre);
   }
 
   
@@ -54,7 +54,7 @@ public class Delta {
    * @return the meta-data associated to this delta.
    */
   final MetaData getMetaData() {
-    return provider.getMetaData();
+    return source.getMetaData();
   }
 
   /**

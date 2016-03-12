@@ -8,7 +8,6 @@ package org.jdbdt;
  * </p>
  * 
  * @see JDBDT#delta(DataSource)
- * @see JDBDT#delta(TypedSnapshot)
  * @see Delta
  * @see TypedDelta
  * 

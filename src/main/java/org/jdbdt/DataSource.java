@@ -42,12 +42,13 @@ public abstract class DataSource {
    * Get query.
    * @return The query statement for the snapshot provider.
    */
-  PreparedStatement getQuery() {
+  PreparedStatement getQueryStatement() {
     if (queryStmt == null) {
       compileQuery();
     }
     return queryStmt;
   }
+  
   /**
    * Get meta-data.
    * 
@@ -124,7 +125,7 @@ public abstract class DataSource {
   final RowSet executeQuery(boolean takeSnapshot) {
 
     RowSet rs = new RowSet();
-    executeQuery(getQuery(), getMetaData(), getQueryArguments(), r -> rs.addRow(r));
+    executeQuery(getQueryStatement(), getMetaData(), getQueryArguments(), r -> rs.addRow(r));
     if (takeSnapshot) {
       setSnapshot(rs);
     }

@@ -31,17 +31,17 @@ package org.jdbdt;
  * 
  * @see TypedTable
  * @see JDBDT#selectFrom(TypedTable)
- * @see TableQuery
+ * @see Query
  * 
  * @since 0.1
  */
-public final class TypedTableQuery<T> extends TableQuery {
+public final class TypedQuery<T> extends Query {
 
   /**
    * Constructs a new type query.
    * @param table Typed database table.
    */
-  TypedTableQuery(TypedTable<T> table) {
+  TypedQuery(TypedTable<T> table) {
     super(table);
   }
 
@@ -50,32 +50,33 @@ public final class TypedTableQuery<T> extends TableQuery {
    * @return Table set for the query.
    */
   @SuppressWarnings("unchecked")
+  @Override
   final TypedTable<T> getTable() {
     return (TypedTable<T>) super.getTable();
   }
-
+ 
   /**
-   * Get conversion function
-   * @return Conversion function.
+   * Get conversion function.
+   * @return The conversion function associated to the typed table.
    */
-  Conversion<T> conversion() {
+  final Conversion<T> conversion() {
     return getTable().conversion();
   }
 
   @Override
-  public TypedTableQuery<T> where(String clause) {
+  public TypedQuery<T> where(String clause) {
     super.where(clause);
     return this;
   }
 
   @Override
-  public TypedTableQuery<T>  groupBy(String... fields) {
+  public TypedQuery<T>  groupBy(String... fields) {
     super.groupBy(fields);
     return this;
   }
 
   @Override
-  public TypedTableQuery<T>  having(String clause) {
+  public TypedQuery<T>  having(String clause) {
     super.having(clause);
     return this;
   }

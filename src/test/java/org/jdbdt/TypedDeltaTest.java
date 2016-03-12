@@ -67,17 +67,29 @@ public class TypedDeltaTest extends DBTestCase {
     if (whereClause == null) {
       dataSource = table;
     } else {
-      dataSource = selectFrom(table).where(whereClause);
+      TypedQuery<User> tq = selectFrom(table).where(whereClause);
+      if (queryArgs != null) {
+        tq.withArguments(queryArgs);
+      }
+      dataSource = tq;
     }
     snapshot(dataSource);
     if (DEBUG)
       logErrorsTo(System.err);
   }
 
+  @SuppressWarnings("unchecked")
+  TypedDelta<User> getDelta() {
+    return dataSource == table ?
+        delta(table)
+      :
+        delta((TypedQuery<User>) dataSource);
+  }
+
 
   @Test
   public void testNoChanges() {
-    delta(dataSource).end();
+    getDelta().end();
   }
 
   @Test
@@ -107,7 +119,7 @@ public class TypedDeltaTest extends DBTestCase {
   public void testSuccessInsertCase() throws SQLException {
     User u = new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01"));
     getDAO().doInsert(u);
-    delta(dataSource)
+    getDelta()
     .after(u)
     .end();
   }
@@ -116,7 +128,7 @@ public class TypedDeltaTest extends DBTestCase {
   public void testSuccessInsertCaseList() throws SQLException {
     User u = new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01"));
     getDAO().doInsert(u);
-    delta(dataSource)
+    getDelta()
     .after(Arrays.asList(u))
     .end();
   }
@@ -124,7 +136,7 @@ public class TypedDeltaTest extends DBTestCase {
   public void testSuccessDeleteCase() throws SQLException {
     User u = getTestData(EXISTING_DATA_ID1);
     getDAO().doDelete(EXISTING_DATA_ID1);
-    delta(dataSource)
+    getDelta()
     .before(u)
     .end();
   }
@@ -133,7 +145,7 @@ public class TypedDeltaTest extends DBTestCase {
   public void testSuccessDeleteCaseList() throws SQLException {
     User u = getTestData(EXISTING_DATA_ID1);
     getDAO().doDelete(EXISTING_DATA_ID1);
-    delta(dataSource)
+    getDelta()
     .before(Arrays.asList(u))
     .end();
   }
@@ -143,7 +155,7 @@ public class TypedDeltaTest extends DBTestCase {
     User u1 = getDAO().query(EXISTING_DATA_ID1);
     User u2 = new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-11-11"));
     getDAO().doUpdate(u2);
-    delta(dataSource)
+    getDelta()
     .before(u1)
     .after(u2)
     .end();

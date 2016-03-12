@@ -71,20 +71,20 @@ public final class JDBDT {
   /**
    * Create query for a table.
    * @param t Table.
-   * @return A new {@link TableQuery} object.
+   * @return A new {@link Query} object.
    */
-  public static TableQuery selectFrom(Table t) {
-    return new TableQuery(t); 
+  public static Query selectFrom(Table t) {
+    return new Query(t); 
   }
   
   /**
    * Create query for a typed table.
    * @param <T> Type of objects.
    * @param t Table.
-   * @return A new {@link TypedTableQuery} object.
+   * @return A new {@link TypedQuery} object.
    */
-  public static <T> TypedTableQuery<T> selectFrom(TypedTable<T> t) {
-    return new TypedTableQuery<>(t); 
+  public static <T> TypedQuery<T> selectFrom(TypedTable<T> t) {
+    return new TypedQuery<>(t); 
   }
 
   
@@ -95,7 +95,7 @@ public final class JDBDT {
    * <p>
    * The method takes a snapshot of the current database state
    * for the given snapshot provider (e.g., a {@link Table} 
-   * or a {@link TableQuery} instance).
+   * or a {@link Query} instance).
    * </p>
    * @param sp SnapshotProvider provider.
    * @throws UnexpectedDatabaseException if a database error occurs 
@@ -106,26 +106,49 @@ public final class JDBDT {
     sp.executeQuery(true);
   }
 
+
   /**
-   * Obtain delta for verification.
+   * Obtain delta.
    * 
    * <p>
    * A new query will be issued for the given 
    * snapshot provider instance, and the resulting delta will reflect 
-   * the difference between the last snapshot (see {@link #snapshot(DataSource)})
-   * and the current database state.
+   * the difference between the last snapshot 
+   * (see {@link #snapshot(DataSource)}) and the current database state.
    * </p>
    * 
-   * @param source Data source.
+   * @param s Data source.
    * @return A new {@link Delta} object.
    * @see #snapshot(DataSource)
    */
-  public static Delta delta(DataSource source) {
-    return new Delta(source, source.getSnapshot(), source.executeQuery(false));
+  public static Delta delta(DataSource s) {
+    return new Delta(s);
   }
   
-
-
+  /**
+   * Obtain typed delta - typed table variant.
+   * 
+   * @param <T> type of objects.
+   * @param tt Typed table.
+   * @return A new {@link Delta} object.
+   * @see #snapshot(DataSource)
+   */
+  public static <T> TypedDelta<T> delta(TypedTable<T> tt) {
+    return new TypedDelta<>(tt);
+  }
+  
+  /**
+   * Obtain typed delta - typed query variant.
+   * 
+   * @param <T> type of objects.
+   * @param tq Typed query.
+   * @return A new {@link Delta} object.
+   * @see #snapshot(DataSource)
+   */
+  public static <T> TypedDelta<T> delta(TypedQuery<T> tq) {
+    return new TypedDelta<>(tq);
+  }
+ 
   /**
    * Assert that no changes were made to the database.
    * 
@@ -239,7 +262,7 @@ public final class JDBDT {
    * @return Number of deleted entries.
    * @throws SQLException if a database error occurs.
    * @see #truncate(Table)
-   * @see #deleteAll(TableQuery,Object...)
+   * @see #deleteAll(Query,Object...)
    */
   public static int deleteAll(Table t) throws SQLException  {
     return StatementPool.delete(t).executeUpdate();
@@ -267,7 +290,7 @@ public final class JDBDT {
    * @see #deleteAll(Table)
    * @see #truncate(Table)
    */
-  public static int deleteAll(TableQuery q, Object... args) throws SQLException  {
+  public static int deleteAll(Query q, Object... args) throws SQLException  {
     if (q.groupByClause() != null) {
       throw new InvalidUsageException("GROUP BY clause is set!");
     }
@@ -296,7 +319,7 @@ public final class JDBDT {
    * @param t Table.
    * @throws SQLException if a database error occurs.
    * @see #deleteAll(Table)
-   * @see #deleteAll(TableQuery,Object...)
+   * @see #deleteAll(Query,Object...)
    */
   public static void truncate(Table t) throws SQLException  {
      StatementPool.truncate(t).execute();

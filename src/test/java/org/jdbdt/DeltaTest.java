@@ -63,7 +63,7 @@ public class DeltaTest extends DBTestCase {
     if (whereClause == null) {
       dataSource = table;
     } else {
-      TableQuery q = selectFrom(table).where(whereClause);
+      Query q = selectFrom(table).where(whereClause);
       if (queryArgs != null) {
         q.withArguments(queryArgs);
       }

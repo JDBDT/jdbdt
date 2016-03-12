@@ -70,11 +70,11 @@ import java.sql.Connection;
  * 
  * @see Table
  * @see JDBDT#selectFrom(Table)
- * @see TypedTableQuery
+ * @see TypedQuery
  * 
  * @since 0.1
  */
-public class TableQuery extends DataSource {
+public class Query extends DataSource {
 
   /**
    * Table.
@@ -105,7 +105,7 @@ public class TableQuery extends DataSource {
    * Constructs a new query.
    * @param table Database table.
    */
-  TableQuery(Table table) {
+  Query(Table table) {
     this.table = table;
   }
   
@@ -122,7 +122,7 @@ public class TableQuery extends DataSource {
    * @param clause String for WHERE clause.
    * @return The query instance for chained calls.
    */
-  public TableQuery where(String clause) {
+  public Query where(String clause) {
     checkNotCompiled();
     if (whereClause != null) {
       throw new InvalidUsageException("WHERE clause already set.");
@@ -137,7 +137,7 @@ public class TableQuery extends DataSource {
    * @param fields GROUP BY fields.
    * @return The query instance for chained calls.
    */
-  public TableQuery groupBy(String... fields) {
+  public Query groupBy(String... fields) {
     checkNotCompiled();
     if (groupByClause != null) {
       throw new InvalidUsageException("GROUP BY clause already set.");
@@ -159,7 +159,7 @@ public class TableQuery extends DataSource {
    * @param clause String for HAVING clause.
    * @return The query instance for chained calls.
    */
-  public TableQuery having(String clause) {
+  public Query having(String clause) {
     checkNotCompiled();
     if (havingClause != null) {
       throw new InvalidUsageException("HAVING clause already set.");
@@ -173,7 +173,7 @@ public class TableQuery extends DataSource {
    * @param args Query arguments.
    * @return The query instance for chained calls.
    */
-  public TableQuery withArguments(Object... args) {
+  public Query withArguments(Object... args) {
     checkNotCompiled();
     if (queryArgs != null) {
       throw new InvalidUsageException("Query arguments are already set.");
@@ -235,6 +235,7 @@ public class TableQuery extends DataSource {
   String groupByClause() {
     return groupByClause;
   }
+  
   /**
    * Get HAVING clause.
    * @return The HAVING clause for the query (null if undefined).

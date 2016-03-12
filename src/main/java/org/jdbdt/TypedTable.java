@@ -56,7 +56,9 @@ import java.sql.SQLException;
  */
 public final class TypedTable<T> extends Table {
 
-  /** Conversion function. */
+  /** 
+   * Conversion function. 
+   */
   private final Conversion<T> conv;
   
   /**
