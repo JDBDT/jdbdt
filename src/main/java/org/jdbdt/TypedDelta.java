@@ -110,14 +110,14 @@ public final class TypedDelta<T> extends Delta {
   }
   
   @Override
-  public TypedDelta<T> before(DataSet ds)  throws DeltaAssertionError {
-    super.before(ds);
+  public TypedDelta<T> before(DataSet data)  throws DeltaAssertionError {
+    super.before(data);
     return this;
   }
   
   @Override
-  public TypedDelta<T> after(DataSet ds)  throws DeltaAssertionError {
-    super.after(ds);
+  public TypedDelta<T> after(DataSet data)  throws DeltaAssertionError {
+    super.after(data);
     return this;
   }
   

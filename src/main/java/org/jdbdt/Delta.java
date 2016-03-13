@@ -39,7 +39,7 @@ public class Delta {
    * @param s Data source.
    */
   Delta(DataSource s) { 
-    RowSet pre = s.getSnapshot(),
+    DataSet pre = s.getSnapshot(),
            post = s.executeQuery(false);
     source = s;
     diff = calcDiff(pre, post);
@@ -72,7 +72,7 @@ public class Delta {
    * Get 'before'-set.
    * @return The 'before' set of rows left to verify. 
    */
-  final RowSet getBeforeSet() {
+  final DataSet getBeforeSet() {
     return null;
   }
 
@@ -80,7 +80,7 @@ public class Delta {
    * Get 'after'-set.
    * @return The 'after' set of rows left to verify. 
    */
-  final RowSet getAfterSet() {
+  final DataSet getAfterSet() {
     return null;
   }
 
@@ -112,12 +112,12 @@ public class Delta {
   /**
    * Assert that the given data set is no longer defined.
    * 
-   * @param ds Data set.
+   * @param data Data set.
    * @return The delta object instance (for chained calls).
    * @throws DeltaAssertionError in case some row in the data set is still defined.         
    */
-  public Delta before(DataSet ds)  throws DeltaAssertionError {
-    for (Row r : ds) {
+  public Delta before(DataSet data)  throws DeltaAssertionError {
+    for (Row r : data) {
       before(r);
     }
     return this;
@@ -126,12 +126,12 @@ public class Delta {
   /**
    * Assert that the given data set is now defined.
    * 
-   * @param ds Data set.
+   * @param data Data set.
    * @return The delta object instance (for chained calls).
    * @throws DeltaAssertionError in case some row in the data set is still defined.    
    */
-  public Delta after(DataSet ds)  throws DeltaAssertionError {
-    for (Row r : ds) {
+  public Delta after(DataSet data)  throws DeltaAssertionError {
+    for (Row r : data) {
       after(r);
     }
     return this;
@@ -211,7 +211,7 @@ public class Delta {
    * @return Map reflecting differences between both sets.
    */
   static
-  LinkedHashMap<Row, Integer> calcDiff(RowSet rs1, RowSet rs2) {
+  LinkedHashMap<Row, Integer> calcDiff(DataSet rs1, DataSet rs2) {
     LinkedHashMap<Row,Integer> diff = new LinkedHashMap<>();
     // Try to minimize space use by matching equal rows soon.
     Iterator<Row> a = rs1.iterator(),

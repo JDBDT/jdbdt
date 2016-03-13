@@ -134,7 +134,7 @@ public final class Log {
    * Write a data set to the log.
    * @param ds Data set instance.
    */
-  public void write(DataSet ds) {
+  public void write(DataBuilder ds) {
     Element rootNode = root(),
             dsNode = xmlDoc.createElement(DS_TAG),
             tableNode = xmlDoc.createElement(TABLE_TAG),
@@ -143,7 +143,7 @@ public final class Log {
     dsNode.appendChild(tableNode);
     dsNode.appendChild(rowsNode);
     write(tableNode, ds.getTable().getMetaData());
-    write(rowsNode, ds.getTable().getMetaData().columns(), ds.getRowSet());
+    write(rowsNode, ds.getTable().getMetaData().columns(), ds.data());
     flush(rootNode);
   }
 
@@ -194,7 +194,7 @@ public final class Log {
   }
 
   @SuppressWarnings("javadoc")
-  private void write(Element topNode, List<MetaData.ColumnInfo> columns, RowSet set) {
+  private void write(Element topNode, List<MetaData.ColumnInfo> columns, DataSet set) {
     topNode.setAttribute(SIZE_ATTR,  String.valueOf(set.size()));
     for (Row r : set) {
       Object[] data = r.getColumnData();

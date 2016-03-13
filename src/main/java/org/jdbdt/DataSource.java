@@ -27,7 +27,7 @@ public abstract class DataSource {
   /**
    * Last snapshot (if any).
    */
-  private RowSet snapshot;
+  private DataSet snapshot;
   
   /**
    * Constructor.
@@ -122,9 +122,9 @@ public abstract class DataSource {
    * @param takeSnapshot Indicates that a snapshot should be taken.
    * @return Result of query.
    */
-  final RowSet executeQuery(boolean takeSnapshot) {
+  final DataSet executeQuery(boolean takeSnapshot) {
 
-    RowSet rs = new RowSet();
+    DataSet rs = new DataSet();
     executeQuery(getQueryStatement(), getMetaData(), getQueryArguments(), r -> rs.addRow(r));
     if (takeSnapshot) {
       setSnapshot(rs);
@@ -136,7 +136,7 @@ public abstract class DataSource {
    * Get last snapshot.
    * @return Last snapshot taken.
    */
-  final RowSet getSnapshot() {
+  final DataSet getSnapshot() {
     if (snapshot == null) {
       throw new InvalidUsageException("No snapshot taken for table.");
     }
@@ -147,7 +147,7 @@ public abstract class DataSource {
    * Set snapshot data.
    * @param s Data set to assume as snapshot.
    */
-  final void setSnapshot(RowSet s) {
+  final void setSnapshot(DataSet s) {
     if (snapshot != null) {
       snapshot.clear();
     }

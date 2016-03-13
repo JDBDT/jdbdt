@@ -14,10 +14,10 @@ import org.junit.runners.Suite.SuiteClasses;
   TearDownTest.class,
   DeltaTest.class,
   TypedDeltaTest.class,
-  DataSetTest.class,
-  DataSetFillersTest.class,
-  DataSetSequenceFillersTest.class,
-  DataSetRandomFillersTest.class,
+  DataBuilderCoreTest.class,
+  DataBuilderCoreFillerTest.class,
+  DataBuilderSequenceFillersTest.class,
+  DataBuilderRandomFillersTest.class,
 //  IntegrationTest.class
 })
 public class DBEngineTestSuite {

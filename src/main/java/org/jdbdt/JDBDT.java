@@ -60,12 +60,12 @@ public final class JDBDT {
   }
   
   /**
-   * Create data set for a table.
+   * Create data builder for a table.
    * @param t Table.
-   * @return A new {@link DataSet} object.
+   * @return A new {@link DataBuilder} object.
    */
-  public static DataSet data(Table t) {
-    return new DataSet(t);
+  public static DataBuilder build(Table t) {
+    return new DataBuilder(t);
   }
   
   /**
@@ -196,19 +196,19 @@ public final class JDBDT {
    * 
    * <p>
    * A call to this method is shorthand for
-   * <code>delta(s).after(ds).end()</code>.
+   * <code>delta(s).after(data).end()</code>.
    * </p>
    * 
    * @param s SnapshotProvider.
-   * @param ds data set.
+   * @param data data set.
    * @throws DeltaAssertionError if the assertion fails.
    * @see #assertNoChanges(DataSource)
    * @see #assertDeleted(DataSource,DataSet)
    * @see #assertChanged(DataSource,DataSet,DataSet)
    * @see Delta#end()
    */
-  public static void assertInserted(DataSource s, DataSet ds) throws DeltaAssertionError {
-    delta(s).after(ds).end(); 
+  public static void assertInserted(DataSource s, DataSet data) throws DeltaAssertionError {
+    delta(s).after(data).end(); 
   }
   
   /**

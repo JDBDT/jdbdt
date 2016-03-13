@@ -23,7 +23,7 @@ import org.junit.runners.MethodSorters;
 
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class DataSetSequenceFillersTest  {
+public class DataBuilderSequenceFillersTest  {
 
   private static Table table;
   private static final String TABLE_NAME = "Foo";
@@ -51,13 +51,13 @@ public class DataSetSequenceFillersTest  {
 
   @Rule 
   public TestName testName = new TestName();
-  DataSet theSUT;
-  RowSet expected;
+  DataBuilder theSUT;
+  DataSet expected;
   String column;
   
   @Before 
   public void setUp() {
-    theSUT = new DataSet(table);
+    theSUT = new DataBuilder(table);
     for (Map.Entry<String, Object> e : BASE_DATA.entrySet()) {
       theSUT.value(e.getKey(), e.getValue());
     }
@@ -67,8 +67,8 @@ public class DataSetSequenceFillersTest  {
      void next(int index, Map<String,Object> data);
   }
 
-  static RowSet deriveRowSet(int n, DataGenerator dg) {
-    RowSet rs = new RowSet();
+  static DataSet deriveRowSet(int n, DataGenerator dg) {
+    DataSet rs = new DataSet();
     for (int i=0; i < n; i++) {
       @SuppressWarnings("unchecked")
       Map<String,Object> data = (Map<String,Object>) BASE_DATA.clone();
@@ -87,7 +87,7 @@ public class DataSetSequenceFillersTest  {
     });
     theSUT.sequence(column, 0);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getRowSet());
+    assertEquals(expected, theSUT.data());
   }
   @Test
   public void testLong() {
@@ -97,7 +97,7 @@ public class DataSetSequenceFillersTest  {
     });
     theSUT.sequence(column, 0L);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getRowSet());
+    assertEquals(expected, theSUT.data());
   }
   
   @Test
@@ -108,7 +108,7 @@ public class DataSetSequenceFillersTest  {
     });
     theSUT.sequence(column, BigInteger.ZERO);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getRowSet());
+    assertEquals(expected, theSUT.data());
   }
   
   @Test
@@ -119,7 +119,7 @@ public class DataSetSequenceFillersTest  {
     });
     theSUT.sequence(column, 0.0f, 0.5f);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getRowSet());
+    assertEquals(expected, theSUT.data());
   }
   
   @Test
@@ -130,7 +130,7 @@ public class DataSetSequenceFillersTest  {
     });
     theSUT.sequence(column, 0.0f, 0.5);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getRowSet());
+    assertEquals(expected, theSUT.data());
   }
 
   @Test
@@ -138,11 +138,11 @@ public class DataSetSequenceFillersTest  {
     column = "cDate";
     Date start = Date.valueOf("2015-01-01");
     expected = deriveRowSet(COUNT, (i,data) -> {
-      data.put(column, new Date(start.getTime() + i * DataSet.MILLIS_PER_DAY));
+      data.put(column, new Date(start.getTime() + i * DataBuilder.MILLIS_PER_DAY));
     });
     theSUT.sequence(column, start, 1);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getRowSet());
+    assertEquals(expected, theSUT.data());
   }
   
   @Test
@@ -155,7 +155,7 @@ public class DataSetSequenceFillersTest  {
     });
     theSUT.sequence(column, fixedTime, increment);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getRowSet());
+    assertEquals(expected, theSUT.data());
   }
   
   @Test
@@ -168,7 +168,7 @@ public class DataSetSequenceFillersTest  {
     });
     theSUT.sequence(column, fixedTS, increment);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getRowSet());
+    assertEquals(expected, theSUT.data());
   }
   
   private static boolean DEBUG = false;
@@ -182,7 +182,7 @@ public class DataSetSequenceFillersTest  {
         System.out.println(Arrays.toString(r.getColumnData()));
       }
       System.out.println("-- actual --");
-      for (Row r : theSUT.getRowSet()) {
+      for (Row r : theSUT.data()) {
         System.out.println(Arrays.toString(r.getColumnData()));
       }
     }

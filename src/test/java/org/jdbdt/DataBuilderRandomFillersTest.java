@@ -28,7 +28,7 @@ import org.junit.runners.MethodSorters;
 
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class DataSetRandomFillersTest  {
+public class DataBuilderRandomFillersTest  {
 
   private static Table table;
   private static final String TABLE_NAME = "Foo";
@@ -56,15 +56,15 @@ public class DataSetRandomFillersTest  {
 
   @Rule 
   public TestName testName = new TestName();
-  DataSet theSUT;
-  RowSet expected;
+  DataBuilder theSUT;
+  DataSet expected;
   String column;
   Random rng;
   
   @Before 
   public void setUp() {
-    rng = new Random(DataSet.RNG_SEED);
-    theSUT = new DataSet(table);
+    rng = new Random(DataBuilder.RNG_SEED);
+    theSUT = new DataBuilder(table);
     for (Map.Entry<String, Object> e : BASE_DATA.entrySet()) {
       theSUT.value(e.getKey(), e.getValue());
     }
@@ -74,8 +74,8 @@ public class DataSetRandomFillersTest  {
     void next(Map<String,Object> data);
   }
 
-  static RowSet deriveRowSet(int n, DataGenerator dg) {
-    RowSet rs = new RowSet();
+  static DataSet deriveRowSet(int n, DataGenerator dg) {
+    DataSet rs = new DataSet();
     for (int i=0; i < n; i++) {
       @SuppressWarnings("unchecked")
       Map<String,Object> data = (Map<String,Object>) BASE_DATA.clone();
@@ -94,7 +94,7 @@ public class DataSetRandomFillersTest  {
     });
     theSUT.random(column, customF);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getRowSet());
+    assertEquals(expected, theSUT.data());
   }
   
   @Test
@@ -109,7 +109,7 @@ public class DataSetRandomFillersTest  {
     });
     theSUT.random(column, values);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getRowSet());
+    assertEquals(expected, theSUT.data());
   }
   @Test
   public void testRandomList() {
@@ -123,7 +123,7 @@ public class DataSetRandomFillersTest  {
     });
     theSUT.random(column, values);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getRowSet());
+    assertEquals(expected, theSUT.data());
   }
   @Test
   public void testRandomInt() {
@@ -133,7 +133,7 @@ public class DataSetRandomFillersTest  {
     });
     theSUT.random(column, 1, COUNT);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getRowSet());
+    assertEquals(expected, theSUT.data());
   }
   @Test
   public void testRandomLong() {
@@ -143,7 +143,7 @@ public class DataSetRandomFillersTest  {
     });    
     theSUT.random(column, 1L, COUNT);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getRowSet());
+    assertEquals(expected, theSUT.data());
   }
 
   @Test
@@ -154,7 +154,7 @@ public class DataSetRandomFillersTest  {
     });
     theSUT.random(column, 1.0f, (float) COUNT);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getRowSet());
+    assertEquals(expected, theSUT.data());
   }
   
   @Test
@@ -165,7 +165,7 @@ public class DataSetRandomFillersTest  {
     });
     theSUT.random(column, 1.0, COUNT);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getRowSet());
+    assertEquals(expected, theSUT.data());
   }
   
   @Test
@@ -178,7 +178,7 @@ public class DataSetRandomFillersTest  {
     });
     theSUT.random(column, min, max);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getRowSet());
+    assertEquals(expected, theSUT.data());
   }
 
   static boolean DEBUG = false;
@@ -192,7 +192,7 @@ public class DataSetRandomFillersTest  {
         System.out.println(Arrays.toString(r.getColumnData()));
       }
       System.out.println("-- actual --");
-      for (Row r : theSUT.getRowSet()) {
+      for (Row r : theSUT.data()) {
         System.out.println(Arrays.toString(r.getColumnData()));
       }
     }

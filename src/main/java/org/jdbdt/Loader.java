@@ -80,12 +80,12 @@ public class Loader {
   
   /**
    * Insert all the rows defined by a data set. 
-   * @param ds Data set.
+   * @param data Data set.
    * @return The loader instance (for chained calls).
    * @throws SQLException if a database error occurs during insertion.
    */
-  public Loader rows(DataSet ds) throws SQLException {
-    for (Row r : ds) {
+  public Loader rows(DataSet data) throws SQLException {
+    for (Row r : data) {
       table.insertRow(r.getColumnData());
     }
     return this;
