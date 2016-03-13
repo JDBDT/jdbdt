@@ -21,6 +21,5 @@ import org.junit.runners.Suite.SuiteClasses;
 //  IntegrationTest.class
 })
 public class DBEngineTestSuite {
-  public static final String DB_URL_PROP = "org.jdbdt.test.DB_URL";
   public static final String DB_DATE_UNSUPPORTED_PROP = "org.jdbdt.test.DATA_UNSUPPORTED";
 }

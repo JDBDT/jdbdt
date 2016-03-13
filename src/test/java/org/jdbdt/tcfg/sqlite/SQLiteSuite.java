@@ -1,5 +1,6 @@
 package org.jdbdt.tcfg.sqlite;
 
+import org.jdbdt.DBCfg;
 import org.jdbdt.DBEngineTestSuite;
 import org.jdbdt.JDBDT;
 import org.jdbdt.StatementPoolingEnabled;
@@ -18,8 +19,8 @@ import org.junit.experimental.categories.Categories.ExcludeCategory;
 public class SQLiteSuite extends DBEngineTestSuite {
   @BeforeClass 
   public static void setup() throws ClassNotFoundException { 
-    Class.forName("org.sqlite.JDBC");
-    System.setProperty(DB_URL_PROP, "jdbc:sqlite:jdbdt-sqlite-test.db");
+    DBCfg.getConfig().setDriver("org.sqlite.JDBC");
+    DBCfg.getConfig().setURL("jdbc:sqlite:jdbdt-sqlite-test.db");
     System.setProperty(DB_DATE_UNSUPPORTED_PROP, "true");
     JDBDT.disableStatementPooling();
   }

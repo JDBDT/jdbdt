@@ -87,9 +87,7 @@ public class DeltaTest extends DBTestCase {
   @Test(expected=DeltaAssertionError.class)
   public void testFailureInsertCase() throws SQLException {
     getDAO().doInsert(new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01")));
-    Delta d = delta(dataSource);
-    JDBDT.log(System.err).write(d);
-    d.end();
+    delta(dataSource).end();
   }
   
   @Test(expected=DeltaAssertionError.class)

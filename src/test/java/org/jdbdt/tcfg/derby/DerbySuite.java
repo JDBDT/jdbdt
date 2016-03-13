@@ -1,5 +1,6 @@
 package org.jdbdt.tcfg.derby;
 
+import org.jdbdt.DBCfg;
 import org.jdbdt.DBEngineTestSuite;
 import org.junit.BeforeClass;
 
@@ -8,7 +9,7 @@ import org.junit.BeforeClass;
 public class DerbySuite extends DBEngineTestSuite {
   @BeforeClass 
   public static void setup() throws ClassNotFoundException { 
-    Class.forName("org.h2.Driver");
-    System.setProperty(DB_URL_PROP, "jdbc:derby:jdbdt-derby-test;create=true");
+    DBCfg.getConfig().setDriver("org.h2.Driver");
+    DBCfg.getConfig().setURL("jdbc:derby:jdbdt-derby-test;create=true");
   }
 }

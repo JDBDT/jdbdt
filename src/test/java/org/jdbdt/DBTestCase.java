@@ -49,8 +49,9 @@ public class DBTestCase {
       
   @BeforeClass
   public static void setupDB() throws Exception {
-    String dbURL = System.getProperty(DBEngineTestSuite.DB_URL_PROP);
-    gConn = DriverManager.getConnection(dbURL);
+    DBCfg cfg = DBCfg.getConfig();
+    Class.forName(cfg.getDriver());
+    gConn = DriverManager.getConnection(cfg.getURL());
     gConn.setAutoCommit(true);
     gDAO = new UserDAO(getConnection());
     gConversion = 
@@ -85,7 +86,17 @@ public class DBTestCase {
   protected static final User[] INITIAL_DATA = {
     new User("linus", "Linus Torvalds", "linux", Date.valueOf("2015-01-01")),
     new User("steve", "Steve Jobs", "macos", Date.valueOf("2015-12-31")),
-    new User("bill", "Bill Gates", "windows", Date.valueOf("2015-09-12"))
+    new User("bill", "Bill Gates", "windows", Date.valueOf("2015-09-12")),
+    new User("alanis", "Alanis ", "xyz", Date.valueOf("2015-01-01")),
+    new User("blanis", "Blanis ", "xyz", Date.valueOf("2015-01-02")),
+    new User("clanis", "Clanis ", "xyz", Date.valueOf("2015-01-03")),
+    new User("dlanis", "Dlanis ", "xyz", Date.valueOf("2015-01-04")),
+    new User("elanis", "Elanis ", "xyz", Date.valueOf("2015-01-05")),
+    new User("flanis", "Flanis ", "xyz", Date.valueOf("2015-01-06")),
+    new User("glanis", "Glanis ", "xyz", Date.valueOf("2015-01-07")),
+    new User("hlanis", "Hlanis ", "xyz", Date.valueOf("2015-01-08")),
+    new User("ilanis", "Ilanis ", "xyz", Date.valueOf("2015-01-09")),
+    new User("jlanis", "Jlanis ", "xyz", Date.valueOf("2015-01-10"))
   };
   
   protected static final String EXISTING_DATA_ID1 =

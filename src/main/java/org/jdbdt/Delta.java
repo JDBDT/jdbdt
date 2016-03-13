@@ -1,5 +1,8 @@
 package org.jdbdt;
 
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+
 /**
  * Database delta, representing the incremental evolution 
  * of an observer's state.
@@ -26,14 +29,9 @@ public class Delta {
   private final DataSource source;
 
   /**
-   * Rows no longer seen.
+   * Representation of differences.
    */
-  private final RowSet beforeSet;
-  /**
-   * Rows now seen.
-   */
-  private final RowSet afterSet;
-
+  private final LinkedHashMap<Row, Integer> diff;
 
   /**
    * Constructs a new database delta.
@@ -44,8 +42,7 @@ public class Delta {
     RowSet pre = s.getSnapshot(),
            post = s.executeQuery(false);
     source = s;
-    beforeSet = pre.diff(post);
-    afterSet = post.diff(pre);
+    diff = calcDiff(pre, post);
   }
 
   
@@ -68,7 +65,7 @@ public class Delta {
    * changes were verified).
    */
   public final int size() {
-    return beforeSet.size() + afterSet.size();
+    return diff.size();
   }
 
   /**
@@ -76,7 +73,7 @@ public class Delta {
    * @return The 'before' set of rows left to verify. 
    */
   final RowSet getBeforeSet() {
-    return beforeSet;
+    return null;
   }
 
   /**
@@ -84,7 +81,7 @@ public class Delta {
    * @return The 'after' set of rows left to verify. 
    */
   final RowSet getAfterSet() {
-    return afterSet;
+    return null;
   }
 
   /**
@@ -154,25 +151,40 @@ public class Delta {
    *         there are remaining changes to verify
    */
   public final void end() throws DeltaAssertionError {
-    int unverified = beforeSet.size() + afterSet.size();
-    if (unverified > 0) {
-      throwDeltaAssertionError(unverified + " unverified changes.");
+    if (size() > 0) {
+      throwDeltaAssertionError(size() + " unverified changes.");
     }
   }
 
   @SuppressWarnings("javadoc")
   private void after(Row r) {
-    if (!afterSet.removeRow(r)) {
+    int n = diff.getOrDefault(r, 0);
+    if (n <= 0) {
       throwDeltaAssertionError("New query result expected: "
           + r.toString());
+    }
+    --n;
+    if (n == 0) {
+      diff.remove(r);
+    } 
+    else {
+      diff.put(r, n);
     }
   }
 
   @SuppressWarnings("javadoc")
   private void before(Row r) {
-    if (!beforeSet.removeRow(r)) {
+    int n = diff.getOrDefault(r, 0);
+    if (n >= 0) {
       throwDeltaAssertionError("Old query result expected: "
           + r.toString());
+    }
+    ++n;
+    if (n == 0) {
+      diff.remove(r);
+    } 
+    else {
+      diff.put(r, n);
     }
   }
 
@@ -190,5 +202,52 @@ public class Delta {
 //      errorLog.write(this);
 //    }
       throw new DeltaAssertionError(msg);
+  }
+
+  /**
+   * Calculate differences between two sets of rows.
+   * @param rs1 First set.
+   * @param rs2 Second set.
+   * @return Map reflecting differences between both sets.
+   */
+  static
+  LinkedHashMap<Row, Integer> calcDiff(RowSet rs1, RowSet rs2) {
+    LinkedHashMap<Row,Integer> diff = new LinkedHashMap<>();
+    // Try to minimize space use by matching equal rows soon.
+    Iterator<Row> a = rs1.iterator(),
+                  b = rs2.iterator();
+    boolean done = false;
+    while (!done) {
+      if (!a.hasNext()) {
+        while (b.hasNext()) {
+          update(diff, b.next(), +1);
+        }
+        done = true;
+      }
+      else if (!b.hasNext()) {
+        while (a.hasNext()) {
+          update(diff, a.next(), -1);
+        }
+        done = true;
+      } 
+      else {
+        update(diff, a.next(), -1);
+        update(diff, b.next(), +1);
+      }
+    }
+
+    return diff;
+  }
+  
+  @SuppressWarnings("javadoc")
+  private static void 
+  update(LinkedHashMap<Row, Integer> diff, Row r, int d) {
+    int n = diff.getOrDefault(r, 0) + d;
+    if (n == 0) {
+      diff.remove(r);
+    }
+    else {
+      diff.put(r, n);
+    } 
   }
 }

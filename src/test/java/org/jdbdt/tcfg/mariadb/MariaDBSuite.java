@@ -1,5 +1,6 @@
 package org.jdbdt.tcfg.mariadb;
 
+import org.jdbdt.DBCfg;
 import org.jdbdt.DBEngineTestSuite;
 import org.junit.BeforeClass;
 
@@ -7,7 +8,7 @@ import org.junit.BeforeClass;
 public class MariaDBSuite extends DBEngineTestSuite {
   @BeforeClass 
   public static void setup() throws ClassNotFoundException, InstantiationException, IllegalAccessException { 
-    Class.forName("org.mariadb.jdbc.Driver");
-    System.setProperty(DB_URL_PROP, "jdbc:mariadb://localhost:3306");
+    DBCfg.getConfig().setDriver("org.mariadb.jdbc.Driver");
+    DBCfg.getConfig().setURL("jdbc:mariadb://localhost:3316");
   }
 }
