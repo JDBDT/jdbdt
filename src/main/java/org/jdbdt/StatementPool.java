@@ -53,14 +53,12 @@ final class StatementPool {
    * @return Compiled statement.
    * @throws SQLException If there is an error compiling the statement.
    */
-  private synchronized
-  PreparedStatement compileStatement(Connection c, String sql) 
-      throws SQLException {    
+  private synchronized PreparedStatement 
+  compileStatement(Connection c, String sql) throws SQLException {    
     if (! poolingEnabled) {
       return c.prepareStatement(sql);
     }
     Map<String, PreparedStatement> pool;
-
     if (pools == null) {
       pools = new WeakHashMap<>();
       pool = null;
