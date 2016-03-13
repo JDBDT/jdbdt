@@ -422,10 +422,6 @@ public final class JDBDT {
    * causing the previous log to be closed.
    * </p>
    * 
-   * <p>
-   * To configure logging for deltas associated to a particular snapshot instance, 
-   * use {@link DataSource#logErrorsTo(Log)} instead.
-   * </p>
    * 
    * @param out Output log.
    *
@@ -433,7 +429,6 @@ public final class JDBDT {
    * @see #log(File)
    * @see #log(PrintStream)
    * @see Log#close()
-   * @see DataSource#logErrorsTo(Log)
    */
   public static void logErrorsTo(Log out) {
     if (errorLog != null) {
@@ -453,7 +448,6 @@ public final class JDBDT {
    * @see #logErrorsTo(Log)
    * @see #log(PrintStream)
    * @see #log(File)
-   * @see DataSource#logErrorsTo(Log)
    */
   public static void logErrorsTo(PrintStream out) {
     logErrorsTo(log(out));
