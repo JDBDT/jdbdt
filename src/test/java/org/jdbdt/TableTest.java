@@ -25,15 +25,6 @@ public class TableTest extends DBTestCase {
   @Test
   public void testInit() {
     assertEquals(UserDAO.TABLE_NAME, theSUT.getName());
-    assertEquals(-1, theSUT.getColumnCount());
-    assertNull(theSUT.getColumnNames());
-  }
-  
-  @Test
-  public void testInitColumns() {
-    theSUT.columns(UserDAO.COLUMNS);
-    assertEquals(UserDAO.COLUMNS.length, theSUT.getColumnCount());
-    assertArrayEquals(UserDAO.COLUMNS,theSUT.getColumnNames());
   }
   
   @Test(expected=InvalidUsageException.class)

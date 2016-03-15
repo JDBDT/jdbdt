@@ -171,7 +171,7 @@ public class DataBuilderCoreTest extends DBTestCase {
   private void testSimpleGeneration(final int N) throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
     Object[] rowData = getConversion().convert(u);
-    DataSet expectedRows = new DataSet();
+    DataSet expectedRows = new DataSet(table);
     for (int i=0; i < N; i++) {
       expectedRows.addRow(new RowImpl(rowData));
     }

@@ -190,6 +190,13 @@ public class Query extends DataSource {
     return table.getConnection();
   }
   
+
+  @Override
+  final String[] getColumnNames() {
+    // TODO Auto-generated method stub
+    return table.getColumnNames();
+  }
+  
   @Override
   final Object[] getQueryArguments() {
     return queryArgs;
@@ -243,6 +250,7 @@ public class Query extends DataSource {
   String havingClause() {
     return havingClause;
   }
+
   
   
 

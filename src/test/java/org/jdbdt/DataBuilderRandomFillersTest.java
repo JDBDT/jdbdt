@@ -75,7 +75,7 @@ public class DataBuilderRandomFillersTest  {
   }
 
   static DataSet deriveRowSet(int n, DataGenerator dg) {
-    DataSet rs = new DataSet();
+    DataSet rs = new DataSet(table);
     for (int i=0; i < n; i++) {
       @SuppressWarnings("unchecked")
       Map<String,Object> data = (Map<String,Object>) BASE_DATA.clone();

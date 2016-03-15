@@ -294,7 +294,7 @@ public final class DataBuilder {
    */
   public DataSet data() {   
     if (theRows == null) {
-      final DataSet rows = new DataSet();
+      final DataSet rows = new DataSet(table);
       rng.setSeed(RNG_SEED);
       for (RowSupplier rs : suppliers) {
         rs.supply(rows);

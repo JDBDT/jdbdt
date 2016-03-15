@@ -1,2 +1,1 @@
-- TypedDataSet ? DataSet.row method?
-- Final round of documentation before release
+- Query.columns

@@ -99,19 +99,9 @@ public class Table extends DataSource {
    * @return Array of column names, or <code>null</code> if all
    *   columns are set.
    */
+  @Override
   final String[] getColumnNames() {
     return columnNames;
-  }
-
-
-  /**
-   * Get column count.
-   * @return -1 if the columns were not defined, 
-   *         a positive integer value otherwise.
-   * @see #columns(String...)
-   */
-  final int getColumnCount() {
-    return columnNames == null ? -1 : columnNames.length;
   }
 
   /**
@@ -123,7 +113,7 @@ public class Table extends DataSource {
   public Table boundTo(Connection conn) throws SQLException {
     checkIfNotBound();
     connection = conn;
-    compileQuery();
+    ensureCompiled();
     if (columnNames == null) {
       MetaData md = getMetaData();
       int nCols = md.getColumnCount();

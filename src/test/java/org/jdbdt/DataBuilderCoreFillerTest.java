@@ -55,7 +55,7 @@ public class DataBuilderCoreFillerTest extends DBTestCase {
     }
   }
   private static DataSet deriveRowSet(int n, UserGenerator ug) {
-    DataSet rs = new DataSet();
+    DataSet rs = new DataSet(table);
     gen(rs, ug, n);
     return rs;
   }

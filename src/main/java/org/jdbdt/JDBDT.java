@@ -69,6 +69,35 @@ public final class JDBDT {
   }
   
   /**
+   * Create data set (untyped version).
+   * @param source Data source instance.
+   * @return A new, empty data set.
+   */
+  public static DataSet data(DataSource source) {
+    return new DataSet(source);
+  }
+  
+  /**
+   * Create data set - typed table version.
+   * @param <T> Type of objects.
+   * @param tt Typed table.
+   * @return A new, empty data set.
+   */
+  public static <T> TypedDataSet<T> data(TypedTable<T> tt) {
+    return new TypedDataSet<>(tt);
+  }
+  
+  /**
+   * Create data set - typed query version.
+   * @param <T> Type of objects.
+   * @param tq Typed query.
+   * @return A new, empty data set.
+   */
+  public static <T> TypedDataSet<T> data(TypedQuery<T> tq) {
+    return new TypedDataSet<>(tq);
+  }
+  
+  /**
    * Create query for a table.
    * @param t Table.
    * @return A new {@link Query} object.
