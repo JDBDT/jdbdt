@@ -46,6 +46,9 @@ public class TableTest extends DBTestCase {
   public void testBinding() throws SQLException {
     theSUT.boundTo(getConnection());
     assertSame(theSUT.getConnection(), getConnection());
+    assertEquals(UserDAO.COLUMNS.length, theSUT.getColumnCount());
+    assertNotNull(theSUT.getQueryStatement());
+    assertNotNull(theSUT.getMetaData());
   }
   
   @Test(expected=InvalidUsageException.class)
