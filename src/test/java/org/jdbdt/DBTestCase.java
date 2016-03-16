@@ -54,12 +54,8 @@ public class DBTestCase {
     gConn = DriverManager.getConnection(cfg.getURL());
     gConn.setAutoCommit(true);
     gDAO = new UserDAO(getConnection());
-    gConversion = 
-        System.getProperty(DBEngineTestSuite.DB_DATE_UNSUPPORTED_PROP) == null ?
-          STD_CONVERSION : ALT_CONVERSION;
+    gConversion = cfg.isDateSupported() ? STD_CONVERSION : ALT_CONVERSION;
   }
-  
- 
   
   @AfterClass
   public static void teardownDB() throws SQLException {

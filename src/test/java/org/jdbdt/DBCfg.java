@@ -14,6 +14,7 @@ public class DBCfg {
   
   private String url = HSQLDBSuite.MEM_DB_URL;
   private String driver = HSQLDBSuite.DRIVER;    
+  private boolean dateSupported = true;
   
   public void setDriver(String driver) {
     this.driver = driver;
@@ -23,11 +24,19 @@ public class DBCfg {
     this.url = url;
   }
   
+  public void dateNotSupported() {
+    dateSupported = false;
+  }
+  
   public String getDriver() {
     return driver;
   }
  
   public String getURL() {
     return url;
+  }
+  
+  public boolean isDateSupported() {
+    return dateSupported;
   }
 }

@@ -21,7 +21,7 @@ public class SQLiteSuite extends DBEngineTestSuite {
   public static void setup() throws ClassNotFoundException { 
     DBCfg.getConfig().setDriver("org.sqlite.JDBC");
     DBCfg.getConfig().setURL("jdbc:sqlite:jdbdt-sqlite-test.db");
-    System.setProperty(DB_DATE_UNSUPPORTED_PROP, "true");
+    DBCfg.getConfig().dateNotSupported();
     JDBDT.disableStatementPooling();
   }
 }
