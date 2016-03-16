@@ -109,4 +109,11 @@ public class DataSet implements Iterable<Row> {
   public Iterator<Row> iterator() {
     return rows.iterator();
   }
+  
+  @Override
+  public boolean equals(Object o) {
+    return o == this ||
+      ( o instanceof DataSet &&
+        rows.equals(((DataSet) o).rows) );
+  }
 }
