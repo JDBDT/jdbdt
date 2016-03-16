@@ -9,9 +9,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
   StatementPoolTest.class,
   TableTest.class,
-  LoaderTest.class,
-  TypedLoaderTest.class,
   TearDownTest.class,
+  DataInsertionTest.class,
   DeltaTest.class,
   TypedDeltaTest.class,
   DataBuilderCoreTest.class,

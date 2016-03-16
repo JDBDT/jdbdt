@@ -24,12 +24,12 @@ public final class JDBDT {
    * Private constructor to avoid unintended instantiation.
    */
   private JDBDT() { }
-  
+
   /**
    * Version identifier.
    */
   private static final String VERSION = "0.1.0-SNAPSHOT";
-  
+
   /**
    * Get JDBDT version.
    * @return The version identifier for the JDBDT library in use.
@@ -46,7 +46,7 @@ public final class JDBDT {
   public static Table table(String tableName) {
     return new Table(tableName); 
   }
-  
+
   /**
    * Create typed handle for given table name
    * and conversion function.
@@ -58,7 +58,7 @@ public final class JDBDT {
   public static <T> TypedTable<T> table(String tableName, Conversion<T> conv) {
     return new TypedTable<>(tableName, conv); 
   }
-  
+
   /**
    * Create data builder for a table.
    * @param t Table.
@@ -67,7 +67,7 @@ public final class JDBDT {
   public static DataBuilder build(Table t) {
     return new DataBuilder(t);
   }
-  
+
   /**
    * Create data set (untyped version).
    * @param source Data source instance.
@@ -76,7 +76,7 @@ public final class JDBDT {
   public static DataSet data(DataSource source) {
     return new DataSet(source);
   }
-  
+
   /**
    * Create data set - typed table version.
    * @param <T> Type of objects.
@@ -86,7 +86,7 @@ public final class JDBDT {
   public static <T> TypedDataSet<T> data(TypedTable<T> tt) {
     return new TypedDataSet<>(tt);
   }
-  
+
   /**
    * Create data set - typed query version.
    * @param <T> Type of objects.
@@ -96,7 +96,7 @@ public final class JDBDT {
   public static <T> TypedDataSet<T> data(TypedQuery<T> tq) {
     return new TypedDataSet<>(tq);
   }
-  
+
   /**
    * Create query for a table.
    * @param t Table.
@@ -105,7 +105,7 @@ public final class JDBDT {
   public static Query selectFrom(Table t) {
     return new Query(t); 
   }
-  
+
   /**
    * Create query for a typed table.
    * @param <T> Type of objects.
@@ -116,7 +116,7 @@ public final class JDBDT {
     return new TypedQuery<>(t); 
   }
 
-  
+
 
   /**
    * Take a database snapshot.
@@ -153,7 +153,7 @@ public final class JDBDT {
   public static Delta delta(DataSource s) {
     return new Delta(s);
   }
-  
+
   /**
    * Obtain typed delta - typed table variant.
    * 
@@ -165,7 +165,7 @@ public final class JDBDT {
   public static <T> TypedDelta<T> delta(TypedTable<T> tt) {
     return new TypedDelta<>(tt);
   }
-  
+
   /**
    * Obtain typed delta - typed query variant.
    * 
@@ -177,7 +177,7 @@ public final class JDBDT {
   public static <T> TypedDelta<T> delta(TypedQuery<T> tq) {
     return new TypedDelta<>(tq);
   }
- 
+
   /**
    * Assert that no changes were made to the database.
    * 
@@ -197,7 +197,7 @@ public final class JDBDT {
   public static void assertNoChanges(DataSource sp) throws DeltaAssertionError {
     delta(sp).end(); 
   }
-  
+
   /**
    * Assert that database changed only by removal of a given
    * data set.
@@ -218,7 +218,7 @@ public final class JDBDT {
   public static void assertDeleted(DataSource source, DataSet data) throws DeltaAssertionError {
     delta(source).before(data).end(); 
   }
-  
+
   /**
    * Assert that database changed only by addition of a given
    * data set.
@@ -239,7 +239,7 @@ public final class JDBDT {
   public static void assertInserted(DataSource s, DataSet data) throws DeltaAssertionError {
     delta(s).after(data).end(); 
   }
-  
+
   /**
    * Assert that database changed according
    * to given 'before' and 'after' data sets. 
@@ -262,26 +262,27 @@ public final class JDBDT {
   public static void assertChanged(DataSource s, DataSet a, DataSet b) throws DeltaAssertionError {
     delta(s).before(b).after(a).end(); 
   }
-  
+
   /**
-   * Create a database loader to insert data onto a table.
+   * Insert a data set onto database.
    * 
-   * @param table Database table.
-   * @return A new {@link Loader} instance. 
+   * @param data Data set for insertion.
+   * @throws SQLException If a database error occurs.
+   *  
    */
-  public static Loader insertInto(Table table) {
-    return new Loader(table);
+  public static void insert(DataSet data) throws SQLException {
+    DataInsertion.insert(data);
   }
-  
+
   /**
-   * Create a database loader to insert data onto a typed table.
+   * Populate database with given data set.
    * 
-   * @param <T> Type of objects.
-   * @param table Database table.
-   * @return A new {@link TypedLoader} instance. 
+   * @param data Data set for insertion.
+   * @throws SQLException If a database error occurs.
+   *  
    */
-  public static <T> TypedLoader<T> insertInto(TypedTable<T> table) {
-    return new TypedLoader<>(table);
+  public static void populate(DataSet data) throws SQLException {
+    DataInsertion.populate(data);
   }
 
   /**
@@ -296,8 +297,8 @@ public final class JDBDT {
   public static int deleteAll(Table t) throws SQLException  {
     return StatementPool.delete(t).executeUpdate();
   }
-  
-  
+
+
   /**
    * Delete all data returned by a table query. 
    * 
@@ -326,14 +327,14 @@ public final class JDBDT {
       throw new InvalidUsageException("HAVING clause is set!");
     }
     String whereClause = q.whereClause();
-    
+
     if (whereClause == null) {
       throw new InvalidUsageException("WHERE clause is not set!");
     }
     PreparedStatement deleteStmt = 
-      StatementPool.compile(q.getConnection(), 
-          "DELETE FROM " + q.getTable().getName() 
-          + " WHERE " + whereClause);
+        StatementPool.compile(q.getConnection(), 
+            "DELETE FROM " + q.getTable().getName() 
+            + " WHERE " + whereClause);
     Object[] args = q.getQueryArguments();
     if (args != null && args.length > 0) {
       for (int i=0; i < args.length; i++) {
@@ -342,7 +343,7 @@ public final class JDBDT {
     }
     return deleteStmt.executeUpdate();
   }
-  
+
   /**
    * Truncate table.
    * @param t Table.
@@ -351,9 +352,9 @@ public final class JDBDT {
    * @see #deleteAll(Query)
    */
   public static void truncate(Table t) throws SQLException  {
-     StatementPool.truncate(t).execute();
+    StatementPool.truncate(t).execute();
   }
-  
+
   /**
    * Execute an arbitrary SQL statement.
    * 
@@ -379,7 +380,7 @@ public final class JDBDT {
   public static void sql(Connection c, String sqlCode) throws SQLException {
     StatementPool.compile(c, sqlCode).execute();
   }
-  
+
   /**
    * Disable statement pooling.
    * 
@@ -397,7 +398,7 @@ public final class JDBDT {
   public static void disableStatementPooling() {
     StatementPool.disablePooling();
   }
-  
+
   /**
    * Create a log that is written to a file.
    * 
@@ -420,7 +421,7 @@ public final class JDBDT {
   public static Log log(File file) throws FileNotFoundException {
     return new Log(file);
   }
-  
+
   /**
    * Create a log that is written to a stream.
    * 
@@ -439,7 +440,7 @@ public final class JDBDT {
   public static Log log(PrintStream out) {
     return new Log(out);
   }
-  
+
   /**
    * Log delta assertion errors to given log instance.
    * 
@@ -465,7 +466,7 @@ public final class JDBDT {
     }
     errorLog = out;
   }
-  
+
   /**
    * Log assertion errors to given output stream.
    * 
@@ -481,18 +482,18 @@ public final class JDBDT {
   public static void logErrorsTo(PrintStream out) {
     logErrorsTo(log(out));
   }
-  
+
   /**
    * Error log in use (initially null).
    */
   private static Log errorLog = null;
 
   // TODO
-//  @SuppressWarnings("javadoc")
-//  private static <S extends SnapshotProvider> S logSetup(S s) {
-//    if (errorLog != null) {
-//      s.logErrorsTo(errorLog);
-//    }
-//    return s;
-//  }
+  //  @SuppressWarnings("javadoc")
+  //  private static <S extends SnapshotProvider> S logSetup(S s) {
+  //    if (errorLog != null) {
+  //      s.logErrorsTo(errorLog);
+  //    }
+  //    return s;
+  //  }
 }
