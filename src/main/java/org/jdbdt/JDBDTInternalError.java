@@ -12,7 +12,7 @@ package org.jdbdt;
  * 
  * @since 0.1
  */
-public final class JDBDTInternalError extends Error {
+final class JDBDTInternalError extends Error {
 
   /**
    * Constructs exception with given cause.
