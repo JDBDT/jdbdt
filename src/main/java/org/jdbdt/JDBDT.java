@@ -291,7 +291,7 @@ public final class JDBDT {
    * @return Number of deleted entries.
    * @throws SQLException if a database error occurs.
    * @see #truncate(Table)
-   * @see #deleteAll(Query,Object...)
+   * @see #deleteAll(Query)
    */
   public static int deleteAll(Table t) throws SQLException  {
     return StatementPool.delete(t).executeUpdate();
@@ -310,7 +310,6 @@ public final class JDBDT {
    * </p>
    *
    * @param q query.
-   * @param args Optional query arguments.
    * @return Number of deleted entries.
    * @throws SQLException if a database error occurs.
    * @throws InvalidUsageException if the query has 
@@ -319,7 +318,7 @@ public final class JDBDT {
    * @see #deleteAll(Table)
    * @see #truncate(Table)
    */
-  public static int deleteAll(Query q, Object... args) throws SQLException  {
+  public static int deleteAll(Query q) throws SQLException  {
     if (q.groupByClause() != null) {
       throw new InvalidUsageException("GROUP BY clause is set!");
     }
@@ -335,6 +334,7 @@ public final class JDBDT {
       StatementPool.compile(q.getConnection(), 
           "DELETE FROM " + q.getTable().getName() 
           + " WHERE " + whereClause);
+    Object[] args = q.getQueryArguments();
     if (args != null && args.length > 0) {
       for (int i=0; i < args.length; i++) {
         deleteStmt.setObject(i + 1, args[i]);
@@ -348,7 +348,7 @@ public final class JDBDT {
    * @param t Table.
    * @throws SQLException if a database error occurs.
    * @see #deleteAll(Table)
-   * @see #deleteAll(Query,Object...)
+   * @see #deleteAll(Query)
    */
   public static void truncate(Table t) throws SQLException  {
      StatementPool.truncate(t).execute();

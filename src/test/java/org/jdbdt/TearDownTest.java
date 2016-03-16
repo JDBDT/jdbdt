@@ -47,23 +47,31 @@ public class TearDownTest extends DBTestCase {
   @Test
   public void testDeleteAll3() throws SQLException {
     int n = getDAO().count();
-    deleteAll(selectFrom(table).where("LOGIN=?"), EXISTING_DATA_ID1);
+    deleteAll(selectFrom(table).where("LOGIN=?").withArguments(EXISTING_DATA_ID1));
+    assertEquals(n-1, getDAO().count());
+    assertNull(getDAO().query(EXISTING_DATA_ID1));
+  }
+  
+  @Test
+  public void testDeleteAll4() throws SQLException {
+    int n = getDAO().count();
+    deleteAll(selectFrom(table).where("LOGIN='" +EXISTING_DATA_ID1 + "'"));
     assertEquals(n-1, getDAO().count());
     assertNull(getDAO().query(EXISTING_DATA_ID1));
   }
   
   @Test(expected=InvalidUsageException.class)
-  public void testDeleteAll4() throws SQLException {
+  public void testDeleteAll5() throws SQLException {
     deleteAll(selectFrom(table));
   }
   
   @Test(expected=InvalidUsageException.class)
-  public void testDeleteAll5() throws SQLException {
+  public void testDeleteAll7() throws SQLException {
     deleteAll(selectFrom(table).where("w").groupBy("g"));
   }
   
   @Test(expected=InvalidUsageException.class)
-  public void testDeleteAll6() throws SQLException {
+  public void testDeleteAll8() throws SQLException {
     deleteAll(selectFrom(table).where("w").having("h"));
   }
 }
