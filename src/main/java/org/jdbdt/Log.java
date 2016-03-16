@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.sql.Timestamp;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -132,9 +133,9 @@ public final class Log {
   }
   /**
    * Write a data set to the log.
-   * @param ds Data set instance.
+   * @param data Data set.
    */
-  public void write(DataBuilder ds) {
+  public void write(DataSet data) {
     Element rootNode = root(),
             dsNode = xmlDoc.createElement(DS_TAG),
             tableNode = xmlDoc.createElement(TABLE_TAG),
@@ -142,8 +143,8 @@ public final class Log {
     rootNode.appendChild(dsNode);
     dsNode.appendChild(tableNode);
     dsNode.appendChild(rowsNode);
-    write(tableNode, ds.getTable().getMetaData());
-    write(rowsNode, ds.getTable().getMetaData().columns(), ds.data());
+    write(tableNode, data.getSource().getMetaData());
+    write(rowsNode, data.getSource().getMetaData().columns(), data.iterator());
     flush(rootNode);
   }
 
@@ -188,15 +189,16 @@ public final class Log {
     deltaNode.appendChild(aSetNode);
     write(queryNode, d.getMetaData());
     deltaNode.setAttribute(SIZE_ATTR, String.valueOf(d.size()));
-    write(bSetNode, d.getMetaData().columns(), d.getBeforeSet());
-    write(aSetNode, d.getMetaData().columns(), d.getAfterSet());
+    write(bSetNode, d.getMetaData().columns(), d.bIterator());
+    write(aSetNode, d.getMetaData().columns(), d.aIterator());
     flush(rootNode);
   }
 
   @SuppressWarnings("javadoc")
-  private void write(Element topNode, List<MetaData.ColumnInfo> columns, DataSet set) {
-    topNode.setAttribute(SIZE_ATTR,  String.valueOf(set.size()));
-    for (Row r : set) {
+  private void write(Element topNode, List<MetaData.ColumnInfo> columns, Iterator<Row> itr) {
+    int size = 0;
+    while (itr.hasNext()) {
+      Row r = itr.next();
       Object[] data = r.getColumnData();
       Element rowElem = xmlDoc.createElement(ROW_TAG);
       for (int i=0; i < data.length; i++) {
@@ -206,7 +208,9 @@ public final class Log {
         rowElem.appendChild(colNode);
       }
       topNode.appendChild(rowElem);
+      size++;
     }
+    topNode.setAttribute(SIZE_ATTR,  String.valueOf(size));
   }
 
   /**

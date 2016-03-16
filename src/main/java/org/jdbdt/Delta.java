@@ -2,6 +2,8 @@ package org.jdbdt;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 
 /**
  * Database delta, representing the incremental evolution 
@@ -49,7 +51,7 @@ public final class Delta {
    * Get meta-data.
    * @return the meta-data associated to this delta.
    */
-  final MetaData getMetaData() {
+  MetaData getMetaData() {
     return source.getMetaData();
   }
 
@@ -63,24 +65,8 @@ public final class Delta {
    * @return The size of the delta left to verify (0 if all
    * changes were verified).
    */
-  public final int size() {
+  public int size() {
     return diff.size();
-  }
-
-  /**
-   * Get 'before'-set.
-   * @return The 'before' set of rows left to verify. 
-   */
-  final DataSet getBeforeSet() {
-    return null;
-  }
-
-  /**
-   * Get 'after'-set.
-   * @return The 'after' set of rows left to verify. 
-   */
-  final DataSet getAfterSet() {
-    return null;
   }
 
   /**
@@ -149,7 +135,7 @@ public final class Delta {
    * @throws DeltaAssertionError in case 
    *         there are remaining changes to verify
    */
-  public final void end() throws DeltaAssertionError {
+  public void end() throws DeltaAssertionError {
     if (size() > 0) {
       throwDeltaAssertionError(size() + " unverified changes.");
     }
@@ -249,4 +235,73 @@ public final class Delta {
       diff.put(r, n);
     } 
   }
+  
+
+  /**
+   * Get iterator for 'before' set.
+   * @return An iterator instance.
+   */
+  Iterator<Row> bIterator () {
+    return new DeltaIterator(diff, true);
+  }
+  
+  /**
+   * Get iterator for 'after' set.
+   * @return An iterator instance.
+   */
+  Iterator<Row> aIterator () {
+    return new DeltaIterator(diff, false);
+  }
+  
+  @SuppressWarnings("javadoc")
+  private static
+  class DeltaIterator implements Iterator<Row> {
+    Iterator<Entry<Row,Integer>> supportItr;
+    Entry<Row,Integer> nextEntry;
+    boolean preState;
+    int count;
+    
+    DeltaIterator(LinkedHashMap<Row, Integer> diff, boolean pre) {
+      supportItr = diff.entrySet().iterator();
+      preState = pre;
+      count = 0;
+      nextEntry = null;
+      advance();
+    }
+    
+    private void advance() {
+      if (count == 0) {
+        nextEntry = null;
+        while (supportItr.hasNext() && nextEntry == null) {
+          Entry<Row,Integer> entry = supportItr.next();
+          if (entry.getValue() < 0) {
+            if (preState) {
+              nextEntry = entry; 
+            }
+          }
+          else if (!preState) {
+            nextEntry = entry;
+          }
+        }
+        
+      }
+    }
+    
+    @Override
+    public boolean hasNext() {
+      return nextEntry != null;
+    }
+
+    @Override
+    public Row next() {
+      if (nextEntry == null) {
+        throw new NoSuchElementException();
+      }
+      Row r = nextEntry.getKey();
+      advance();
+      return r;
+    }
+    
+  }
+
 }
