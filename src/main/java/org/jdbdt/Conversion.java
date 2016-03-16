@@ -4,11 +4,6 @@ package org.jdbdt;
 /**
  * Conversion function from objects to database format.
  * 
- * <p>
- * Implementations of this interface are used to define
- * {@link TypedTable} instances through 
- * the {@link JDBDT#table(String,Conversion)} method.
- * </p>
  * 
  * <p>
  * The {@link #convert} method defines a mapping
@@ -24,9 +19,6 @@ package org.jdbdt;
  * </p>
  * 
  * @param <T> Type of objects.
- * 
- * @see TypedTable
- * @see JDBDT#table(String,Conversion)
  * 
  * @since 0.1
  */

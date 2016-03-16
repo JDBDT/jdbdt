@@ -19,7 +19,6 @@ import org.junit.runners.MethodSorters;
 public class StatementPoolTest extends DBTestCase {
 
   private static Table table;
-  private static TypedTable<User> typedTable;
   
   @BeforeClass
   public static void globalSetup() throws SQLException {
@@ -27,8 +26,6 @@ public class StatementPoolTest extends DBTestCase {
         table(UserDAO.TABLE_NAME)
           .columns(UserDAO.COLUMNS)
           .boundTo(getConnection());
-    typedTable = table(UserDAO.TABLE_NAME, getConversion())
-                .columns(UserDAO.COLUMNS).boundTo(getConnection());
   }
   
   @Test
@@ -76,7 +73,7 @@ public class StatementPoolTest extends DBTestCase {
   @Test
   public void test06() throws SQLException {
     Query q1 = selectFrom(table);
-    Query q2 = selectFrom(typedTable);
+    Query q2 = selectFrom(table);
     PreparedStatement s1 = q1.getQueryStatement();
     PreparedStatement s2 = q2.getQueryStatement();
     assertSame(s1, s2);
@@ -85,7 +82,7 @@ public class StatementPoolTest extends DBTestCase {
   @Test
   public void test07() throws SQLException {
     Query q1 = selectFrom(table).where("login='foo'");
-    Query q2 = selectFrom(typedTable).where("login='foo'");
+    Query q2 = selectFrom(table).where("login='foo'");
     PreparedStatement s1 = q1.getQueryStatement();
     PreparedStatement s2 = q2.getQueryStatement();
     assertSame(s1, s2);
@@ -94,21 +91,21 @@ public class StatementPoolTest extends DBTestCase {
   @Test
   public void test09() throws SQLException {
     PreparedStatement s1 = delete(table);
-    PreparedStatement s2 = delete(typedTable);
+    PreparedStatement s2 = delete(table);
     assertSame(s1, s2);
   }
   
   @Test @Category(TruncateSupportEnabled.class)
   public void test10() throws SQLException {
     PreparedStatement s1 = StatementPool.truncate(table);
-    PreparedStatement s2 = StatementPool.truncate(typedTable);
+    PreparedStatement s2 = StatementPool.truncate(table);
     assertSame(s1, s2);
   }
   
   @Test
   public void test11() throws SQLException {
     PreparedStatement s1 = insert(table);
-    PreparedStatement s2 = insert(typedTable);
+    PreparedStatement s2 = insert(table);
     assertSame(s1, s2);
   }
 

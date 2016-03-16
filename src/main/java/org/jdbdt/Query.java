@@ -14,11 +14,6 @@ import java.sql.Connection;
  * and {@link #having(String)}, usually in a chained sequence of calls.
  * </p>
  * 
- * <p>
- * Typed table queries (instances of subclass {@link TypedTable}) can be
- * defined similarly but are defined in association to {@link TypedTable} objects.
- * </p> 
- * 
  * <p><b>Illustration 1 - simple query to select all columns</b></p>
  * <blockquote><pre>
  * import static org.jdbdt.JDBDT.*;
@@ -70,11 +65,10 @@ import java.sql.Connection;
  * 
  * @see Table
  * @see JDBDT#selectFrom(Table)
- * @see TypedQuery
  * 
  * @since 0.1
  */
-public class Query extends DataSource {
+public final class Query extends DataSource {
 
   /**
    * Table.

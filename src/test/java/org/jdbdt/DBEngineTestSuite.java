@@ -12,7 +12,6 @@ import org.junit.runners.Suite.SuiteClasses;
   TearDownTest.class,
   DataInsertionTest.class,
   DeltaTest.class,
-  TypedDeltaTest.class,
   DataBuilderCoreTest.class,
   DataBuilderCoreFillerTest.class,
   DataBuilderSequenceFillersTest.class,

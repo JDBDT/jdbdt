@@ -44,7 +44,7 @@ public class DataSet implements Iterable<Row> {
    * @return The data source associated to this 
    *   data set.
    */
-  final DataSource getSource() {
+  public final DataSource getSource() {
     return source;
   }
 

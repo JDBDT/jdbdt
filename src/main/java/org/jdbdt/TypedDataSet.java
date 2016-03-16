@@ -17,24 +17,11 @@ public class TypedDataSet<T> extends DataSet {
   private final Conversion<T> conv;
   
   /**
-   * Construct a typed data set from a typed table.
-   * @param tt Typed table.
+   * Construct a typed data set.
+   * @param ds Data source
+   * @param conv Conversion function
    */
-  TypedDataSet(TypedTable<T> tt) {
-    this(tt, tt.conversion());
-  }
-
-  /**
-   * Construct a typed data set from a typed query.
-   * @param tq Typed query.
-   */
-  TypedDataSet(TypedQuery<T> tq) {
-    this(tq, tq.conversion());
-  }
-  
-  
-  @SuppressWarnings("javadoc")
-  private TypedDataSet(DataSource ds, Conversion<T> conv) {
+  TypedDataSet(DataSource ds, Conversion<T> conv) {
     super(ds);
     this.conv = conv;
   }

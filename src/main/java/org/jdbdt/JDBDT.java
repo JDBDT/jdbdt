@@ -47,17 +47,6 @@ public final class JDBDT {
     return new Table(tableName); 
   }
 
-  /**
-   * Create typed handle for given table name
-   * and conversion function.
-   * @param <T> Type of data.
-   * @param tableName Name of the database table.
-   * @param conv Conversion function.
-   * @return A new {@link TypedTable} instance.
-   */
-  public static <T> TypedTable<T> table(String tableName, Conversion<T> conv) {
-    return new TypedTable<>(tableName, conv); 
-  }
 
   /**
    * Create data builder for a table.
@@ -69,7 +58,7 @@ public final class JDBDT {
   }
 
   /**
-   * Create data set (untyped version).
+   * Create a new data set.
    * @param source Data source instance.
    * @return A new, empty data set.
    */
@@ -78,45 +67,24 @@ public final class JDBDT {
   }
 
   /**
-   * Create data set - typed table version.
+   * Create typed data set.
    * @param <T> Type of objects.
-   * @param tt Typed table.
+   * @param source Data source.
+   * @param conv Conversion function.
    * @return A new, empty data set.
    */
-  public static <T> TypedDataSet<T> data(TypedTable<T> tt) {
-    return new TypedDataSet<>(tt);
-  }
-
-  /**
-   * Create data set - typed query version.
-   * @param <T> Type of objects.
-   * @param tq Typed query.
-   * @return A new, empty data set.
-   */
-  public static <T> TypedDataSet<T> data(TypedQuery<T> tq) {
-    return new TypedDataSet<>(tq);
+  public static <T> TypedDataSet<T> data(DataSource source, Conversion<T> conv) {
+    return new TypedDataSet<>(source, conv);
   }
 
   /**
    * Create query for a table.
    * @param t Table.
-   * @return A new {@link Query} object.
+   * @return A new query object.
    */
   public static Query selectFrom(Table t) {
     return new Query(t); 
   }
-
-  /**
-   * Create query for a typed table.
-   * @param <T> Type of objects.
-   * @param t Table.
-   * @return A new {@link TypedQuery} object.
-   */
-  public static <T> TypedQuery<T> selectFrom(TypedTable<T> t) {
-    return new TypedQuery<>(t); 
-  }
-
-
 
   /**
    * Take a database snapshot.
@@ -134,7 +102,6 @@ public final class JDBDT {
   snapshot(DataSource sp)  {
     sp.executeQuery(true);
   }
-
 
   /**
    * Obtain delta.
@@ -154,29 +121,6 @@ public final class JDBDT {
     return new Delta(s);
   }
 
-  /**
-   * Obtain typed delta - typed table variant.
-   * 
-   * @param <T> type of objects.
-   * @param tt Typed table.
-   * @return A new {@link Delta} object.
-   * @see #snapshot(DataSource)
-   */
-  public static <T> TypedDelta<T> delta(TypedTable<T> tt) {
-    return new TypedDelta<>(tt);
-  }
-
-  /**
-   * Obtain typed delta - typed query variant.
-   * 
-   * @param <T> type of objects.
-   * @param tq Typed query.
-   * @return A new {@link Delta} object.
-   * @see #snapshot(DataSource)
-   */
-  public static <T> TypedDelta<T> delta(TypedQuery<T> tq) {
-    return new TypedDelta<>(tq);
-  }
 
   /**
    * Assert that no changes were made to the database.
@@ -189,9 +133,9 @@ public final class JDBDT {
    * @param sp SnapshotProvider provider.
    * @throws DeltaAssertionError 
    *         if there are unverified changes for the delta
-   * @see #assertChanged(DataSource,DataSet,DataSet)
-   * @see #assertDeleted(DataSource,DataSet)
-   * @see #assertInserted(DataSource,DataSet)
+   * @see #assertChanged(DataSet,DataSet)
+   * @see #assertDeleted(DataSet)
+   * @see #assertInserted(DataSet)
    * @see Delta#end()
    */
   public static void assertNoChanges(DataSource sp) throws DeltaAssertionError {
@@ -207,16 +151,14 @@ public final class JDBDT {
    * <code>delta(source).before(data).end()</code>.
    * </p>
    * 
-   * @param source Data source.
    * @param data Data set.
    * @throws DeltaAssertionError if the assertion fails.
    * @see #assertNoChanges(DataSource)
-   * @see #assertDeleted(DataSource,DataSet)
-   * @see #assertInserted(DataSource,DataSet)
+   * @see #assertInserted(DataSet)
    * @see Delta#end()
    */
-  public static void assertDeleted(DataSource source, DataSet data) throws DeltaAssertionError {
-    delta(source).before(data).end(); 
+  public static void assertDeleted(DataSet data) throws DeltaAssertionError {
+    delta(data.getSource()).before(data).end(); 
   }
 
   /**
@@ -228,16 +170,15 @@ public final class JDBDT {
    * <code>delta(s).after(data).end()</code>.
    * </p>
    * 
-   * @param s Data source.
    * @param data data set.
    * @throws DeltaAssertionError if the assertion fails.
    * @see #assertNoChanges(DataSource)
-   * @see #assertDeleted(DataSource,DataSet)
-   * @see #assertChanged(DataSource,DataSet,DataSet)
+   * @see #assertDeleted(DataSet)
+   * @see #assertChanged(DataSet,DataSet)
    * @see Delta#end()
    */
-  public static void assertInserted(DataSource s, DataSet data) throws DeltaAssertionError {
-    delta(s).after(data).end(); 
+  public static void assertInserted(DataSet data) throws DeltaAssertionError {
+    delta(data.getSource()).after(data).end(); 
   }
 
   /**
@@ -249,18 +190,20 @@ public final class JDBDT {
    * <code>delta(s).before(b).after(a).end()</code>.
    * </p>
    * 
-   * @param s Data source.
-   * @param a 'after' set.
-   * @param b 'before' set.
+   * @param pre Old data no longer in database.
+   * @param post New Data in database.
    * @throws DeltaAssertionError if the assertion fails.
    *
    * @see #assertNoChanges(DataSource)
-   * @see #assertDeleted(DataSource,DataSet)
-   * @see #assertInserted(DataSource,DataSet)
+   * @see #assertDeleted(DataSet)
+   * @see #assertInserted(DataSet)
    * @see Delta#end()
    */
-  public static void assertChanged(DataSource s, DataSet a, DataSet b) throws DeltaAssertionError {
-    delta(s).before(b).after(a).end(); 
+  public static void assertChanged(DataSet pre, DataSet post) throws DeltaAssertionError {
+    if (pre.getSource() != post.getSource()) {
+      throw new InvalidUsageException("Data sets associate to different data sources.");
+    }
+    delta(pre.getSource()).before(pre).after(post).end(); 
   }
 
   /**

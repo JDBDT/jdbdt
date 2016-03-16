@@ -18,11 +18,10 @@ import java.util.LinkedHashMap;
  * </p>
  * 
  * @see JDBDT#delta(DataSource)
- * @see TypedDelta
  * @since 0.1
  * 
  */
-public class Delta {
+public final class Delta {
   /**
    * Observer instance. 
    */

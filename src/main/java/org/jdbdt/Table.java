@@ -40,10 +40,9 @@ import java.sql.SQLException;
  * </pre></blockquote>
  * 
  * 
- * @see TypedTable
  * @since 0.1
  */
-public class Table extends DataSource {
+public final class Table extends DataSource {
 
   /**
    * Table name.

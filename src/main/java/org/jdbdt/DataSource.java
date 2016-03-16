@@ -136,7 +136,7 @@ public abstract class DataSource {
    */
   final DataSet getSnapshot() {
     if (snapshot == null) {
-      throw new InvalidUsageException("No snapshot taken for table.");
+      throw new InvalidUsageException("No snapshot taken!");
     }
     return snapshot;
   }

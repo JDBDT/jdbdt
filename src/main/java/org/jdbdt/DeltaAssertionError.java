@@ -9,7 +9,6 @@ package org.jdbdt;
  * 
  * @see JDBDT#delta(DataSource)
  * @see Delta
- * @see TypedDelta
  * 
  * @since 0.1
  */
