@@ -15,7 +15,7 @@ public class DataSet implements Iterable<Row> {
   /**
    * Data source.
    */
-  final DataSource ds;
+  final DataSource source;
   /**
    * Rows in the data set.
    */
@@ -35,10 +35,18 @@ public class DataSet implements Iterable<Row> {
    * @param l Row list. 
    */
   DataSet(DataSource ds, ArrayList<Row> l) {
-    this.ds = ds;
+    this.source = ds;
     this.rows = l;
   }
   
+  /**
+   * Get data source.
+   * @return The data source associated to this 
+   *   data set.
+   */
+  final DataSource getSource() {
+    return source;
+  }
 
   /**
    * Test if set is empty.
@@ -69,8 +77,8 @@ public class DataSet implements Iterable<Row> {
    * @return The data set instance (for chained calls).
    */
   public final DataSet row(Object... columnValues) {
-    if (columnValues.length != ds.getColumnCount()) {
-      throw new InvalidUsageException(ds.getColumnCount() +
+    if (columnValues.length != source.getColumnCount()) {
+      throw new InvalidUsageException(source.getColumnCount() +
             " columns expected, not " + columnValues.length + ".");
     }
     addRow(new RowImpl(columnValues));
@@ -113,4 +121,5 @@ public class DataSet implements Iterable<Row> {
       ( o instanceof DataSet &&
         rows.equals(((DataSet) o).rows) );
   }
+
 }
