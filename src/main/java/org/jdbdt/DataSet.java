@@ -4,17 +4,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Representation of a row set.
+ * Data set.
  * 
- * <p>
- * This class is used internally by JDBDT to represent database row sets.
- * </p>
+ * <p>A data set represents a collection of rows.</p>
  * 
  * @since 0.1
  *
  */
 public class DataSet implements Iterable<Row> {
-  
   /**
    * Data source.
    */
