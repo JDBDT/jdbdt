@@ -167,28 +167,5 @@ public final class Table extends DataSource {
     if (connection != null) {
       throw new InvalidUsageException("Table is already bound to a connection.");
     }
-  }
- 
-  /**
-   * Insert a row into the table.
-   * @param row Row to insert.
-   * @throws SQLException If a dababase error occurs.
-   * @throws InvalidUsageException if the number of columns in the row 
-   *    is different from expected. 
-   */
-  void insertRow(Object[] row) throws SQLException {
-    final int n = getColumnCount();
-    if ( row.length != n) {
-      throw new InvalidUsageException("Expected "+ n + 
-          " column values, got " +  row.length);  
-    }
-    PreparedStatement  insertStmt = StatementPool.insert(this);
-    for (int i = 1; i <= n; i++) {
-      insertStmt.setObject(i, row[i-1]);
-    }
-    insertStmt.execute();
-    insertStmt.clearParameters();
-  }
-
- 
+  } 
 }
