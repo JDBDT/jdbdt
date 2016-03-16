@@ -228,7 +228,7 @@ public final class JDBDT {
    * <code>delta(s).after(data).end()</code>.
    * </p>
    * 
-   * @param s SnapshotProvider.
+   * @param s Data source.
    * @param data data set.
    * @throws DeltaAssertionError if the assertion fails.
    * @see #assertNoChanges(DataSource)
@@ -249,7 +249,7 @@ public final class JDBDT {
    * <code>delta(s).before(b).after(a).end()</code>.
    * </p>
    * 
-   * @param s SnapshotProvider.
+   * @param s Data source.
    * @param a 'after' set.
    * @param b 'before' set.
    * @throws DeltaAssertionError if the assertion fails.
