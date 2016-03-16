@@ -130,27 +130,4 @@ final class StatementPool {
     sql.append(')');
     return compile(t.getConnection(), sql.toString());
   }
-
-
-  /**
-   * Get DELETE statement for a table.
-   * @param t Table.
-   * @return Compiled statement for deletion.
-   * @throws SQLException If a database error occurs.
-   */
-  static PreparedStatement delete(Table t) throws SQLException {
-    return compile(t.getConnection(),
-        "DELETE FROM " + t.getName());
-  }
-
-  /**
-   * Get TRUNCATE statement for a table.
-   * @param t Table.
-   * @return Compiled statement for truncation.
-   * @throws SQLException If a database error occurs.
-   */
-  static PreparedStatement truncate(Table t) throws SQLException {
-    return compile(t.getConnection(),
-        "TRUNCATE TABLE " + t.getName());
-  }
 }

@@ -89,20 +89,6 @@ public class StatementPoolTest extends DBTestCase {
   }
   
   @Test
-  public void test09() throws SQLException {
-    PreparedStatement s1 = delete(table);
-    PreparedStatement s2 = delete(table);
-    assertSame(s1, s2);
-  }
-  
-  @Test @Category(TruncateSupportEnabled.class)
-  public void test10() throws SQLException {
-    PreparedStatement s1 = StatementPool.truncate(table);
-    PreparedStatement s2 = StatementPool.truncate(table);
-    assertSame(s1, s2);
-  }
-  
-  @Test
   public void test11() throws SQLException {
     PreparedStatement s1 = insert(table);
     PreparedStatement s2 = insert(table);

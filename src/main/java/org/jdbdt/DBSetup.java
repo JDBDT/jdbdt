@@ -75,7 +75,8 @@ final class DBSetup {
    * @throws SQLException If a database error occurs.
    */
   static int deleteAll(Table t) throws SQLException {
-    return StatementPool.delete(t).executeUpdate();
+    return StatementPool.compile(t.getConnection(), "DELETE FROM " + t.getName())
+                        .executeUpdate();
   }
   
   /**
@@ -84,7 +85,8 @@ final class DBSetup {
    * @throws SQLException If a database error occurs.
    */
   static void truncate(Table t) throws SQLException {
-    StatementPool.truncate(t).execute();    
+    StatementPool.compile(t.getConnection(),
+        "TRUNCATE TABLE " + t.getName()).execute();
   }
   
   /**
