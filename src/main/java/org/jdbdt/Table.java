@@ -1,9 +1,7 @@
 package org.jdbdt;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
 
 /**
  * Database table representation.
