@@ -45,54 +45,21 @@ public class StatementPoolTest extends DBTestCase {
   
   @Test
   public void test03() throws SQLException {
-    Query q = selectFrom(table);
-    // Inverse order to test02
-    PreparedStatement s1 = compile(getConnection(), q.getSQLForQuery());
-    PreparedStatement s2 = q.getQueryStatement();
+    Query q1 = selectFrom(table);
+    Query q2 = selectFrom(table);
+    PreparedStatement s1 = q1.getQueryStatement();
+    PreparedStatement s2 = q2.getQueryStatement();
     assertSame(s1, s2);
   }
   
   @Test
   public void test04() throws SQLException {
-    Query q1 = selectFrom(table);
-    Query q2 = selectFrom(table);
-    PreparedStatement s1 = q1.getQueryStatement();
-    PreparedStatement s2 = q2.getQueryStatement();
-    assertSame(s1, s2);
-  }
-  
-  @Test
-  public void test05() throws SQLException {
     Query q1 = selectFrom(table).where("login='foo'");
     Query q2 = selectFrom(table).where("login='foo'");
     PreparedStatement s1 = q1.getQueryStatement();
     PreparedStatement s2 = q2.getQueryStatement();
     assertSame(s1, s2);
   }
-  
-  @Test
-  public void test06() throws SQLException {
-    Query q1 = selectFrom(table);
-    Query q2 = selectFrom(table);
-    PreparedStatement s1 = q1.getQueryStatement();
-    PreparedStatement s2 = q2.getQueryStatement();
-    assertSame(s1, s2);
-  }
-  
-  @Test
-  public void test07() throws SQLException {
-    Query q1 = selectFrom(table).where("login='foo'");
-    Query q2 = selectFrom(table).where("login='foo'");
-    PreparedStatement s1 = q1.getQueryStatement();
-    PreparedStatement s2 = q2.getQueryStatement();
-    assertSame(s1, s2);
-  }
-  
-  @Test
-  public void test11() throws SQLException {
-    PreparedStatement s1 = insert(table);
-    PreparedStatement s2 = insert(table);
-    assertSame(s1, s2);
-  }
+
 
 }

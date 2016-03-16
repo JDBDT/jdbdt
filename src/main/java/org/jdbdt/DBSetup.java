@@ -53,7 +53,21 @@ final class DBSetup {
    * @throws SQLException If a database error occurs.
    */
   private static void insert(Table t, DataSet data) throws SQLException {
-    PreparedStatement  insertStmt = StatementPool.insert(t);
+    StringBuilder sql = new StringBuilder("INSERT INTO ");
+    String[] columnNames = t.getColumnNames();
+    sql.append(t.getName())
+    .append('(')
+    .append(columnNames[0]);
+    for (int i=1; i < columnNames.length; i++) {
+      sql.append(',').append(columnNames[i]);
+    }
+    sql.append(") VALUES (?");
+    for (int i=1; i < columnNames.length; i++) {
+      sql.append(",?");
+    }
+    sql.append(')');
+    PreparedStatement  insertStmt = 
+      StatementPool.compile(t.getConnection(), sql.toString());
     for (Row r : data) {
       final int n = r.getColumnCount();
       final Object[] cols = r.getColumnData();

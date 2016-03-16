@@ -107,27 +107,4 @@ final class StatementPool {
   static PreparedStatement compile(Connection c, String sql) throws SQLException {
     return INSTANCE.compileStatement(c,  sql);
   }
-
-  /**
-   * Get INSERT statement for a table.
-   * @param t Table.
-   * @return Compiled statement for insertion.
-   * @throws SQLException If a database error occurs.
-   */
-  static PreparedStatement insert(Table t) throws SQLException {
-    StringBuilder sql = new StringBuilder("INSERT INTO ");
-    String[] columnNames = t.getColumnNames();
-    sql.append(t.getName())
-    .append('(')
-    .append(columnNames[0]);
-    for (int i=1; i < columnNames.length; i++) {
-      sql.append(',').append(columnNames[i]);
-    }
-    sql.append(") VALUES (?");
-    for (int i=1; i < columnNames.length; i++) {
-      sql.append(",?");
-    }
-    sql.append(')');
-    return compile(t.getConnection(), sql.toString());
-  }
 }
