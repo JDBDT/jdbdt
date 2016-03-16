@@ -214,7 +214,7 @@ public final class JDBDT {
    *  
    */
   public static void insert(DataSet data) throws SQLException {
-    DataInsertion.insert(data);
+    DBSetup.insert(data);
   }
 
   /**
@@ -225,7 +225,7 @@ public final class JDBDT {
    *  
    */
   public static void populate(DataSet data) throws SQLException {
-    DataInsertion.populate(data);
+    DBSetup.populate(data);
   }
 
   /**
@@ -238,7 +238,7 @@ public final class JDBDT {
    * @see #deleteAll(Query)
    */
   public static int deleteAll(Table t) throws SQLException  {
-    return StatementPool.delete(t).executeUpdate();
+    return DBSetup.deleteAll(t);
   }
 
 
@@ -263,28 +263,7 @@ public final class JDBDT {
    * @see #truncate(Table)
    */
   public static int deleteAll(Query q) throws SQLException  {
-    if (q.groupByClause() != null) {
-      throw new InvalidUsageException("GROUP BY clause is set!");
-    }
-    if (q.havingClause() != null) {
-      throw new InvalidUsageException("HAVING clause is set!");
-    }
-    String whereClause = q.whereClause();
-
-    if (whereClause == null) {
-      throw new InvalidUsageException("WHERE clause is not set!");
-    }
-    PreparedStatement deleteStmt = 
-        StatementPool.compile(q.getConnection(), 
-            "DELETE FROM " + q.getTable().getName() 
-            + " WHERE " + whereClause);
-    Object[] args = q.getQueryArguments();
-    if (args != null && args.length > 0) {
-      for (int i=0; i < args.length; i++) {
-        deleteStmt.setObject(i + 1, args[i]);
-      }
-    }
-    return deleteStmt.executeUpdate();
+    return DBSetup.deleteAll(q);
   }
 
   /**
@@ -295,7 +274,7 @@ public final class JDBDT {
    * @see #deleteAll(Query)
    */
   public static void truncate(Table t) throws SQLException  {
-    StatementPool.truncate(t).execute();
+    DBSetup.truncate(t);
   }
 
   /**
