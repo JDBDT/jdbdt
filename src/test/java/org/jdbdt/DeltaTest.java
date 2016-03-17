@@ -132,7 +132,7 @@ public class DeltaTest extends DBTestCase {
   @Test
   public void testSuccessDeleteCase2() throws SQLException {
     User u = getTestData(EXISTING_DATA_ID1);
-    getDAO().doDelete(EXISTING_DATA_ID1);
+    getDAO().doDelete(EXISTING_DATA_ID1);      
     assertDeleted( 
         data(dataSource)
         .row(u.getLogin(), 
@@ -171,6 +171,4 @@ public class DeltaTest extends DBTestCase {
             dateValue(u2.getCreated()))
         ); 
   }
-
-
 }
