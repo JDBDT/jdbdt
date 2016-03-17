@@ -4,7 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * Utility class for database insertions.
+ * Utility class with methods for database setup.
  * 
  * @since 0.1
  *
@@ -12,7 +12,7 @@ import java.sql.SQLException;
 final class DBSetup {
 
   /**
-   * Insert a dataset onto the database.
+   * Insert a data set onto the database.
    * @param data Data Set.
    * @throws SQLException If a database error occurs during insertion.
    */
@@ -140,11 +140,4 @@ final class DBSetup {
   private DBSetup() {
     
   }
-
-  
-
-  
-  
-  
-  
 }
