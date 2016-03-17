@@ -327,7 +327,7 @@ public final class JDBDT {
    * 
    */
   public static void disableStatementPooling() {
-    StatementPool.disablePooling();
+    StatementPool.disable();
   }
 
   /**

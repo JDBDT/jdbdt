@@ -14,8 +14,6 @@ import java.util.WeakHashMap;
  */
 final class StatementPool {
 
-
-
   /**
    * Enabled flag.
    */
@@ -37,15 +35,19 @@ final class StatementPool {
   }
 
   /**
-   * Disable pooling.
+   * Enable/disable pooling.
+   * @param enable Enabling flag.
    */
-  private synchronized void noPooling() {
-    poolingEnabled = false;
-    if (pools != null) {
-      pools.clear();
-      pools = null;
+  private synchronized void pooling(boolean enable) {
+    if (enable != poolingEnabled) {
+      poolingEnabled = enable;
+      if (!enable && pools != null) {
+        pools.clear();
+        pools = null;
+      }
     }
   }
+
   /**
    * Compile statement.
    * @param c connection
@@ -85,10 +87,16 @@ final class StatementPool {
   INSTANCE = new StatementPool();
 
   /**
-   * Disable statement pooling.
+   * Activate statement pooling.
    */
-  static void disablePooling() {
-    INSTANCE.noPooling();
+  static void enable() {
+    INSTANCE.pooling(true);
+  }
+  /**
+   * Deactivate statement pooling.
+   */
+  static void disable() {
+    INSTANCE.pooling(false);
   }
   /**
    * Compile an SQL statement.
