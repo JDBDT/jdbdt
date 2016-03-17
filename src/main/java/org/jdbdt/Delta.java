@@ -40,13 +40,19 @@ public final class Delta {
    * @param s Data source.
    */
   Delta(DataSource s) { 
-    DataSet pre = s.getSnapshot(),
-           post = s.executeQuery(false);
-    source = s;
-    diff = calcDiff(pre, post);
+    this(s.getSnapshot());
   }
 
-  
+  /**
+   * Construct a new delta.
+   * @param pre Pre-state to assume.
+   */
+  Delta(DataSet pre) {
+    source = pre.getSource();
+    diff = calcDiff(pre, source.executeQuery(false));
+  }
+
+
   /**
    * Get meta-data.
    * @return the meta-data associated to this delta.
@@ -182,11 +188,11 @@ public final class Delta {
    */
   private void throwDeltaAssertionError(String msg) {
     // TODO
-//    Log errorLog = obs.getErrorLog();
-//    if (errorLog != null) {
-//      errorLog.write(this);
-//    }
-      throw new DeltaAssertionError(msg);
+    //    Log errorLog = obs.getErrorLog();
+    //    if (errorLog != null) {
+    //      errorLog.write(this);
+    //    }
+    throw new DeltaAssertionError(msg);
   }
 
   /**
@@ -200,7 +206,7 @@ public final class Delta {
     LinkedHashMap<Row,Integer> diff = new LinkedHashMap<>();
     // Try to minimize space use by matching equal rows soon.
     Iterator<Row> a = rs1.iterator(),
-                  b = rs2.iterator();
+        b = rs2.iterator();
     boolean done = false;
     while (!done) {
       if (!a.hasNext()) {
@@ -223,7 +229,7 @@ public final class Delta {
 
     return diff;
   }
-  
+
   @SuppressWarnings("javadoc")
   private static void 
   update(LinkedHashMap<Row, Integer> diff, Row r, int d) {
@@ -235,7 +241,7 @@ public final class Delta {
       diff.put(r, n);
     } 
   }
-  
+
 
   /**
    * Get iterator for 'before' set.
@@ -244,7 +250,7 @@ public final class Delta {
   Iterator<Row> bIterator () {
     return new DeltaIterator(diff, true);
   }
-  
+
   /**
    * Get iterator for 'after' set.
    * @return An iterator instance.
@@ -252,7 +258,7 @@ public final class Delta {
   Iterator<Row> aIterator () {
     return new DeltaIterator(diff, false);
   }
-  
+
   @SuppressWarnings("javadoc")
   private static
   class DeltaIterator implements Iterator<Row> {
@@ -260,7 +266,7 @@ public final class Delta {
     Entry<Row,Integer> nextEntry;
     boolean preState;
     int count;
-    
+
     DeltaIterator(LinkedHashMap<Row, Integer> diff, boolean pre) {
       supportItr = diff.entrySet().iterator();
       preState = pre;
@@ -268,7 +274,7 @@ public final class Delta {
       nextEntry = null;
       advance();
     }
-    
+
     private void advance() {
       if (count == 0) {
         nextEntry = null;
@@ -283,10 +289,10 @@ public final class Delta {
             nextEntry = entry;
           }
         }
-        
+
       }
     }
-    
+
     @Override
     public boolean hasNext() {
       return nextEntry != null;
@@ -301,7 +307,7 @@ public final class Delta {
       advance();
       return r;
     }
-    
+
   }
 
 }

@@ -206,6 +206,15 @@ public final class JDBDT {
     delta(pre.getSource()).before(pre).after(post).end(); 
   }
 
+  
+  /**
+   * Assert database state is the given data set.
+   * @param data Data set.
+   * @throws DeltaAssertionError if the assertion fails.
+   */
+  public static void assertState(DataSet data) throws DeltaAssertionError {
+    new Delta(data).end(); 
+  }
   /**
    * Insert a data set onto database.
    * 
