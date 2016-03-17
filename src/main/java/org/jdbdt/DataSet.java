@@ -2,6 +2,7 @@ package org.jdbdt;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 /**
  * Data set.
@@ -121,5 +122,32 @@ public class DataSet implements Iterable<Row> {
       ( o instanceof DataSet &&
         rows.equals(((DataSet) o).rows) );
   }
-
+  /**
+   * Create sub-set of a given data set.
+   * @param data Data set.
+   * @param startIndex Start index.
+   * @param endIndex End index.
+   * @return A new data set containing 
+   *        the rows in the specified range.
+   */
+  public static DataSet subset(DataSet data, int startIndex, int endIndex) {
+    DataSet sub = new DataSet(data.getSource());
+    ListIterator<Row> itr = data.rows.listIterator(startIndex);
+    int index = startIndex;
+    while (itr.hasNext() && index < endIndex) {
+      sub.rows.add(itr.next());
+    }
+    return sub;
+  }
+  
+  /**
+   * Add rows of given data set to this set.
+   * @param other This data set.
+   * @return The data set instance (for chained calls).
+   */
+  public DataSet add(DataSet other) {
+    rows.addAll(other.rows);
+    return this;
+  }
+  
 }
