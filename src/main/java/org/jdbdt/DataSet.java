@@ -2,6 +2,7 @@ package org.jdbdt;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ListIterator;
 
 /**
@@ -20,7 +21,7 @@ public class DataSet implements Iterable<Row> {
   /**
    * Rows in the data set.
    */
-  private final ArrayList<Row> rows;
+  private final List<Row> rows;
   
   /**
    * Constructs a new data set.
