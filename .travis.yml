@@ -1,7 +1,4 @@
 language: java
 script: mvn -Prelease package
-os:
-  - linux
-  - osx
 jdk:
   - oraclejdk8
