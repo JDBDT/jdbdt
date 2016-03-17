@@ -9,7 +9,7 @@ import java.util.Collection;
  *
  * @since 0.1
  */
-public class TypedDataSet<T> extends DataSet {
+public final class TypedDataSet<T> extends DataSet {
 
   /**
    * Conversion function.
