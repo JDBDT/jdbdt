@@ -1,6 +1,5 @@
 package org.jdbdt;
 
-import java.sql.SQLException;
 import java.util.Collection;
 
 /**
