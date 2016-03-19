@@ -4,6 +4,7 @@ package org.jdbdt;
 import static org.jdbdt.JDBDT.*;
 
 import java.sql.SQLException;
+import java.util.EnumMap;
 
 import static org.junit.Assert.*;
 
@@ -14,169 +15,120 @@ import org.junit.runners.MethodSorters;
 
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class QueryTest extends DBTestCase {  
+public class QueryTest extends DBTestCase { 
+  enum S {
+    ARGS, COLS, GROUP_BY, HAVING, ORDER_BY, WHERE;
+  }
+  interface QMutator<T> {
+    Query set(T arg);
+  }
   private Query theSUT;
-  
+  private EnumMap<S,Object> qsetup;
+ 
   @Before
   public void setup() throws SQLException {
     Table t = table(UserDAO.TABLE_NAME)
              .columns(UserDAO.COLUMNS)
              .boundTo(getConnection());
     theSUT = selectFrom(t);
+    qsetup = new EnumMap<>(S.class);
+    for (S s : S.values()) {
+      qsetup.put(s, null);
+    }
+    qsetup.put(S.COLS, UserDAO.COLUMNS);
+  }
+  
+  <T> void setup(S s, QMutator<T> m, T arg) {
+    qsetup.put(s, arg);
+    assertSame(theSUT, m.set(arg));
   }
 
+  void verifyQSettings() {
+    assertEquals(qsetup.get(S.WHERE),    theSUT.whereClause());
+    assertEquals(qsetup.get(S.HAVING),   theSUT.havingClause());
+    assertArrayEquals((String[]) qsetup.get(S.GROUP_BY), s2a(theSUT.groupByClause()));
+    assertArrayEquals((String[]) qsetup.get(S.ORDER_BY), s2a(theSUT.orderByClause()));
+    assertArrayEquals((Object[]) qsetup.get(S.ARGS), theSUT.getQueryArguments());
+    assertArrayEquals((String[]) qsetup.get(S.COLS), theSUT.getColumnNames());
+  }
+  
+  static String[] s2a(String s) {
+    return s == null ? null : s.split(",");
+  }
+  
   @Test
   public void testInit() {
-    assertNull(theSUT.whereClause());
-    assertNull(theSUT.groupByClause());
-    assertNull(theSUT.havingClause());
-    assertNull(theSUT.orderByClause());
+    verifyQSettings();
   }
   
   @Test
   public void testInitWhere() {
-    String clause = "login='foo'";
-    theSUT.where(clause);
-    assertEquals(clause, theSUT.whereClause());
-    assertNull(theSUT.groupByClause());
-    assertNull(theSUT.havingClause());
-    assertNull(theSUT.orderByClause());
+    setup(S.WHERE, theSUT::where, "login='foo'");
+    verifyQSettings();
   }
   
   @Test
   public void testInitOrderBy1() {
-    String clause = "login";
-    theSUT.orderBy(clause);
-    assertNull(theSUT.whereClause());
-    assertNull(theSUT.groupByClause());
-    assertNull(theSUT.havingClause());
-    assertEquals(clause, theSUT.orderByClause());
-    assertNull(theSUT.getQueryArguments());
+    setup(S.ORDER_BY, theSUT::orderBy, new String[] { "login" });
+    verifyQSettings();
   }
   
   @Test
   public void testInitOrderBy2() {
-    String c1 = "login", c2 = "password";
-    theSUT.orderBy(c1, c2);
-    assertNull(theSUT.whereClause());
-    assertNull(theSUT.groupByClause());
-    assertNull(theSUT.havingClause());
-    assertEquals(c1 + "," + c2, theSUT.orderByClause());
-    assertNull(theSUT.getQueryArguments());
+    setup(S.ORDER_BY, theSUT::orderBy, new String[] { "password", "login" });
+    verifyQSettings();
   }
+  
   
   @Test
   public void testInitGroupBy1() {
-    // TODO sensible query
-    String clause = "login";
-    theSUT.groupBy(clause);
-    assertNull(theSUT.whereClause());
-    assertEquals(clause, theSUT.groupByClause());
-    assertNull(theSUT.havingClause());
-    assertNull(theSUT.orderByClause());
-    assertNull(theSUT.getQueryArguments());
+    setup(S.GROUP_BY, theSUT::groupBy, new String[] { "password" });
+    verifyQSettings();
   }
   
   @Test
   public void testInitGroupBy2() {
     // TODO sensible query
-    String c1 = "login", f2 = "password";
-    theSUT.groupBy(c1, f2);
-    assertNull(theSUT.whereClause());
-    assertEquals(c1 + "," + f2, theSUT.groupByClause());
-    assertNull(theSUT.havingClause());
-    assertNull(theSUT.orderByClause());
-    assertNull(theSUT.getQueryArguments());
+    setup(S.GROUP_BY, theSUT::groupBy, new String[] { "password", "login" });
+    verifyQSettings();
   }
   
   @Test
   public void testInitHaving() {
-    String clause = "created NOT NULL";
-    theSUT.having(clause);
-    assertNull(theSUT.whereClause());
-    assertNull(theSUT.groupByClause());
-    assertEquals(clause,  theSUT.havingClause());
-    assertNull(theSUT.orderByClause());
-    assertNull(theSUT.getQueryArguments());
+    // TODO sensible query
+    setup(S.HAVING, theSUT::having, "created NOT NULL");
+    verifyQSettings();
+  }
+  @Test
+  public void testInitQueryArguments() {
+    setup(S.ARGS, theSUT::withArguments, new Object[] { "foo", 1 });
+    verifyQSettings();
   }
   
   @Test
   public void testInitChain1() {
-    // TODO sensible query
-    String wClause ="login LIKE '%user%'", 
-           obClause = "login";
-    theSUT.where(wClause ).orderBy(obClause);
-    assertEquals(wClause , theSUT.whereClause());
-    assertNull(theSUT.groupByClause());
-    assertNull(theSUT.havingClause());
-    assertEquals(obClause, theSUT.orderByClause());
-    assertNull(theSUT.getQueryArguments());
+    setup(S.WHERE, theSUT::where, "login LIKE '%user%'");
+    setup(S.ORDER_BY, theSUT::orderBy, new String[] { "login" });
+    verifyQSettings();
   }
   
   
   @Test
   public void testInitChain2() {
     // TODO sensible query
-    String w ="login LIKE '%user%'", 
-           gb = "login",
-           h = "created NOT NULL",
-           ob = "login";
-           
-    theSUT.where(w)
-          .groupBy(gb)
-          .having(h)
-          .orderBy(ob);
+    setup(S.WHERE, theSUT::where, "login LIKE ?");
+    setup(S.ARGS, theSUT::withArguments, new Object[] { "foo%" });
+    setup(S.ORDER_BY, theSUT::orderBy, new String[] { "login" });
+    setup(S.HAVING, theSUT::having, "created NOT NULL");
     
-    assertEquals(w , theSUT.whereClause());
-    assertEquals(gb, theSUT.groupByClause());
-    assertEquals(h, theSUT.havingClause());
-    assertEquals(ob, theSUT.orderByClause());
-    assertNull(theSUT.getQueryArguments());
+    verifyQSettings();
   }
   
-
   
-  @Test
-  public void testInitQueryArguments1() {
-    // TODO sensible query
-    String w ="login LIKE ?"; 
-    Object args[] = { "foo" };
-    theSUT.where(w).withArguments(args);
-    assertEquals(w , theSUT.whereClause());
-    assertNull(theSUT.groupByClause());
-    assertNull(theSUT.havingClause());
-    assertNull(theSUT.orderByClause());
-    assertArrayEquals(args, theSUT.getQueryArguments());
-  }
-  
-  @Test
-  public void testInitQueryArguments2() {
-    // TODO sensible query
-    String w ="login LIKE ? AND PASSWORD LIKE ?"; 
-    Object args[] = { "foo", "foo" };
-    theSUT.where(w).withArguments(args);
-    assertEquals(w , theSUT.whereClause());
-    assertNull(theSUT.groupByClause());
-    assertNull(theSUT.havingClause());
-    assertNull(theSUT.orderByClause());
-    assertArrayEquals(args, theSUT.getQueryArguments());
-  }
-  
-  @Test
-  public void testInitColumns1() {
-    String[] cols = { "login", "password" };
-    theSUT.columns(cols);
-    assertArrayEquals(cols, theSUT.getColumnNames());
-  }
-  
-  interface QueryChainMethod {
-    Query exec(String arg);
-  }
-  
-  void initTwice(QueryChainMethod m) {
-    m.exec("first");
+  void initTwice(QMutator<String> m) {
+    m.set("1");
     try {
-      m.exec("again");
+      m.set("2");
       fail(InvalidUsageException.class.toString());
     } 
     catch(InvalidUsageException e) { }
@@ -207,10 +159,10 @@ public class QueryTest extends DBTestCase {
     initTwice(theSUT::columns);
   }
   
-  void initAfterCompiling(QueryChainMethod m) {
+  void initAfterCompiling(QMutator<String> m) {
     theSUT.getQueryStatement();
     try {
-      m.exec("x");
+      m.set("x");
       fail(InvalidUsageException.class.toString());
     } 
     catch(InvalidUsageException e) { }
