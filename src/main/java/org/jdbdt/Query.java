@@ -103,7 +103,7 @@ public final class Query extends DataSource {
   /**
    * DISTINCT clause (undefined if false).
    */
-  private boolean distinct;
+  private boolean distinctClause;
   
   
   /**
@@ -169,10 +169,10 @@ public final class Query extends DataSource {
    */
   public Query distinct() {
     checkNotCompiled();
-    if (distinct) {
+    if (distinctClause) {
       throw new InvalidUsageException("DISTINCT clause already set.");
     }
-    distinct = true;
+    distinctClause = true;
     return this;
   }
 
@@ -281,7 +281,7 @@ public final class Query extends DataSource {
   @Override
   final String getSQLForQuery() {
     StringBuilder sql = new StringBuilder("SELECT");
-    if (distinct) {
+    if (distinctClause) {
       sql.append(" DISTINCT");
     }
     sql.append("\n ");
@@ -319,6 +319,14 @@ public final class Query extends DataSource {
     return whereClause;
   }
 
+  /**
+   * Get DISTINCT clause.
+   * @return <code>true</code> if DISTINCT clause is set for the query.
+   */
+  boolean distinctClause() {
+    return distinctClause;
+  }
+  
   /**
    * Get GROUP BY clause.
    * @return The WHERE clause for the query (null if undefined).

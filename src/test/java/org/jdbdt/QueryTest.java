@@ -23,7 +23,7 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class QueryTest extends DBTestCase { 
   enum S {
-    ARGS, COLS, GROUP_BY, HAVING, ORDER_BY, WHERE;
+    ARGS, COLS, DISTINCT, GROUP_BY, HAVING, ORDER_BY, WHERE;
   }
   interface QMutator<T> {
     Query set(T arg);
@@ -41,6 +41,7 @@ public class QueryTest extends DBTestCase {
     for (S s : S.values()) {
       qsetup.put(s, null);
     }
+    qsetup.put(S.DISTINCT, false);
     qsetup.put(S.COLS, UserDAO.COLUMNS);
   }
   
@@ -50,8 +51,9 @@ public class QueryTest extends DBTestCase {
   }
 
   void qverify() {
-    assertEquals(qsetup.get(S.WHERE),    theSUT.whereClause());
-    assertEquals(qsetup.get(S.HAVING),   theSUT.havingClause());
+    assertEquals(qsetup.get(S.WHERE), theSUT.whereClause());
+    assertEquals(qsetup.get(S.HAVING), theSUT.havingClause());
+    assertEquals(qsetup.get(S.DISTINCT), theSUT.distinctClause());
     assertArrayEquals((String[]) qsetup.get(S.GROUP_BY), s2a(theSUT.groupByClause()));
     assertArrayEquals((String[]) qsetup.get(S.ORDER_BY), s2a(theSUT.orderByClause()));
     assertArrayEquals((Object[]) qsetup.get(S.ARGS), theSUT.getQueryArguments());
@@ -105,9 +107,16 @@ public class QueryTest extends DBTestCase {
     qset(S.HAVING, theSUT::having, "created NOT NULL");
     qverify();
   }
+  
   @Test
   public void testInitQueryArguments() {
     qset(S.ARGS, theSUT::withArguments, new Object[] { "foo", 1 });
+    qverify();
+  }
+  
+  @Test
+  public void testInitDistinct() {
+    qset(S.DISTINCT, dummy -> theSUT.distinct(), true);
     qverify();
   }
   
@@ -126,6 +135,7 @@ public class QueryTest extends DBTestCase {
     qset(S.ARGS, theSUT::withArguments, new Object[] { "foo%" });
     qset(S.ORDER_BY, theSUT::orderBy, new String[] { "login" });
     qset(S.HAVING, theSUT::having, "created NOT NULL");
+    qset(S.DISTINCT, dummy -> theSUT.distinct(), true);
     qverify();
   }
   
