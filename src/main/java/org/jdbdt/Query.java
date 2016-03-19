@@ -280,7 +280,7 @@ public final class Query extends DataSource {
 
   @Override
   final String getSQLForQuery() {
-    StringBuilder sql = new StringBuilder("SELECT\n ");
+    StringBuilder sql = new StringBuilder("SELECT");
     if (distinct) {
       sql.append(" DISTINCT");
     }
