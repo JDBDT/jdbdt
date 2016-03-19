@@ -40,11 +40,9 @@ public final class TypedDataSet<T> extends DataSet {
    * Add rows to the data set.
    * @param rows Objects to map onto row values.
    * @return The loader instance (for possible chaining).
-   * @throws SQLException If a database error occurs during insertion.
    */
   @SafeVarargs
-  public final TypedDataSet<T> rows(T... rows) 
-      throws SQLException {
+  public final TypedDataSet<T> rows(T... rows)  {
     for (T rowObj : rows) {
       super.row(conv.convert(rowObj));
     }
