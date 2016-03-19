@@ -162,9 +162,17 @@ public class QueryTest extends DBTestCase {
     assertArrayEquals(args, theSUT.getQueryArguments());
   }
   
+  @Test
+  public void testInitColumns1() {
+    String[] cols = { "login", "password" };
+    theSUT.columns(cols);
+    assertArrayEquals(cols, theSUT.getColumnNames());
+  }
+  
   interface QueryChainMethod {
     Query exec(String arg);
   }
+  
   void initTwice(QueryChainMethod m) {
     m.exec("first");
     try {
@@ -173,6 +181,7 @@ public class QueryTest extends DBTestCase {
     } 
     catch(InvalidUsageException e) { }
   }
+  
   @Test 
   public void testInitWhereTwice() { 
     initTwice(theSUT::where); 
@@ -192,5 +201,43 @@ public class QueryTest extends DBTestCase {
   @Test 
   public void testInitArgumentsTwice() {
     initTwice(theSUT::withArguments);
+  }
+  @Test 
+  public void testInitColumnsTwice() {
+    initTwice(theSUT::columns);
+  }
+  
+  void initAfterCompiling(QueryChainMethod m) {
+    theSUT.getQueryStatement();
+    try {
+      m.exec("x");
+      fail(InvalidUsageException.class.toString());
+    } 
+    catch(InvalidUsageException e) { }
+  }
+  
+  @Test 
+  public void testInitWhereAfterCompiling() { 
+    initAfterCompiling(theSUT::where); 
+  }
+  @Test 
+  public void testInitGroupByAfterCompiling() {
+    initAfterCompiling(theSUT::groupBy);
+  }
+  @Test 
+  public void testInitOrderByAfterCompiling() {
+    initAfterCompiling(theSUT::orderBy);
+  }
+  @Test 
+  public void testInitHavingAfterCompiling() {
+    initAfterCompiling(theSUT::having);
+  }
+  @Test 
+  public void testInitArgumentsAfterCompiling() {
+    initAfterCompiling(theSUT::withArguments);
+  }
+  @Test 
+  public void testInitColumnsAfterCompiling() {
+    initAfterCompiling(theSUT::columns);
   }
 }
