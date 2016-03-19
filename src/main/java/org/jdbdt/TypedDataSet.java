@@ -55,10 +55,8 @@ public final class TypedDataSet<T> extends DataSet {
    * Add rows in a collection to the data set.
    * @param rows Collection of row objects.
    * @return The loader instance (for possible chaining).
-   * @throws SQLException If a database error occurs during insertion.
    */
-  public TypedDataSet<T> rows(Collection<? extends T> rows) 
-  throws SQLException {
+  public TypedDataSet<T> rows(Collection<? extends T> rows) {
     for (T rowObj : rows) {
       super.row(conv.convert(rowObj));
     }
