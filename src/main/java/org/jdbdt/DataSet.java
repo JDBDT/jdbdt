@@ -157,9 +157,5 @@ public class DataSet implements Iterable<Row> {
    */
   void enforceHOrdering() {
     Collections.sort(rows, (a,b) -> Integer.compare(a.hashCode(), b.hashCode()));    
-    for (Row r : rows) {
-      System.out.println(r + " -> " + r.hashCode());
-    }
-    System.out.println("--");
   }
 }
