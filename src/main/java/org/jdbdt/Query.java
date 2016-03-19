@@ -101,6 +101,12 @@ public final class Query extends DataSource {
   private String orderByClause = null;
 
   /**
+   * DISTINCT clause (undefined if false).
+   */
+  private boolean distinct;
+  
+  
+  /**
    * Query arguments if any.
    */
   private Object[] queryArgs = null;
@@ -154,6 +160,19 @@ public final class Query extends DataSource {
       throw new InvalidUsageException("WHERE clause already set.");
     }
     whereClause = clause;
+    return this;
+  }
+  
+  /**
+   * Set DISTINCT clause for query.
+   * @return The query instance for chained calls.
+   */
+  public Query distinct() {
+    checkNotCompiled();
+    if (distinct) {
+      throw new InvalidUsageException("DISTINCT clause already set.");
+    }
+    distinct = true;
     return this;
   }
 
@@ -262,12 +281,21 @@ public final class Query extends DataSource {
   @Override
   final String getSQLForQuery() {
     StringBuilder sql = new StringBuilder("SELECT\n ");
+    if (distinct) {
+      sql.append(" DISTINCT");
+    }
+    sql.append("\n ");
+    
+    // Deal with columns
     String[] colNames = getColumnNames();
     sql.append(colNames[0]);
     for (int i = 1; i < colNames.length;i++) {
       sql.append(',').append('\n').append(' ').append(colNames[i]);
     }
+    // Deal with table
     sql.append("\nFROM ").append(table.getName());
+    
+    // Deal with WHERE, GROUP BY, HAVING, ORDER BY
     if (whereClause != null) {
       sql.append("\nWHERE\n").append(' ').append(whereClause);
     }
