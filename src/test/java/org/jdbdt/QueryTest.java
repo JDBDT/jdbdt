@@ -5,6 +5,7 @@ import static org.jdbdt.JDBDT.*;
 
 import java.sql.SQLException;
 import java.util.EnumMap;
+import java.util.HashSet;
 
 import static org.junit.Assert.*;
 
@@ -156,6 +157,10 @@ public class QueryTest extends DBTestCase {
   public void testInitColumnsTwice() {
     initTwice(theSUT::columns);
   }
+  @Test 
+  public void testInitDistinctTwice() {
+    initTwice(dummy -> theSUT.distinct());
+  }
   
   void initAfterCompiling(QMutator<String> m) {
     theSUT.getQueryStatement();
@@ -190,6 +195,10 @@ public class QueryTest extends DBTestCase {
   public void testInitColumnsAfterCompiling() {
     initAfterCompiling(theSUT::columns);
   }
+  @Test 
+  public void testInitDistinctAfterCompiling() {
+    initAfterCompiling(dummy -> theSUT.distinct());
+  }
   
   void matchDataSets(DataSet expected, DataSet actual) {
     actual.enforceHOrdering();
@@ -211,18 +220,45 @@ public class QueryTest extends DBTestCase {
                     .orderBy("login")
                     .executeQuery(false);
     DataSet expected = 
-        data(theSUT, getConversion())
+      data(theSUT, getConversion())
         .rows(INITIAL_DATA);
+    matchDataSets(actual, expected);
+  }
+  
+  @Test
+  public void testExecWithDistinct1() {
+    DataSet actual = theSUT
+                    .distinct()
+                    .executeQuery(false);
+    DataSet expected = 
+      data(theSUT, getConversion())
+        .rows(INITIAL_DATA);
+    matchDataSets(actual, expected);
+  }
+  
+  @Test
+  public void testExecWithDistinct2() {
+    DataSet actual = theSUT
+                    .distinct()
+                    .columns("password")
+                    .executeQuery(false);
+    HashSet<String> distinctPass = new HashSet<>();
+    DataSet expected = data(theSUT);
+    for (User u : INITIAL_DATA) {
+      if (distinctPass.add(u.getPassword())) {
+        expected.row(u.getPassword());
+      }
+    }
     matchDataSets(actual, expected);
   }
   
   @Test
   public void testExecWithOrderBy2() {
     DataSet actual = theSUT
-                    .orderBy("login", "password")
+                    .orderBy("password", "login")
                     .executeQuery(false);
     DataSet expected = 
-        data(theSUT, getConversion())
+      data(theSUT, getConversion())
         .rows(INITIAL_DATA);
     matchDataSets(actual, expected);
   }
@@ -239,6 +275,7 @@ public class QueryTest extends DBTestCase {
     matchDataSets(actual, expected);
   }
   
+  
   @Test
   public void testExecWhereWithArgs() throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
@@ -250,6 +287,33 @@ public class QueryTest extends DBTestCase {
     DataSet expected = 
         data(theSUT, getConversion())
           .row(u);
+    matchDataSets(actual, expected);
+  }
+  @Test
+  public void testExecColumns1() throws SQLException {
+    User u = getDAO().query(EXISTING_DATA_ID1);
+    DataSet actual = theSUT
+                    .columns("password")
+                    .where("login=?")
+                    .withArguments(EXISTING_DATA_ID1)
+                    .executeQuery(false);
+    DataSet expected = 
+        data(theSUT)
+          .row(u.getPassword());
+    matchDataSets(actual, expected);
+  }
+  
+  @Test
+  public void testExecColumns2() throws SQLException {
+    User u = getDAO().query(EXISTING_DATA_ID1);
+    DataSet actual = theSUT
+                    .columns("password","name")
+                    .where("login=?")
+                    .withArguments(EXISTING_DATA_ID1)
+                    .executeQuery(false);
+    DataSet expected = 
+        data(theSUT)
+          .row(u.getPassword(), u.getName());
     matchDataSets(actual, expected);
   }
 }
