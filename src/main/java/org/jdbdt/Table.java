@@ -152,7 +152,7 @@ public final class Table extends DataSource {
    * Ensure table is bound to a connection,
    * otherwise throw {@link InvalidUsageException}.
    */
-  private void checkIfBound() {
+  void checkIfBound() {
     if (connection == null) {
       throw new InvalidUsageException("Table is not bound to a connection.");
     }
@@ -161,7 +161,7 @@ public final class Table extends DataSource {
    * Ensure table is NOT bound to a connection,
    * otherwise throw {@link InvalidUsageException}.
    */
-  private void checkIfNotBound() {
+  void checkIfNotBound() {
     if (connection != null) {
       throw new InvalidUsageException("Table is already bound to a connection.");
     }
