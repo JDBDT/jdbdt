@@ -6,7 +6,11 @@ import static org.jdbdt.JDBDT.*;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
 
 import static org.junit.Assert.*;
 
@@ -331,5 +335,45 @@ public class QueryTest extends DBTestCase {
     assertEquals(actual, expected);
   }
   
-  
+  <T extends Number> DataSet passCount(T zero, Function<T,T> incr, BiPredicate<String,T> pred) {
+    DataSet expected = data(theSUT);
+    HashMap<String,T> count = new HashMap<>();
+    for (User u : INITIAL_DATA) {
+      count.put(u.getPassword(), 
+                incr.apply(count.getOrDefault(u.getPassword(),zero)));
+    }
+    for (Entry<String,T> e : count.entrySet()) {
+      if (pred.test(e.getKey(), e.getValue())) {
+        expected.row(e.getKey(), e.getValue());
+      }
+    }
+    return expected;
+  }
+  @Test
+  public void testExecWithGroupBy1() {
+    DataSet actual = theSUT
+        .columns("password","count(login)")
+        .groupBy("password")
+        .executeQuery(false);
+    DataSet expected = 
+      DBCfg.getConfig().doesCountReturnAnInteger() ?
+        passCount(0, x -> x + 1, (p,n) -> true) 
+      :
+        passCount(0L, x -> x + 1L, (p,n) -> true);
+    matchDataSets(actual, expected);
+  }
+  @Test
+  public void testExecWithGroupBy2() {
+    DataSet actual = theSUT
+        .columns("password","count(login)")
+        .groupBy("password")
+        .having("count(login) > 1")
+        .executeQuery(false);
+    DataSet expected = 
+      DBCfg.getConfig().doesCountReturnAnInteger() ?
+        passCount(0, x -> x + 1, (s,n) -> n > 1) 
+      :
+        passCount(0L, x -> x + 1L, (s,n) -> n > 1L);
+    matchDataSets(actual, expected);
+  }
 }
