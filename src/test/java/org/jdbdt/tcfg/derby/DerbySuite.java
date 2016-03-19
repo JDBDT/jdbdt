@@ -9,7 +9,10 @@ import org.junit.BeforeClass;
 public class DerbySuite extends DBEngineTestSuite {
   @BeforeClass 
   public static void setup() throws ClassNotFoundException { 
-    DBCfg.getConfig().setDriver("org.h2.Driver");
-    DBCfg.getConfig().setURL("jdbc:derby:jdbdt-derby-test;create=true");
+    DBCfg.getConfig()
+      .reset()
+      .setDriver("org.h2.Driver")
+      .setURL("jdbc:derby:jdbdt-derby-test;create=true")
+      .countReturnsInteger();
   }
 }

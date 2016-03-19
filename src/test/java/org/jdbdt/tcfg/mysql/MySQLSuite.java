@@ -17,9 +17,10 @@ public class MySQLSuite extends DBEngineTestSuite {
 
   @BeforeClass 
   public static void setup() throws ClassNotFoundException {
-    String url = startDatabase();
-    DBCfg.getConfig().setDriver("com.mysql.jdbc.Driver");
-    DBCfg.getConfig().setURL(url);
+    DBCfg.getConfig()
+      .reset()
+      .setDriver("com.mysql.jdbc.Driver")
+      .setURL(startDatabase());
   }
   
   @AfterClass

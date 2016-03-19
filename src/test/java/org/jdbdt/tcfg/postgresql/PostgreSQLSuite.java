@@ -17,8 +17,10 @@ public class PostgreSQLSuite extends DBEngineTestSuite {
   
   @BeforeClass 
   public static void setup() throws ClassNotFoundException, IOException { 
-    DBCfg.getConfig().setDriver("org.postgresql.Driver");
-    DBCfg.getConfig().setURL(startDatabase());
+    DBCfg.getConfig()
+      .reset()
+      .setDriver("org.postgresql.Driver")
+      .setURL(startDatabase());
   }
   
   @AfterClass

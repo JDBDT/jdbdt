@@ -16,6 +16,6 @@ public class HSQLDBSuite {
   
   @BeforeClass 
   public static void setup() throws ClassNotFoundException { 
-    DBCfg.getConfig().setDriver(DRIVER);
+    DBCfg.getConfig().reset().setDriver(DRIVER);
   }
 }

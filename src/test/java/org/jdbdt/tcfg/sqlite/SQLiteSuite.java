@@ -19,9 +19,12 @@ import org.junit.experimental.categories.Categories.ExcludeCategory;
 public class SQLiteSuite extends DBEngineTestSuite {
   @BeforeClass 
   public static void setup() throws ClassNotFoundException { 
-    DBCfg.getConfig().setDriver("org.sqlite.JDBC");
-    DBCfg.getConfig().setURL("jdbc:sqlite:jdbdt-sqlite-test.db");
-    DBCfg.getConfig().dateNotSupported();
+    DBCfg.getConfig()
+      .reset()
+      .setDriver("org.sqlite.JDBC")
+      .setURL("jdbc:sqlite:jdbdt-sqlite-test.db")
+      .dateNotSupported()
+      .countReturnsInteger();
     JDBDT.disableStatementPooling();
   }
 }

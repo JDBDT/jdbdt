@@ -12,6 +12,6 @@ import org.junit.runners.Suite.SuiteClasses;
 public class H2Suite {
   @BeforeClass 
   public static void setup() throws ClassNotFoundException { 
-    DBCfg.getConfig().setDriver("org.h2.Driver");
+    DBCfg.getConfig().reset().setDriver("org.h2.Driver");
   }
 }
