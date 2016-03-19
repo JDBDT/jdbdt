@@ -328,7 +328,7 @@ public class QueryTest extends DBTestCase {
     DataSet expected = 
       data(theSUT, getConversion())
         .rows(sortedUsers);
-    matchDataSets(actual, expected);
+    assertEquals(actual, expected);
   }
   
   
