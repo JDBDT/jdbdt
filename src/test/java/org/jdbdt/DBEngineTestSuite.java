@@ -9,6 +9,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
   StatementPoolTest.class,
   TableTest.class,
+  QueryTest.class,
   DBSetupTest.class,
   DeltaTest.class,
   DataBuilderCoreTest.class,

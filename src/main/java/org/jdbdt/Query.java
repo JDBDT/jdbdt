@@ -91,6 +91,11 @@ public final class Query extends DataSource {
   private String havingClause = null;
   
   /**
+   * ORDER BY clause for query (undefined if null).
+   */
+  private String orderByClause = null;
+  
+  /**
    * Query arguments if any.
    */
   private Object[] queryArgs = null;
@@ -144,6 +149,38 @@ public final class Query extends DataSource {
         sb.append(',').append(fields[i]);
       }
       groupByClause = sb.toString();
+    }
+    return this;
+  }
+  
+  /**
+   * Set ORDER BY clause for query.
+   * 
+   * <p>
+   * Note that setting the ORDER BY clause will not affect 
+   * the result of database assertions by JDBDT, since these
+   * do not attend to the order of query results.
+   * Setting the ORDER BY clause will also likely impact 
+   * on the performance of query execution, but may be useful 
+   * for debugging purposes.
+   * </p>
+   * 
+   * @param fields ORDER BY fields.
+   * @return The query instance for chained calls.
+   */
+  public Query orderBy(String... fields) {
+    checkNotCompiled();
+    if (orderByClause != null) {
+      throw new InvalidUsageException("GROUP BY clause already set.");
+    }
+    if (fields.length == 0) {
+      orderByClause = fields[0];
+    } else {
+      StringBuilder sb = new StringBuilder(fields[0]);
+      for (int i=1; i < fields.length; i++) {
+        sb.append(',').append(fields[i]);
+      }
+      orderByClause = sb.toString();
     }
     return this;
   }
@@ -218,6 +255,9 @@ public final class Query extends DataSource {
     if (havingClause != null) {
       sql.append("\nHAVING\n").append(' ').append(havingClause);
     }
+    if (orderByClause != null) {
+      sql.append("\nORDER BY\n").append(' ').append(orderByClause);
+    }
     return sql.toString();
   }
 
@@ -245,9 +285,11 @@ public final class Query extends DataSource {
     return havingClause;
   }
 
-  
-  
-
-
- 
+  /**
+   * Get ORDER BY clause.
+   * @return The ORDER BY clause for the query (null if undefined).
+   */
+  String orderByClause() {
+    return orderByClause;
+  }
 }
