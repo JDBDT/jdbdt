@@ -1,6 +1,7 @@
 package org.jdbdt;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -150,5 +151,15 @@ public class DataSet implements Iterable<Row> {
     rows.addAll(other.rows);
     return this;
   }
-  
+
+  /**
+   * Sort data set by row hash code (for testing purposes only).
+   */
+  void enforceHOrdering() {
+    Collections.sort(rows, (a,b) -> Integer.compare(a.hashCode(), b.hashCode()));    
+    for (Row r : rows) {
+      System.out.println(r + " -> " + r.hashCode());
+    }
+    System.out.println("--");
+  }
 }
