@@ -26,7 +26,7 @@ public class QueryTest extends DBTestCase {
   private EnumMap<S,Object> qsetup;
  
   @Before
-  public void setup() throws SQLException {
+  public void createQuery() throws SQLException {
     Table t = table(UserDAO.TABLE_NAME)
              .columns(UserDAO.COLUMNS)
              .boundTo(getConnection());
@@ -38,12 +38,12 @@ public class QueryTest extends DBTestCase {
     qsetup.put(S.COLS, UserDAO.COLUMNS);
   }
   
-  <T> void setup(S s, QMutator<T> m, T arg) {
+  <T> void qset(S s, QMutator<T> m, T arg) {
     qsetup.put(s, arg);
     assertSame(theSUT, m.set(arg));
   }
 
-  void verifyQSettings() {
+  void qverify() {
     assertEquals(qsetup.get(S.WHERE),    theSUT.whereClause());
     assertEquals(qsetup.get(S.HAVING),   theSUT.havingClause());
     assertArrayEquals((String[]) qsetup.get(S.GROUP_BY), s2a(theSUT.groupByClause()));
@@ -58,72 +58,70 @@ public class QueryTest extends DBTestCase {
   
   @Test
   public void testInit() {
-    verifyQSettings();
+    qverify();
   }
   
   @Test
   public void testInitWhere() {
-    setup(S.WHERE, theSUT::where, "login='foo'");
-    verifyQSettings();
+    qset(S.WHERE, theSUT::where, "login='foo'");
+    qverify();
   }
   
   @Test
   public void testInitOrderBy1() {
-    setup(S.ORDER_BY, theSUT::orderBy, new String[] { "login" });
-    verifyQSettings();
+    qset(S.ORDER_BY, theSUT::orderBy, new String[] { "login" });
+    qverify();
   }
   
   @Test
   public void testInitOrderBy2() {
-    setup(S.ORDER_BY, theSUT::orderBy, new String[] { "password", "login" });
-    verifyQSettings();
+    qset(S.ORDER_BY, theSUT::orderBy, new String[] { "password", "login" });
+    qverify();
   }
   
   
   @Test
   public void testInitGroupBy1() {
-    setup(S.GROUP_BY, theSUT::groupBy, new String[] { "password" });
-    verifyQSettings();
+    qset(S.GROUP_BY, theSUT::groupBy, new String[] { "password" });
+    qverify();
   }
   
   @Test
   public void testInitGroupBy2() {
     // TODO sensible query
-    setup(S.GROUP_BY, theSUT::groupBy, new String[] { "password", "login" });
-    verifyQSettings();
+    qset(S.GROUP_BY, theSUT::groupBy, new String[] { "password", "login" });
+    qverify();
   }
   
   @Test
   public void testInitHaving() {
     // TODO sensible query
-    setup(S.HAVING, theSUT::having, "created NOT NULL");
-    verifyQSettings();
+    qset(S.HAVING, theSUT::having, "created NOT NULL");
+    qverify();
   }
   @Test
   public void testInitQueryArguments() {
-    setup(S.ARGS, theSUT::withArguments, new Object[] { "foo", 1 });
-    verifyQSettings();
+    qset(S.ARGS, theSUT::withArguments, new Object[] { "foo", 1 });
+    qverify();
   }
   
   @Test
   public void testInitChain1() {
-    setup(S.WHERE, theSUT::where, "login LIKE '%user%'");
-    setup(S.ORDER_BY, theSUT::orderBy, new String[] { "login" });
-    verifyQSettings();
+    qset(S.WHERE, theSUT::where, "login LIKE '%user%'");
+    qset(S.ORDER_BY, theSUT::orderBy, new String[] { "login" });
+    qverify();
   }
   
   
   @Test
   public void testInitChain2() {
     // TODO sensible query
-    setup(S.WHERE, theSUT::where, "login LIKE ?");
-    setup(S.ARGS, theSUT::withArguments, new Object[] { "foo%" });
-    setup(S.ORDER_BY, theSUT::orderBy, new String[] { "login" });
-    setup(S.HAVING, theSUT::having, "created NOT NULL");
-    
-    verifyQSettings();
+    qset(S.WHERE, theSUT::where, "login LIKE ?");
+    qset(S.ARGS, theSUT::withArguments, new Object[] { "foo%" });
+    qset(S.ORDER_BY, theSUT::orderBy, new String[] { "login" });
+    qset(S.HAVING, theSUT::having, "created NOT NULL");
+    qverify();
   }
-  
   
   void initTwice(QMutator<String> m) {
     m.set("1");
@@ -191,5 +189,67 @@ public class QueryTest extends DBTestCase {
   @Test 
   public void testInitColumnsAfterCompiling() {
     initAfterCompiling(theSUT::columns);
+  }
+  
+  void matchDataSets(DataSet expected, DataSet actual) {
+    actual.enforceHOrdering();
+    expected.enforceHOrdering();
+    assertEquals(actual, expected);
+  }
+  @Test
+  public void testExecPlain() {
+    DataSet actual = theSUT.executeQuery(false);
+    DataSet expected = 
+      data(theSUT, getConversion())
+        .rows(INITIAL_DATA);
+    matchDataSets(actual, expected);
+  }
+  
+  @Test
+  public void testExecWithOrderBy1() {
+    DataSet actual = theSUT
+                    .orderBy("login")
+                    .executeQuery(false);
+    DataSet expected = 
+        data(theSUT, getConversion())
+        .rows(INITIAL_DATA);
+    matchDataSets(actual, expected);
+  }
+  
+  @Test
+  public void testExecWithOrderBy2() {
+    DataSet actual = theSUT
+                    .orderBy("login", "password")
+                    .executeQuery(false);
+    DataSet expected = 
+        data(theSUT, getConversion())
+        .rows(INITIAL_DATA);
+    matchDataSets(actual, expected);
+  }
+  
+  @Test
+  public void testExecWhere() throws SQLException {
+    User u = getDAO().query(EXISTING_DATA_ID1);
+    DataSet actual = theSUT
+                    .where("login='" + EXISTING_DATA_ID1 + "'")
+                    .executeQuery(false);
+    DataSet expected = 
+        data(theSUT, getConversion())
+          .row(u);
+    matchDataSets(actual, expected);
+  }
+  
+  @Test
+  public void testExecWhereWithArgs() throws SQLException {
+    User u = getDAO().query(EXISTING_DATA_ID1);
+    assertNotNull(u);
+    DataSet actual = theSUT
+                    .where("login=?")
+                    .withArguments(EXISTING_DATA_ID1)
+                    .executeQuery(false);
+    DataSet expected = 
+        data(theSUT, getConversion())
+          .row(u);
+    matchDataSets(actual, expected);
   }
 }
