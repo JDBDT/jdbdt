@@ -76,6 +76,11 @@ public final class Query extends DataSource {
   private final Table table;
 
   /**
+   * Query-specific columns (equal to table columns if null).
+   */
+  private String[] columns;
+
+  /**
    * WHERE statement for query (undefined if null).
    */
   private String whereClause = null;
@@ -84,36 +89,58 @@ public final class Query extends DataSource {
    * GROUP BY clause for query (undefined if null).
    */
   private String groupByClause = null;
-  
+
   /**
    * HAVING clause for query (undefined if null).
    */
   private String havingClause = null;
-  
+
   /**
    * ORDER BY clause for query (undefined if null).
    */
   private String orderByClause = null;
-  
+
   /**
    * Query arguments if any.
    */
   private Object[] queryArgs = null;
-  
+
   /**
    * Constructs a new query.
    * @param table Database table.
    */
   Query(Table table) {
+    table.checkIfBound();
     this.table = table;
   }
-  
+
   /**
    * Get table associated to query.
    * @return Table set for the query.
    */
   Table getTable() {
     return table;
+  }
+
+  /**
+   * Set columns for query.
+   * 
+   * <p>
+   * If the query columns are not set, the source table
+   * columns (see {@link Table#columns(String...)})
+   * will be used by the query.
+   * </p>
+   * 
+   * @param columnNames Column names.
+   * @return The query instance for chained calls.
+   */
+  public Query columns(String... columnNames) {
+    checkNotCompiled();
+    if (columns != null) {
+      throw new InvalidUsageException("Columns already set.");
+    }
+    columns = columnNames.clone();
+    return this;
   }
 
   /**
@@ -152,7 +179,7 @@ public final class Query extends DataSource {
     }
     return this;
   }
-  
+
   /**
    * Set ORDER BY clause for query.
    * 
@@ -198,7 +225,7 @@ public final class Query extends DataSource {
     havingClause = clause;
     return this;
   }
-  
+
   /**
    * Set query arguments.
    * @param args Query arguments.
@@ -215,35 +242,30 @@ public final class Query extends DataSource {
     queryArgs = args;
     return this;
   }
-  
+
   @Override
   final Connection getConnection() {
     return table.getConnection();
   }
-  
+
 
   @Override
   final String[] getColumnNames() {
-    // TODO Auto-generated method stub
-    return table.getColumnNames();
+    return columns != null ? columns : table.getColumnNames();
   }
-  
+
   @Override
   final Object[] getQueryArguments() {
     return queryArgs;
   }
-  
+
   @Override
   final String getSQLForQuery() {
     StringBuilder sql = new StringBuilder("SELECT\n ");
-    String[] columnNames = table.getColumnNames();
-    if (columnNames ==  null) {
-      sql.append('*');
-    } else {
-      sql.append(columnNames[0]);
-      for (int i = 1; i < columnNames.length;i++) {
-        sql.append(',').append('\n').append(' ').append(columnNames[i]);
-      }
+    String[] colNames = getColumnNames();
+    sql.append(colNames[0]);
+    for (int i = 1; i < colNames.length;i++) {
+      sql.append(',').append('\n').append(' ').append(colNames[i]);
     }
     sql.append("\nFROM ").append(table.getName());
     if (whereClause != null) {
@@ -268,7 +290,7 @@ public final class Query extends DataSource {
   String whereClause() {
     return whereClause;
   }
-  
+
   /**
    * Get GROUP BY clause.
    * @return The WHERE clause for the query (null if undefined).
@@ -276,7 +298,7 @@ public final class Query extends DataSource {
   String groupByClause() {
     return groupByClause;
   }
-  
+
   /**
    * Get HAVING clause.
    * @return The HAVING clause for the query (null if undefined).
@@ -292,7 +314,7 @@ public final class Query extends DataSource {
   String orderByClause() {
     return orderByClause;
   }
-  
+
   /**
    * Get string representation.
    * @return The SQL code for the query.
