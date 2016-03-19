@@ -292,4 +292,13 @@ public final class Query extends DataSource {
   String orderByClause() {
     return orderByClause;
   }
+  
+  /**
+   * Get string representation.
+   * @return The SQL code for the query.
+   */
+  @Override
+  public String toString() {
+    return getSQLForQuery();
+  }
 }
