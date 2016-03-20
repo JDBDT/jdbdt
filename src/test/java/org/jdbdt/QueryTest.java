@@ -96,15 +96,16 @@ public class QueryTest extends DBTestCase {
   
   @Test
   public void testInitGroupBy2() {
-    // TODO sensible query
-    qset(S.GROUP_BY, theSUT::groupBy, new String[] { "password", "login" });
+    qset(S.COLS, theSUT::columns, new String[] { "password", "count(login)" });
+    qset(S.GROUP_BY, theSUT::groupBy, new String[] { "password" });
     qverify();
   }
   
   @Test
   public void testInitHaving() {
-    // TODO sensible query
-    qset(S.HAVING, theSUT::having, "created NOT NULL");
+    qset(S.COLS, theSUT::columns, new String[] { "password", "count(login)" });
+    qset(S.GROUP_BY, theSUT::groupBy, new String[] { "password" });
+    qset(S.HAVING, theSUT::having,  "count(login) > 1" );
     qverify();
   }
   
@@ -121,20 +122,11 @@ public class QueryTest extends DBTestCase {
   }
   
   @Test
-  public void testInitChain1() {
-    qset(S.WHERE, theSUT::where, "login LIKE '%user%'");
-    qset(S.ORDER_BY, theSUT::orderBy, new String[] { "login" });
-    qverify();
-  }
-  
-  
-  @Test
-  public void testInitChain2() {
-    // TODO sensible query
+  public void testInitChain() {
+    qset(S.COLS, theSUT::columns, new String[] { "password" });
     qset(S.WHERE, theSUT::where, "login LIKE ?");
     qset(S.ARGS, theSUT::withArguments, new Object[] { "foo%" });
-    qset(S.ORDER_BY, theSUT::orderBy, new String[] { "login" });
-    qset(S.HAVING, theSUT::having, "created NOT NULL");
+    qset(S.ORDER_BY, theSUT::orderBy, new String[] { "password" });
     qset(S.DISTINCT, dummy -> theSUT.distinct(), true);
     qverify();
   }
