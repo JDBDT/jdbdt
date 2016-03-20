@@ -1,7 +1,8 @@
 # Before Maven Central release 
-
-* Query.columns, orderBy
-* Normalize exception classes
+* Query for multiple tables?
+* Minor:
+  - boundTo
+  - DataSource
 * Tracing / logging improved
 * Test refactoring round
 * Documentation round
