@@ -6,7 +6,7 @@ package org.jdbdt;
  * @since 0.1
  *
  */
-public abstract class JDBDTRuntimeException extends RuntimeException {
+public class JDBDTRuntimeException extends RuntimeException {
 
   /**
    * Constructs a new exception using supplied message.
