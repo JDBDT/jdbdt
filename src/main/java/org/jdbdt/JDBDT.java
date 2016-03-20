@@ -131,14 +131,14 @@ public final class JDBDT {
    * </p>
    * 
    * @param sp SnapshotProvider provider.
-   * @throws DeltaAssertionError 
+   * @throws DatabaseAssertionError 
    *         if there are unverified changes for the delta
    * @see #assertChanged(DataSet,DataSet)
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
    * @see Delta#end()
    */
-  public static void assertNoChanges(DataSource sp) throws DeltaAssertionError {
+  public static void assertNoChanges(DataSource sp) throws DatabaseAssertionError {
     delta(sp).end(); 
   }
 
@@ -152,12 +152,12 @@ public final class JDBDT {
    * </p>
    * 
    * @param data Data set.
-   * @throws DeltaAssertionError if the assertion fails.
+   * @throws DatabaseAssertionError if the assertion fails.
    * @see #assertNoChanges(DataSource)
    * @see #assertInserted(DataSet)
    * @see Delta#end()
    */
-  public static void assertDeleted(DataSet data) throws DeltaAssertionError {
+  public static void assertDeleted(DataSet data) throws DatabaseAssertionError {
     delta(data.getSource()).before(data).end(); 
   }
 
@@ -171,13 +171,13 @@ public final class JDBDT {
    * </p>
    * 
    * @param data data set.
-   * @throws DeltaAssertionError if the assertion fails.
+   * @throws DatabaseAssertionError if the assertion fails.
    * @see #assertNoChanges(DataSource)
    * @see #assertDeleted(DataSet)
    * @see #assertChanged(DataSet,DataSet)
    * @see Delta#end()
    */
-  public static void assertInserted(DataSet data) throws DeltaAssertionError {
+  public static void assertInserted(DataSet data) throws DatabaseAssertionError {
     delta(data.getSource()).after(data).end(); 
   }
 
@@ -192,14 +192,14 @@ public final class JDBDT {
    * 
    * @param pre Old data no longer in database.
    * @param post New Data in database.
-   * @throws DeltaAssertionError if the assertion fails.
+   * @throws DatabaseAssertionError if the assertion fails.
    *
    * @see #assertNoChanges(DataSource)
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
    * @see Delta#end()
    */
-  public static void assertChanged(DataSet pre, DataSet post) throws DeltaAssertionError {
+  public static void assertChanged(DataSet pre, DataSet post) throws DatabaseAssertionError {
     if (pre.getSource() != post.getSource()) {
       throw new InvalidUsageException("Data sets associate to different data sources.");
     }
@@ -210,9 +210,9 @@ public final class JDBDT {
   /**
    * Assert database state is the given data set.
    * @param data Data set.
-   * @throws DeltaAssertionError if the assertion fails.
+   * @throws DatabaseAssertionError if the assertion fails.
    */
-  public static void assertState(DataSet data) throws DeltaAssertionError {
+  public static void assertState(DataSet data) throws DatabaseAssertionError {
     new Delta(data).end(); 
   }
   /**
@@ -377,7 +377,7 @@ public final class JDBDT {
    * 
    * <p>
    * For a non-null log instance argument, whenever an assertion error is 
-   * thrown by the JDBDT API ({@link DeltaAssertionError}),
+   * thrown by the JDBDT API ({@link DatabaseAssertionError}),
    * the unverified portion of the delta object at stake ({@link Delta})
    * will be logged. A null argument disables logging of this kind,
    * causing the previous log to be closed.
