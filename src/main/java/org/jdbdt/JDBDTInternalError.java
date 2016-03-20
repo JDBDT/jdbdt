@@ -18,7 +18,7 @@ final class JDBDTInternalError extends Error {
    * Constructs exception with given cause.
    * @param cause Cause for the exception.
    */
-  JDBDTInternalError(Throwable cause) {
+  public JDBDTInternalError(Throwable cause) {
     super("Unexpected internal error", cause);
   }
   
@@ -26,7 +26,7 @@ final class JDBDTInternalError extends Error {
    * Constructs exception using supplied message.
    * @param message Error message. 
    */
-  JDBDTInternalError(String message) {
+  public JDBDTInternalError(String message) {
     super(message);
   }
 

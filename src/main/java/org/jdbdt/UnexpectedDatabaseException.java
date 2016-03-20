@@ -19,7 +19,7 @@ public final class UnexpectedDatabaseException extends JDBDTRuntimeException {
    * Constructs the exception with given cause.
    * @param cause Cause for the exception.
    */
-  UnexpectedDatabaseException(SQLException cause) {
+  public UnexpectedDatabaseException(SQLException cause) {
     super("Unexpected database error", cause);
   }
   

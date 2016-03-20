@@ -11,7 +11,7 @@ public final class InvalidUsageException extends JDBDTRuntimeException {
    * Constructs a new exception using supplied message.
    * @param msg Exception message.
    */
-  InvalidUsageException(String msg) {
+  public InvalidUsageException(String msg) {
     super(msg);
   }
   
@@ -21,7 +21,7 @@ public final class InvalidUsageException extends JDBDTRuntimeException {
    * @param msg Exception message.
    * @param cause Cause for exception.
    */
-  InvalidUsageException(String msg, Throwable cause) {
+  public InvalidUsageException(String msg, Throwable cause) {
     super(msg, cause);
   }
   
