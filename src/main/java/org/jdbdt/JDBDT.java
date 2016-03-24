@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.EnumSet;
 
 
 /**
@@ -331,7 +332,16 @@ public final class JDBDT {
   }
 
   /**
-   * Create a log that is written to a file.
+   * Enable tracing.
+   * @param log Log for output.
+   * @param options Trace options.
+   */
+  public void trace(Log log, Trace... options) {
+    Runtime.getRuntime().trace(log, options);
+  }
+  
+  /**
+   * Create a file log.
    * 
    * <p>
    * A log can be used for reporting or debugging purposes,

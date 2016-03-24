@@ -58,6 +58,7 @@ final class StatementPool {
   private synchronized PreparedStatement 
   compileStatement(Connection c, String sql) throws SQLException {    
     if (! poolingEnabled) {
+      Runtime.getRuntime().logSQL(sql);
       return c.prepareStatement(sql);
     }
     Map<String, PreparedStatement> pool;
@@ -74,6 +75,7 @@ final class StatementPool {
     sql = sql.intern();
     PreparedStatement ps = pool.get(sql);
     if (ps == null) {
+      Runtime.getRuntime().logSQL(sql);
       ps = c.prepareStatement(sql);
       pool.put(sql, ps);
     }

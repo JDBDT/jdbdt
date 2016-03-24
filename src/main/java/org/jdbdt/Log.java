@@ -19,6 +19,7 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -174,6 +175,18 @@ public final class Log {
   }
   
   /**
+   * Log SQL code.
+   * @param sql SQL code.
+   */
+  public void writeSQL(String sql) {
+    Element rootNode = root(),
+            sqlNode = xmlDoc.createElement(SQL_TAG);
+    rootNode.appendChild(sqlNode);
+    sqlNode.appendChild(xmlDoc.createCDATASection(sql));
+    flush(rootNode);
+  }
+  
+  /**
    * Write the state of a delta to the log.
    * @param d Delta instance.
    */
@@ -248,6 +261,8 @@ public final class Log {
   @SuppressWarnings("javadoc")
   private static final String ROW_TAG = "row";
   @SuppressWarnings("javadoc")
+  private static final String SQL_TAG = "sql";
+  @SuppressWarnings("javadoc")
   private static final String COLUMN_TAG = "column";
   @SuppressWarnings("javadoc")
   private static final String LABEL_ATTR = "label";
@@ -273,6 +288,8 @@ public final class Log {
       throw new JDBDTInternalError(e);
     }
   }
+
+
 
   
 }

@@ -53,6 +53,7 @@ final class DBSetup {
    * @throws SQLException If a database error occurs.
    */
   private static void insert(Table t, DataSet data) throws SQLException {
+    Runtime.getRuntime().logIf(Trace.insertions, data);
     StringBuilder sql = new StringBuilder("INSERT INTO ");
     String[] columnNames = t.getColumnNames();
     sql.append(t.getName())
