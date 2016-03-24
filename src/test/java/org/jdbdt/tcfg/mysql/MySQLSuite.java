@@ -29,7 +29,7 @@ public class MySQLSuite extends DBEngineTestSuite {
   }
   
   private static final File   DB_PATH = new File("mysql");
-  private static final int    DB_PORT = 3316;
+  private static final int    DB_PORT = 9999;
   private static final String DB_USER = "jdbdt";
   private static final String DB_PASS = "jdbdt";
   
