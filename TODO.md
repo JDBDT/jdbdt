@@ -2,6 +2,7 @@
 * Query:
  - select().from() ... 
  - multiple tables?
+* DataSource from PreparedStatement
 * Minor:
   - boundTo
   - DataSource
