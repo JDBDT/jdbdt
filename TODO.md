@@ -1,5 +1,7 @@
 # Before Maven Central release 
-* Query for multiple tables?
+* Query:
+ - select().from() ... 
+ - multiple tables?
 * Minor:
   - boundTo
   - DataSource
