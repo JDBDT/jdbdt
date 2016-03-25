@@ -19,27 +19,44 @@ public class DataSet implements Iterable<Row> {
    * Data source.
    */
   final DataSource source;
+  
   /**
    * Rows in the data set.
    */
   private final List<Row> rows;
   
   /**
+   * Read-only flag.
+   */
+  private final boolean readOnly;
+  
+  /**
    * Constructs a new data set.
    * @param ds Data source.
    */
   DataSet(DataSource ds) {
-    this(ds, new ArrayList<>());
+    this(ds, new ArrayList<>(), false);
+  }
+
+  /**
+   * Constructs a new data set.
+   * @param ds Data source.
+   * @param readOnly Read-only flag.
+   */
+  DataSet(DataSource ds, boolean readOnly) {
+    this(ds, new ArrayList<>(), readOnly);
   }
   
   /**
    * Constructs a new row set.
    * @param ds Data source.
-   * @param l Row list. 
+   * @param list Row list. 
+   * @param readOnly Read-only flag
    */
-  DataSet(DataSource ds, ArrayList<Row> l) {
+  DataSet(DataSource ds, List<Row> list, boolean readOnly) {
     this.source = ds;
-    this.rows = l;
+    this.rows = list;
+    this.readOnly = readOnly;
   }
   
   /**
@@ -49,6 +66,20 @@ public class DataSet implements Iterable<Row> {
    */
   public final DataSource getSource() {
     return source;
+  }
+  
+  /**
+   * Check if the data set is read-only.
+   * 
+   * <p>
+   * Adding rows to the data set will result in an exception 
+   * of type {@link InvalidUsageException}.
+   * </p>
+   * 
+   * @return <code>true</code> if data set is read-only.
+   */
+  public final boolean isReadOnly() {
+    return readOnly;
   }
 
   /**
@@ -60,7 +91,7 @@ public class DataSet implements Iterable<Row> {
   }
   
   /**
-   * Get size set.
+   * Get size of data set.
    * @return The number of rows in the set.
    */
   public int size() {
@@ -68,7 +99,7 @@ public class DataSet implements Iterable<Row> {
   }
   
   /**
-   * Clear contents.
+   * Clear contents (package-private).
    */
   final void clear() {
     rows.clear();
@@ -80,6 +111,7 @@ public class DataSet implements Iterable<Row> {
    * @return The data set instance (for chained calls).
    */
   public final DataSet row(Object... columnValues) {
+    checkIfNotReadOnly();
     if (columnValues.length != source.getColumnCount()) {
       throw new InvalidUsageException(source.getColumnCount() +
             " columns expected, not " + columnValues.length + ".");
@@ -95,14 +127,15 @@ public class DataSet implements Iterable<Row> {
    * @return The data set instance (for chained calls).
    */
   public final DataSet row(Object[][] rows) {
+    checkIfNotReadOnly();
     for (Object[] columnValues : rows) {
-      row(columnValues);
+      addRow(new RowImpl(columnValues));
     }
     return this;
   }
   
   /**
-   * Add a row to the set (package-private version).
+   * Add a row to the set (package-private version; ignores read-only setting).
    * @param r Row to add.
    */
   final void addRow(Row r) {
@@ -115,7 +148,8 @@ public class DataSet implements Iterable<Row> {
    */
   @Override
   public Iterator<Row> iterator() {
-    return rows.iterator();
+    return !readOnly ? rows.iterator() 
+      : Collections.unmodifiableList(rows).iterator();
   }
   
   @Override
@@ -124,6 +158,7 @@ public class DataSet implements Iterable<Row> {
       ( o instanceof DataSet &&
         rows.equals(((DataSet) o).rows) );
   }
+  
   /**
    * Create sub-set of a given data set.
    * @param data Data set.
@@ -148,8 +183,16 @@ public class DataSet implements Iterable<Row> {
    * @return The data set instance (for chained calls).
    */
   public DataSet add(DataSet other) {
+    checkIfNotReadOnly();
     rows.addAll(other.rows);
     return this;
+  }
+
+  @SuppressWarnings("javadoc")
+  private void checkIfNotReadOnly() {
+    if (readOnly) {
+      throw new InvalidUsageException("Data set is read-only.");
+    }
   }
 
   /**
