@@ -6,8 +6,6 @@ import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.EnumSet;
-
 
 /**
  * JDBDT API facade.
