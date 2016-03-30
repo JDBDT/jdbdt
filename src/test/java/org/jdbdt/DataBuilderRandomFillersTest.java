@@ -1,6 +1,5 @@
 package org.jdbdt;
 
-import static org.jdbdt.JDBDT.table;
 import static org.junit.Assert.*;
 
 import java.math.BigInteger;
@@ -28,7 +27,7 @@ import org.junit.runners.MethodSorters;
 
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class DataBuilderRandomFillersTest  {
+public class DataBuilderRandomFillersTest extends DBTestCase {
 
   private static Table table;
   private static final String TABLE_NAME = "Foo";
@@ -50,8 +49,7 @@ public class DataBuilderRandomFillersTest  {
     BASE_DATA.put("cDate", new Date(0L));
     String[] columns = new String[BASE_DATA.size()];
     BASE_DATA.keySet().toArray(columns);
-    table = table(TABLE_NAME)
-           .columns(columns);
+    table = getDB().table(TABLE_NAME).columns(columns);
   }
 
   @Rule 

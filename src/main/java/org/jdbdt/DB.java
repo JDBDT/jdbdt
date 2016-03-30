@@ -133,7 +133,7 @@ public final class DB {
    * @throws SQLException If there is a error preparing the statement.
    */
   public PreparedStatement 
-  compileStatement(String sql) throws SQLException {    
+  compile(String sql) throws SQLException {    
     if (! statementPooling) {
       Runtime.getRuntime().logSQL(sql);
       return connection.prepareStatement(sql);

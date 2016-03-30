@@ -5,7 +5,7 @@ package org.jdbdt;
  * Representation of a table query.
  *
  * <p>
- * A table query is created using {@link JDBDT#selectFrom(Table)}
+ * A table query is created using {@link DB#select()}
  * or implicitly through {@link JDBDT#snapshot(DataSource)}.
  * It has an associate {@link Table} instance, set at creation time, plus
  * optional WHERE, GROUP BY and HAVING clauses. The optional
@@ -63,7 +63,6 @@ package org.jdbdt;
  * 
  * 
  * @see Table
- * @see DB#select(String...)
  * 
  * @since 0.1
  */
@@ -134,9 +133,20 @@ public final class Query extends DataSource {
   }
 
   /**
+   * Set table as the data source to this query.
+   * <p>
+   * A call to this method is shorthand for <code>from(t.getName())</code>.
+   * @param t Table source.
+   * @return The query instance for chained calls.
+   */
+  public Query from(Table t) {
+    return from(t.getName());
+  }
+  
+  /**
    * Set FROM clause.
    * @param sources Data sources.
-   * @return The The query instance for chained calls.
+   * @return The query instance for chained calls.
    */
   @SafeVarargs
   public final Query from(String...sources) {
@@ -246,7 +256,7 @@ public final class Query extends DataSource {
 
 
   @Override
-  final String[] getColumnNames() {
+  final String[] getColumns() {
     return columns;
   }
 
@@ -262,12 +272,16 @@ public final class Query extends DataSource {
       sql.append(" DISTINCT");
     }
     sql.append("\n ");
-
+    
     // Deal with columns
-    String[] colNames = getColumnNames();
-    sql.append(colNames[0]);
-    for (int i = 1; i < colNames.length;i++) {
-      sql.append(',').append('\n').append(' ').append(colNames[i]);
+    String[] colNames = getColumns();
+    if (colNames == null) { 
+      sql.append('*');
+    } else {
+      sql.append(colNames[0]);
+      for (int i = 1; i < colNames.length;i++) {
+        sql.append(',').append('\n').append(' ').append(colNames[i]);
+      }
     }
     // Deal with FROM, WHERE, GROUP BY, HAVING, ORDER BY
     format(sql, "FROM",     fromClause);
@@ -288,7 +302,7 @@ public final class Query extends DataSource {
       .append(value);
     }
   }
-  
+
   @SuppressWarnings("javadoc")
   private void format(StringBuilder sb, String clauseName, String[] values) {
     if (values != null) {
@@ -354,4 +368,7 @@ public final class Query extends DataSource {
   public String toString() {
     return getSQLForQuery();
   }
+
+
+  
 }

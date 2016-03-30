@@ -54,7 +54,7 @@ public class QueryTest extends DBTestCase {
     assertArrayEquals((String[]) qsetup.get(S.GROUP_BY), theSUT.groupByClause());
     assertArrayEquals((String[]) qsetup.get(S.ORDER_BY), theSUT.orderByClause());
     assertArrayEquals((Object[]) qsetup.get(S.ARGS), theSUT.getQueryArguments());
-    assertArrayEquals((String[]) qsetup.get(S.COLS), theSUT.getColumnNames());
+    assertArrayEquals((String[]) qsetup.get(S.COLS), theSUT.getColumns());
   }
   
   

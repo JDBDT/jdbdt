@@ -55,7 +55,7 @@ public abstract class DataSource {
    */
   final int getColumnCount() {
     ensureCompiled();
-    return getColumnNames().length;
+    return getColumns().length;
   }
 
 
@@ -85,8 +85,17 @@ public abstract class DataSource {
   void ensureCompiled() {
     if (queryStmt == null) {
       try {
-        queryStmt = db.compileStatement(getSQLForQuery());
-        metaData = new MetaData(queryStmt);
+        PreparedStatement stmt = db.compile(getSQLForQuery());
+        MetaData md = new MetaData(stmt);
+        if (getColumns() == null) {
+          String[] cols = new String[md.getColumnCount()];
+          for (int i = 0; i < cols.length; i++) {
+            cols[i] = md.getLabel(i);
+          }
+          columns(cols);
+        }
+        queryStmt = stmt;
+        metaData = md;
       }
       catch (SQLException e) {
         throw new UnexpectedDatabaseException(e);
@@ -115,11 +124,18 @@ public abstract class DataSource {
    */
   abstract Object[] getQueryArguments();
 
+  /**
+   * Set column names.
+   * @param columns SQL columns.
+   * @return Implementations should return <code>this</code>, for chained calls.
+   */
+  public abstract DataSource columns(String... columns);
+    
   /** 
    * Get column names.
    * @return Array of column names.
    */
-  abstract String[] getColumnNames();
+  abstract String[] getColumns();
 
   /**
    * Execute query.

@@ -57,6 +57,9 @@ public class DBTestCase {
     gDAO = new UserDAO(getConnection());
     gConversion = cfg.isDateSupported() ? STD_CONVERSION : ALT_CONVERSION;
     gDB = JDBDT.db(gConn);
+    if (!cfg.useStatementPooling()) {
+      gDB.disableStatementPooling();
+    }
   }
   
   @AfterClass

@@ -2,7 +2,6 @@ package org.jdbdt.tcfg.sqlite;
 
 import org.jdbdt.DBCfg;
 import org.jdbdt.DBEngineTestSuite;
-import org.jdbdt.JDBDT;
 import org.jdbdt.StatementPoolingEnabled;
 import org.jdbdt.TruncateSupportEnabled;
 import org.junit.BeforeClass;
@@ -24,7 +23,7 @@ public class SQLiteSuite extends DBEngineTestSuite {
       .setDriver("org.sqlite.JDBC")
       .setURL("jdbc:sqlite:jdbdt-sqlite-test.db")
       .dateNotSupported()
-      .countReturnsInteger();
-    JDBDT.disableStatementPooling();
+      .countReturnsInteger()
+      .noStatementPooling();
   }
 }

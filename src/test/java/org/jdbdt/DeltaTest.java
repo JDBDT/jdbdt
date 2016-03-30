@@ -42,10 +42,10 @@ public class DeltaTest extends DBTestCase {
 
   @BeforeClass
   public static void globalSetup() throws SQLException {
-    table = table(UserDAO.TABLE_NAME)
-        .columns(UserDAO.COLUMNS)
-        .boundTo(getConnection());
+    table = getDB().table(UserDAO.TABLE_NAME)
+                   .columns(UserDAO.COLUMNS);
   }
+  
   private final String whereClause;
   private final Object[] queryArgs;
 
@@ -59,7 +59,7 @@ public class DeltaTest extends DBTestCase {
     if (whereClause == null) {
       dataSource = table;
     } else {
-      Query q = selectFrom(table).where(whereClause);
+      Query q = getDB().select().from(table).where(whereClause);
       if (queryArgs != null) {
         q.withArguments(queryArgs);
       }

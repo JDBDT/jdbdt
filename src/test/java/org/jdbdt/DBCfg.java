@@ -12,10 +12,11 @@ public class DBCfg {
   
   private static final DBCfg INSTANCE = new DBCfg();
   
-  private String url = HSQLDBSuite.MEM_DB_URL;
-  private String driver = HSQLDBSuite.DRIVER;    
-  private boolean dateSupported = true;
-  private boolean countIsAnInt = false;
+  private String url;
+  private String driver;    
+  private boolean dateSupported;
+  private boolean countIsAnInt;
+  private boolean statementPooling;
   
   private DBCfg() {
     reset();
@@ -26,6 +27,7 @@ public class DBCfg {
     driver = HSQLDBSuite.DRIVER;    
     dateSupported = true;
     countIsAnInt = false;
+    statementPooling = true;
     return this;
   }
   
@@ -63,5 +65,15 @@ public class DBCfg {
   public boolean doesCountReturnAnInteger() {
     return countIsAnInt;
   }
+
+  public DBCfg noStatementPooling() {
+    statementPooling = false;
+    return this;    
+  }
+  
+  public boolean useStatementPooling() {
+    return statementPooling;
+  }
+  
 
 }

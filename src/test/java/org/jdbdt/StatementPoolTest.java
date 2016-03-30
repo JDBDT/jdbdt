@@ -26,7 +26,7 @@ public class StatementPoolTest extends DBTestCase {
   }
   
   private PreparedStatement compile(String sql) throws SQLException {
-    return getDB().compileStatement(sql);
+    return getDB().compile(sql);
   }
   @Before 
   public void setup() {

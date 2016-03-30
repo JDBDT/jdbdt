@@ -55,7 +55,7 @@ final class DBSetup {
   private static void insert(Table t, DataSet data) throws SQLException {
     Runtime.getRuntime().logIf(Trace.insertions, data);
     StringBuilder sql = new StringBuilder("INSERT INTO ");
-    String[] columnNames = t.getColumnNames();
+    String[] columnNames = t.getColumns();
     sql.append(t.getName())
     .append('(')
     .append(columnNames[0]);
@@ -67,7 +67,7 @@ final class DBSetup {
       sql.append(",?");
     }
     sql.append(')');
-    PreparedStatement  insertStmt = t.getDB().compileStatement(sql.toString());
+    PreparedStatement  insertStmt = t.getDB().compile(sql.toString());
     for (Row r : data) {
       final int n = r.getColumnCount();
       final Object[] cols = r.getColumnData();
@@ -90,7 +90,7 @@ final class DBSetup {
    */
   static int deleteAll(Table t) throws SQLException {
     return t.getDB()
-            .compileStatement("DELETE FROM " + t.getName())
+            .compile("DELETE FROM " + t.getName())
             .executeUpdate();
   }
   
@@ -101,7 +101,7 @@ final class DBSetup {
    */
   static void truncate(Table t) throws SQLException {
     t.getDB()
-     .compileStatement("TRUNCATE TABLE " + t.getName())
+     .compile("TRUNCATE TABLE " + t.getName())
      .execute();
   }
   
@@ -127,7 +127,7 @@ final class DBSetup {
       throw new InvalidUsageException("FROM clause specifies multiple data sources!");
     }
     PreparedStatement deleteStmt = 
-      q.getDB().compileStatement(
+      q.getDB().compile(
         "DELETE FROM " + q.fromClause()[0] +
         " WHERE " + whereClause);
     Object[] args = q.getQueryArguments();

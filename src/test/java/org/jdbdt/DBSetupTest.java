@@ -26,10 +26,8 @@ public class DBSetupTest extends DBTestCase {
 
   @BeforeClass
   public static void globalSetup() throws SQLException {
-    table = 
-        table(UserDAO.TABLE_NAME)
-        .columns(UserDAO.COLUMNS)
-        .boundTo(getConnection());
+    table = getDB().table(UserDAO.TABLE_NAME)
+                   .columns(UserDAO.COLUMNS);
   }
 
   private static int newUserCounter = 0;
@@ -128,7 +126,7 @@ public class DBSetupTest extends DBTestCase {
   @Test
   public void testDeleteAll2() throws SQLException {
     int n = getDAO().count();
-    deleteAll(selectFrom(table).where("LOGIN='" + EXISTING_DATA_ID1+"'"));
+    deleteAll(getDB().select().from(table).where("LOGIN='" + EXISTING_DATA_ID1+"'"));
     assertEquals(n-1, getDAO().count());
     assertNull(getDAO().query(EXISTING_DATA_ID1));
   }
@@ -136,7 +134,7 @@ public class DBSetupTest extends DBTestCase {
   @Test
   public void testDeleteAll3() throws SQLException {
     int n = getDAO().count();
-    deleteAll(selectFrom(table).where("LOGIN=?").withArguments(EXISTING_DATA_ID1));
+    deleteAll(getDB().select().from(table).where("LOGIN=?").withArguments(EXISTING_DATA_ID1));
     assertEquals(n-1, getDAO().count());
     assertNull(getDAO().query(EXISTING_DATA_ID1));
   }
@@ -144,23 +142,23 @@ public class DBSetupTest extends DBTestCase {
   @Test
   public void testDeleteAll4() throws SQLException {
     int n = getDAO().count();
-    deleteAll(selectFrom(table).where("LOGIN='" +EXISTING_DATA_ID1 + "'"));
+    deleteAll(getDB().select().from(table).where("LOGIN='" +EXISTING_DATA_ID1 + "'"));
     assertEquals(n-1, getDAO().count());
     assertNull(getDAO().query(EXISTING_DATA_ID1));
   }
   
   @Test(expected=InvalidUsageException.class)
   public void testDeleteAll5() throws SQLException {
-    deleteAll(selectFrom(table));
+    deleteAll(getDB().select().from(table));
   }
   
   @Test(expected=InvalidUsageException.class)
   public void testDeleteAll7() throws SQLException {
-    deleteAll(selectFrom(table).where("w").groupBy("g"));
+    deleteAll(getDB().select().from(table).where("w").groupBy("g"));
   }
   
   @Test(expected=InvalidUsageException.class)
   public void testDeleteAll8() throws SQLException {
-    deleteAll(selectFrom(table).where("w").having("h"));
+    deleteAll(getDB().select().from(table).where("w").having("h"));
   }
 }

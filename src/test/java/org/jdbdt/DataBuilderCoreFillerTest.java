@@ -1,6 +1,5 @@
 package org.jdbdt;
 
-import static org.jdbdt.JDBDT.table;
 import static org.junit.Assert.*;
 
 import java.sql.Date;
@@ -25,7 +24,7 @@ public class DataBuilderCoreFillerTest extends DBTestCase {
 
   @BeforeClass
   public static void globalSetup() throws SQLException {
-    table = table(UserDAO.TABLE_NAME).boundTo(getConnection());
+    table = getDB().table(UserDAO.TABLE_NAME).columns(UserDAO.COLUMNS);
   }
 
   DataBuilder theSUT;

@@ -122,7 +122,7 @@ public final class DataBuilder {
 
     @Override
     public void supply(DataSet rs) {
-      final String[] colNames = table.getColumnNames();
+      final String[] colNames = table.getColumns();
       for (int r=0; r < rowCount; r++) {
         final Object[] colData = new Object[colNames.length];
         for (int c = 0; c < colNames.length; c++) {
@@ -185,7 +185,7 @@ public final class DataBuilder {
   DataBuilder(Table t) {
     ensureArgNotNull(t);
     table = t;
-    String[] columnNames = t.getColumnNames();
+    String[] columnNames = t.getColumns();
     currentFillers = new ColumnFiller[columnNames.length];
     fillerCount = 0;
     for (int idx=0; idx < columnNames.length; idx++) {
@@ -217,7 +217,7 @@ public final class DataBuilder {
       for (int idx = 0; idx < table.getColumnCount(); idx++) {
         if (currentFillers[idx] == null) {
           throw new InvalidUsageException("No filler is set for column '" + 
-              table.getColumnNames()[idx]);
+              table.getColumns()[idx]);
         }
       }
       throw new JDBDTInternalError("Filler count does not match fillers set.");

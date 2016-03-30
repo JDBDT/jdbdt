@@ -40,7 +40,7 @@ public final class Table extends DataSource {
   /**
    * Table columns (if null, all columns will be considered).
    */
-  private String[] columnNames = null;
+  private String[] columns = null;
 
   /**
    * Constructor.
@@ -64,14 +64,14 @@ public final class Table extends DataSource {
   /** 
    * Specify database columns to consider for the table. 
    * 
-   * @param columnNames Column names.
+   * @param columns SQL columns.
    * @return The table instance (for chained calls).
    */
-  public Table columns(String... columnNames) {
-    if (this.columnNames != null) {
+  public Table columns(String... columns) {
+    if (this.columns != null) {
       throw new InvalidUsageException("Columns are already defined.");
     }
-    this.columnNames = columnNames.clone();
+    this.columns = columns.clone();
     return this;
   }
 
@@ -81,20 +81,20 @@ public final class Table extends DataSource {
    *   columns are set.
    */
   @Override
-  final String[] getColumnNames() {
-    return columnNames;
+  final String[] getColumns() {
+    return columns;
   }
 
   
   @Override
   String getSQLForQuery() {
     StringBuilder sql = new StringBuilder("SELECT\n ");
-    if (columnNames ==  null) {
+    if (columns ==  null) {
       sql.append('*');
     } else {
-      sql.append(columnNames[0]);
-      for (int i = 1; i < columnNames.length;i++) {
-        sql.append(',').append('\n').append(' ').append(columnNames[i]);
+      sql.append(columns[0]);
+      for (int i = 1; i < columns.length;i++) {
+        sql.append(',').append('\n').append(' ').append(columns[i]);
       }
     }
     sql.append("\nFROM ").append(tableName);

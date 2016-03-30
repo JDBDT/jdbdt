@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
@@ -77,7 +76,6 @@ public final class JDBDT {
   public static <T> TypedDataSet<T> data(DataSource source, Conversion<T> conv) {
     return new TypedDataSet<>(source, conv);
   }
-
 
   /**
    * Take a database snapshot.
