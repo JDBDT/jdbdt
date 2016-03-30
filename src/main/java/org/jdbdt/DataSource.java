@@ -1,6 +1,5 @@
 package org.jdbdt;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,29 +14,41 @@ import java.util.function.Consumer;
 public abstract class DataSource {
 
   /**
+   * Database instance for this data source.
+   */
+  private final DB db;
+  
+  /**
    * Selection query for the table.
    */
-  private PreparedStatement queryStmt;
+  private PreparedStatement queryStmt = null;
 
   /**
    * Meta-data for query statement.
    */
-  private MetaData metaData;
+  private MetaData metaData = null;
 
   /**
    * Last snapshot (if any).
    */
-  private DataSet snapshot;
+  private DataSet snapshot = null;
 
   /**
    * Constructor.
+   * @param db Database instance.
    */
-  DataSource() {
-    queryStmt = null;
-    metaData = null;
-    snapshot = null;
+  DataSource(DB db) {
+    this.db = db;
   }
 
+  /**
+   * Get database instance.
+   * @return Database instance associated to this data source.
+   */
+  final DB getDB() {
+    return db;
+  }
+  
   /**
    * Get column count.
    * @return Column count.
@@ -74,7 +85,7 @@ public abstract class DataSource {
   void ensureCompiled() {
     if (queryStmt == null) {
       try {
-        queryStmt = StatementPool.compile(getConnection(), getSQLForQuery());
+        queryStmt = db.compileStatement(getSQLForQuery());
         metaData = new MetaData(queryStmt);
       }
       catch (SQLException e) {
@@ -91,12 +102,6 @@ public abstract class DataSource {
       throw new InvalidUsageException("Query has already been compiled.");
     }
   }
-  
-  /**
-   * Get database connection.
-   * @return The database connection associate to this snapshot provider.
-   */
-  abstract Connection getConnection(); 
 
   /**
    * Get SQL code for query.

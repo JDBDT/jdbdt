@@ -1,6 +1,5 @@
 package org.jdbdt;
 
-import java.sql.Connection;
 
 /**
  * Representation of a table query.
@@ -64,31 +63,31 @@ import java.sql.Connection;
  * 
  * 
  * @see Table
- * @see JDBDT#selectFrom(Table)
+ * @see DB#select(String...)
  * 
  * @since 0.1
  */
 public final class Query extends DataSource {
 
   /**
-   * Table.
+   * Columns.
    */
-  private final Table table;
+  private String[] columns = null;
 
   /**
-   * Query-specific columns (equal to table columns if null).
+   * FROM clause.
    */
-  private String[] columns;
+  private String[] fromClause = null;
 
   /**
-   * WHERE statement for query (undefined if null).
+   * WHERE clause (undefined if null).
    */
   private String whereClause = null;
 
   /**
    * GROUP BY clause for query (undefined if null).
    */
-  private String groupByClause = null;
+  private String[] groupByClause = null;
 
   /**
    * HAVING clause for query (undefined if null).
@@ -98,14 +97,14 @@ public final class Query extends DataSource {
   /**
    * ORDER BY clause for query (undefined if null).
    */
-  private String orderByClause = null;
+  private String[] orderByClause = null;
 
   /**
    * DISTINCT clause (undefined if false).
    */
   private boolean distinctClause;
-  
-  
+
+
   /**
    * Query arguments if any.
    */
@@ -113,39 +112,38 @@ public final class Query extends DataSource {
 
   /**
    * Constructs a new query.
-   * @param table Database table.
+   * @param db Database instance.
    */
-  Query(Table table) {
-    table.checkIfBound();
-    this.table = table;
+  Query(DB db) {
+    super(db);
   }
 
-  /**
-   * Get table associated to query.
-   * @return Table set for the query.
-   */
-  Table getTable() {
-    return table;
-  }
 
   /**
-   * Set columns for query.
-   * 
-   * <p>
-   * If the query columns are not set, the source table
-   * columns (see {@link Table#columns(String...)})
-   * will be used by the query.
-   * </p>
-   * 
-   * @param columnNames Column names.
-   * @return The query instance for chained calls.
+   * Set FROM clause.
+   * @param columns Query Columns.
+   * @return The The query instance for chained calls.
    */
-  public Query columns(String... columnNames) {
-    checkNotCompiled();
-    if (columns != null) {
+  @SafeVarargs
+  public final Query columns(String... columns) {
+    if (this.columns != null) {
       throw new InvalidUsageException("Columns already set.");
     }
-    columns = columnNames.clone();
+    this.columns = columns.clone();
+    return this;
+  }
+
+  /**
+   * Set FROM clause.
+   * @param sources Data sources.
+   * @return The The query instance for chained calls.
+   */
+  @SafeVarargs
+  public final Query from(String...sources) {
+    if (fromClause != null) {
+      throw new InvalidUsageException("FROM clause already set.");
+    }
+    this.fromClause = sources.clone();
     return this;
   }
 
@@ -162,7 +160,7 @@ public final class Query extends DataSource {
     whereClause = clause;
     return this;
   }
-  
+
   /**
    * Set DISTINCT clause for query.
    * @return The query instance for chained calls.
@@ -187,15 +185,7 @@ public final class Query extends DataSource {
     if (groupByClause != null) {
       throw new InvalidUsageException("GROUP BY clause already set.");
     }
-    if (fields.length == 0) {
-      groupByClause = fields[0];
-    } else {
-      StringBuilder sb = new StringBuilder(fields[0]);
-      for (int i=1; i < fields.length; i++) {
-        sb.append(',').append(fields[i]);
-      }
-      groupByClause = sb.toString();
-    }
+    groupByClause = fields.clone();
     return this;
   }
 
@@ -219,15 +209,7 @@ public final class Query extends DataSource {
     if (orderByClause != null) {
       throw new InvalidUsageException("GROUP BY clause already set.");
     }
-    if (fields.length == 0) {
-      orderByClause = fields[0];
-    } else {
-      StringBuilder sb = new StringBuilder(fields[0]);
-      for (int i=1; i < fields.length; i++) {
-        sb.append(',').append(fields[i]);
-      }
-      orderByClause = sb.toString();
-    }
+    orderByClause = fields.clone();    
     return this;
   }
 
@@ -262,15 +244,10 @@ public final class Query extends DataSource {
     return this;
   }
 
-  @Override
-  final Connection getConnection() {
-    return table.getConnection();
-  }
-
 
   @Override
   final String[] getColumnNames() {
-    return columns != null ? columns : table.getColumnNames();
+    return columns;
   }
 
   @Override
@@ -285,30 +262,48 @@ public final class Query extends DataSource {
       sql.append(" DISTINCT");
     }
     sql.append("\n ");
-    
+
     // Deal with columns
     String[] colNames = getColumnNames();
     sql.append(colNames[0]);
     for (int i = 1; i < colNames.length;i++) {
       sql.append(',').append('\n').append(' ').append(colNames[i]);
     }
-    // Deal with table
-    sql.append("\nFROM ").append(table.getName());
-    
-    // Deal with WHERE, GROUP BY, HAVING, ORDER BY
-    if (whereClause != null) {
-      sql.append("\nWHERE\n").append(' ').append(whereClause);
-    }
-    if (groupByClause != null) {
-      sql.append("\nGROUP BY\n").append(' ').append(groupByClause);
-    }
-    if (havingClause != null) {
-      sql.append("\nHAVING\n").append(' ').append(havingClause);
-    }
-    if (orderByClause != null) {
-      sql.append("\nORDER BY\n").append(' ').append(orderByClause);
-    }
+    // Deal with FROM, WHERE, GROUP BY, HAVING, ORDER BY
+    format(sql, "FROM",     fromClause);
+    format(sql, "WHERE",    whereClause);
+    format(sql, "GROUP BY", groupByClause);
+    format(sql, "HAVING",   havingClause);
+    format(sql, "ORDER BY", orderByClause);
     return sql.toString();
+  }
+
+  @SuppressWarnings("javadoc")
+  private void format(StringBuilder sb, String clauseName, String value) {
+    if (value != null) {
+      sb.append('\n')
+      .append(clauseName)
+      .append('\n')
+      .append(' ')
+      .append(value);
+    }
+  }
+  
+  @SuppressWarnings("javadoc")
+  private void format(StringBuilder sb, String clauseName, String[] values) {
+    if (values != null) {
+      format(sb, clauseName, values[0]);
+      for (int i=1; i < values.length; i++) {
+        sb.append(',').append('\n').append(' ').append(values[i]);
+      }
+    }
+  }
+  /**
+   * Get FROM clause.
+   * @return The WHERE clause for the query (null if undefined).
+   */
+  String[] fromClause() {
+    return fromClause;
   }
 
   /**
@@ -326,12 +321,12 @@ public final class Query extends DataSource {
   boolean distinctClause() {
     return distinctClause;
   }
-  
+
   /**
    * Get GROUP BY clause.
    * @return The WHERE clause for the query (null if undefined).
    */
-  String groupByClause() {
+  String[] groupByClause() {
     return groupByClause;
   }
 
@@ -347,7 +342,7 @@ public final class Query extends DataSource {
    * Get ORDER BY clause.
    * @return The ORDER BY clause for the query (null if undefined).
    */
-  String orderByClause() {
+  String[] orderByClause() {
     return orderByClause;
   }
 

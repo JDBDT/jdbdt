@@ -19,6 +19,7 @@ import org.junit.BeforeClass;
 public class DBTestCase {
 
   private static Connection gConn;
+  private static DB gDB;
   private static UserDAO gDAO;
   private static Conversion<User> gConversion;
   
@@ -55,6 +56,7 @@ public class DBTestCase {
     gConn.setAutoCommit(true);
     gDAO = new UserDAO(getConnection());
     gConversion = cfg.isDateSupported() ? STD_CONVERSION : ALT_CONVERSION;
+    gDB = JDBDT.db(gConn);
   }
   
   @AfterClass
@@ -62,6 +64,10 @@ public class DBTestCase {
     gConn.close();
   }
 
+  protected static DB getDB() {
+    return gDB;
+  }
+  
   protected static Connection getConnection() {
     return gConn;
   }

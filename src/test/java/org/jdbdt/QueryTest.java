@@ -33,16 +33,13 @@ public class QueryTest extends DBTestCase {
  
   @Before
   public void createQuery() throws SQLException {
-    Table t = table(UserDAO.TABLE_NAME)
-             .columns(UserDAO.COLUMNS)
-             .boundTo(getConnection());
-    theSUT = selectFrom(t);
+    theSUT = getDB().select().from(UserDAO.TABLE_NAME);
     qsetup = new EnumMap<>(S.class);
     for (S s : S.values()) {
       qsetup.put(s, null);
     }
     qsetup.put(S.DISTINCT, false);
-    qsetup.put(S.COLS, UserDAO.COLUMNS);
+    //qsetup.put(S.COLS, UserDAO.COLUMNS);
   }
   
   <T> void qset(S s, QMutator<T> m, T arg) {
@@ -54,15 +51,12 @@ public class QueryTest extends DBTestCase {
     assertEquals(qsetup.get(S.WHERE), theSUT.whereClause());
     assertEquals(qsetup.get(S.HAVING), theSUT.havingClause());
     assertEquals(qsetup.get(S.DISTINCT), theSUT.distinctClause());
-    assertArrayEquals((String[]) qsetup.get(S.GROUP_BY), s2a(theSUT.groupByClause()));
-    assertArrayEquals((String[]) qsetup.get(S.ORDER_BY), s2a(theSUT.orderByClause()));
+    assertArrayEquals((String[]) qsetup.get(S.GROUP_BY), theSUT.groupByClause());
+    assertArrayEquals((String[]) qsetup.get(S.ORDER_BY), theSUT.orderByClause());
     assertArrayEquals((Object[]) qsetup.get(S.ARGS), theSUT.getQueryArguments());
     assertArrayEquals((String[]) qsetup.get(S.COLS), theSUT.getColumnNames());
   }
   
-  static String[] s2a(String s) {
-    return s == null ? null : s.split(",");
-  }
   
   @Test
   public void testInit() {

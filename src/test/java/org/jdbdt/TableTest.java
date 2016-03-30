@@ -1,8 +1,6 @@
 package org.jdbdt;
 
 
-import static org.jdbdt.JDBDT.table;
-
 import java.sql.SQLException;
 
 import static org.junit.Assert.*;
@@ -19,7 +17,7 @@ public class TableTest extends DBTestCase {
   
   @Before
   public void setup() throws SQLException {
-    theSUT = table(UserDAO.TABLE_NAME);
+    theSUT = getDB().table(UserDAO.TABLE_NAME);
   }
   
   @Test
@@ -35,31 +33,6 @@ public class TableTest extends DBTestCase {
       fail("Unexpected exception");
     }
     theSUT.columns(UserDAO.COLUMNS);
-  }
-  
-  @Test(expected=InvalidUsageException.class)
-  public void testWhenNotBound() {
-    theSUT.getConnection();
-  }
-  
-  @Test
-  public void testBinding() throws SQLException {
-    theSUT.boundTo(getConnection());
-    assertSame(theSUT.getConnection(), getConnection());
-    assertEquals(UserDAO.COLUMNS.length, theSUT.getColumnCount());
-    assertNotNull(theSUT.getQueryStatement());
-    assertNotNull(theSUT.getMetaData());
-  }
-  
-  @Test(expected=InvalidUsageException.class)
-  public void testRebinding() throws SQLException {
-    try {
-      theSUT.boundTo(getConnection());
-    }
-    catch(Throwable e) {
-      fail("Unexpected error");
-    }
-    theSUT.boundTo(getConnection());
   }
   
 }

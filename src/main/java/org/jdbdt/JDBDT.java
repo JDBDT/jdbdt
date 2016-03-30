@@ -38,13 +38,15 @@ public final class JDBDT {
   }
 
   /**
-   * Create handle for given table name.
-   * @param tableName Name of the database table.
-   * @return A new {@link Table} instance.
+   * Create a database handle for given SQL connection.,
+   * @param c Connection.
+   * @return A new database handle.
    */
-  public static Table table(String tableName) {
-    return new Table(tableName); 
+  public static DB db(Connection c) {
+    return new DB(c);
   }
+  
+
 
 
   /**
@@ -76,14 +78,6 @@ public final class JDBDT {
     return new TypedDataSet<>(source, conv);
   }
 
-  /**
-   * Create query for a table.
-   * @param t Table.
-   * @return A new query object.
-   */
-  public static Query selectFrom(Table t) {
-    return new Query(t); 
-  }
 
   /**
    * Take a database snapshot.
@@ -286,50 +280,6 @@ public final class JDBDT {
   }
 
   /**
-   * Execute an arbitrary SQL statement.
-   * 
-   * <p>
-   * Calling this method differs from
-   * <code>c.prepareStatement(sql).execute()</code>
-   * as follows: an internal, JDBC-driver independent, pool
-   * of statements ensures that the SQL code is compiled
-   * only once for the given connection, i.e., the 
-   * associated {@link PreparedStatement} is generated
-   * only once. For SQL code that executes repeatedly,
-   * this may be more efficient. This also ensures
-   * that SQL code executed in this manner
-   * minimizes the use of the actual JDBC driver statement
-   * pool (if any), and possible impact on the
-   * the SUT components' performance.
-   * </p>
-   * 
-   * @param c Database connection.
-   * @param sqlCode SQL code.
-   * @throws SQLException If a database error occurs.
-   */
-  public static void sql(Connection c, String sqlCode) throws SQLException {
-    StatementPool.compile(c, sqlCode).execute();
-  }
-
-  /**
-   * Disable statement pooling.
-   * 
-   * <p>
-   * JDBDT uses an internal statement pool to re-use
-   * compiled SQL statements.
-   * The pooling scheme is enabled by default, but
-   * for some JDBC drivers (e.g. SQLite) re-using
-   * SQL statements may cause problems. 
-   * In those cases, pooling should be turned off
-   * explicitly using this method.
-   * </p> 
-   * 
-   */
-  public static void disableStatementPooling() {
-    StatementPool.disable();
-  }
-
-  /**
    * Enable tracing.
    * @param log Log for output.
    * @param options Trace options.
@@ -427,12 +377,4 @@ public final class JDBDT {
    */
   private static Log errorLog = null;
 
-  // TODO
-  //  @SuppressWarnings("javadoc")
-  //  private static <S extends SnapshotProvider> S logSetup(S s) {
-  //    if (errorLog != null) {
-  //      s.logErrorsTo(errorLog);
-  //    }
-  //    return s;
-  //  }
 }

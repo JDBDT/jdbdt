@@ -67,8 +67,7 @@ final class DBSetup {
       sql.append(",?");
     }
     sql.append(')');
-    PreparedStatement  insertStmt = 
-      StatementPool.compile(t.getConnection(), sql.toString());
+    PreparedStatement  insertStmt = t.getDB().compileStatement(sql.toString());
     for (Row r : data) {
       final int n = r.getColumnCount();
       final Object[] cols = r.getColumnData();
@@ -90,8 +89,9 @@ final class DBSetup {
    * @throws SQLException If a database error occurs.
    */
   static int deleteAll(Table t) throws SQLException {
-    return StatementPool.compile(t.getConnection(), "DELETE FROM " + t.getName())
-                        .executeUpdate();
+    return t.getDB()
+            .compileStatement("DELETE FROM " + t.getName())
+            .executeUpdate();
   }
   
   /**
@@ -100,8 +100,9 @@ final class DBSetup {
    * @throws SQLException If a database error occurs.
    */
   static void truncate(Table t) throws SQLException {
-    StatementPool.compile(t.getConnection(),
-        "TRUNCATE TABLE " + t.getName()).execute();
+    t.getDB()
+     .compileStatement("TRUNCATE TABLE " + t.getName())
+     .execute();
   }
   
   /**
@@ -122,10 +123,13 @@ final class DBSetup {
     if (whereClause == null) {
       throw new InvalidUsageException("WHERE clause is not set!");
     }
+    if (q.fromClause().length != 1) {
+      throw new InvalidUsageException("FROM clause specifies multiple data sources!");
+    }
     PreparedStatement deleteStmt = 
-        StatementPool.compile(q.getConnection(), 
-            "DELETE FROM " + q.getTable().getName() 
-            + " WHERE " + whereClause);
+      q.getDB().compileStatement(
+        "DELETE FROM " + q.fromClause()[0] +
+        " WHERE " + whereClause);
     Object[] args = q.getQueryArguments();
     if (args != null && args.length > 0) {
       for (int i=0; i < args.length; i++) {

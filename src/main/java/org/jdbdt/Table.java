@@ -1,8 +1,5 @@
 package org.jdbdt;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 /**
  * Database table representation.
  * 
@@ -13,15 +10,11 @@ import java.sql.SQLException;
  * </p>
  * <ul>
  * <li>
- * must be created using {@link JDBDT#table(String)};
+ * must be created using {@link DB#table(String)};
  * </li>
  * <li>
  * may have an associated subset of the table's columns using {@link #columns(String...)} - 
  * otherwise, by default, all table columns will be considered;
- * </li>
- * <li>
- * must be associated (only once) to a database connection using 
- * {@link #boundTo(Connection)} before any actual database operations.
  * </li>
  * </ul>
  * 
@@ -31,17 +24,14 @@ import java.sql.SQLException;
  * import org.jdbdt.Table;
  * import java.sql.Connection;
  * ...
- * Connection conn = ...;
+ * DB db = ...;
  * Table t = table("TableName")
- *          .columns("A", "B", "C", "D")
- *          .boundTo(conn);
+ *          .columns("A", "B", "C", "D");
  * </pre></blockquote>
- * 
  * 
  * @since 0.1
  */
 public final class Table extends DataSource {
-
   /**
    * Table name.
    */
@@ -53,18 +43,13 @@ public final class Table extends DataSource {
   private String[] columnNames = null;
 
   /**
-   * Connection to which the table is bound.
-   */
-  private Connection connection = null;
-
-
-  /**
    * Constructor.
-   * 
+   * @param db Database instance.
    * @param tableName Table name
-   * @see JDBDT#table(String)
+   * @see DB#table(String)
    */
-  Table(String tableName) {
+  Table(DB db, String tableName) {
+    super(db);
     this.tableName = tableName;
   }
 
@@ -83,7 +68,6 @@ public final class Table extends DataSource {
    * @return The table instance (for chained calls).
    */
   public Table columns(String... columnNames) {
-    checkIfNotBound();
     if (this.columnNames != null) {
       throw new InvalidUsageException("Columns are already defined.");
     }
@@ -101,26 +85,6 @@ public final class Table extends DataSource {
     return columnNames;
   }
 
-  /**
-   * Set database connection to use.
-   * @param conn Database connection.
-   * @return The table instance (for chained calls).
-   * @throws SQLException If a database error occurs.
-   */
-  public Table boundTo(Connection conn) throws SQLException {
-    checkIfNotBound();
-    connection = conn;
-    ensureCompiled();
-    if (columnNames == null) {
-      MetaData md = getMetaData();
-      int nCols = md.getColumnCount();
-      columnNames = new String[nCols];
-      for (int i = 0; i < nCols; i++) {
-        columnNames[i] = md.getLabel(i);
-      }
-    }
-    return this;
-  }
   
   @Override
   String getSQLForQuery() {
@@ -136,34 +100,9 @@ public final class Table extends DataSource {
     sql.append("\nFROM ").append(tableName);
     return sql.toString();
   }
-  
-  @Override
-  final Connection getConnection() {
-    checkIfBound();
-    return connection;
-  }
 
   @Override
   final Object[] getQueryArguments() {
     return null;
   }
- 
-  /**
-   * Ensure table is bound to a connection,
-   * otherwise throw {@link InvalidUsageException}.
-   */
-  void checkIfBound() {
-    if (connection == null) {
-      throw new InvalidUsageException("Table is not bound to a connection.");
-    }
-  }
-  /**
-   * Ensure table is NOT bound to a connection,
-   * otherwise throw {@link InvalidUsageException}.
-   */
-  void checkIfNotBound() {
-    if (connection != null) {
-      throw new InvalidUsageException("Table is already bound to a connection.");
-    }
-  } 
 }
