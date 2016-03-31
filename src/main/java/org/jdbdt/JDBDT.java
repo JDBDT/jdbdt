@@ -45,9 +45,6 @@ public final class JDBDT {
     return new DB(c);
   }
   
-
-
-
   /**
    * Create data builder for a table.
    * @param t Table.
