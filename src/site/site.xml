@@ -17,19 +17,28 @@
 -->
   <body>
     <links>
-      <item name="Javadoc" href="apidocs/index.html"/>
-      <item name="Source code repository" href="https://github.com/edrdo/jdbdt/" />
-      <item name="Issue tracking" href="https://github.com/edrdo/jdbdt/issues/"/>
-      <item name="Continuous integration" href="https://travis-ci.org/edrdo/jdbdt/"/>
     </links>
 
     <menu name="JDBDT">
-      <item name="Introduction" href="index.html"/>
+      <item name="About" href="index.html"/>
       <item name="License" href="http://www.eclipse.org/legal/epl-v10.html"/>
+      <item name="Installation" href="https://github.com/edrdo/jdbdt/" />
+      <item name="Repository" href="https://github.com/edrdo/jdbdt/" />
+      <item name="Issue tracking" href="https://github.com/edrdo/jdbdt/issues/"/>
+      <item name="Continuous integration" href="https://travis-ci.org/edrdo/jdbdt/"/>
 <!--
       <item name="Download" href="download.html"/>
       <item name="Release Notes" href="release-notes.html" />
 -->
+    </menu>
+    <menu name="Reference">
+      <item name="Getting started" href="GettingStarted.html"/>
+      <item name="Database handlers" href="DB.html"/>
+      <item name="Data sources" href="DataSources.html"/>
+      <item name="Data sets" href="DataSets.html"/>
+      <item name="Database setup" href="DBSetup.html"/>
+      <item name="Database assertions" href="DBAssertions.html"/>
+      <item name="Javadoc" href="apidocs/index.html"/>
     </menu>
 
     <menu ref="reports"/>
