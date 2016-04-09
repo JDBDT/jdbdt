@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="JDBDT">
+  <bannerLeft>
+    <name>JDBDT</name>
+    <src>images/jdbdt-logo.png</src>
+    <href>http://jdbdt.org/</href>
+  </bannerLeft>
+<!--
+  <bannerRight>
+    <src>http://maven.apache.org/images/maven-small.gif</src>
+  </bannerRight>
+-->
+  <body>
+    <links>
+      <item name="Source code repository" href="https://github.com/edrdo/jdbdt/" />
+      <item name="Issue tracking" href="https://github.com/edrdo/jdbdt/issues/"/>
+      <item name="Continuous integration" href="https://travis-ci.org/edrdo/jdbdt/"/>
+    </links>
+
+    <menu name="JDBDT">
+      <item name="Introduction" href="index.html"/>
+<!--
+      <item name="Download" href="download.html"/>
+      <item name="Release Notes" href="release-notes.html" />
+-->
+    </menu>
+
+    <!-- <menu ref="reports"/> -->
+  </body>
+</project>
