@@ -27,7 +27,7 @@ import org.junit.runners.MethodSorters;
 
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class DataBuilderRandomFillersTest extends DBTestCase {
+public class DataSetBuilderRandomFillersTest extends DBTestCase {
 
   private static Table table;
   private static final String TABLE_NAME = "Foo";

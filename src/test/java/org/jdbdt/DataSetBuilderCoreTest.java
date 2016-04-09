@@ -16,7 +16,7 @@ import org.junit.runners.MethodSorters;
 
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class DataBuilderCoreTest extends DBTestCase {
+public class DataSetBuilderCoreTest extends DBTestCase {
 
   @Rule public TestName testName = new TestName();
 
@@ -68,7 +68,7 @@ public class DataBuilderCoreTest extends DBTestCase {
   private void invalidFiller(String c, ColumnFiller<?> f) {
     invalidUse(theSUT,
                sut -> sut.set(c,f),
-               DataBuilderCoreTest::assertEmptyDataSet
+               DataSetBuilderCoreTest::assertEmptyDataSet
                );
   }
   @Test

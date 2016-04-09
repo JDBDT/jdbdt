@@ -12,10 +12,10 @@ import org.junit.runners.Suite.SuiteClasses;
   QueryTest.class,
   DBSetupTest.class,
   DeltaTest.class,
-  DataBuilderCoreTest.class,
-  DataBuilderCoreFillerTest.class,
-  DataBuilderSequenceFillersTest.class,
-  DataBuilderRandomFillersTest.class,
+  DataSetBuilderCoreTest.class,
+  DataSetBuilderCoreFillerTest.class,
+  DataSetBuilderSequenceFillersTest.class,
+  DataSetBuilderRandomFillersTest.class,
 //  IntegrationTest.class
 })
 public class DBEngineTestSuite {

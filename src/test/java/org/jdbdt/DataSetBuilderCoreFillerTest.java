@@ -16,7 +16,7 @@ import org.junit.runners.MethodSorters;
 
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class DataBuilderCoreFillerTest extends DBTestCase {
+public class DataSetBuilderCoreFillerTest extends DBTestCase {
 
   @Rule public TestName testName = new TestName();
 

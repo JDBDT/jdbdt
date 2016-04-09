@@ -22,7 +22,7 @@ import org.junit.runners.MethodSorters;
 
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class DataBuilderSequenceFillersTest  extends DBTestCase {
+public class DataSetBuilderSequenceFillersTest  extends DBTestCase {
 
   private static Table table;
   private static final String TABLE_NAME = "Foo";
