@@ -49,13 +49,13 @@ public class DataBuilderSequenceFillersTest  extends DBTestCase {
 
   @Rule 
   public TestName testName = new TestName();
-  DataBuilder theSUT;
+  DataSetBuilder theSUT;
   DataSet expected;
   String column;
   
   @Before 
   public void setUp() {
-    theSUT = new DataBuilder(table);
+    theSUT = new DataSetBuilder(table);
     for (Map.Entry<String, Object> e : BASE_DATA.entrySet()) {
       theSUT.value(e.getKey(), e.getValue());
     }
@@ -136,7 +136,7 @@ public class DataBuilderSequenceFillersTest  extends DBTestCase {
     column = "cDate";
     Date start = Date.valueOf("2015-01-01");
     expected = deriveRowSet(COUNT, (i,data) -> {
-      data.put(column, new Date(start.getTime() + i * DataBuilder.MILLIS_PER_DAY));
+      data.put(column, new Date(start.getTime() + i * DataSetBuilder.MILLIS_PER_DAY));
     });
     theSUT.sequence(column, start, 1);
     theSUT.generate(COUNT);

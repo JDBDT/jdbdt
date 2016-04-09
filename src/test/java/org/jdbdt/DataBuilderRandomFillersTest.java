@@ -54,15 +54,15 @@ public class DataBuilderRandomFillersTest extends DBTestCase {
 
   @Rule 
   public TestName testName = new TestName();
-  DataBuilder theSUT;
+  DataSetBuilder theSUT;
   DataSet expected;
   String column;
   Random rng;
   
   @Before 
   public void setUp() {
-    rng = new Random(DataBuilder.RNG_SEED);
-    theSUT = new DataBuilder(table);
+    rng = new Random(DataSetBuilder.RNG_SEED);
+    theSUT = new DataSetBuilder(table);
     for (Map.Entry<String, Object> e : BASE_DATA.entrySet()) {
       theSUT.value(e.getKey(), e.getValue());
     }

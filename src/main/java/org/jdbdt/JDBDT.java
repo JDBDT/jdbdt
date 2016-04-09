@@ -7,11 +7,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * JDBDT API facade.
+ * JDBDT main API facade.
  * 
- * <p>The facade defines the standard API
- * for use by test code for tasks like database 
- * verification, setup, and tear-down.
+ * <p>
+ * This utility class defines the front-end API database 
+ * verification, setup, tear-down, as well as JDBDT
+ * object creation.
  * </p>
  *  
  * @since 0.1
@@ -29,46 +30,46 @@ public final class JDBDT {
   private static final String VERSION = "0.1.0-SNAPSHOT";
 
   /**
-   * Get JDBDT version.
-   * @return The version identifier for the JDBDT library in use.
+   * Get JDBDT version identifier.
+   * @return An identifier for the JDBDT version.
    */
   public static String version() { 
     return VERSION;
   }
 
   /**
-   * Create a database handle for given SQL connection.,
+   * Create a database handle for given SQL connection.
    * @param c Connection.
-   * @return A new database handle.
+   * @return A new database handle for the given connection.
    */
   public static DB db(Connection c) {
     return new DB(c);
   }
   
   /**
-   * Create data builder for a table.
-   * @param t Table.
-   * @return A new {@link DataBuilder} object.
+   * Create a new data set builder.
+   * @param source Data source.
+   * @return A new data set builder for the given source.
    */
-  public static DataBuilder build(Table t) {
-    return new DataBuilder(t);
+  public static DataSetBuilder build(DataSource source) {
+    return new DataSetBuilder(source);
   }
 
   /**
    * Create a new data set.
-   * @param source Data source instance.
-   * @return A new, empty data set.
+   * @param source Data source.
+   * @return A new data set for the given source.
    */
   public static DataSet data(DataSource source) {
     return new DataSet(source);
   }
 
   /**
-   * Create typed data set.
+   * Create a new typed data set.
    * @param <T> Type of objects.
    * @param source Data source.
    * @param conv Conversion function.
-   * @return A new, empty data set.
+   * @return A new typed data set for the given source.
    */
   public static <T> TypedDataSet<T> data(DataSource source, Conversion<T> conv) {
     return new TypedDataSet<>(source, conv);
@@ -79,18 +80,44 @@ public final class JDBDT {
    * 
    * <p>
    * The method takes a snapshot of the current database state
-   * for the given snapshot provider (e.g., a {@link Table} 
-   * or a {@link Query} instance).
+   * for the given data source. A fresh query will be issued, 
+   * yielding a new data set that is recorded internally 
+   * as the latest snapshot for the data source. 
+   * The snapshot is used as the base reference for any subsequent 
+   * delta assertions, until a new snapshot is defined with
+   * a new call to this method or to {@link #assumeSnapshot(DataSet)}.
    * </p>
-   * @param sp SnapshotProvider provider.
+   * 
+   * <p>
+   * Note that the method returns the data set instance representing the snapshot,
+   * but assertion methods do not require any book-keeping 
+   * by the caller, hence the result may be ignored for this
+   * purpose. Note also that this data set is read-only (see {@link DataSet#isReadOnly()}).
+   * </p>
+   * @param source Data source.
    * @throws UnexpectedDatabaseException if a database error occurs 
-   *   
+   * @return Data set representing the snapshot.
+   * 
+   * @see #assumeSnapshot(DataSet)
+   * @see #assertChanged(DataSet, DataSet)
+   * @see #assertDeleted(DataSet)
+   * @see #assertInserted(DataSet)
+   * @see #delta(DataSource)
    */
-  public static void
-  snapshot(DataSource sp)  {
-    sp.executeQuery(true);
+  public static DataSet
+  snapshot(DataSource source)  {
+    return source.executeQuery(true);
   }
 
+  /**
+   * Assume the given data set as a snapshot for current database state.-
+   * @param data Data set.
+   */
+  public static void
+  assumeSnapshot(DataSet data)  {
+    data.getSource().setSnapshot(data);
+  }
+  
   /**
    * Obtain delta.
    * 

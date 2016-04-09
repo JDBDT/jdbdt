@@ -27,7 +27,7 @@ public class DataBuilderCoreFillerTest extends DBTestCase {
     table = getDB().table(UserDAO.TABLE_NAME).columns(UserDAO.COLUMNS);
   }
 
-  DataBuilder theSUT;
+  DataSetBuilder theSUT;
 
   static final 
   User BASE_DATA = new User("someLogin", 
@@ -36,7 +36,7 @@ public class DataBuilderCoreFillerTest extends DBTestCase {
                             Date.valueOf("2015-12-31"));
   @Before 
   public void setUp() {
-    theSUT = new DataBuilder(table);
+    theSUT = new DataSetBuilder(table);
     //"login", "name", "password", "created" 
     theSUT.value("login", BASE_DATA.getLogin())
           .value("name", BASE_DATA.getName())

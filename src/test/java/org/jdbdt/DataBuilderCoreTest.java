@@ -34,14 +34,14 @@ public class DataBuilderCoreTest extends DBTestCase {
     table = getDB().table(UserDAO.TABLE_NAME).columns(UserDAO.COLUMNS);
   }
 
-  DataBuilder theSUT;
+  DataSetBuilder theSUT;
 
   @Before 
   public void setUp() {
-    theSUT = new DataBuilder(table);
+    theSUT = new DataSetBuilder(table);
   }
 
-  private static void assertEmptyDataSet(DataBuilder sut) {
+  private static void assertEmptyDataSet(DataSetBuilder sut) {
     assertEquals("filler count", 0, sut.fillerCount());
     assertEquals("row count", 0, sut.size());
     assertEquals("empty row list", 0, sut.data().size());
@@ -54,7 +54,7 @@ public class DataBuilderCoreTest extends DBTestCase {
   
   private static void 
   invalidUse
-  (DataBuilder sut, Consumer<DataBuilder> operation, Consumer<DataBuilder> assertions) {
+  (DataSetBuilder sut, Consumer<DataSetBuilder> operation, Consumer<DataSetBuilder> assertions) {
     try {
       operation.accept(sut);
       fail("Expected " + InvalidUsageException.class);

@@ -5,8 +5,8 @@ package org.jdbdt;
  *
  * <p>
  * Column fillers can be set directly for data sets
- * using {@link DataBuilder#set(String, ColumnFiller)} if desired.
- * Alternatively, the {@link DataBuilder} class provides many
+ * using {@link DataSetBuilder#set(String, ColumnFiller)} if desired.
+ * Alternatively, the {@link DataSetBuilder} class provides many
  * convenience methods that abstract the creation
  * of commonly used column fillers.
  * </p>

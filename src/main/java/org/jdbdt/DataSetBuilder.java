@@ -23,7 +23,7 @@ import java.util.function.Function;
  * Data builders can be used as follows: 
  * <ul>
  * <li>
- * Instances are created with a call to {@link JDBDT#build(Table)}. 
+ * Instances are created with a call to {@link JDBDT#build(DataSource)}. 
  * </li>
  * <li>
  * Entries (rows) in the data set are specified by setting one 
@@ -72,10 +72,10 @@ import java.util.function.Function;
  * </pre></blockquote>
  * 
  * @since 0.1 
- * @see JDBDT#build(Table)
+ * @see JDBDT#build(DataSource)
  *
  */
-public final class DataBuilder {
+public final class DataSetBuilder {
 
   /**
    * Row supplier interface.
@@ -122,7 +122,7 @@ public final class DataBuilder {
 
     @Override
     public void supply(DataSet rs) {
-      final String[] colNames = table.getColumns();
+      final String[] colNames = source.getColumns();
       for (int r=0; r < rowCount; r++) {
         final Object[] colData = new Object[colNames.length];
         for (int c = 0; c < colNames.length; c++) {
@@ -141,7 +141,7 @@ public final class DataBuilder {
   /**
    * Table.
    */
-  private final Table table;
+  private final DataSource source;
 
   /** 
    * Random number generator.
@@ -179,13 +179,13 @@ public final class DataBuilder {
   private DataSet theRows;
 
   /**
-   * Constructs a new data set for the given table.
-   * @param t Table for data set.
+   * Constructs a new data set builder. 
+   * @param source Data source associated to builder. 
    */
-  DataBuilder(Table t) {
-    ensureArgNotNull(t);
-    table = t;
-    String[] columnNames = t.getColumns();
+  DataSetBuilder(DataSource source) {
+    ensureArgNotNull(source);
+    this.source = source;
+    String[] columnNames = source.getColumns();
     currentFillers = new ColumnFiller[columnNames.length];
     fillerCount = 0;
     for (int idx=0; idx < columnNames.length; idx++) {
@@ -211,13 +211,13 @@ public final class DataBuilder {
    * @throws InvalidUsageException for an invalid row count, or if
    *     there are columns with no associated fillers.
    */
-  public DataBuilder generate(int rows) throws InvalidUsageException {
+  public DataSetBuilder generate(int rows) throws InvalidUsageException {
     ensureValid(rows, rows > 0);
     if (fillerCount < currentFillers.length) {
-      for (int idx = 0; idx < table.getColumnCount(); idx++) {
+      for (int idx = 0; idx < source.getColumnCount(); idx++) {
         if (currentFillers[idx] == null) {
           throw new InvalidUsageException("No filler is set for column '" + 
-              table.getColumns()[idx]);
+              source.getColumns()[idx]);
         }
       }
       throw new JDBDTInternalError("Filler count does not match fillers set.");
@@ -239,7 +239,7 @@ public final class DataBuilder {
    * @param filler Column filler. 
    * @return The data set instance (for chained calls).
    */
-  public DataBuilder set(String column, ColumnFiller<?> filler) {
+  public DataSetBuilder set(String column, ColumnFiller<?> filler) {
     ensureArgNotNull(column);
     ensureArgNotNull(filler);
     Integer idx = columnIdx.get(column.toLowerCase());
@@ -273,13 +273,6 @@ public final class DataBuilder {
     return rowCount;
   }
 
-  /**
-   * Get table associated to this data set.
-   * @return A able instance.
-   */
-  Table getTable() {
-    return table;
-  }
 
   /**
    * Get data set generated.
@@ -294,7 +287,7 @@ public final class DataBuilder {
    */
   public DataSet data() {   
     if (theRows == null) {
-      final DataSet rows = new DataSet(table);
+      final DataSet rows = new DataSet(source);
       rng.setSeed(RNG_SEED);
       for (RowSupplier rs : suppliers) {
         rs.supply(rows);
@@ -335,8 +328,8 @@ public final class DataBuilder {
    * Constant value filler.
    *
    * @param <T> Datum type.
-   * @see DataBuilder#value(String, Object)
-   * @see DataBuilder#nullValue(String)
+   * @see DataSetBuilder#value(String, Object)
+   * @see DataSetBuilder#nullValue(String)
    */
   private static class ConstantFiller<T> implements ColumnFiller<T> {
     /** Constant value. */
@@ -364,7 +357,7 @@ public final class DataBuilder {
    * @return The data set instance (for chained calls).
    * @see #value(String, Object)
    */
-  public DataBuilder nullValue(String column) {
+  public DataSetBuilder nullValue(String column) {
     return set(column, NULL_FILLER);
   }
 
@@ -378,7 +371,7 @@ public final class DataBuilder {
    * @return  The data set instance (for chained calls).
    * @see #nullValue(String)
    */
-  public DataBuilder remainingColumnsNull() {
+  public DataSetBuilder remainingColumnsNull() {
     for (int i = 0; i < currentFillers.length; i++) {
       if (currentFillers[i] == null) {
         currentFillers[i] = NULL_FILLER;
@@ -394,7 +387,7 @@ public final class DataBuilder {
    * @param value Value to use.
    * @return The data set instance (for chained calls).
    */
-  public DataBuilder value(String column, Object value) {
+  public DataSetBuilder value(String column, Object value) {
     return set(column, new ConstantFiller<Object>(value)); 
   }
 
@@ -418,7 +411,7 @@ public final class DataBuilder {
    * @return The data set instance (for chained calls).
    * @see #sequence(String, Function)
    */
-  public <T> DataBuilder sequence(String column, T initial, Function<T,T> step) {
+  public <T> DataSetBuilder sequence(String column, T initial, Function<T,T> step) {
     ensureArgNotNull(initial);
     ensureArgNotNull(step);
     return set(column, new StdSeqFiller<T>(initial, step));
@@ -437,7 +430,7 @@ public final class DataBuilder {
    * @return The data set instance (for chained calls).
    * @see #sequence(String, Function, int)
    */
-  public DataBuilder sequence(String column, Function<Integer,?> step) {
+  public DataSetBuilder sequence(String column, Function<Integer,?> step) {
     return sequence(column, step, 0);
   }
 
@@ -460,7 +453,7 @@ public final class DataBuilder {
    * @return The data set instance (for chained calls).
    * @see #sequence(String, Object, Function)
    */
-  public DataBuilder sequence(String column, Function<Integer,?> step, int initial) {
+  public DataSetBuilder sequence(String column, Function<Integer,?> step, int initial) {
     ensureArgNotNull(step);
     return set(column, new ColumnFiller<Object>() {
       int count = initial;
@@ -488,7 +481,7 @@ public final class DataBuilder {
    * 
    */
   @SafeVarargs
-  public final <T> DataBuilder sequence(String column, T... values) {
+  public final <T> DataSetBuilder sequence(String column, T... values) {
     ensureValidArray(values);
     return sequence(column,  i -> values [i % values.length]);
   }
@@ -507,7 +500,7 @@ public final class DataBuilder {
    * 
    * @see #sequence(String,Function)
    */
-  public DataBuilder sequence(String column, List<?> values) { 
+  public DataSetBuilder sequence(String column, List<?> values) { 
     ensureValidList(values);
     return sequence(column,  i -> values.get(i % values.size()));
   }
@@ -525,7 +518,7 @@ public final class DataBuilder {
    * @return The data set instance (for chained calls).
    * @see #sequence(String, int, int)
    */
-  public DataBuilder sequence(String column, int initial) {
+  public DataSetBuilder sequence(String column, int initial) {
     return sequence(column, initial, 1);
   }
 
@@ -545,7 +538,7 @@ public final class DataBuilder {
    * @see #sequence(String, Object, Function)
    * @see #sequence(String, int)
    */
-  public DataBuilder sequence(String column, int initial, int step) {
+  public DataSetBuilder sequence(String column, int initial, int step) {
     return sequence(column, (Integer) initial, n -> n + step);
   }
 
@@ -563,7 +556,7 @@ public final class DataBuilder {
    * @see #sequence(String, Object, Function)
    * @see #sequence(String, long, long)
    */
-  public DataBuilder sequence(String column, long initial) {
+  public DataSetBuilder sequence(String column, long initial) {
     return sequence(column, initial, 1L);
   }
 
@@ -583,7 +576,7 @@ public final class DataBuilder {
    * @see #sequence(String, Object, Function)
    * @see #sequence(String, long)
    */
-  public DataBuilder sequence(String column, long initial, long step) {
+  public DataSetBuilder sequence(String column, long initial, long step) {
     return sequence(column, (Long) initial, n -> n + step);
   }
 
@@ -601,7 +594,7 @@ public final class DataBuilder {
    * @see #sequence(String, Object, Function)
    * @see #sequence(String, BigInteger, BigInteger)
    */
-  public DataBuilder sequence(String column, BigInteger initial) {
+  public DataSetBuilder sequence(String column, BigInteger initial) {
     ensureArgNotNull(initial);
     return sequence(column, initial, BigInteger.ONE);
   }
@@ -622,7 +615,7 @@ public final class DataBuilder {
    * @see #sequence(String, Object, Function)
    * @see #sequence(String, BigInteger)
    */
-  public DataBuilder sequence(String column, BigInteger initial, BigInteger step) {
+  public DataSetBuilder sequence(String column, BigInteger initial, BigInteger step) {
     ensureArgNotNull(initial);
     ensureArgNotNull(step);
     return sequence(column, initial, n -> n.add(step));
@@ -644,7 +637,7 @@ public final class DataBuilder {
    * @see #sequence(String, Object, Function)
    * @see #sequence(String, double, double)
    */
-  public DataBuilder sequence(String column, float initial, float step) {
+  public DataSetBuilder sequence(String column, float initial, float step) {
     return sequence(column, (Float) initial, x -> x + step);
   }
   /**
@@ -663,7 +656,7 @@ public final class DataBuilder {
    * @see #sequence(String, Object, Function)
    * @see #sequence(String, float, float)
    */
-  public DataBuilder sequence(String column, double initial, double step) {
+  public DataSetBuilder sequence(String column, double initial, double step) {
     return sequence(column, (Double) initial, x -> x + step);
   }
 
@@ -690,7 +683,7 @@ public final class DataBuilder {
    * @see #sequence(String, Timestamp, long)
    * @see #sequence(String, Object, Function)
    */
-  public DataBuilder sequence(String column, Date initial, int step) {
+  public DataSetBuilder sequence(String column, Date initial, int step) {
     ensureArgNotNull(initial);
     return sequence(column, initial, d -> new Date(d.getTime() + step * MILLIS_PER_DAY));
   }
@@ -713,7 +706,7 @@ public final class DataBuilder {
    * @see #sequence(String, Timestamp, long)
    * @see #sequence(String, Object, Function)
    */
-  public DataBuilder sequence(String column, Time initial, int step) {
+  public DataSetBuilder sequence(String column, Time initial, int step) {
     ensureArgNotNull(initial);
     return sequence(column, initial, t -> new Time(t.getTime() + step * 1000L));
   }
@@ -736,7 +729,7 @@ public final class DataBuilder {
    * @see #sequence(String, Time, int)
    * @see #sequence(String, Object, Function)
    */
-  public DataBuilder sequence(String column, Timestamp initial, long step) {
+  public DataSetBuilder sequence(String column, Timestamp initial, long step) {
     ensureArgNotNull(initial);
     return sequence(column, initial, ts -> new Timestamp(ts.getTime() + step));
   }
@@ -758,7 +751,7 @@ public final class DataBuilder {
    * @see #sequence(String, Object...)
    */
   @SafeVarargs
-  public final <T> DataBuilder random(String column, T... values) {
+  public final <T> DataSetBuilder random(String column, T... values) {
     ensureValidArray(values);
     return set(column, () -> values[rng.nextInt(values.length)]);
   }
@@ -778,7 +771,7 @@ public final class DataBuilder {
    * @see #random(String, Object...)
    * @see #sequence(String, List)
    */
-  public DataBuilder random(String column, List<?> values) {
+  public DataSetBuilder random(String column, List<?> values) {
     ensureValidList(values);
     return set(column,() -> values.get(rng.nextInt(values.size())));
   }
@@ -800,7 +793,7 @@ public final class DataBuilder {
    * @see #random(String, float, float)
    * @see #random(String, double, double)
    */
-  public  DataBuilder random(String column, int min, int max) {
+  public  DataSetBuilder random(String column, int min, int max) {
     ensureValidRange(min, max);
     final int n = max - min + 1;
     return set(column, () -> min + rng.nextInt(n));
@@ -823,7 +816,7 @@ public final class DataBuilder {
    * @see #random(String, float, float)
    * @see #random(String, double, double)
    */
-  public  DataBuilder random(String column, long min, long max) {
+  public  DataSetBuilder random(String column, long min, long max) {
     ensureValidRange(min, max);
     return set(column, () ->  nextRandomLong(min, max));
   }
@@ -845,7 +838,7 @@ public final class DataBuilder {
    * @see #random(String, long, long)
    * @see #random(String, double, double)
    */
-  public  DataBuilder random(String column, float min, float max) {
+  public  DataSetBuilder random(String column, float min, float max) {
     ensureValidRange(min, max);
     final float diff = max - min;
     return set(column, () -> min + rng.nextFloat() * diff);
@@ -868,7 +861,7 @@ public final class DataBuilder {
    * @see #random(String, long, long)
    * @see #random(String, float, float)
    */
-  public  DataBuilder random(String column, double min, double max) {
+  public  DataSetBuilder random(String column, double min, double max) {
     ensureValidRange(min, max);
     final double diff = max - min;
     return set(column, () -> min + rng.nextDouble() * diff);
@@ -891,7 +884,7 @@ public final class DataBuilder {
    * @see #random(String, Timestamp, Timestamp)
    * 
    */
-  public  DataBuilder random(String column, Date min, Date max) {
+  public  DataSetBuilder random(String column, Date min, Date max) {
     ensureValidRange(min, max);
     final long a = min.getTime() / MILLIS_PER_DAY,
         b = max.getTime() / MILLIS_PER_DAY ;
@@ -925,7 +918,7 @@ public final class DataBuilder {
    * @see #random(String, Timestamp, Timestamp)
    * @see #random(String, Date, Date)
    */
-  public  DataBuilder random(String column, Time min, Time max) {
+  public  DataSetBuilder random(String column, Time min, Time max) {
     ensureValidRange(min, max);
     final long a = min.getTime(),
         b = max.getTime();
@@ -959,7 +952,7 @@ public final class DataBuilder {
    * @see #random(String, Time, Time)
    * @see #random(String, Date, Date)
    */
-  public  DataBuilder random(String column, Timestamp min, Timestamp max) {
+  public  DataSetBuilder random(String column, Timestamp min, Timestamp max) {
     ensureValidRange(min, max);
     final long a = min.getTime() * NANO_PER_MSEC  + min.getNanos(), 
         n = max.getTime() * NANO_PER_MSEC + max.getNanos() - a + 1;
@@ -1008,7 +1001,7 @@ public final class DataBuilder {
    * @see #random(String, Time, Time)
    * @see #random(String, Timestamp, Timestamp)
    */
-  public DataBuilder random(String column, Function<Random,?> gen) {
+  public DataSetBuilder random(String column, Function<Random,?> gen) {
     return set(column, () -> gen.apply(rng));
   }
 
