@@ -224,7 +224,7 @@ public final class Log {
   private static final Transformer XML_TRANSFORMER;
 
   @SuppressWarnings("javadoc")
-  private static final String ROOT_TAG = "jdbdt-log";
+  private static final String ROOT_TAG = "jdbdt-log-message";
   @SuppressWarnings("javadoc")
   private static final String VERSION_ATTR = "version";
   @SuppressWarnings("javadoc")
