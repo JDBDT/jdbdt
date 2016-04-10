@@ -199,7 +199,7 @@ public final class Log {
     int size = 0;
     while (itr.hasNext()) {
       Row r = itr.next();
-      Object[] data = r.getColumnData();
+      Object[] data = r.data();
       Element rowElem = xmlDoc.createElement(ROW_TAG);
       for (int i=0; i < data.length; i++) {
         Element colNode = xmlDoc.createElement(COLUMN_TAG);

@@ -36,7 +36,7 @@ final class RowImpl implements Row {
    * Get data for this row.
    * @return The data representing the columns of this row.
    */
-  public Object[] getColumnData() {
+  public Object[] data() {
     return data;
   }
   
@@ -44,7 +44,7 @@ final class RowImpl implements Row {
    * Get column count. 
    * @return The data representing the columns of this row.
    */
-  public int getColumnCount() {
+  public int length() {
     return data.length;
   }
   
@@ -63,7 +63,7 @@ final class RowImpl implements Row {
    * 
    * 
    * @return Hash code for this row obtained by calling 
-   *        {@link Arrays#hashCode()} over {@link #getColumnData()}.
+   *        {@link Arrays#hashCode()} over {@link #data()}.
    *        The returned value is calculated only once and cached for subsequent.
    *        
    */
@@ -78,7 +78,7 @@ final class RowImpl implements Row {
   
   /**
    * Get string representation for this row.
-   * @return String obtained by calling {@link Arrays#toString()} over {@link #getColumnData()}.
+   * @return String obtained by calling {@link Arrays#toString()} over {@link #data()}.
    */
   @Override
   public String toString() {

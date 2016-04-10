@@ -9,15 +9,15 @@ package org.jdbdt;
 public interface Row {
 
   /**
-   * Get column count.
+   * Get row length.
    * @return the number of columns in the database row.
    */
-  int getColumnCount();
+  int length();
   
   /**
-   * Get column data.
+   * Get row data.
    * @return An array of objects. 
    *   Each entry in the array corresponds to a database column.
    */
-  Object[] getColumnData();
+  Object[] data();
 }

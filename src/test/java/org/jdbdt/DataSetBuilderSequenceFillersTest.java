@@ -177,11 +177,11 @@ public class DataSetBuilderSequenceFillersTest  extends DBTestCase {
       System.out.println("> " + testName.getMethodName() + " -- " + column);
       System.out.println("-- expected --");
       for (Row r : expected) {
-        System.out.println(Arrays.toString(r.getColumnData()));
+        System.out.println(Arrays.toString(r.data()));
       }
       System.out.println("-- actual --");
       for (Row r : theSUT.data()) {
-        System.out.println(Arrays.toString(r.getColumnData()));
+        System.out.println(Arrays.toString(r.data()));
       }
     }
   }
