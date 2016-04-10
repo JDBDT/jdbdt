@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.EnumSet;
 import java.util.IdentityHashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  * Database instance.
@@ -15,92 +14,112 @@ import java.util.function.Consumer;
  *
  */
 public final class DB {
-   /**
-    * Connection.
-    */
+  /**
+   * Database options.
+   *
+   * @since 0.1
+   */
+  public enum Option {
+    /**
+     * Statement pooling (enabled by default).
+     */
+    StatementPooling,
+    /**
+     * Log deltas.
+     */
+    LogDeltas,
+    /**
+     * Log assertion errors.
+     */
+    LogAssertionErrors,
+    /**
+     * Log data set insertions.
+     */
+    LogInsertions,
+    /**
+     * Log data set snapshots.
+     */
+    LogSnapshots,
+    /**
+     * Log SQL statements.
+     */
+    LogSQL;
+  }
+  /**
+   * Connection.
+   */
   private final Connection connection;
- 
+
   /**
    * Trace options.
    */
-  private EnumSet<Trace> traceOptions = EnumSet.noneOf(Trace.class);
-  
+  private EnumSet<Option> optionSet = EnumSet.noneOf(Option.class);
+
   /**
-   * Trace log.
+   * Log to use. 
    */
-  private Log traceLog = null;
-  
+  private Log log = null;
+
   /**
    * Statement pool.
    */
   private Map<String,PreparedStatement> pool;
-  
-  /**
-   * Statement pooling flag.
-   */
-  private boolean statementPooling = true;
-  
+
+
   /**
    * Constructor.
    * @param connection Database connection.
    */
   DB(Connection connection) {
     this.connection = connection;
+    log = new Log(System.err);
+    enable(Option.StatementPooling);
   }
+
+  /**
+   * Enable options.
+   * @param options Options to enable.
+   */
+  public void enable(Option... options) {
+    for (Option o : options) {
+      optionSet.add(o);
+    }
+  }
+  
+  /** 
+   * Enable all logging options.
+   */
+  public void enableFullLogging() {
+    enable(DB.Option.LogAssertionErrors,
+           DB.Option.LogDeltas,
+           DB.Option.LogSnapshots,
+           DB.Option.LogSQL);
+  }
+
+  /**
+   * Disable options.
+   * @param options Options to enable.
+   * @see #enable(Option...)
+   * @see #isEnabled(Option)
+   */
+  public void disable(Option... options) {
+    for (Option o : options) {
+      optionSet.remove(o);
+    }
+  }
+  
   
   /**
-   * Set trace options for database.
-   * @param log Log instance to use.
-   * @param options Trace options.
-   * @return <code>this</code> (for chained calls).
+   * Check if option is enabled.
+   * @param o Option.
+   * @return <code>true</code> if <code>o</code> is enabled.
+   * @see #enable(Option...)
+   * @see #disable(Option...)
    */
-  public DB trace(Log log, Trace... options) {
-    traceLog = log;
-    traceOptions.clear();
-    for (Trace o : options) {
-      traceOptions.add(o);
-    }
-    return this;
+  public boolean isEnabled(Option o) {
+    return optionSet.contains(o);
   }
-  
-  
-  @SuppressWarnings("javadoc")
-  void trace(Trace option, Consumer<Log> action) {
-    if (traceOptions.contains(option))
-      action.accept(traceLog);
-  }
-  
-  @SuppressWarnings("javadoc")
-  void trace(Trace option, DataSet data) {
-    trace(option, l -> l.write(data));
-  }
-  
-  /**
-   * Disable statement pooling.
-   * @return <code>this</code> (for chained calls).
-   */
-  public DB disableStatementPooling() {
-    if (statementPooling) {
-      if (pool != null) {
-        pool.clear();
-        pool = null;
-      }
-      statementPooling = false;
-    }
-    return this;
-  }
-  
-  /**
-   * Enable statement pooling.
-   * @return <code>this</code> (for chained calls).
-   */
-  public DB enableStatementPooling() {
-    if (!statementPooling) {
-      statementPooling = true;
-    }
-    return this; 
-  }
-  
+
   /**
    * Get connection.
    * @return The connection associated to this instance.
@@ -108,7 +127,7 @@ public final class DB {
   public Connection getConnection() {
     return connection;
   }
-  
+
   /**
    * Create a table data source.
    * @param name Table name.
@@ -117,7 +136,7 @@ public final class DB {
   public Table table(String name) {
     return new Table(this, name);
   }
-  
+
   /**
    * Create a query data source.
    * @return A new {@link Table} instance.
@@ -125,7 +144,7 @@ public final class DB {
   public Query select() {
     return new Query(this);
   }
-  
+
   /**
    * Prepare a SQL statement.
    * @param sql SQL code.
@@ -134,21 +153,70 @@ public final class DB {
    */
   public PreparedStatement 
   compile(String sql) throws SQLException {    
-    if (! statementPooling) {
-      Runtime.getRuntime().logSQL(sql);
+    if (! isEnabled(Option.StatementPooling)) {
+      logSQL(sql);
       return connection.prepareStatement(sql);
     }
     if (pool == null) {
       pool = new IdentityHashMap<>();
     } 
-    sql = sql.intern();
-    PreparedStatement ps = pool.get(sql);
+    String sqlI = sql.intern();
+    PreparedStatement ps = pool.get(sqlI);
     if (ps == null) {
-      Runtime.getRuntime().logSQL(sql);
-      ps = connection.prepareStatement(sql);
-      pool.put(sql, ps);
+      logSQL(sqlI);
+      ps = connection.prepareStatement(sqlI);
+      pool.put(sqlI, ps);
     }
     return ps;
+  }
+
+
+  /**
+   * Set log to use.
+   * The log set at creation time
+   * writes to <code>System.err</code>.
+   * @param log Logging instance.
+   */
+  public void setLog(Log log) {
+    this.log = log;
+  }
+
+  
+  /**
+   * Log delta.
+   * @param delta Delta instance.
+   */
+  void logDelta(Delta delta) {
+    if (isEnabled(Option.LogDeltas)) {
+      log.write(delta);
+    }
+  }
+  
+  /**
+   * Log snapshot.
+   * @param data Data set.
+   */
+  void logSnapshot(DataSet data) {
+    if (isEnabled(Option.LogSnapshots)) {
+      log.write(data);
+    }
+  }
+  
+  /**
+   * Log insertion.
+   * @param data Data set.
+   */
+  void logInsertion(DataSet data) {
+    if (isEnabled(Option.LogInsertions)) {
+      log.write(data);
+    }
+  }
+  
+  @SuppressWarnings("javadoc")
+  void logSQL(String sql) {
+    if (isEnabled(Option.LogSQL)) {
+      log.writeSQL(sql);
+    }
   }
 
 

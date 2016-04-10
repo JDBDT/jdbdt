@@ -50,8 +50,8 @@ public final class Delta {
   Delta(DataSet pre) {
     source = pre.getSource();
     diff = calcDiff(pre, source.executeQuery(false));
+    source.getDB().logDelta(this);
   }
-
 
   /**
    * Get meta-data.

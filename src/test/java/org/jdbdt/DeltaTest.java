@@ -36,7 +36,6 @@ public class DeltaTest extends DBTestCase {
   }
 
   @Rule public TestName testName = new TestName();
-  private static final boolean DEBUG = false;
   private static Table table;
   private DataSource dataSource;
 
@@ -66,8 +65,6 @@ public class DeltaTest extends DBTestCase {
       dataSource = q;
     }
     snapshot(dataSource);
-    if (DEBUG) 
-      logErrorsTo(System.err);
   }
 
   @Test

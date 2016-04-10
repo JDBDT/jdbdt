@@ -41,7 +41,7 @@ final class DBSetup {
       throw new InvalidUsageException("Empty data set.");
     }
     Table t = (Table) source;
-    JDBDT.deleteAll(t);
+    deleteAll(t);
     insert(t, data);
     t.setSnapshot(data);
   }
@@ -53,7 +53,7 @@ final class DBSetup {
    * @throws SQLException If a database error occurs.
    */
   private static void insert(Table t, DataSet data) throws SQLException {
-    Runtime.getRuntime().logIf(Trace.insertions, data);
+    t.getDB().logInsertion(data);
     StringBuilder sql = new StringBuilder("INSERT INTO ");
     String[] columnNames = t.getColumns();
     sql.append(t.getName())

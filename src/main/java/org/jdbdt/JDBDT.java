@@ -300,15 +300,6 @@ public final class JDBDT {
   public static void truncate(Table t) throws SQLException  {
     DBSetup.truncate(t);
   }
-
-  /**
-   * Enable tracing.
-   * @param log Log for output.
-   * @param options Trace options.
-   */
-  public void trace(Log log, Trace... options) {
-    Runtime.getRuntime().trace(log, options);
-  }
   
   /**
    * Create a file log.
@@ -326,8 +317,6 @@ public final class JDBDT {
    * @throws FileNotFoundException If the output file cannot be created.
    * 
    * @see #log(PrintStream)
-   * @see #logErrorsTo(Log)
-   * @see #logErrorsTo(PrintStream)
    */
   public static Log log(File file) throws FileNotFoundException {
     return new Log(file);
@@ -345,58 +334,9 @@ public final class JDBDT {
    * @return A log instance.
    * 
    * @see #log(File)
-   * @see #logErrorsTo(Log)
-   * @see #logErrorsTo(PrintStream)
    */
   public static Log log(PrintStream out) {
     return new Log(out);
   }
-
-  /**
-   * Log delta assertion errors to given log instance.
-   * 
-   * <p>
-   * For a non-null log instance argument, whenever an assertion error is 
-   * thrown by the JDBDT API ({@link DatabaseAssertionError}),
-   * the unverified portion of the delta object at stake ({@link Delta})
-   * will be logged. A null argument disables logging of this kind,
-   * causing the previous log to be closed.
-   * </p>
-   * 
-   * 
-   * @param out Output log.
-   *
-   * @see #logErrorsTo(PrintStream)
-   * @see #log(File)
-   * @see #log(PrintStream)
-   * @see Log#close()
-   */
-  public static void logErrorsTo(Log out) {
-    if (errorLog != null) {
-      errorLog.close();
-    }
-    errorLog = out;
-  }
-
-  /**
-   * Log assertion errors to given output stream.
-   * 
-   * <p>
-   * A call to this method is shorthand for 
-   * <code>logErrorsTo(log(out)))</code>
-   * @param out Output stream.
-   * 
-   * @see #logErrorsTo(Log)
-   * @see #log(PrintStream)
-   * @see #log(File)
-   */
-  public static void logErrorsTo(PrintStream out) {
-    logErrorsTo(log(out));
-  }
-
-  /**
-   * Error log in use (initially null).
-   */
-  private static Log errorLog = null;
 
 }

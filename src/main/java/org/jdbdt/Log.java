@@ -137,26 +137,14 @@ public final class Log {
    */
   public void write(DataSet data) {
     Element rootNode = root(),
-            dsNode = xmlDoc.createElement(DS_TAG),
-            tableNode = xmlDoc.createElement(TABLE_TAG),
+            dsNode = xmlDoc.createElement(DATA_TAG),
+            tableNode = xmlDoc.createElement(SOURCE_TAG),
             rowsNode = xmlDoc.createElement(ROWS_TAG);
     rootNode.appendChild(dsNode);
     dsNode.appendChild(tableNode);
     dsNode.appendChild(rowsNode);
     write(tableNode, data.getSource().getMetaData());
     write(rowsNode, data.getSource().getMetaData().columns(), data.iterator());
-    flush(rootNode);
-  }
-
-  /**
-   * Write table info to the log.
-   * @param t Table instance.
-   */
-  public void write(Table t) { 
-    Element rootNode = root(),
-            tableNode = xmlDoc.createElement(TABLE_TAG);
-    rootNode.appendChild(tableNode);
-    write(tableNode, t.getMetaData());
     flush(rootNode);
   }
 
@@ -181,7 +169,7 @@ public final class Log {
     Element rootNode = root(),
             sqlNode = xmlDoc.createElement(SQL_TAG);
     rootNode.appendChild(sqlNode);
-    sqlNode.appendChild(xmlDoc.createCDATASection(sql));
+    sqlNode.appendChild(xmlDoc.createCDATASection("\n" + sql + "\n"));
     flush(rootNode);
   }
   
@@ -192,7 +180,7 @@ public final class Log {
   public void write(Delta d) {
     Element rootNode = root(),
             deltaNode = xmlDoc.createElement(DELTA_TAG),
-            queryNode = xmlDoc.createElement(QUERY),
+            queryNode = xmlDoc.createElement(SOURCE_TAG),
             bSetNode = xmlDoc.createElement(BEFORE_TAG),
             aSetNode = xmlDoc.createElement(AFTER_TAG);
     rootNode.appendChild(deltaNode);
@@ -242,15 +230,13 @@ public final class Log {
   @SuppressWarnings("javadoc")
   private static final String TIME_ATTR = "time";
   @SuppressWarnings("javadoc")
-  private static final String TABLE_TAG = "table";
-  @SuppressWarnings("javadoc")
   private static final String DELTA_TAG = "delta";
   @SuppressWarnings("javadoc")
-  private static final String DS_TAG = "data-set";
+  private static final String DATA_TAG = "data-set";
   @SuppressWarnings("javadoc")
   private static final String SIZE_ATTR = "size";
   @SuppressWarnings("javadoc")
-  private static final String QUERY = "query";
+  private static final String SOURCE_TAG = "data-source";
   @SuppressWarnings("javadoc")
   private static final String BEFORE_TAG = "before";
   @SuppressWarnings("javadoc")

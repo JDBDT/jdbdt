@@ -143,12 +143,13 @@ public abstract class DataSource {
    * @return Result of query.
    */
   final DataSet executeQuery(boolean takeSnapshot) {
-    DataSet rs = new DataSet(this, true);
-    executeQuery(getQueryStatement(), getMetaData(), getQueryArguments(), r -> rs.addRow(r));
+    DataSet data = new DataSet(this, true);
+    executeQuery(getQueryStatement(), getMetaData(), getQueryArguments(), r -> data.addRow(r));
     if (takeSnapshot) {
-      setSnapshot(rs);
+      setSnapshot(data);
+      getDB().logSnapshot(data);
     }
-    return rs;
+    return data;
   }
 
   /**
