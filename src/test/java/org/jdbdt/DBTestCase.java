@@ -60,7 +60,7 @@ public class DBTestCase {
     if (!cfg.useStatementPooling()) {
       gDB.disable(DB.Option.StatementPooling);
     }
-    gDB.enableFullLogging();
+    // gDB.enableFullLogging();
   }
   
   @AfterClass
