@@ -123,7 +123,5 @@ public class DBTestCase {
     return null;
   }
   
-  protected interface Thrower {
-    void run() throws Throwable;
-  }
+
 }

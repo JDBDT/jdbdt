@@ -13,20 +13,18 @@ class TestUtil {
   static void 
   expectException(Class<? extends Throwable> excClass, Thrower thrower) {
     try {
-      thrower.run();
-      fail("Expected " + excClass.getName() +
-          " but no exception was thrown");
+      thrower.run();      
     } 
-    catch (AssertionError e) {
-      throw e;
-    }
     catch (Throwable e) {
       if (! excClass.isAssignableFrom(e.getClass())) {
         fail("Expected " + excClass.getName() + 
               " but " + e.getClass().getName() + 
               " was thrown instead");
       }
+      return;
     }
+    fail("Expected " + excClass.getName() +
+         " but no exception was thrown");
   }
 
 }
