@@ -39,7 +39,6 @@ public class QueryTest extends DBTestCase {
       qsetup.put(s, null);
     }
     qsetup.put(S.DISTINCT, false);
-    //qsetup.put(S.COLS, UserDAO.COLUMNS);
   }
   
   <T> void qset(S s, QMutator<T> m, T arg) {
@@ -206,6 +205,7 @@ public class QueryTest extends DBTestCase {
     expected.normalizeRowOrder();
     assertTrue(expected.sameDataAs(actual));
   }
+  
   @Test
   public void testExecPlain() {
     DataSet actual = theSUT.executeQuery(false);
