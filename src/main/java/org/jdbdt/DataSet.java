@@ -69,6 +69,14 @@ public class DataSet implements Iterable<Row> {
   }
 
   /**
+   * Create a builder for this data set.
+   * @return A new builder for this data set.
+   */
+  public DataSetBuilder build() {
+    return new DataSetBuilder(this);
+  }
+  
+  /**
    * Check if the data set is read-only.
    * 
    * <p>

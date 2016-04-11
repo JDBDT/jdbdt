@@ -1,6 +1,7 @@
 package org.jdbdt;
 
 import static org.junit.Assert.*;
+import static org.jdbdt.JDBDT.builder;
 
 import java.math.BigInteger;
 import java.sql.Date;
@@ -55,7 +56,7 @@ public class DataSetBuilderSequenceFillersTest  extends DBTestCase {
   
   @Before 
   public void setUp() {
-    theSUT = new DataSetBuilder(table);
+    theSUT = builder(table);
     for (Map.Entry<String, Object> e : BASE_DATA.entrySet()) {
       theSUT.value(e.getKey(), e.getValue());
     }
@@ -85,7 +86,7 @@ public class DataSetBuilderSequenceFillersTest  extends DBTestCase {
     });
     theSUT.sequence(column, 0);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   @Test
   public void testLong() {
@@ -95,7 +96,7 @@ public class DataSetBuilderSequenceFillersTest  extends DBTestCase {
     });
     theSUT.sequence(column, 0L);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   
   @Test
@@ -106,7 +107,7 @@ public class DataSetBuilderSequenceFillersTest  extends DBTestCase {
     });
     theSUT.sequence(column, BigInteger.ZERO);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   
   @Test
@@ -117,7 +118,7 @@ public class DataSetBuilderSequenceFillersTest  extends DBTestCase {
     });
     theSUT.sequence(column, 0.0f, 0.5f);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   
   @Test
@@ -128,7 +129,7 @@ public class DataSetBuilderSequenceFillersTest  extends DBTestCase {
     });
     theSUT.sequence(column, 0.0f, 0.5);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
 
   @Test
@@ -140,7 +141,7 @@ public class DataSetBuilderSequenceFillersTest  extends DBTestCase {
     });
     theSUT.sequence(column, start, 1);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   
   @Test
@@ -153,7 +154,7 @@ public class DataSetBuilderSequenceFillersTest  extends DBTestCase {
     });
     theSUT.sequence(column, fixedTime, increment);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   
   @Test
@@ -166,7 +167,7 @@ public class DataSetBuilderSequenceFillersTest  extends DBTestCase {
     });
     theSUT.sequence(column, fixedTS, increment);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   
   private static boolean DEBUG = false;
@@ -180,7 +181,7 @@ public class DataSetBuilderSequenceFillersTest  extends DBTestCase {
         System.out.println(Arrays.toString(r.data()));
       }
       System.out.println("-- actual --");
-      for (Row r : theSUT.data()) {
+      for (Row r : theSUT.getDataSet()) {
         System.out.println(Arrays.toString(r.data()));
       }
     }

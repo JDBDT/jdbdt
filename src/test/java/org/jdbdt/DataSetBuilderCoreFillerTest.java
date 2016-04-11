@@ -1,6 +1,7 @@
 package org.jdbdt;
 
 import static org.junit.Assert.*;
+import static org.jdbdt.JDBDT.builder;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -36,7 +37,7 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
                             Date.valueOf("2015-12-31"));
   @Before 
   public void setUp() {
-    theSUT = new DataSetBuilder(table);
+    theSUT = builder(table);
     //"login", "name", "password", "created" 
     theSUT.value("login", BASE_DATA.getLogin())
           .value("name", BASE_DATA.getName())
@@ -69,7 +70,7 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
     });
     theSUT.sequence("login", i -> userPrefix + i);
     theSUT.generate(count);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   @Test
   public void testSeq2() {
@@ -87,7 +88,7 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
     });
     theSUT.sequence("login", userPrefix, s -> s + "_" );
     theSUT.generate(count);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   @Test
   public void testSeq3() {
@@ -104,7 +105,7 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
     }
     theSUT.sequence("login", values);
     theSUT.generate(count);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   @Test
   public void testSeq4() {
@@ -121,7 +122,7 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
     }
     theSUT.sequence("login", Arrays.asList(values));
     theSUT.generate(count);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   @Test
   public void testNullValue() {
@@ -136,7 +137,7 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
     theSUT.generate(count);
     theSUT.nullValue("login");
     theSUT.generate(count);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   @Test
   public void testRemainingColumnsNull() {
@@ -152,7 +153,7 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
     theSUT.value("login", BASE_DATA.getLogin());
     theSUT.remainingColumnsNull();
     theSUT.generate(count);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
 
 }

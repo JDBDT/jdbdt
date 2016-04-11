@@ -1,7 +1,7 @@
 package org.jdbdt;
 
 import static org.junit.Assert.*;
-
+import static org.jdbdt.JDBDT.builder;
 
 import java.sql.SQLException;
 import java.util.function.Consumer;
@@ -38,13 +38,12 @@ public class DataSetBuilderCoreTest extends DBTestCase {
 
   @Before 
   public void setUp() {
-    theSUT = new DataSetBuilder(table);
+    theSUT = builder(table);
   }
 
   private static void assertEmptyDataSet(DataSetBuilder sut) {
     assertEquals("filler count", 0, sut.fillerCount());
-    assertEquals("row count", 0, sut.size());
-    assertEquals("empty row list", 0, sut.data().size());
+    assertEquals("empty row list", 0, sut.getDataSet().size());
   }
 
   @Test
@@ -102,8 +101,7 @@ public class DataSetBuilderCoreTest extends DBTestCase {
       theSUT.value(UserDAO.COLUMNS[c], row[c]);
     }
     assertEquals("fillers set", UserDAO.COLUMNS.length, theSUT.fillerCount());
-    assertEquals("row count", 0, theSUT.size());
-    assertEquals("no rows", 0, theSUT.data().size());
+    assertEquals("no rows", 0, theSUT.getDataSet().size());
   }
   private void checkMissingFillers(int N) {
     invalidUse
@@ -111,8 +109,7 @@ public class DataSetBuilderCoreTest extends DBTestCase {
      sut -> sut.generate(1),
      sut -> {
        assertEquals("fillers set", N, sut.fillerCount());
-       assertEquals("row count", 0, sut.size());
-       assertEquals("no rows", 0, sut.data().size());
+       assertEquals("no rows", 0, sut.getDataSet().size());
      });
   }
   @Test
@@ -145,8 +142,7 @@ public class DataSetBuilderCoreTest extends DBTestCase {
      sut -> sut.generate(0),
      sut -> {
        assertEquals("fillers set", UserDAO.COLUMNS.length, sut.fillerCount());
-       assertEquals("row count", 0, sut.size());
-       assertEquals("no rows", 0, sut.data().size());
+       assertEquals("no rows", 0, sut.getDataSet().size());
     });
   }
   
@@ -162,8 +158,7 @@ public class DataSetBuilderCoreTest extends DBTestCase {
      sut -> sut.generate(-1),
      sut -> {
        assertEquals("fillers set", UserDAO.COLUMNS.length, sut.fillerCount());
-       assertEquals("row count", 0, sut.size());
-       assertEquals("no rows", 0, sut.data().size());
+       assertEquals("no rows", 0, sut.getDataSet().size());
     });
   }
   
@@ -179,8 +174,7 @@ public class DataSetBuilderCoreTest extends DBTestCase {
     }
     theSUT.generate(N);
     assertEquals("fillers set", UserDAO.COLUMNS.length, theSUT.fillerCount());
-    assertEquals("row count", N, theSUT.size());
-    assertEquals(expectedRows, theSUT.data());
+    assertEquals(expectedRows, theSUT.getDataSet());
   }
   @Test
   public void testGenerateOneRow() throws SQLException {
@@ -191,28 +185,5 @@ public class DataSetBuilderCoreTest extends DBTestCase {
   public void testGenerate100Rows() throws SQLException {
     testSimpleGeneration(100);
   }
-  @Test
-  public void testCaching1() throws SQLException {
-    testSimpleGeneration(2);
-    DataSet r1 = theSUT.data();
-    DataSet r2 = theSUT.data();
-    assertSame(r1, r2);
-  }
-  @Test
-  public void testCaching2() throws SQLException {
-    testSimpleGeneration(2);
-    DataSet r1 = theSUT.data();
-    theSUT.reset();
-    DataSet r2 = theSUT.data();
-    assertSame(r1, r2);
-  }
-  
-  @Test
-  public void testCaching3() throws SQLException {
-    testSimpleGeneration(1);
-    DataSet r1 = theSUT.data();
-    theSUT.generate(1);
-    DataSet r2 = theSUT.data();
-    assertNotSame(r1, r2);
-  }
+ 
 }

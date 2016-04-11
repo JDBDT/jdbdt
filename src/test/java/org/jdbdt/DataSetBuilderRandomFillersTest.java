@@ -1,6 +1,7 @@
 package org.jdbdt;
 
 import static org.junit.Assert.*;
+import static org.jdbdt.JDBDT.builder;
 
 import java.math.BigInteger;
 import java.sql.Date;
@@ -62,7 +63,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
   @Before 
   public void setUp() {
     rng = new Random(DataSetBuilder.RNG_SEED);
-    theSUT = new DataSetBuilder(table);
+    theSUT = builder(table);
     for (Map.Entry<String, Object> e : BASE_DATA.entrySet()) {
       theSUT.value(e.getKey(), e.getValue());
     }
@@ -92,7 +93,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     });
     theSUT.random(column, customF);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   
   @Test
@@ -107,7 +108,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     });
     theSUT.random(column, values);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   @Test
   public void testRandomList() {
@@ -121,7 +122,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     });
     theSUT.random(column, values);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   @Test
   public void testRandomInt() {
@@ -131,7 +132,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     });
     theSUT.random(column, 1, COUNT);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   @Test
   public void testRandomLong() {
@@ -141,7 +142,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     });    
     theSUT.random(column, 1L, COUNT);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
 
   @Test
@@ -152,7 +153,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     });
     theSUT.random(column, 1.0f, (float) COUNT);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   
   @Test
@@ -163,7 +164,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     });
     theSUT.random(column, 1.0, COUNT);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
   
   @Test
@@ -176,7 +177,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     });
     theSUT.random(column, min, max);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.data());
+    assertEquals(expected, theSUT.getDataSet());
   }
 
   static boolean DEBUG = false;
@@ -190,7 +191,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
         System.out.println(Arrays.toString(r.data()));
       }
       System.out.println("-- actual --");
-      for (Row r : theSUT.data()) {
+      for (Row r : theSUT.getDataSet()) {
         System.out.println(Arrays.toString(r.data()));
       }
     }
