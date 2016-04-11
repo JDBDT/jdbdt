@@ -3,6 +3,7 @@ package org.jdbdt;
 
 import static org.jdbdt.JDBDT.*;
 import static org.junit.Assert.*;
+import static org.jdbdt.TestUtil.*;
 
 import java.sql.SQLException;
 

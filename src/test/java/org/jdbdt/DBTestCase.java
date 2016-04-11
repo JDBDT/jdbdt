@@ -5,8 +5,6 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import static org.junit.Assert.fail;
-
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -127,24 +125,5 @@ public class DBTestCase {
   
   protected interface Thrower {
     void run() throws Throwable;
-  }
-  
-  protected static void 
-  expectException(Class<? extends Throwable> excClass, Thrower thrower) {
-    try {
-      thrower.run();
-      fail("Expected " + excClass.getName() +
-          " but no exception was thrown");
-    } 
-    catch (AssertionError e) {
-      throw e;
-    }
-    catch (Throwable e) {
-      if (! excClass.isAssignableFrom(e.getClass())) {
-        fail("Expected " + excClass.getName() + 
-              " but " + e.getClass().getName() + 
-              " was thrown instead");
-      }
-    }
   }
 }
