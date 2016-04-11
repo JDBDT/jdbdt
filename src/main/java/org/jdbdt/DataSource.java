@@ -45,7 +45,7 @@ public abstract class DataSource {
    * Get database instance.
    * @return Database instance associated to this data source.
    */
-  final DB getDB() {
+  public final DB getDB() {
     return db;
   }
   
