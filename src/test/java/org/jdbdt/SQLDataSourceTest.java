@@ -61,7 +61,7 @@ public class SQLDataSourceTest extends DBTestCase {
     for (User u : INITIAL_DATA) {
       expected.row(u.getLogin(), u.getPassword());
     }
-    assertDataSet(actual, expected);
+    assertDataSet(expected, actual);
   }
   
   @Test
@@ -73,7 +73,7 @@ public class SQLDataSourceTest extends DBTestCase {
     DataSet expected = 
       data(theSUT)
        .row(u.getLogin(), u.getPassword());
-    assertDataSet(actual, expected);
+    assertDataSet(expected, actual);
   }
 
 }

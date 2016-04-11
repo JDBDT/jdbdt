@@ -40,7 +40,7 @@ public class TableTest extends DBTestCase {
     DataSet expected = 
       data(theSUT, getConversion())
         .rows(INITIAL_DATA);
-    TestUtil.assertDataSet(expected, actual);
+    assertDataSet(expected, actual);
   }
   
 }

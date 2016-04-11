@@ -201,7 +201,7 @@ public class QueryTest extends DBTestCase {
     DataSet expected = 
       data(theSUT, getConversion())
         .rows(INITIAL_DATA);
-    assertDataSet(actual, expected);
+    assertDataSet(expected, actual);
   }
   
   @Test
@@ -213,7 +213,7 @@ public class QueryTest extends DBTestCase {
     DataSet expected = 
         data(theSUT, getConversion())
           .row(u);
-    assertDataSet(actual, expected);
+    assertDataSet(expected, actual);
   }
   
   
@@ -228,7 +228,7 @@ public class QueryTest extends DBTestCase {
     DataSet expected = 
         data(theSUT, getConversion())
           .row(u);
-    assertDataSet(actual, expected);
+    assertDataSet(expected, actual);
   }
   @Test
   public void testExecColumns1() throws SQLException {
@@ -241,7 +241,7 @@ public class QueryTest extends DBTestCase {
     DataSet expected = 
         data(theSUT)
           .row(u.getPassword());
-    assertDataSet(actual, expected);
+    assertDataSet(expected, actual);
   }
   
   @Test
@@ -255,7 +255,7 @@ public class QueryTest extends DBTestCase {
     DataSet expected = 
         data(theSUT)
           .row(u.getPassword(), u.getName());
-    assertDataSet(actual, expected);
+    assertDataSet(expected, actual);
   }
   
   @Test
@@ -266,7 +266,7 @@ public class QueryTest extends DBTestCase {
     DataSet expected = 
       data(theSUT, getConversion())
         .rows(INITIAL_DATA);
-    assertDataSet(actual, expected);
+    assertDataSet(expected, actual);
   }
   
   @Test
@@ -282,7 +282,7 @@ public class QueryTest extends DBTestCase {
         expected.row(u.getPassword());
       }
     }
-    assertDataSet(actual, expected);
+    assertDataSet(expected, actual);
   }
   
   @Test
@@ -345,7 +345,7 @@ public class QueryTest extends DBTestCase {
         passCount(0, x -> x + 1, (p,n) -> true) 
       :
         passCount(0L, x -> x + 1L, (p,n) -> true);
-    assertDataSet(actual, expected);
+    assertDataSet(expected, actual);
   }
   @Test
   public void testExecWithGroupBy2() {
@@ -359,6 +359,6 @@ public class QueryTest extends DBTestCase {
         passCount(0, x -> x + 1, (s,n) -> n > 1) 
       :
         passCount(0L, x -> x + 1L, (s,n) -> n > 1L);
-    assertDataSet(actual, expected);
+    assertDataSet(expected, actual);
   }
 }

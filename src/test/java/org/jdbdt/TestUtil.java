@@ -28,7 +28,7 @@ class TestUtil {
          " but no exception was thrown");
   }
   
-  static void assertDataSet(DataSet actual, DataSet expected) {
+  static void assertDataSet(DataSet expected, DataSet actual) {
     actual.normalizeRowOrder();
     expected.normalizeRowOrder();
     assertTrue(expected.sameDataAs(actual));

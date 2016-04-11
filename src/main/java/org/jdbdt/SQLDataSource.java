@@ -24,7 +24,7 @@ public final class SQLDataSource extends DataSource {
   }
 
   /**
-   * Set arguments for SQL query.
+   * Set arguments for SQL query (if needed).
    * @param args Query arguments.
    * @return The data source instance, for chained calls.
    */
@@ -38,7 +38,5 @@ public final class SQLDataSource extends DataSource {
   @Override
   String getSQLForQuery() {
     return sqlForQuery;
-  }
-
-  
+  } 
 }
