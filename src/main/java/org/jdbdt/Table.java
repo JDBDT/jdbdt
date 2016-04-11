@@ -38,11 +38,6 @@ public final class Table extends DataSource {
   private final String tableName;
 
   /**
-   * Table columns (if null, all columns will be considered).
-   */
-  private String[] columns = null;
-
-  /**
    * Constructor.
    * @param db Database instance.
    * @param tableName Table name
@@ -68,28 +63,15 @@ public final class Table extends DataSource {
    * @return The table instance (for chained calls).
    */
   public Table columns(String... columns) {
-    if (this.columns != null) {
-      throw new InvalidOperationException("Columns are already defined.");
-    }
-    this.columns = columns.clone();
+    super.setColumns(columns);
     return this;
   }
 
-  /**
-   * Get column names.
-   * @return Array of column names, or <code>null</code> if all
-   *   columns are set.
-   */
-  @Override
-  final String[] getColumns() {
-    return columns;
-  }
-
-  
   @Override
   String getSQLForQuery() {
     StringBuilder sql = new StringBuilder("SELECT\n ");
-    if (columns ==  null) {
+    String[] columns = getColumns();
+    if (columns == null) {
       sql.append('*');
     } else {
       sql.append(columns[0]);
@@ -101,8 +83,4 @@ public final class Table extends DataSource {
     return sql.toString();
   }
 
-  @Override
-  final Object[] getQueryArguments() {
-    return null;
-  }
 }

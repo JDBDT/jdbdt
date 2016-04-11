@@ -29,6 +29,16 @@ public abstract class DataSource {
   private MetaData metaData = null;
 
   /**
+   * Column names.
+   */
+  private String[] columns;
+  
+  /**
+   * Query arguments (if any).
+   */
+  private Object[] queryArgs;
+  
+  /**
    * Last snapshot (if any).
    */
   private DataSet snapshot = null;
@@ -50,19 +60,39 @@ public abstract class DataSource {
   }
   
   /**
+   * Set columns for data source.
+   * 
+   * @param columns Column names.
+   */
+  final void setColumns(String[] columns) {
+    if (this.columns != null) {
+      throw new InvalidOperationException("Columns are already set.");
+    }
+    this.columns = columns.clone();    
+  }
+ 
+  /** 
+   * Get column names.
+   * @return Array of column names.
+   */
+  final String[] getColumns() {
+    return columns;
+  }
+  
+  /**
    * Get column count.
    * @return Column count.
    */
   final int getColumnCount() {
     ensureCompiled();
-    return getColumns().length;
+    return columns.length;
   }
 
   /**
    * Get query.
    * @return The query statement for the data source.
    */
-  PreparedStatement getQueryStatement() {
+  final PreparedStatement getQueryStatement() {
     ensureCompiled();
     return queryStmt;
   }
@@ -76,11 +106,33 @@ public abstract class DataSource {
     ensureCompiled();
     return metaData;
   }
+  
+  /**
+   * Set arguments for issuing query.
+   * @param args Arguments to use for query.
+   */
+  final void setQueryArguments(Object[] args) {
+    if (queryArgs != null) {
+      throw new InvalidOperationException("Query arguments are already set.");
+    }
+    if (args == null || args.length == 0) {
+      throw new InvalidOperationException("Invalid query arguments (null / empty array?).");
+    }
+    queryArgs = args.clone();
+  }
 
+  /**
+   * Get query arguments.
+   * @return Array of arguments if any, otherwise <code>null</code>.
+   */
+  final Object[] getQueryArguments() {
+    return queryArgs;
+  }
+  
   /**
    * Ensure query is compiled.
    */
-  void ensureCompiled() {
+  private void ensureCompiled() {
     if (queryStmt == null) {
       try {
         PreparedStatement stmt = db.compile(getSQLForQuery());
@@ -90,7 +142,7 @@ public abstract class DataSource {
           for (int i = 0; i < cols.length; i++) {
             cols[i] = md.getLabel(i);
           }
-          columns(cols);
+          setColumns(cols);
         }
         queryStmt = stmt;
         metaData = md;
@@ -116,24 +168,7 @@ public abstract class DataSource {
    */
   abstract String getSQLForQuery();
 
-  /**
-   * Get arguments for issuing query.
-   * @return Arguments to use for query, <code>null</code> otherwise.
-   */
-  abstract Object[] getQueryArguments();
 
-  /**
-   * Set column names.
-   * @param columns SQL columns.
-   * @return Implementations should return <code>this</code> for chained calls.
-   */
-  public abstract DataSource columns(String... columns);
-    
-  /** 
-   * Get column names.
-   * @return Array of column names.
-   */
-  abstract String[] getColumns();
 
   /**
    * Execute query.
@@ -172,7 +207,6 @@ public abstract class DataSource {
     snapshot = s;
   }
 
-
   /**
    * Execute query.
    * @param queryStmt Query statement.
@@ -209,4 +243,6 @@ public abstract class DataSource {
       throw new UnexpectedDatabaseException(e);
     } 
   }
+
+ 
 }

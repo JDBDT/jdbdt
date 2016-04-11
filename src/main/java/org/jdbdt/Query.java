@@ -69,11 +69,6 @@ package org.jdbdt;
 public final class Query extends DataSource {
 
   /**
-   * Columns.
-   */
-  private String[] columns = null;
-
-  /**
    * FROM clause.
    */
   private String[] fromClause = null;
@@ -103,12 +98,6 @@ public final class Query extends DataSource {
    */
   private boolean distinctClause;
 
-
-  /**
-   * Query arguments if any.
-   */
-  private Object[] queryArgs = null;
-
   /**
    * Constructs a new query.
    * @param db Database instance.
@@ -125,10 +114,7 @@ public final class Query extends DataSource {
    */
   @SafeVarargs
   public final Query columns(String... columns) {
-    if (this.columns != null) {
-      throw new InvalidOperationException("Columns already set.");
-    }
-    this.columns = columns.clone();
+    super.setColumns(columns);
     return this;
   }
 
@@ -244,26 +230,10 @@ public final class Query extends DataSource {
    */
   public Query withArguments(Object... args) {
     checkNotCompiled();
-    if (queryArgs != null) {
-      throw new InvalidOperationException("Query arguments are already set.");
-    }
-    if (args == null || args.length == 0) {
-      throw new InvalidOperationException("Invalid query arguments.");
-    }
-    queryArgs = args;
+    super.setQueryArguments(args);
     return this;
   }
 
-
-  @Override
-  final String[] getColumns() {
-    return columns;
-  }
-
-  @Override
-  final Object[] getQueryArguments() {
-    return queryArgs;
-  }
 
   @Override
   final String getSQLForQuery() {
