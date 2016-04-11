@@ -174,7 +174,7 @@ public class DataSetBuilderCoreTest extends DBTestCase {
     }
     theSUT.generate(N);
     assertEquals("fillers set", UserDAO.COLUMNS.length, theSUT.fillerCount());
-    assertEquals(expectedRows, theSUT.data());
+    assertTrue(expectedRows.sameDataAs(theSUT.data()));
   }
   @Test
   public void testGenerateOneRow() throws SQLException {

@@ -184,12 +184,6 @@ public class DataSet implements Iterable<Row> {
         : Collections.unmodifiableList(rows).iterator();
   }
 
-  @Override
-  public boolean equals(Object o) {
-    return o == this ||
-        ( o instanceof DataSet &&
-            rows.equals(((DataSet) o).rows) );
-  }
 
   /**
    * Create sub-set of a given data set.
@@ -219,9 +213,20 @@ public class DataSet implements Iterable<Row> {
   }
 
   /**
-   * Sort data set by row hash code (for testing purposes only).
+   * Sort rows in data set by row hash code (for testing purposes only).
    */
-  void enforceHOrdering() {
+  final void normalizeRowOrder() {
     Collections.sort(rows, (a,b) -> Integer.compare(a.hashCode(), b.hashCode()));    
   }
+  
+  /**
+   * Test if given data set has the same rows (for testing purposes only).
+   * @param other The other data set.
+   * @return <code>true</code> if the other data set contains the same
+   * rows and in the same order.
+   */
+  final boolean sameDataAs(DataSet other) {
+    return rows.equals(other.rows);
+  }
+
 }

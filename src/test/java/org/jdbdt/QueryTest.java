@@ -202,9 +202,9 @@ public class QueryTest extends DBTestCase {
   }
   
   void matchDataSets(DataSet expected, DataSet actual) {
-    actual.enforceHOrdering();
-    expected.enforceHOrdering();
-    assertEquals(actual, expected);
+    actual.normalizeRowOrder();
+    expected.normalizeRowOrder();
+    assertTrue(expected.sameDataAs(actual));
   }
   @Test
   public void testExecPlain() {
@@ -308,7 +308,7 @@ public class QueryTest extends DBTestCase {
     DataSet expected = 
       data(theSUT, getConversion())
         .rows(sortedUsers);
-    assertEquals(actual, expected);
+    assertTrue(expected.sameDataAs(actual));
   }
   
   @Test
@@ -328,7 +328,7 @@ public class QueryTest extends DBTestCase {
     DataSet expected = 
       data(theSUT, getConversion())
         .rows(sortedUsers);
-    assertEquals(actual, expected);
+    assertTrue(expected.sameDataAs(actual));
   }
   
   <T extends Number> DataSet passCount(T zero, Function<T,T> incr, BiPredicate<String,T> pred) {
