@@ -2,6 +2,7 @@ package org.jdbdt;
 
 
 import static org.jdbdt.JDBDT.*;
+import static org.jdbdt.TestUtil.*;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -126,11 +127,8 @@ public class QueryTest extends DBTestCase {
   
   void initTwice(QMutator<String> m) {
     m.set("1");
-    try {
-      m.set("2");
-      fail(InvalidOperationException.class.toString());
-    } 
-    catch(InvalidOperationException e) { }
+    expectException(InvalidOperationException.class, 
+      () -> m.set("2"));
   }
   
   @Test 
@@ -164,11 +162,8 @@ public class QueryTest extends DBTestCase {
   
   void initAfterCompiling(QMutator<String> m) {
     theSUT.getQueryStatement();
-    try {
-      m.set("x");
-      fail(InvalidOperationException.class.toString());
-    } 
-    catch(InvalidOperationException e) { }
+    expectException(InvalidOperationException.class,
+      () -> m.set("x"));
   }
   
   @Test 
