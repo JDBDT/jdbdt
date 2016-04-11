@@ -6,10 +6,10 @@ import java.sql.SQLException;
 import java.util.function.Consumer;
 
 /**
- * Abstract class for snapshot providers 
+ * Base class for data sources.
  * 
  * @since 0.1
- *
+ * 
  */
 public abstract class DataSource {
 
@@ -19,7 +19,7 @@ public abstract class DataSource {
   private final DB db;
   
   /**
-   * Selection query for the table.
+   * Query statement.
    */
   private PreparedStatement queryStmt = null;
 
@@ -58,11 +58,9 @@ public abstract class DataSource {
     return getColumns().length;
   }
 
-
-
   /**
    * Get query.
-   * @return The query statement for the snapshot provider.
+   * @return The query statement for the data source.
    */
   PreparedStatement getQueryStatement() {
     ensureCompiled();
@@ -72,7 +70,7 @@ public abstract class DataSource {
   /**
    * Get meta-data.
    * 
-   * @return The meta-data instance for the snaphot provider.
+   * @return Meta-data for the data source query.
    */
   final MetaData getMetaData() {
     ensureCompiled();
@@ -127,7 +125,7 @@ public abstract class DataSource {
   /**
    * Set column names.
    * @param columns SQL columns.
-   * @return Implementations should return <code>this</code>, for chained calls.
+   * @return Implementations should return <code>this</code> for chained calls.
    */
   public abstract DataSource columns(String... columns);
     
@@ -211,7 +209,4 @@ public abstract class DataSource {
       throw new UnexpectedDatabaseException(e);
     } 
   }
-
-
-
 }
