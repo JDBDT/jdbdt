@@ -19,17 +19,17 @@ public class DataSet implements Iterable<Row> {
    * Data source.
    */
   final DataSource source;
-  
+
   /**
    * Rows in the data set.
    */
   private final List<Row> rows;
-  
+
   /**
    * Read-only flag.
    */
   private final boolean readOnly;
-  
+
   /**
    * Constructs a new data set.
    * @param ds Data source.
@@ -46,7 +46,7 @@ public class DataSet implements Iterable<Row> {
   DataSet(DataSource ds, boolean readOnly) {
     this(ds, new ArrayList<>(), readOnly);
   }
-  
+
   /**
    * Constructs a new row set.
    * @param ds Data source.
@@ -58,7 +58,7 @@ public class DataSet implements Iterable<Row> {
     this.rows = list;
     this.readOnly = readOnly;
   }
-  
+
   /**
    * Get data source.
    * @return The data source associated to this 
@@ -67,7 +67,7 @@ public class DataSet implements Iterable<Row> {
   public final DataSource getSource() {
     return source;
   }
-  
+
   /**
    * Check if the data set is read-only.
    * 
@@ -89,7 +89,7 @@ public class DataSet implements Iterable<Row> {
   final boolean isEmpty() {
     return rows.isEmpty();
   }
-  
+
   /**
    * Get size of data set.
    * @return The number of rows in the set.
@@ -97,34 +97,42 @@ public class DataSet implements Iterable<Row> {
   public int size() {
     return rows.size();
   }
-  
+
   /**
    * Clear contents (package-private).
    */
   final void clear() {
     rows.clear();
   }
-  
+
   /**
    * Add a row to the data set.
    * @param columnValues Column values forming a row. 
    * @return The data set instance (for chained calls).
+   * @throws InvalidOperationException if this data set is read-only.
+   * @see #row(Object[][])
+   * @see #add(DataSet)
+   * @see #isReadOnly()
    */
   public final DataSet row(Object... columnValues) {
     checkIfNotReadOnly();
     if (columnValues.length != source.getColumnCount()) {
       throw new InvalidOperationException(source.getColumnCount() +
-            " columns expected, not " + columnValues.length + ".");
+          " columns expected, not " + columnValues.length + ".");
     }
     addRow(new RowImpl(columnValues));
     return this;
   }
 
-  
+
   /**
    * Add rows to the data set.
    * @param rows Array of rows. 
    * @return The data set instance (for chained calls).
+   * @throws InvalidOperationException if this data set is read-only.
+   * @see #row(Object...)
+   * @see #add(DataSet)
+   * @see #isReadOnly()
    */
   public final DataSet row(Object[][] rows) {
     checkIfNotReadOnly();
@@ -135,13 +143,29 @@ public class DataSet implements Iterable<Row> {
   }
   
   /**
+   * Add rows of given data set to this data set.
+   * 
+   * @param other The other data set.
+   * @return The data set instance (for chained calls).
+   * @throws InvalidOperationException if this data set is read-only.
+   * @see #row(Object...)
+   * @see #row(Object[][])
+   * @see #isReadOnly()
+   */
+  public DataSet add(DataSet other) {
+    checkIfNotReadOnly();
+    rows.addAll(other.rows);
+    return this;
+  }
+
+  /**
    * Add a row to the set (package-private version; ignores read-only setting).
    * @param r Row to add.
    */
   final void addRow(Row r) {
     rows.add(r);
   }
-  
+
   /**
    * Get an iterator for the row set.
    * @return An iterator object.
@@ -149,16 +173,16 @@ public class DataSet implements Iterable<Row> {
   @Override
   public Iterator<Row> iterator() {
     return !readOnly ? rows.iterator() 
-      : Collections.unmodifiableList(rows).iterator();
+        : Collections.unmodifiableList(rows).iterator();
   }
-  
+
   @Override
   public boolean equals(Object o) {
     return o == this ||
-      ( o instanceof DataSet &&
-        rows.equals(((DataSet) o).rows) );
+        ( o instanceof DataSet &&
+            rows.equals(((DataSet) o).rows) );
   }
-  
+
   /**
    * Create sub-set of a given data set.
    * @param data Data set.
@@ -176,17 +200,8 @@ public class DataSet implements Iterable<Row> {
     }
     return sub;
   }
-  
-  /**
-   * Add rows of given data set to this set.
-   * @param other This data set.
-   * @return The data set instance (for chained calls).
-   */
-  public DataSet add(DataSet other) {
-    checkIfNotReadOnly();
-    rows.addAll(other.rows);
-    return this;
-  }
+
+ 
 
   @SuppressWarnings("javadoc")
   private void checkIfNotReadOnly() {
