@@ -14,11 +14,6 @@ public final class SQLDataSource extends DataSource {
   private final String sqlForQuery; 
   
   /**
-   * Query arguments (if any).
-   */
-  private Object[] queryArgs = null;
-  
-  /**
    * Constructor.
    * @param db Database handle.
    * @param sql SQL for query
@@ -35,10 +30,8 @@ public final class SQLDataSource extends DataSource {
    */
   @SafeVarargs
   public final SQLDataSource withArguments(Object... args) {
-    if (queryArgs != null) {
-      throw new InvalidOperationException("Query arguments already defined.");
-    }
-    queryArgs = args; 
+    checkNotCompiled();
+    super.setQueryArguments(args);
     return this;
   }
   

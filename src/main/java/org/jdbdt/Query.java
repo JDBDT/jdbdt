@@ -136,6 +136,7 @@ public final class Query extends DataSource {
    */
   @SafeVarargs
   public final Query from(String...sources) {
+    checkNotCompiled();
     if (fromClause != null) {
       throw new InvalidOperationException("FROM clause already set.");
     }
