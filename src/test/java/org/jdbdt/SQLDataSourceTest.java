@@ -53,12 +53,6 @@ public class SQLDataSourceTest extends DBTestCase {
         () -> theSUT.withArguments("foo"));
   }
   
-  void matchDataSets(DataSet expected, DataSet actual) {
-    actual.normalizeRowOrder();
-    expected.normalizeRowOrder();
-    assertTrue(expected.sameDataAs(actual));
-  }
-  
   @Test
   public void testQueryExecution1() {
     DataSet actual = 
@@ -67,7 +61,7 @@ public class SQLDataSourceTest extends DBTestCase {
     for (User u : INITIAL_DATA) {
       expected.row(u.getLogin(), u.getPassword());
     }
-    matchDataSets(actual, expected);
+    assertDataSet(actual, expected);
   }
   
   @Test
@@ -79,7 +73,7 @@ public class SQLDataSourceTest extends DBTestCase {
     DataSet expected = 
       data(theSUT)
        .row(u.getLogin(), u.getPassword());
-    matchDataSets(actual, expected);
+    assertDataSet(actual, expected);
   }
 
 }

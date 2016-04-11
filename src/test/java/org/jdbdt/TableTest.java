@@ -4,6 +4,8 @@ package org.jdbdt;
 import java.sql.SQLException;
 
 import static org.junit.Assert.*;
+import static org.jdbdt.JDBDT.*;
+import static org.jdbdt.TestUtil.*;
 
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -16,7 +18,7 @@ public class TableTest extends DBTestCase {
   private Table theSUT;
   
   @Before
-  public void setup() throws SQLException {
+  public void createTable() throws SQLException {
     theSUT = getDB().table(UserDAO.TABLE_NAME);
   }
   
@@ -25,14 +27,20 @@ public class TableTest extends DBTestCase {
     assertEquals(UserDAO.TABLE_NAME, theSUT.getName());
   }
   
-  @Test(expected=InvalidOperationException.class)
+  @Test
   public void testReInitColumns() {
-    try {
-      theSUT.columns(UserDAO.COLUMNS);
-    } catch(Throwable e) {
-      fail("Unexpected exception");
-    }
     theSUT.columns(UserDAO.COLUMNS);
+    expectException(InvalidOperationException.class,
+     () -> theSUT.columns(UserDAO.COLUMNS));
+  }
+  
+  @Test
+  public void testQueryExecution() {
+    DataSet actual = theSUT.executeQuery(false);
+    DataSet expected = 
+      data(theSUT, getConversion())
+        .rows(INITIAL_DATA);
+    TestUtil.assertDataSet(expected, actual);
   }
   
 }

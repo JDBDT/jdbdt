@@ -1,5 +1,6 @@
 package org.jdbdt;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
@@ -26,5 +27,10 @@ class TestUtil {
     fail("Expected " + excClass.getName() +
          " but no exception was thrown");
   }
-
+  
+  static void assertDataSet(DataSet actual, DataSet expected) {
+    actual.normalizeRowOrder();
+    expected.normalizeRowOrder();
+    assertTrue(expected.sameDataAs(actual));
+  }
 }
