@@ -114,7 +114,7 @@ public final class Log {
       out.flush();
     } 
     catch (Throwable e) {
-      throw new JDBDTInternalError(e);
+      throw new InternalAPIError(e);
     } 
   }
 
@@ -270,7 +270,7 @@ public final class Log {
       XML_TRANSFORMER.setOutputProperty(OutputKeys.VERSION, "1.0");
     } catch (ParserConfigurationException | TransformerConfigurationException
         | TransformerFactoryConfigurationError e) {
-      throw new JDBDTInternalError(e);
+      throw new InternalAPIError(e);
     }
   }
 

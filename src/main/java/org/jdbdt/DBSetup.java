@@ -19,10 +19,10 @@ final class DBSetup {
   static void insert(DataSet data) throws SQLException {
     DataSource source = data.getSource();
     if ( ! (source instanceof Table)) {
-      throw new InvalidUsageException("Data set is not defined for a table.");
+      throw new InvalidOperationException("Data set is not defined for a table.");
     }
     if (data.isEmpty()) {
-      throw new InvalidUsageException("Empty data set.");
+      throw new InvalidOperationException("Empty data set.");
     }
     insert((Table) source, data);
   }
@@ -35,10 +35,10 @@ final class DBSetup {
   static void populate(DataSet data) throws SQLException {
     DataSource source = data.getSource();
     if ( ! (source instanceof Table)) {
-      throw new InvalidUsageException("Data set is not defined for a table.");
+      throw new InvalidOperationException("Data set is not defined for a table.");
     }
     if (data.isEmpty()) {
-      throw new InvalidUsageException("Empty data set.");
+      throw new InvalidOperationException("Empty data set.");
     }
     Table t = (Table) source;
     deleteAll(t);
@@ -72,7 +72,7 @@ final class DBSetup {
       final int n = r.length();
       final Object[] cols = r.data();
       if (n != t.getColumnCount()) {
-        throw new InvalidUsageException("Invalid number of columns for insertion.");
+        throw new InvalidOperationException("Invalid number of columns for insertion.");
       }
       for (int i = 0; i < n; i++) {
         insertStmt.setObject(i+1, cols[i]);
@@ -113,18 +113,18 @@ final class DBSetup {
    */
   static int deleteAll(Query q) throws SQLException {
     if (q.groupByClause() != null) {
-      throw new InvalidUsageException("GROUP BY clause is set!");
+      throw new InvalidOperationException("GROUP BY clause is set!");
     }
     if (q.havingClause() != null) {
-      throw new InvalidUsageException("HAVING clause is set!");
+      throw new InvalidOperationException("HAVING clause is set!");
     }
     String whereClause = q.whereClause();
 
     if (whereClause == null) {
-      throw new InvalidUsageException("WHERE clause is not set!");
+      throw new InvalidOperationException("WHERE clause is not set!");
     }
     if (q.fromClause().length != 1) {
-      throw new InvalidUsageException("FROM clause specifies multiple data sources!");
+      throw new InvalidOperationException("FROM clause specifies multiple data sources!");
     }
     PreparedStatement deleteStmt = 
       q.getDB().compile(

@@ -57,9 +57,9 @@ public class DataSetBuilderCoreTest extends DBTestCase {
   (DataSetBuilder sut, Consumer<DataSetBuilder> operation, Consumer<DataSetBuilder> assertions) {
     try {
       operation.accept(sut);
-      fail("Expected " + InvalidUsageException.class);
+      fail("Expected " + InvalidOperationException.class);
     }
-    catch (InvalidUsageException e) {
+    catch (InvalidOperationException e) {
       assertions.accept(sut);
     }
   }

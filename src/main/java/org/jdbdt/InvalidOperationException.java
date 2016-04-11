@@ -5,13 +5,13 @@ package org.jdbdt;
  * 
  * @since 0.1
  */
-public final class InvalidUsageException extends JDBDTRuntimeException {
+public final class InvalidOperationException extends RuntimeException {
 
   /**
    * Constructs a new exception using supplied message.
    * @param msg Exception message.
    */
-  public InvalidUsageException(String msg) {
+  public InvalidOperationException(String msg) {
     super(msg);
   }
   
@@ -21,7 +21,7 @@ public final class InvalidUsageException extends JDBDTRuntimeException {
    * @param msg Exception message.
    * @param cause Cause for exception.
    */
-  public InvalidUsageException(String msg, Throwable cause) {
+  public InvalidOperationException(String msg, Throwable cause) {
     super(msg, cause);
   }
   

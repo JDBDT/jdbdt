@@ -126,7 +126,7 @@ public final class Query extends DataSource {
   @SafeVarargs
   public final Query columns(String... columns) {
     if (this.columns != null) {
-      throw new InvalidUsageException("Columns already set.");
+      throw new InvalidOperationException("Columns already set.");
     }
     this.columns = columns.clone();
     return this;
@@ -151,7 +151,7 @@ public final class Query extends DataSource {
   @SafeVarargs
   public final Query from(String...sources) {
     if (fromClause != null) {
-      throw new InvalidUsageException("FROM clause already set.");
+      throw new InvalidOperationException("FROM clause already set.");
     }
     this.fromClause = sources.clone();
     return this;
@@ -165,7 +165,7 @@ public final class Query extends DataSource {
   public Query where(String clause) {
     checkNotCompiled();
     if (whereClause != null) {
-      throw new InvalidUsageException("WHERE clause already set.");
+      throw new InvalidOperationException("WHERE clause already set.");
     }
     whereClause = clause;
     return this;
@@ -178,7 +178,7 @@ public final class Query extends DataSource {
   public Query distinct() {
     checkNotCompiled();
     if (distinctClause) {
-      throw new InvalidUsageException("DISTINCT clause already set.");
+      throw new InvalidOperationException("DISTINCT clause already set.");
     }
     distinctClause = true;
     return this;
@@ -193,7 +193,7 @@ public final class Query extends DataSource {
   public Query groupBy(String... fields) {
     checkNotCompiled();
     if (groupByClause != null) {
-      throw new InvalidUsageException("GROUP BY clause already set.");
+      throw new InvalidOperationException("GROUP BY clause already set.");
     }
     groupByClause = fields.clone();
     return this;
@@ -217,7 +217,7 @@ public final class Query extends DataSource {
   public Query orderBy(String... fields) {
     checkNotCompiled();
     if (orderByClause != null) {
-      throw new InvalidUsageException("GROUP BY clause already set.");
+      throw new InvalidOperationException("GROUP BY clause already set.");
     }
     orderByClause = fields.clone();    
     return this;
@@ -231,7 +231,7 @@ public final class Query extends DataSource {
   public Query having(String clause) {
     checkNotCompiled();
     if (havingClause != null) {
-      throw new InvalidUsageException("HAVING clause already set.");
+      throw new InvalidOperationException("HAVING clause already set.");
     }
     havingClause = clause;
     return this;
@@ -245,10 +245,10 @@ public final class Query extends DataSource {
   public Query withArguments(Object... args) {
     checkNotCompiled();
     if (queryArgs != null) {
-      throw new InvalidUsageException("Query arguments are already set.");
+      throw new InvalidOperationException("Query arguments are already set.");
     }
     if (args == null || args.length == 0) {
-      throw new InvalidUsageException("Invalid query arguments.");
+      throw new InvalidOperationException("Invalid query arguments.");
     }
     queryArgs = args;
     return this;

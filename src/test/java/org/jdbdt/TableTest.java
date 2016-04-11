@@ -25,7 +25,7 @@ public class TableTest extends DBTestCase {
     assertEquals(UserDAO.TABLE_NAME, theSUT.getName());
   }
   
-  @Test(expected=InvalidUsageException.class)
+  @Test(expected=InvalidOperationException.class)
   public void testReInitColumns() {
     try {
       theSUT.columns(UserDAO.COLUMNS);

@@ -73,7 +73,7 @@ public class DataSet implements Iterable<Row> {
    * 
    * <p>
    * Adding rows to the data set will result in an exception 
-   * of type {@link InvalidUsageException}.
+   * of type {@link InvalidOperationException}.
    * </p>
    * 
    * @return <code>true</code> if data set is read-only.
@@ -113,7 +113,7 @@ public class DataSet implements Iterable<Row> {
   public final DataSet row(Object... columnValues) {
     checkIfNotReadOnly();
     if (columnValues.length != source.getColumnCount()) {
-      throw new InvalidUsageException(source.getColumnCount() +
+      throw new InvalidOperationException(source.getColumnCount() +
             " columns expected, not " + columnValues.length + ".");
     }
     addRow(new RowImpl(columnValues));
@@ -191,7 +191,7 @@ public class DataSet implements Iterable<Row> {
   @SuppressWarnings("javadoc")
   private void checkIfNotReadOnly() {
     if (readOnly) {
-      throw new InvalidUsageException("Data set is read-only.");
+      throw new InvalidOperationException("Data set is read-only.");
     }
   }
 

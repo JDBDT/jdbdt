@@ -216,7 +216,7 @@ public final class JDBDT {
    */
   public static void assertChanged(DataSet pre, DataSet post) throws DatabaseAssertionError {
     if (pre.getSource() != post.getSource()) {
-      throw new InvalidUsageException("Data sets associate to different data sources.");
+      throw new InvalidOperationException("Data sets associate to different data sources.");
     }
     delta(pre.getSource()).before(pre).after(post).end(); 
   }
@@ -280,7 +280,7 @@ public final class JDBDT {
    * @param q query.
    * @return Number of deleted entries.
    * @throws SQLException if a database error occurs.
-   * @throws InvalidUsageException if the query has 
+   * @throws InvalidOperationException if the query has 
    *    a GROUP BY or HAVING clause set, or if no WHERE
    *    clause is set for it.
    * @see #deleteAll(Table)

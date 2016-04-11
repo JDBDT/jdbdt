@@ -208,19 +208,19 @@ public final class DataSetBuilder {
    * 
    * @param rows Number of rows (a positive integer)
    * @return The data set instance (for chained calls).
-   * @throws InvalidUsageException for an invalid row count, or if
+   * @throws InvalidOperationException for an invalid row count, or if
    *     there are columns with no associated fillers.
    */
-  public DataSetBuilder generate(int rows) throws InvalidUsageException {
+  public DataSetBuilder generate(int rows) throws InvalidOperationException {
     ensureValid(rows, rows > 0);
     if (fillerCount < currentFillers.length) {
       for (int idx = 0; idx < source.getColumnCount(); idx++) {
         if (currentFillers[idx] == null) {
-          throw new InvalidUsageException("No filler is set for column '" + 
+          throw new InvalidOperationException("No filler is set for column '" + 
               source.getColumns()[idx]);
         }
       }
-      throw new JDBDTInternalError("Filler count does not match fillers set.");
+      throw new InternalAPIError("Filler count does not match fillers set.");
     }
     addGenerator(currentFillers, rows);
     return this;
@@ -244,7 +244,7 @@ public final class DataSetBuilder {
     ensureArgNotNull(filler);
     Integer idx = columnIdx.get(column.toLowerCase());
     if (idx == null) {
-      throw new InvalidUsageException("Invalid column name: '" + column + "'.");
+      throw new InvalidOperationException("Invalid column name: '" + column + "'.");
     }
     if (currentFillers[idx] == null) {
       fillerCount ++;
@@ -1008,27 +1008,27 @@ public final class DataSetBuilder {
   /**
    * Non-null validation utility method.
    * @param o Object reference.
-   * @throws InvalidUsageException if <code>o == null</code>.
+   * @throws InvalidOperationException if <code>o == null</code>.
    */
   private static void ensureArgNotNull(Object o) 
-      throws InvalidUsageException {
+      throws InvalidOperationException {
     if (o == null) {
-      throw new InvalidUsageException("Null argument.");
+      throw new InvalidOperationException("Null argument.");
     }
   }
 
   /**
    * Array validation utility method.
    * @param array Array reference.
-   * @throws InvalidUsageException if the array is <code>null</code> or empty.
+   * @throws InvalidOperationException if the array is <code>null</code> or empty.
    */
   private static void ensureValidArray(Object[] array)
-      throws InvalidUsageException {
+      throws InvalidOperationException {
     if (array == null) {
-      throw new InvalidUsageException("Null array argument.");
+      throw new InvalidOperationException("Null array argument.");
     }
     if (array.length == 0) {
-      throw new InvalidUsageException("Empty array argument.");
+      throw new InvalidOperationException("Empty array argument.");
 
     }
   }
@@ -1036,27 +1036,27 @@ public final class DataSetBuilder {
   /**
    * List validation utility method.
    * @param list Array reference.
-   * @throws InvalidUsageException if the list is <code>null</code> or empty.
+   * @throws InvalidOperationException if the list is <code>null</code> or empty.
    */
   private static void ensureValidList(List<?> list) 
-      throws InvalidUsageException {
+      throws InvalidOperationException {
     if (list == null) {
-      throw new InvalidUsageException("Null list argument.");
+      throw new InvalidOperationException("Null list argument.");
     }
     if (list.size() == 0) {
-      throw new InvalidUsageException("Empty list argument.");
+      throw new InvalidOperationException("Empty list argument.");
     }
   }
   /**
    * Condition validation utility method.
    * @param o Object reference.
    * @param condition Boolean value for condition.
-   * @throws InvalidUsageException if <code>condition == false</code>.
+   * @throws InvalidOperationException if <code>condition == false</code>.
    */
   private static void ensureValid(Object o, boolean condition) 
-      throws InvalidUsageException {
+      throws InvalidOperationException {
     if (! condition) {
-      throw new InvalidUsageException("Invalid value for parameter: " + o);
+      throw new InvalidOperationException("Invalid value for parameter: " + o);
     }
   }
 
@@ -1065,17 +1065,17 @@ public final class DataSetBuilder {
    * @param <T> Type of data.
    * @param min Minimum value.
    * @param max Maximum value.
-   * @throws InvalidUsageException if the range is not valid.
+   * @throws InvalidOperationException if the range is not valid.
    */
   private static <T extends Comparable<T>> void ensureValidRange(T min, T max) {
     if (min == null) {
-      throw new InvalidUsageException("Null value for minimum.");
+      throw new InvalidOperationException("Null value for minimum.");
     }
     if (max == null) {
-      throw new InvalidUsageException("Null value for maximum.");
+      throw new InvalidOperationException("Null value for maximum.");
     }
     if (min.compareTo(max) >= 0) {
-      throw new InvalidUsageException("Invalid range: " + min + " >= " + max);
+      throw new InvalidOperationException("Invalid range: " + min + " >= " + max);
     }
   }
 

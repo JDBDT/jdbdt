@@ -129,9 +129,9 @@ public class QueryTest extends DBTestCase {
     m.set("1");
     try {
       m.set("2");
-      fail(InvalidUsageException.class.toString());
+      fail(InvalidOperationException.class.toString());
     } 
-    catch(InvalidUsageException e) { }
+    catch(InvalidOperationException e) { }
   }
   
   @Test 
@@ -167,9 +167,9 @@ public class QueryTest extends DBTestCase {
     theSUT.getQueryStatement();
     try {
       m.set("x");
-      fail(InvalidUsageException.class.toString());
+      fail(InvalidOperationException.class.toString());
     } 
-    catch(InvalidUsageException e) { }
+    catch(InvalidOperationException e) { }
   }
   
   @Test 

@@ -69,7 +69,7 @@ public final class Table extends DataSource {
    */
   public Table columns(String... columns) {
     if (this.columns != null) {
-      throw new InvalidUsageException("Columns are already defined.");
+      throw new InvalidOperationException("Columns are already defined.");
     }
     this.columns = columns.clone();
     return this;

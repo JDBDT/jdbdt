@@ -104,11 +104,11 @@ public abstract class DataSource {
   }
   /**
    * Validate that query has not been compiled yet.
-   * @throws InvalidUsageException if query has been already compiled.
+   * @throws InvalidOperationException if query has been already compiled.
    */
-  final void checkNotCompiled() throws InvalidUsageException {
+  final void checkNotCompiled() throws InvalidOperationException {
     if (queryStmt != null) {
-      throw new InvalidUsageException("Query has already been compiled.");
+      throw new InvalidOperationException("Query has already been compiled.");
     }
   }
 
@@ -158,7 +158,7 @@ public abstract class DataSource {
    */
   final DataSet getSnapshot() {
     if (snapshot == null) {
-      throw new InvalidUsageException("No snapshot taken!");
+      throw new InvalidOperationException("No snapshot taken!");
     }
     return snapshot;
   }

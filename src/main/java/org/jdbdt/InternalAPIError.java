@@ -12,13 +12,13 @@ package org.jdbdt;
  * 
  * @since 0.1
  */
-final class JDBDTInternalError extends Error {
+final class InternalAPIError extends Error {
 
   /**
    * Constructs exception with given cause.
    * @param cause Cause for the exception.
    */
-  public JDBDTInternalError(Throwable cause) {
+  public InternalAPIError(Throwable cause) {
     super("Unexpected internal error", cause);
   }
   
@@ -26,7 +26,7 @@ final class JDBDTInternalError extends Error {
    * Constructs exception using supplied message.
    * @param message Error message. 
    */
-  public JDBDTInternalError(String message) {
+  public InternalAPIError(String message) {
     super(message);
   }
 

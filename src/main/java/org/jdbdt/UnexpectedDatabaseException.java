@@ -13,7 +13,7 @@ import java.sql.SQLException;
  * 
  * @since 0.1
  */
-public final class UnexpectedDatabaseException extends JDBDTRuntimeException {
+public final class UnexpectedDatabaseException extends RuntimeException {
 
   /**
    * Constructs the exception with given cause.

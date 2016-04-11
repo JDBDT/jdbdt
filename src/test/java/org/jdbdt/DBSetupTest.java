@@ -68,12 +68,12 @@ public class DBSetupTest extends DBTestCase {
     }
   }
   
-  @Test(expected=InvalidUsageException.class) 
+  @Test(expected=InvalidOperationException.class) 
   public void testInsert0() throws SQLException {
     doInsert(); // Empty data set
   }
   
-  @Test(expected=InvalidUsageException.class) 
+  @Test(expected=InvalidOperationException.class) 
   public void testPopulate0() throws SQLException {
     doPopulate(); // Empty data set
   }
@@ -147,17 +147,17 @@ public class DBSetupTest extends DBTestCase {
     assertNull(getDAO().query(EXISTING_DATA_ID1));
   }
   
-  @Test(expected=InvalidUsageException.class)
+  @Test(expected=InvalidOperationException.class)
   public void testDeleteAll5() throws SQLException {
     deleteAll(getDB().select().from(table));
   }
   
-  @Test(expected=InvalidUsageException.class)
+  @Test(expected=InvalidOperationException.class)
   public void testDeleteAll7() throws SQLException {
     deleteAll(getDB().select().from(table).where("w").groupBy("g"));
   }
   
-  @Test(expected=InvalidUsageException.class)
+  @Test(expected=InvalidOperationException.class)
   public void testDeleteAll8() throws SQLException {
     deleteAll(getDB().select().from(table).where("w").having("h"));
   }
