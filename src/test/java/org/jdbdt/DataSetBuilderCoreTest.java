@@ -1,7 +1,8 @@
 package org.jdbdt;
 
 import static org.junit.Assert.*;
-import static org.jdbdt.JDBDT.builder;
+import static org.jdbdt.JDBDT.*;
+import static org.jdbdt.TestUtil.*;
 
 import java.sql.SQLException;
 import java.util.function.Consumer;
@@ -54,15 +55,9 @@ public class DataSetBuilderCoreTest extends DBTestCase {
   private static void 
   invalidUse
   (DataSetBuilder sut, Consumer<DataSetBuilder> operation, Consumer<DataSetBuilder> assertions) {
-    try {
-      operation.accept(sut);
-      fail("Expected " + InvalidOperationException.class);
-    }
-    catch (InvalidOperationException e) {
-      assertions.accept(sut);
-    }
+    expectException(InvalidOperationException.class, () -> operation.accept(sut));
+    assertions.accept(sut);
   }
-
 
   private void invalidFiller(String c, ColumnFiller<?> f) {
     invalidUse(theSUT,
