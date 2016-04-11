@@ -93,7 +93,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     });
     theSUT.random(column, customF);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getDataSet());
+    assertEquals(expected, theSUT.data());
   }
   
   @Test
@@ -108,7 +108,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     });
     theSUT.random(column, values);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getDataSet());
+    assertEquals(expected, theSUT.data());
   }
   @Test
   public void testRandomList() {
@@ -122,7 +122,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     });
     theSUT.random(column, values);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getDataSet());
+    assertEquals(expected, theSUT.data());
   }
   @Test
   public void testRandomInt() {
@@ -132,7 +132,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     });
     theSUT.random(column, 1, COUNT);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getDataSet());
+    assertEquals(expected, theSUT.data());
   }
   @Test
   public void testRandomLong() {
@@ -142,7 +142,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     });    
     theSUT.random(column, 1L, COUNT);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getDataSet());
+    assertEquals(expected, theSUT.data());
   }
 
   @Test
@@ -153,7 +153,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     });
     theSUT.random(column, 1.0f, (float) COUNT);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getDataSet());
+    assertEquals(expected, theSUT.data());
   }
   
   @Test
@@ -164,7 +164,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     });
     theSUT.random(column, 1.0, COUNT);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getDataSet());
+    assertEquals(expected, theSUT.data());
   }
   
   @Test
@@ -177,7 +177,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     });
     theSUT.random(column, min, max);
     theSUT.generate(COUNT);
-    assertEquals(expected, theSUT.getDataSet());
+    assertEquals(expected, theSUT.data());
   }
 
   static boolean DEBUG = false;
@@ -191,7 +191,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
         System.out.println(Arrays.toString(r.data()));
       }
       System.out.println("-- actual --");
-      for (Row r : theSUT.getDataSet()) {
+      for (Row r : theSUT.data()) {
         System.out.println(Arrays.toString(r.data()));
       }
     }

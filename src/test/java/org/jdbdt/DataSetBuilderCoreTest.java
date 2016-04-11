@@ -43,7 +43,7 @@ public class DataSetBuilderCoreTest extends DBTestCase {
 
   private static void assertEmptyDataSet(DataSetBuilder sut) {
     assertEquals("filler count", 0, sut.fillerCount());
-    assertEquals("empty row list", 0, sut.getDataSet().size());
+    assertEquals("empty row list", 0, sut.data().size());
   }
 
   @Test
@@ -101,7 +101,7 @@ public class DataSetBuilderCoreTest extends DBTestCase {
       theSUT.value(UserDAO.COLUMNS[c], row[c]);
     }
     assertEquals("fillers set", UserDAO.COLUMNS.length, theSUT.fillerCount());
-    assertEquals("no rows", 0, theSUT.getDataSet().size());
+    assertEquals("no rows", 0, theSUT.data().size());
   }
   private void checkMissingFillers(int N) {
     invalidUse
@@ -109,7 +109,7 @@ public class DataSetBuilderCoreTest extends DBTestCase {
      sut -> sut.generate(1),
      sut -> {
        assertEquals("fillers set", N, sut.fillerCount());
-       assertEquals("no rows", 0, sut.getDataSet().size());
+       assertEquals("no rows", 0, sut.data().size());
      });
   }
   @Test
@@ -142,7 +142,7 @@ public class DataSetBuilderCoreTest extends DBTestCase {
      sut -> sut.generate(0),
      sut -> {
        assertEquals("fillers set", UserDAO.COLUMNS.length, sut.fillerCount());
-       assertEquals("no rows", 0, sut.getDataSet().size());
+       assertEquals("no rows", 0, sut.data().size());
     });
   }
   
@@ -158,7 +158,7 @@ public class DataSetBuilderCoreTest extends DBTestCase {
      sut -> sut.generate(-1),
      sut -> {
        assertEquals("fillers set", UserDAO.COLUMNS.length, sut.fillerCount());
-       assertEquals("no rows", 0, sut.getDataSet().size());
+       assertEquals("no rows", 0, sut.data().size());
     });
   }
   
@@ -174,7 +174,7 @@ public class DataSetBuilderCoreTest extends DBTestCase {
     }
     theSUT.generate(N);
     assertEquals("fillers set", UserDAO.COLUMNS.length, theSUT.fillerCount());
-    assertEquals(expectedRows, theSUT.getDataSet());
+    assertEquals(expectedRows, theSUT.data());
   }
   @Test
   public void testGenerateOneRow() throws SQLException {

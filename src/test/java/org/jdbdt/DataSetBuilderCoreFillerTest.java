@@ -70,7 +70,7 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
     });
     theSUT.sequence("login", i -> userPrefix + i);
     theSUT.generate(count);
-    assertEquals(expected, theSUT.getDataSet());
+    assertEquals(expected, theSUT.data());
   }
   @Test
   public void testSeq2() {
@@ -88,7 +88,7 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
     });
     theSUT.sequence("login", userPrefix, s -> s + "_" );
     theSUT.generate(count);
-    assertEquals(expected, theSUT.getDataSet());
+    assertEquals(expected, theSUT.data());
   }
   @Test
   public void testSeq3() {
@@ -105,7 +105,7 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
     }
     theSUT.sequence("login", values);
     theSUT.generate(count);
-    assertEquals(expected, theSUT.getDataSet());
+    assertEquals(expected, theSUT.data());
   }
   @Test
   public void testSeq4() {
@@ -122,7 +122,7 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
     }
     theSUT.sequence("login", Arrays.asList(values));
     theSUT.generate(count);
-    assertEquals(expected, theSUT.getDataSet());
+    assertEquals(expected, theSUT.data());
   }
   @Test
   public void testNullValue() {
@@ -137,7 +137,7 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
     theSUT.generate(count);
     theSUT.nullValue("login");
     theSUT.generate(count);
-    assertEquals(expected, theSUT.getDataSet());
+    assertEquals(expected, theSUT.data());
   }
   @Test
   public void testRemainingColumnsNull() {
@@ -153,7 +153,7 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
     theSUT.value("login", BASE_DATA.getLogin());
     theSUT.remainingColumnsNull();
     theSUT.generate(count);
-    assertEquals(expected, theSUT.getDataSet());
+    assertEquals(expected, theSUT.data());
   }
 
 }

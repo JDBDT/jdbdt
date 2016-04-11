@@ -15,14 +15,16 @@ import java.util.function.Function;
  * 
  * <p>
  * Objects of this kind provide a convenient manner to 
- * define data sets programmatically in association to a database table.
+ * define data sets programmatically.
  * </p>
  * 
  * <p>
  * Data builders can be used as follows: 
  * <ul>
  * <li>
- * Instances are created with a call to {@link DataSet#build()}. 
+ * They are created with calls to either {@link JDBDT#builder(DataSource)},
+ * to create a fresh data set, or to {@link DataSet#build()}
+ * to add data to an existing data set.
  * </li>
  * <li>
  * Entries (rows) in the data set are specified by setting one 
@@ -34,8 +36,11 @@ import java.util.function.Function;
  * <li>
  * Each call to
  * {@link #generate(int)} causes a specified number of rows
- * to be generated, in line with the current
+ * to be added to the underlying data set, in line with the current
  * column fillers set.
+ * </li>
+ * <li>
+ * The data set instance for a builder can be retrieved using {@link #data()}.
  * </li>
  * </ul>
  * 
@@ -67,6 +72,7 @@ import java.util.function.Function;
  * </pre></blockquote>
  * 
  * @since 0.1 
+ * @see JDBDT#builder(DataSource)
  * @see DataSet#build()
  *
  */
@@ -130,7 +136,7 @@ public final class DataSetBuilder {
    * Get data set this builder associates to.
    * @return Data set instance.
    */
-  public DataSet getDataSet() {
+  public DataSet data() {
     return data; 
   }
   

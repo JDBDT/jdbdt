@@ -47,9 +47,9 @@ public final class JDBDT {
   }
   
   /**
-   * Create a new data set builder.
+   * Create a builder for a fresh data set.
    * @param source Data source.
-   * @return A new data set builder for the given source.
+   * @return A new data set builder.
    */
   public static DataSetBuilder builder(DataSource source) {
     return new DataSet(source).build();
