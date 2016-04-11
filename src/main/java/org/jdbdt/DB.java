@@ -139,12 +139,21 @@ public final class DB {
 
   /**
    * Create a query data source.
-   * @return A new {@link Table} instance.
+   * @return A new {@link Query} instance.
    */
   public Query select() {
     return new Query(this);
   }
 
+  /**
+   * Create a new data source from arbitrary SQL code.
+   * @param sql SQL code for query.
+   * @return A new {@link SQLDataSource} instance.
+   */
+  public SQLDataSource source(String sql) {
+    return new SQLDataSource(this, sql);
+  }
+  
   /**
    * Prepare a SQL statement.
    * @param sql SQL code.
