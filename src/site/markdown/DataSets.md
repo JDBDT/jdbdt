@@ -21,10 +21,10 @@ Example:
 	                .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
 	DataSet userSet 
        = data(t)
-		   .row(0,   "root",  "Root User",  "god",        null)
-	       .row(101, "john",  "John Doe",   "justDoeIt", Date.valueOf("2014-07-12")
-	       .row(102, "harry", "Harry H",    "meta",      Date.valueOf("2016-01-01")
-	       .row(103, "guest", "Guest User",  "welcome",  Date.valueOf("2016-01-02");
+		.row(0,   "root",  "Root User",  "god",       null)
+	    .row(101, "john",  "John Doe",   "justDoeIt", Date.valueOf("2014-07-12")
+	    .row(102, "harry", "Harry H",    "meta",      Date.valueOf("2016-01-01")
+	    .row(103, "guest", "Guest User",  "welcome",  Date.valueOf("2016-01-02");
 
 ## Typed data sets.
 
@@ -43,19 +43,21 @@ Example:
 	DB db = ...;
 	Table table = db.table("Users")
 	                .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
+     
 	Conversion<User> conv = u -> new Object[] {  
 	                          u.getID(), 
 	                          u.getLogin(),
 	                          u.getPassword(),
 	                          u.getCreationDate() 
 	                        };
-	User root = ..., john = ..., harry = ..., guest = ...;
-	List<User> listOfOtherUsers ...;       
+    User root = ..., john = ..., harry = ..., guest = ...;
+	List<User> listOfOtherUsers ...;  
 	                 
-	TypedDataSet<User> userSet  = data(t, conv)
-		                           .row(root)
-		                           .rows(john, kafka, guest)
-		                           .rows(listOfOtherUsers);
+	TypedDataSet<User> userSet  
+	   = data(t, conv)
+		.row(root)
+		.rows(john, kafka, guest)
+		.rows(listOfOtherUsers);
 
 ## Data set builders
  
