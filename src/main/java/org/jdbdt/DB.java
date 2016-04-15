@@ -23,27 +23,27 @@ public final class DB {
     /**
      * Statement pooling (enabled by default).
      */
-    StatementPooling,
+    STATEMENT_POOLING,
     /**
      * Log deltas.
      */
-    LogDeltas,
+    LOG_DELTAS,
     /**
      * Log assertion errors.
      */
-    LogAssertionErrors,
+    LOG_ASSERTION_ERRORS,
     /**
      * Log data set insertions.
      */
-    LogInsertions,
+    LOG_INSERTIONS,
     /**
      * Log data set snapshots.
      */
-    LogSnapshots,
+    LOG_QUERIES,
     /**
      * Log SQL statements.
      */
-    LogSQL;
+    LOG_SQL;
   }
   /**
    * Connection.
@@ -73,7 +73,7 @@ public final class DB {
   DB(Connection connection) {
     this.connection = connection;
     log = new Log(System.err);
-    enable(Option.StatementPooling);
+    enable(Option.STATEMENT_POOLING);
   }
 
   /**
@@ -90,10 +90,10 @@ public final class DB {
    * Enable all logging options.
    */
   public void enableFullLogging() {
-    enable(DB.Option.LogAssertionErrors,
-           DB.Option.LogDeltas,
-           DB.Option.LogSnapshots,
-           DB.Option.LogSQL);
+    enable(DB.Option.LOG_ASSERTION_ERRORS,
+           DB.Option.LOG_DELTAS,
+           DB.Option.LOG_QUERIES,
+           DB.Option.LOG_SQL);
   }
 
   /**
@@ -162,7 +162,7 @@ public final class DB {
    */
   public PreparedStatement 
   compile(String sql) throws SQLException {    
-    if (! isEnabled(Option.StatementPooling)) {
+    if (! isEnabled(Option.STATEMENT_POOLING)) {
       logSQL(sql);
       return connection.prepareStatement(sql);
     }
@@ -196,7 +196,7 @@ public final class DB {
    * @param delta Delta instance.
    */
   void logDelta(Delta delta) {
-    if (isEnabled(Option.LogDeltas)) {
+    if (isEnabled(Option.LOG_DELTAS)) {
       log.write(delta);
     }
   }
@@ -206,7 +206,7 @@ public final class DB {
    * @param data Data set.
    */
   void logSnapshot(DataSet data) {
-    if (isEnabled(Option.LogSnapshots)) {
+    if (isEnabled(Option.LOG_QUERIES)) {
       log.write(data);
     }
   }
@@ -216,14 +216,14 @@ public final class DB {
    * @param data Data set.
    */
   void logInsertion(DataSet data) {
-    if (isEnabled(Option.LogInsertions)) {
+    if (isEnabled(Option.LOG_INSERTIONS)) {
       log.write(data);
     }
   }
   
   @SuppressWarnings("javadoc")
   void logSQL(String sql) {
-    if (isEnabled(Option.LogSQL)) {
+    if (isEnabled(Option.LOG_SQL)) {
       log.writeSQL(sql);
     }
   }

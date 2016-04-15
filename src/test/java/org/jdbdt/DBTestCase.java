@@ -58,7 +58,7 @@ public class DBTestCase {
     gConversion = cfg.isDateSupported() ? STD_CONVERSION : ALT_CONVERSION;
     gDB = JDBDT.database(gConn);
     if (!cfg.useStatementPooling()) {
-      gDB.disable(DB.Option.StatementPooling);
+      gDB.disable(DB.Option.STATEMENT_POOLING);
     }
     // gDB.enableFullLogging();
   }

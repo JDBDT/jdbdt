@@ -30,7 +30,7 @@ public class StatementPoolTest extends DBTestCase {
   }
   @Before 
   public void setup() {
-    getDB().enable(DB.Option.StatementPooling);
+    getDB().enable(DB.Option.STATEMENT_POOLING);
   }
   
   @Test
@@ -71,7 +71,7 @@ public class StatementPoolTest extends DBTestCase {
 
   @Test
   public void test05() throws SQLException {
-    getDB().disable(DB.Option.StatementPooling);
+    getDB().disable(DB.Option.STATEMENT_POOLING);
     Query q1 = getDB().select().columns("*").from(table.getName()).where("login='foo'");
     Query q2 = getDB().select().columns("*").from(table.getName()).where("login='foo'");
     PreparedStatement s1 = q1.getQueryStatement();
