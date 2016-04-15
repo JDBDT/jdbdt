@@ -1,6 +1,7 @@
 # Database handles
 
 ## Summary 
+
 A database handle encapsulates JDBT data for interface with a database 
 connection (a `java.sql.Connection` instance), and provides factory 
 methods for [data sources](DataSources.html). 
