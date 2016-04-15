@@ -36,13 +36,18 @@ public final class JDBDT {
   public static String version() { 
     return VERSION;
   }
-
+  
   /**
-   * Create a database handle for given SQL connection.
+   * Create a database handle.
+   * 
+   * <p>The given connection is associated to the handle.
+   * A reference to the connection can later be retrieved 
+   * using {@link DB#getConnection()}</p>.
+   * 
    * @param c Connection.
    * @return A new database handle for the given connection.
    */
-  public static DB db(Connection c) {
+  public static DB database(Connection c) {
     return new DB(c);
   }
   
