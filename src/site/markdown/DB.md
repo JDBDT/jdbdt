@@ -58,13 +58,13 @@ all at once using `enableFullLogging()`, and the output log may be changed using
 <a name="StatementPooling"></a>
 
 A database handle may maintain a pool of reusable `java.sql.PreparedStatement` object
-to avoid re-compiling SQL statements it executes. This happens whether or not some form of
+to avoid re-compiling SQL code it needs to execute. This happens whether or not some form of
 pooling is implemented for the underlying JDBC driver. 
 
-Statement pooling is enabled by default and, generally, it should provide
+The scheme is enabled by default and, generally, it should provide
 more efficiency and cause no problems during statement execution.
-A few drivers, however, may do not work well with statement reuse.
-In those cases, statement pooling should be disabled as follow:
+A few drivers, however, may not work well with statement reuse.
+In those cases, statement pooling should be disabled as follows:
 
     import org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
@@ -73,7 +73,7 @@ In those cases, statement pooling should be disabled as follow:
 	DB db = database(...);
 	db.disable(Option.STATEMENT_POOLING)
 
-*Known issue*: statement pooling should be disabled for 
+**Known issue**: statement pooling should be disabled for 
 [xerial's JDBC driver for sqlite](https://github.com/xerial/sqlite-jdbc). 
 No problems were detected for [all other JDBC drivers tested in the JDBDT build](Compatibility.html).
 
