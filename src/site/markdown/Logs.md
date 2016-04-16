@@ -1,13 +1,13 @@
 # Logging
 
-`Log` objects may be used to log JDBDT objects, like [data sets](DataSets.html) or [deltas](DBAssertions.html#Deltas) in an XML format. 
+`Log` objects may be used to log JDBDT objects, like [data sets](DataSets.html) or [deltas](DBAssertions.html#Deltas) in an XML format.
 
-A log instance is used internally by a [database handler](DB.html#Logging) instance for tracing operations, but may also created explicitly for other purposes (e.g., debugging or report
-generation)s.
+A log instance is used internally by a [database handler](DB.html#Logging) instance for tracing operations, and in that case you do not need to interface with the log instance.
+For other purposes, e.g. complementary debugging, logs may be created and managed explicitly.
 
 ## Creation and use
 
-The creation of a `Log` object takes a `java.io.PrintStream` or `java.io.File` object as argument. The `write` method may be used to log a particular JDBDT object.
+The creation of a `Log` object takes a `java.io.PrintStream` or `java.io.File` object as argument. A `write` method variant may be used to log a particular JDBDT object.
 
 	import org.jdbdt.Log;
 	import org.jdbdt.DataSet;
@@ -28,11 +28,9 @@ The creation of a `Log` object takes a `java.io.PrintStream` or `java.io.File` o
 	
 ## Log format
 
-Each call to a `Log.write` method variant results in a  `jdbdt-log-message` XML fragment
-being output. For instance, the following fragment corresponds to the log output of
-a [data set object](DataSets.html).
+Each call to a `write` method variant outputs a `jdbdt-log-message` XML node. For instance, the following fragment corresponds to the log output of a [data set object](DataSets.html).
 
-	<jdbdt-log-message time="2016-04-16 13:47:13.14" ... >
+	<jdbdt-log-message time="2016-04-16 13:47:13.14" ...>
 	  <data-set>
 	    <data-source columns="4">
 	      <column index="1" label="LOGIN" type="VARCHAR"/>

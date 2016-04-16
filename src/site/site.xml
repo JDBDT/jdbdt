@@ -39,6 +39,7 @@
       <item name="Data sets" href="DataSets.html"/>
       <item name="Database setup" href="DBSetup.html"/>
       <item name="Database assertions" href="DBAssertions.html"/>
+      <item name="Logging" href="Logs.html"/>
       <item name="Javadoc" href="apidocs/index.html"/>
     </menu>
 
