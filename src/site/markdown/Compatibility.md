@@ -1,6 +1,6 @@
 # Compatibility
 
-JDBDT is expected to work with any JDBC driver.
+JDBDT is expected to work with any (sane) JDBC driver.
 The JDBDT build currently tests integration with the following engines:
 
 * [Derby](https://db.apache.org/derby)
