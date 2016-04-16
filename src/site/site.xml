@@ -23,6 +23,7 @@
       <item name="About" href="index.html"/>
       <item name="License" href="http://www.eclipse.org/legal/epl-v10.html"/>
       <item name="Installation" href="https://github.com/edrdo/jdbdt/" />
+      <item name="Compatibility" href="Compatibility.html"/>
       <item name="Repository" href="https://github.com/edrdo/jdbdt/" />
       <item name="Issue tracking" href="https://github.com/edrdo/jdbdt/issues/"/>
       <item name="Continuous integration" href="https://travis-ci.org/edrdo/jdbdt/"/>
