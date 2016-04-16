@@ -1,15 +1,18 @@
 
-# Data sets
+# Summary
 
-A data set is a collection of rows that associates to a [data source](DataSources.html). 
+A `DataSet` object represents a collection of rows for a [data source](DataSources.html)
+that may be used for database [setup](DBSetup.html) or [verification](DBAssertions.html).
 
+The examples below define data sets for a [table](DataSources.html#Table) (`Table`) object, 
+but the definition of data sets is similar for other data sources like 
+[queries](DataSources.html#Query) (`Query`) or [custom SQL data sources](DataSources.html#SQLDataSource) (`SQLDataSource`).
 
 ## Plain definition 
 
-`Data Set` instances are created through `data` JDBDT facade.
-through a chained sequence of calls.
-
-Example:
+In the simplest manner, 
+`DataSet` objects are created through the `data` JDBDT facade method,
+typically followed by a chained sequence of calls.
 
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DataSet;
@@ -28,12 +31,11 @@ Example:
 
 ## Typed data sets.
 
-`TypedDataSet` is a typed extension of `DataSet` that allows for a simple
-form of (one-way) object-relational mapping through conversion functions.
-A `Conversion` instance defines a mapping between objects and row format, i.e.,
-arrays of columns.
-
-Example:
+`TypedDataSet` is a typed extension of `DataSet`. It allows for a simple
+form of (one-way) object-relational mapping through conversion functions expressed
+by the `Conversion` interface. A `Conversion` instance 
+defines a mapping from objects to rows, where each row is expressed as an array 
+of column values.
 
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.TypedDataSet;
@@ -61,28 +63,49 @@ Example:
 
 ## Data set builders
  
-`DataSetBuilder` instances can be used to define data sets 
-with the aid of expressive column filler methods. 
-There are column fillers for value sequences, pseudo-random values,
-amongst other patterns. 
+A `DataSetBuilder` instance can be used to define or augment a data set 
+with the aid of expressive column filler methods. For instance,
+there are column fillers for value sequences or pseudo-random values.
+Many of the column fillers may be defined concisely, for example
+making use of lambda expressions, arrays, or collections.
 
-
+The `builder` facade method creates a builder for a fresh data set and
+the `DataSet.build` method lets you add rows to a previously defined data
+set.
+    
     import static org.jdbdt.JDBDT.*;
-    import org.jdbdt.TypedDataSet;
     import org.jdbdt.DB;
     import org.jdbdt.Table;
+    import org.jdbdt.DataSet;
     ...
 	DB db = ...;
 	DataSet data = builder(
 	
-     build(t)
- *    .sequence("id", 1) // 1, 2, 3, ...
- *    .sequence("login", "harry", "mark", "john")
- *    .nullValue("password")
- *    .random("since", Date.valueOf("2015-01-01"), Date.valueOf("2015-12-31"))
- *    .generate(3) // generate 3 rows
- *    .sequence("login", i -&gt; "user_" + i, 4)  // "user_4", ... , "user_7"
- *    .value("password", "dumbPass")
- *    .generate(4) // generate 4 more rows 
- *    .getData();   
+	DB db = ...;
+	Table table = db.table("Users")
+	                .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");	
+    
+    // Create a fresh data set with 9 rows
+    DataSet data = 
+       builder(t)
+      .sequence("ID", 1) // 1, 2, 3, ...
+      .sequence("LOGIN", "harry", "mark", "john")
+      .sequence("NAME", "Harry H", "Mark M", "John J")
+      .sequence("PASSWORD", i -> "password " + i , 1)
+      .random("CREATED", Date.valueOf("2015-01-01"), Date.valueOf("2015-12-31"))
+      .generate(3) // generate 3 rows, keep with ID sequence and CREATED random filler
+      .sequence("LOGIN", i -> "guest_" + i, 4)  // "user_4", "user_5", ...
+      .sequence("NAME", i -> "Guest User " + i, 4) // "Guest User 4", ...
+      .value("password", "samePasswordForAllGuests") 
+      .generate(6)  
+      .data();   
+      
+    // Add 500 more rows to the data set
+    data.build()
+      .sequence("ID", 1000) // 1000, 1001, ... 
+      .sequence("LOGIN", i -> "anotherUser" + i, 1000)
+      .sequence("NAME", i -> "Yet Another User" + i, 1000)
+      .random("PASSWORD", "aeiou", "qwerty", "12345", "pass is the password")
+      .nullValue("CREATED") // set to NULL
+      .generate(500);
  
