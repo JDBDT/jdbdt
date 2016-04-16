@@ -13,3 +13,4 @@ The JDBDT build currently tests integration with the following engines:
 # Known issues
 
 * [Statement pooling should be disabled for xerial's JDBC driver for sqlite](DB.html#StatementPooling).
+
