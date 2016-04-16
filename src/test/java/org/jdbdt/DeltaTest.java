@@ -54,7 +54,7 @@ public class DeltaTest extends DBTestCase {
   }
 
   @Before 
-  public void takeSnapshot() throws SQLException {
+  public void takeDBSnapshot() throws SQLException {
     if (whereClause == null) {
       dataSource = table;
     } else {
@@ -64,7 +64,7 @@ public class DeltaTest extends DBTestCase {
       }
       dataSource = q;
     }
-    snapshot(dataSource);
+    takeSnapshot(dataSource);
   }
 
   @Test

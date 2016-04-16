@@ -6,7 +6,7 @@ package org.jdbdt;
  *
  * <p>
  * A table query is created using {@link DB#select()}
- * or implicitly through {@link JDBDT#snapshot(DataSource)}.
+ * or implicitly through {@link JDBDT#takeSnapshot(DataSource)}.
  * It has an associate {@link Table} instance, set at creation time, plus
  * optional WHERE, GROUP BY and HAVING clauses. The optional
  * statements may be set using {@link #where(String)}, {@link #groupBy(String...)}),

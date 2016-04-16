@@ -107,7 +107,7 @@ public final class JDBDT {
    * @see #delta(DataSource)
    */
   public static DataSet
-  snapshot(DataSource source)  {
+  takeSnapshot(DataSource source)  {
     return source.executeQuery(true);
   }
 
@@ -127,12 +127,12 @@ public final class JDBDT {
    * A new query will be issued for the given 
    * snapshot provider instance, and the resulting delta will reflect 
    * the difference between the last snapshot 
-   * (see {@link #snapshot(DataSource)}) and the current database state.
+   * (see {@link #takeSnapshot(DataSource)}) and the current database state.
    * </p>
    * 
    * @param s Data source.
    * @return A new {@link Delta} object.
-   * @see #snapshot(DataSource)
+   * @see #takeSnapshot(DataSource)
    */
   public static Delta delta(DataSource s) {
     return new Delta(s);
