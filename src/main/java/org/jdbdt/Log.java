@@ -110,12 +110,12 @@ public final class Log {
   public void write(DataSet data) {
     Element rootNode = root(),
             dsNode = xmlDoc.createElement(DATA_TAG),
-            tableNode = xmlDoc.createElement(SOURCE_TAG),
+            columnsNode = xmlDoc.createElement(COLUMNS_TAG),
             rowsNode = xmlDoc.createElement(ROWS_TAG);
     rootNode.appendChild(dsNode);
-    dsNode.appendChild(tableNode);
+    dsNode.appendChild(columnsNode);
     dsNode.appendChild(rowsNode);
-    write(tableNode, data.getSource().getMetaData());
+    write(columnsNode, data.getSource().getMetaData());
     write(rowsNode, data.getSource().getMetaData().columns(), data.iterator());
     flush(rootNode);
   }
@@ -123,12 +123,12 @@ public final class Log {
   @SuppressWarnings("javadoc")
   private void write(Element topNode, MetaData md) {
     int index = 1;
-    topNode.setAttribute(COLUMNS_ATTR, String.valueOf(md.getColumnCount()));
+    topNode.setAttribute(COUNT_ATTR, String.valueOf(md.getColumnCount()));
     for (MetaData.ColumnInfo col : md.columns()) {
       Element colNode = xmlDoc.createElement(COLUMN_TAG);
       colNode.setAttribute(INDEX_ATTR, String.valueOf(index++));
       colNode.setAttribute(LABEL_ATTR, col.label());
-      colNode.setAttribute(TYPE_ATTR, col.type().toString());
+      colNode.setAttribute(SQL_TYPE_ATTR, col.type().toString());
       topNode.appendChild(colNode);
     } 
   }
@@ -152,7 +152,7 @@ public final class Log {
   public void write(Delta d) {
     Element rootNode = root(),
             deltaNode = xmlDoc.createElement(DELTA_TAG),
-            queryNode = xmlDoc.createElement(SOURCE_TAG),
+            queryNode = xmlDoc.createElement(COLUMNS_TAG),
             bSetNode = xmlDoc.createElement(BEFORE_TAG),
             aSetNode = xmlDoc.createElement(AFTER_TAG);
     rootNode.appendChild(deltaNode);
@@ -176,13 +176,18 @@ public final class Log {
       for (int i=0; i < data.length; i++) {
         Element colNode = xmlDoc.createElement(COLUMN_TAG);
         colNode.setAttribute(LABEL_ATTR, columns.get(i).label());
-        colNode.setTextContent(data[i].toString());
+        if (data[i] != null) {
+          colNode.setAttribute(JAVA_TYPE_ATTR, data[i].getClass().getName());
+          colNode.setTextContent(data[i].toString());
+        } else {
+          colNode.setTextContent(NULL_VALUE);
+        }
         rowElem.appendChild(colNode);
       }
       topNode.appendChild(rowElem);
       size++;
     }
-    topNode.setAttribute(SIZE_ATTR,  String.valueOf(size));
+    topNode.setAttribute(COUNT_ATTR,  String.valueOf(size));
   }
 
   /**
@@ -208,7 +213,7 @@ public final class Log {
   @SuppressWarnings("javadoc")
   private static final String SIZE_ATTR = "size";
   @SuppressWarnings("javadoc")
-  private static final String SOURCE_TAG = "data-source";
+  private static final String COLUMNS_TAG = "columns";
   @SuppressWarnings("javadoc")
   private static final String BEFORE_TAG = "before";
   @SuppressWarnings("javadoc")
@@ -224,11 +229,15 @@ public final class Log {
   @SuppressWarnings("javadoc")
   private static final String LABEL_ATTR = "label";
   @SuppressWarnings("javadoc")
-  private static final String TYPE_ATTR = "type";
+  private static final String SQL_TYPE_ATTR = "sql-type";
+  @SuppressWarnings("javadoc")
+  private static final String JAVA_TYPE_ATTR = "java-type";
   @SuppressWarnings("javadoc")
   private static final String INDEX_ATTR = "index";
   @SuppressWarnings("javadoc")
-  private static final String COLUMNS_ATTR = "columns";
+  private static final String COUNT_ATTR = "count";
+  @SuppressWarnings("javadoc")
+  private static final String NULL_VALUE = "NULL";
 
   static {
     try {
