@@ -5,11 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * User data access object (the SUT for tests).
- * 
- * @since 0.1
- */
 @SuppressWarnings("javadoc")
 public class UserDAO {
   public static final String TABLE_NAME = "Users";
