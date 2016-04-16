@@ -1,8 +1,5 @@
 package org.jdbdt;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -304,44 +301,6 @@ public final class JDBDT {
    */
   public static void truncate(Table t) throws SQLException  {
     DBSetup.truncate(t);
-  }
-  
-  /**
-   * Create a file log.
-   * 
-   * <p>
-   * A log can be used for reporting or debugging purposes,
-   * and has an XML format.
-   * Various types of JDBDT objects may be written to a log
-   * e.g. {@link DataSet} or {@link Delta}.  
-   * Note that output data is only written when {@link Log#close()}
-   * is called on the returned log instance.
-   * </p>
-   * @param file Output file.
-   * @return A log instance.
-   * @throws FileNotFoundException If the output file cannot be created.
-   * 
-   * @see #log(PrintStream)
-   */
-  public static Log log(File file) throws FileNotFoundException {
-    return new Log(file);
-  }
-
-  /**
-   * Create a log that is written to a stream.
-   * 
-   * <p>
-   * This method has a similar functionality to {@link #log(File)},
-   * but redirects log output to the given stream. 
-   * </p>
-   * 
-   * @param out Output stream.
-   * @return A log instance.
-   * 
-   * @see #log(File)
-   */
-  public static Log log(PrintStream out) {
-    return new Log(out);
   }
 
 }

@@ -23,36 +23,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * XML logging facility.
+ * JDBDT log.
  * 
- * <p>
- * A log may be used for test reports and debugging.
- * It is created using {@link JDBDT#log(PrintStream)} or {@link JDBDT#log(File)}.
- * After creation, the available variants of the 
- * {@code write} method may be used to log information
- * for several types of JDBDT objects, e.g., data sets or deltas.
- * The output has an XML format.
- * </p>
- * 
- * <p><b>Illustration</b></p>
- * <blockquote><pre>
- * import static org.jdbdt.JDBDT.*;
- * import org.jdbdt.Log;
- * import org.jdbdt.DataSet;
- * import org.jdbdt.Delta;
- * ...
- * DataSet ds = ...; 
- * log(System.out).write(ds);
- * ...
- * Log flog = log(new File("out.xml"));
- * Delta d = ...;
- * flog.write(d);
- * flog.write(ds);
- * flog.close();
- * </pre></blockquote>
- * 
- * @see JDBDT#log(File)
- * @see JDBDT#log(PrintStream)
  * @since 0.1
  *
  */
@@ -75,14 +47,14 @@ public final class Log {
    * @param ouputFile Output file.
    * @throws FileNotFoundException If the file cannot be opened/created. 
    */
-  Log(File ouputFile) throws FileNotFoundException {
+  public Log(File ouputFile) throws FileNotFoundException {
     this(new PrintStream(new FileOutputStream(ouputFile)), false);
   }
   /**
    * Construct a log with an associated output stream.
    * @param out Output stream.
    */
-  Log(PrintStream out) {
+  public Log(PrintStream out) {
     this(out, true);
   }
   /**
