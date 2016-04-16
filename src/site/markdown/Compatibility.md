@@ -1,3 +1,4 @@
+
 # Compatibility
 
 JDBDT is expected to work with any (sane) JDBC driver.

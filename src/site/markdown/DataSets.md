@@ -1,5 +1,5 @@
 
-# Summary
+# Data sets
 
 A `DataSet` object represents a collection of rows for a [data source](DataSources.html)
 that may be used for database [setup](DBSetup.html) or [verification](DBAssertions.html).

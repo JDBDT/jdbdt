@@ -15,7 +15,7 @@ may be convenient to refer to the API methods concisely.
 * [Database handlers](DB.html) encapsulate access to a database through 
 a JDBC connection. 
 * [Data sources](DataSources.html), table and query objects, 
-* [Data sets](DataSets.html) can be defined programatically 
+* [Data sets](DataSets.html) can be defined programmatically 
 for use in database setup and verification.
 * [Database setup methods](DBSetup.html) can be used 
 to setup database contents.
