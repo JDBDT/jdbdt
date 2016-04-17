@@ -60,6 +60,7 @@ public class DBTestCase {
     if (!cfg.useStatementPooling()) {
       gDB.disable(DB.Option.STATEMENT_POOLING);
     }
+    newUserCounter = 0;
     // gDB.enableFullLogging();
   }
   
@@ -131,7 +132,7 @@ public class DBTestCase {
   
   protected static User createNewUser() {
     final int unique = newUserCounter++;
-    return new User("newUser" + unique, 
+    return new User("user" + unique, 
         "New User" + unique, 
         "pass" + unique, 
         Date.valueOf("2016-01-01"));
