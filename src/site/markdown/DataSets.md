@@ -124,30 +124,45 @@ to modify it will result in `org.jdbdt.InvalidOperationException` being thrown.
 ## Quick method reference
 <a name="MethodReference"></a>
 
-### Facade methods in `JDBDT`
+### Factory methods in the `JDBDT` facade
 
 For a [data source](DataSources.html) `s`:
 
 - `data(s)` creates a new data set.
 - `data(s,c)` creates a new typed data set with conversion function `c`.
-- `builder(s)` creates a data set builder.
+- `builder(s)` creates a data set builder with an underlying fresh data set.
 
-### Instance methods 
+### `DataSet` and `TypedDataSet` instance methods 
+
+Mutators:
 
 - `row` and `rows` add rows to the data set (see examples above).
 - `build` creates a new data set builder backed up by the data set (see example above).
-- `size()` returns the number of rows.
-- `isEmpty()` indicates if a data set is empty.
 - `add(other)` adds all rows from `other` to the data set.
-- `isReadOnly()` indicates if `data is read-only.
-- `setReadOnly()` sets `data` as read-only.
+- `setReadOnly()` sets the data set as read-only.
 
-### Static utility methods 
+Properties:
+
+- `size()` returns the number of rows.
+- `isEmpty()` indicates if the data set is empty.
+- `isReadOnly()` indicates if the data set is read-only.
+- `getDataSource()` returns the [data source](DataSources.html) instance for the data set.
+
+### `DataSetBuilder` methods
+
+- `data()` returns the underlying data set.
+- `generate(n)` adds `n` rows to the underlying data set based on the current column filler settings.
+- `nullValue(column)` sets a `NULL` value filler for `column`.
+- `value(column, v)`  sets a constant filler with value `v` for `column`.
+- `sequence(column, ...)` defines a sequence fillers for `column`.
+- `random(column, ...)` defines a pseudo-random filler for `column`.
+- `set(column, filler)` defines a custom column filler for `column`. 
+ 
+### `DataSet` utility methods 
 
 - `subset(data, index, n)` returns a new data set containing `n` rows of `data` starting from the `index`-th row.
 - `singleton(data,i)` returns a new data set containing only the `index`-th row in `data`.
 - `head(data, n)` returns a new data set containing the first `n` rows of `data`.
 - `tail(data,n)` returns a new data set containing the last `n` rows of `data`.
-
 
 
