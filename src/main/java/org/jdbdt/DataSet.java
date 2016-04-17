@@ -15,6 +15,7 @@ import java.util.ListIterator;
  *
  */
 public class DataSet implements Iterable<Row> {
+  
   /**
    * Data source.
    */
@@ -185,10 +186,9 @@ public class DataSet implements Iterable<Row> {
   }
 
   /**
-   * Get an iterator for the row set.
+   * Get an iterator for the rows.
    * @return An iterator object.
    */
-  @Override
   public Iterator<Row> iterator() {
     return !readOnly ? rows.iterator() 
         : Collections.unmodifiableList(rows).iterator();
@@ -250,7 +250,7 @@ public class DataSet implements Iterable<Row> {
   public static DataSet tail(DataSet data, int n) {
     return subset(data, data.size() - n - 1, n);
   }
-
+  
   @SuppressWarnings("javadoc")
   private void checkIfNotReadOnly() {
     if (readOnly) {
