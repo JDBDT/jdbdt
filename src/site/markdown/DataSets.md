@@ -125,8 +125,12 @@ to modify it will result in `org.jdbdt.InvalidOperationException` being thrown.
 <a name="UtilityMethods"></a>
 
 ### Instance methods
+
 - `data.size()` returns the number of rows in `data`.
+- `data.isEmpty()` indicates if `data` is empty.
 - `dst.add(src)` adds all rows from `src` to `dst`.
+- `data.isReadOnly()` indicates if `data is read-only.
+- `data.setReadOnly()` sets `data` as read-only.
 
 ### Static methods
 
