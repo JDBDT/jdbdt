@@ -3,7 +3,6 @@ package org.jdbdt;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Data set.
@@ -46,7 +45,6 @@ public class DataSet {
   DataSet(DataSource ds, ArrayList<Row> list) {
     this.source = ds;
     this.rows = list;
-    this.readOnly = false;
   }
   
   /**
@@ -206,7 +204,7 @@ public class DataSet {
    *        the rows in the specified range.
    */
   public static DataSet subset(DataSet data, int startIndex, int n) {
-    if (startIndex < 0 || n < 0 || startIndex + n >= data.size()) {
+    if (startIndex < 0 || n < 0 || startIndex + n > data.size()) {
       throw new InvalidOperationException("Invalid range.");
     }
     final DataSet sub = new DataSet(data.getSource());

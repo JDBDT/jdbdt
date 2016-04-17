@@ -11,6 +11,7 @@ import org.junit.runners.Suite.SuiteClasses;
   TableTest.class,
   QueryTest.class,
   SQLDataSourceTest.class,
+  DataSetTest.class,
   DBSetupTest.class,
   DeltaTest.class,
   DataSetBuilderCoreTest.class,
