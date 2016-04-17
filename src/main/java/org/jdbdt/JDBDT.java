@@ -87,20 +87,21 @@ public final class JDBDT {
    * as the latest snapshot for the data source. 
    * The snapshot is used as the base reference for any subsequent 
    * delta assertions, until a new snapshot is defined with
-   * a new call to this method or to {@link #assumeSnapshot(DataSet)}.
+   * a new call to this method or to {@link #populate(DataSet)};
    * </p>
    * 
    * <p>
    * Note that the method returns the data set instance representing the snapshot,
    * but assertion methods do not require any book-keeping 
    * by the caller, hence the result may be ignored for this
-   * purpose. Note also that this data set is read-only (see {@link DataSet#isReadOnly()}).
+   * purpose. Note also that the returned
+   * data set is read-only (see {@link DataSet#isReadOnly()}).
    * </p>
+   * 
    * @param source Data source.
    * @throws UnexpectedDatabaseException if a database error occurs 
    * @return Data set representing the snapshot.
    * 
-   * @see #assumeSnapshot(DataSet)
    * @see #assertChanged(DataSet, DataSet)
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
@@ -111,14 +112,6 @@ public final class JDBDT {
     return source.executeQuery(true);
   }
 
-  /**
-   * Assume the given data set as a snapshot for current database state.-
-   * @param data Data set.
-   */
-  public static void
-  assumeSnapshot(DataSet data)  {
-    data.getSource().setSnapshot(data);
-  }
   
   /**
    * Obtain delta.
