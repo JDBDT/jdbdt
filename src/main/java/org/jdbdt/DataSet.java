@@ -23,7 +23,7 @@ public class DataSet {
   /**
    * Rows in the data set.
    */
-  private final List<Row> rows;
+  private final ArrayList<Row> rows;
 
   /**
    * Read-only flag.
@@ -43,7 +43,7 @@ public class DataSet {
    * @param ds Data source.
    * @param list Row list. 
    */
-  DataSet(DataSource ds, List<Row> list) {
+  DataSet(DataSource ds, ArrayList<Row> list) {
     this.source = ds;
     this.rows = list;
     this.readOnly = false;
@@ -63,6 +63,7 @@ public class DataSet {
   public final boolean isReadOnly() {
     return readOnly;
   }
+  
   /**
    * Set data set as read-only.
    * 
@@ -208,12 +209,11 @@ public class DataSet {
     if (startIndex < 0 || n < 0 || startIndex + n >= data.size()) {
       throw new InvalidOperationException("Invalid range.");
     }
-    DataSet sub = new DataSet(data.getSource());
-    ListIterator<Row> itr = data.rows.listIterator(startIndex);
-    int index = startIndex;
-    int endIndex = startIndex + n;
-    while (itr.hasNext() && index < endIndex) {
-      sub.rows.add(itr.next());
+    final DataSet sub = new DataSet(data.getSource());
+    final int endIndex = startIndex + n;
+    final ArrayList<Row> dataRows = data.rows;
+    for (int i = startIndex; i < endIndex; i++) {
+      sub.rows.add(dataRows.get(i));
     }
     return sub;
   }
@@ -275,7 +275,4 @@ public class DataSet {
   final boolean sameDataAs(DataSet other) {
     return rows.equals(other.rows);
   }
-
-
-
 }

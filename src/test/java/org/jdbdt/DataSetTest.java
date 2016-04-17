@@ -44,6 +44,7 @@ public class DataSetTest extends DBTestCase {
     assertFalse(theSUT.isReadOnly());
     assertTrue(theSUT.isEmpty());
     assertEquals(0, theSUT.size());
+    assertEquals(0, theSUT.getRows().size());
     assertSame(table, theSUT.getSource());
   }
   
@@ -76,6 +77,14 @@ public class DataSetTest extends DBTestCase {
     Object[][] r = new Object[n][];
     for (int i = 0; i < n; i++) {
       r[i] = rowFor(createNewUser());
+    }
+    return r;
+  }
+  
+  private Object[][] subData(Object[][] d, int start, int n) {
+    Object[][] r = new Object[n][];
+    for (int i = 0; i < n; i++) {
+      r[i] = d[start + i];
     }
     return r;
   }
@@ -156,12 +165,67 @@ public class DataSetTest extends DBTestCase {
   
   @Test
   public void testAdd3() {
-    Object[][] r1 = genData(2);
-    theSUT.rows(r1);
+    Object[][] r = genData(2);
+    theSUT.rows(r);
     DataSet other = data(table);
     theSUT.add(other);
-    assertEquals(lRow(r1), theSUT.getRows());
+    assertEquals(lRow(r), theSUT.getRows());
   }
   
+  @Test
+  public void testSubset() {
+    final int size = 10;
+    final int start = 1;
+    final int n = 5;
+    Object[][] r1 = genData(size);
+    Object[][] r2 = subData(r1, start, n);
+    theSUT.rows(r1);
+    DataSet s = DataSet.subset(theSUT, start, n);
+    assertEquals(lRow(r2), s.getRows());
+  }
+  
+  @Test
+  public void testHead1() {
+    final int size = 10;
+    final int n = 1;
+    Object[][] r1 = genData(size);
+    Object[][] r2 = subData(r1, 0, n);
+    theSUT.rows(r1);
+    DataSet s = DataSet.head(theSUT, n);
+    assertEquals(lRow(r2), s.getRows());
+  }
+  
+  @Test
+  public void testHead2() {
+    final int size = 10;
+    final int n = 9;
+    Object[][] r1 = genData(size);
+    Object[][] r2 = subData(r1, 0, n);
+    theSUT.rows(r1);
+    DataSet s = DataSet.head(theSUT, n);
+    assertEquals(lRow(r2), s.getRows());
+  }
+  
+  @Test
+  public void testTail1() {
+    final int size = 10;
+    final int n = 1;
+    Object[][] r1 = genData(size);
+    Object[][] r2 = subData(r1, size - n - 1, n);
+    theSUT.rows(r1);
+    DataSet s = DataSet.tail(theSUT, n);
+    assertEquals(lRow(r2), s.getRows());
+  }
+  
+  @Test
+  public void testTail2() {
+    final int size = 10;
+    final int n = 9;
+    Object[][] r1 = genData(size);
+    Object[][] r2 = subData(r1, size - n - 1, n);
+    theSUT.rows(r1);
+    DataSet s = DataSet.tail(theSUT, n);
+    assertEquals(lRow(r2), s.getRows());
+  }
  
 }
