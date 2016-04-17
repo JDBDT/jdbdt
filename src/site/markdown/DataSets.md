@@ -115,22 +115,25 @@ set.
       .nullValue("CREATED") // set to NULL
       .generate(500);
  
-## Utility methods
-<a name="UtilityMethods"></a>
-
-- `data.size()` returns the number of rows in `data`.
-- `dst.add(src)` adds all rows from `src` to `dst`.
-- `DataSet.subset(data, index, n)` returns a new data set containing `n` rows of `data` starting from the `index`-th row.
-- `DataSet.singleton(data,i)` returns a new data set containing only the `index`-th row in `data`.
-- `DataSet.head(data, n)` returns a new data set containing the first `n` rows of `data`.
-- `DataSet.tail(data,n)` returns a new data set containing the last `n` rows of `data`.
-
-
 ## Read-only data sets
 <a name="ReadOnly"></a>
 
 Data sets are marked as read-only when they are set as [database snapshots](DBAssertions.html#Snapshots). After a data set is marked read-only, attempts
 to modify it will result in `org.jdbdt.InvalidOperationException` being thrown.
+
+## Utility methods
+<a name="UtilityMethods"></a>
+
+### Instance methods
+- `data.size()` returns the number of rows in `data`.
+- `dst.add(src)` adds all rows from `src` to `dst`.
+
+### Static methods
+
+- `subset(data, index, n)` returns a new data set containing `n` rows of `data` starting from the `index`-th row.
+- `singleton(data,i)` returns a new data set containing only the `index`-th row in `data`.
+- `head(data, n)` returns a new data set containing the first `n` rows of `data`.
+- `tail(data,n)` returns a new data set containing the last `n` rows of `data`.
 
 
 
