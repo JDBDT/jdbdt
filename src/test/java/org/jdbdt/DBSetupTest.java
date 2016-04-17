@@ -2,7 +2,6 @@ package org.jdbdt;
 
 import static org.jdbdt.JDBDT.*;
 
-import java.sql.Date;
 import java.sql.SQLException;
 
 import static org.junit.Assert.*;

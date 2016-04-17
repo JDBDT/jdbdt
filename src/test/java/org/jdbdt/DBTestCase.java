@@ -134,7 +134,7 @@ public class DBTestCase {
     return new User("newUser" + unique, 
         "New User" + unique, 
         "pass" + unique, 
-        new Date(System.currentTimeMillis()));
+        Date.valueOf("2016-01-01"));
   }
 
 }
