@@ -79,7 +79,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
       @SuppressWarnings("unchecked")
       Map<String,Object> data = (Map<String,Object>) BASE_DATA.clone();
       dg.next(data);
-      rs.addRow(new RowImpl(data.values().toArray()));
+      rs.addRow(new Row(data.values().toArray()));
     }
     return rs;
   }

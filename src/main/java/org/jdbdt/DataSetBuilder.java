@@ -167,7 +167,7 @@ public final class DataSetBuilder {
       for (int c = 0; c < colNames.length; c++) {
         colData[c] = fillers[c].next();
       }
-      data.addRow(new RowImpl(colData));
+      data.addRow(new Row(colData));
     }
     return this;
   }

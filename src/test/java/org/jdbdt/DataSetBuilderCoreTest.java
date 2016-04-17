@@ -162,7 +162,7 @@ public class DataSetBuilderCoreTest extends DBTestCase {
     Object[] rowData = getConversion().convert(u);
     DataSet expectedRows = new DataSet(table);
     for (int i=0; i < N; i++) {
-      expectedRows.addRow(new RowImpl(rowData));
+      expectedRows.addRow(new Row(rowData));
     }
     for (int col = 0; col < rowData.length; col++) {
       theSUT.value(UserDAO.COLUMNS[col], rowData[col]);

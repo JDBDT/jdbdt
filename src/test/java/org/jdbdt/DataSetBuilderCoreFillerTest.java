@@ -51,7 +51,7 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
   private static void gen(DataSet rs, UserGenerator g, int n) {
     for (int i=0; i < n; i++) {
       User data = g.next(BASE_DATA, i);
-      rs.addRow(new RowImpl(getConversion().convert(data)));
+      rs.addRow(new Row(getConversion().convert(data)));
     }
   }
   private static DataSet deriveRowSet(int n, UserGenerator ug) {

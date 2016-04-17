@@ -84,7 +84,7 @@ public final class Delta {
    *          
    */
   public Delta before(Object... row) throws DatabaseAssertionError {
-    before(new RowImpl(row));
+    before(new Row(row));
     return this;
   }
 
@@ -96,7 +96,7 @@ public final class Delta {
    * @throws DatabaseAssertionError in case the new row is not defined.
    */
   public Delta after(Object... row) throws DatabaseAssertionError {
-    after(new RowImpl(row));
+    after(new Row(row));
     return this;
   }
 

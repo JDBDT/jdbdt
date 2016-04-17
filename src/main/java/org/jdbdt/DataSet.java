@@ -144,7 +144,7 @@ public class DataSet {
       throw new InvalidOperationException(source.getColumnCount() +
           " columns expected, not " + columnValues.length + ".");
     }
-    addRow(new RowImpl(columnValues));
+    addRow(new Row(columnValues));
     return this;
   }
 
@@ -161,7 +161,7 @@ public class DataSet {
   public final DataSet rows(Object[][] rows) {
     checkIfNotReadOnly();
     for (Object[] columnValues : rows) {
-      addRow(new RowImpl(columnValues));
+      addRow(new Row(columnValues));
     }
     return this;
   }

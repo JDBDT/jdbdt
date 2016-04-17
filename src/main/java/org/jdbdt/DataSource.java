@@ -167,9 +167,7 @@ public abstract class DataSource {
    * @return SQL code for the database query.
    */
   abstract String getSQLForQuery();
-
-
-
+  
   /**
    * Execute query.
    * @param takeSnapshot Indicates that a snapshot should be taken.
@@ -233,7 +231,7 @@ public abstract class DataSource {
           for (int i = 0; i < colCount; i++) {          
             data[i] = rs.getObject(i+1);
           }
-          c.accept(new RowImpl(data));
+          c.accept(new Row(data));
         }
       }
       finally {

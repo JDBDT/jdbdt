@@ -76,7 +76,7 @@ public class DataSetTest extends DBTestCase {
     for (int i=0; i < n; i++) {
       Object[] data = rowFor(createNewUser());
       theSUT.row(data);
-      expected.add(new RowImpl(data));
+      expected.add(new Row(data));
     }
     assertFalse(theSUT.isEmpty());
     assertEquals(n, theSUT.size());
