@@ -108,7 +108,7 @@ public final class Delta {
    * @throws DatabaseAssertionError in case some row in the data set is still defined.         
    */
   public Delta before(DataSet data)  throws DatabaseAssertionError {
-    for (Row r : data) {
+    for (Row r : data.getRows()) {
       before(r);
     }
     return this;
@@ -122,7 +122,7 @@ public final class Delta {
    * @throws DatabaseAssertionError in case some row in the data set is still defined.    
    */
   public Delta after(DataSet data)  throws DatabaseAssertionError {
-    for (Row r : data) {
+    for (Row r : data.getRows()) {
       after(r);
     }
     return this;
@@ -205,8 +205,9 @@ public final class Delta {
   LinkedHashMap<Row, Integer> calcDiff(DataSet rs1, DataSet rs2) {
     LinkedHashMap<Row,Integer> diff = new LinkedHashMap<>();
     // Try to minimize space use by matching equal rows soon.
-    Iterator<Row> a = rs1.iterator(),
-        b = rs2.iterator();
+    Iterator<Row> 
+      a = rs1.getRows().iterator(),
+      b = rs2.getRows().iterator();
     boolean done = false;
     while (!done) {
       if (!a.hasNext()) {

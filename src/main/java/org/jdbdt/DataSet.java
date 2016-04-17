@@ -14,7 +14,7 @@ import java.util.ListIterator;
  * @since 0.1
  *
  */
-public class DataSet implements Iterable<Row> {
+public class DataSet {
   
   /**
    * Data source.
@@ -196,16 +196,6 @@ public class DataSet implements Iterable<Row> {
   final void addRow(Row r) {
     rows.add(r);
   }
-
-  /**
-   * Get an iterator for the rows.
-   * @return An iterator object.
-   */
-  public Iterator<Row> iterator() {
-    return !readOnly ? rows.iterator() 
-        : Collections.unmodifiableList(rows).iterator();
-  }
-
 
   /**
    * Create a subset of the rows of given data set.

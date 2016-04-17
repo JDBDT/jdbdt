@@ -116,7 +116,7 @@ public final class Log {
     dsNode.appendChild(columnsNode);
     dsNode.appendChild(rowsNode);
     write(columnsNode, data.getSource().getMetaData());
-    write(rowsNode, data.getSource().getMetaData().columns(), data.iterator());
+    write(rowsNode, data.getSource().getMetaData().columns(), data.getRows().iterator());
     flush(rootNode);
   }
 

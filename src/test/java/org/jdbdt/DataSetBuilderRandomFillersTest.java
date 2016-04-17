@@ -187,11 +187,11 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     if (DEBUG) {
       System.out.println("> " + testName.getMethodName() + " -- " + column);
       System.out.println("-- expected --");
-      for (Row r : expected) {
+      for (Row r : expected.getRows()) {
         System.out.println(Arrays.toString(r.data()));
       }
       System.out.println("-- actual --");
-      for (Row r : theSUT.data()) {
+      for (Row r : theSUT.data().getRows()) {
         System.out.println(Arrays.toString(r.data()));
       }
     }

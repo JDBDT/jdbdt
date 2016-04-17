@@ -68,7 +68,7 @@ final class DBSetup {
     }
     sql.append(')');
     PreparedStatement  insertStmt = t.getDB().compile(sql.toString());
-    for (Row r : data) {
+    for (Row r : data.getRows()) {
       final int n = r.length();
       final Object[] cols = r.data();
       if (n != t.getColumnCount()) {
