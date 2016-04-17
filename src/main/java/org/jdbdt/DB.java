@@ -160,7 +160,7 @@ public final class DB {
    * @return Prepared statement.
    * @throws SQLException If there is a error preparing the statement.
    */
-  public PreparedStatement 
+  PreparedStatement 
   compile(String sql) throws SQLException {    
     if (! isEnabled(Option.STATEMENT_POOLING)) {
       logSQL(sql);
