@@ -5,6 +5,7 @@ import static org.jdbdt.TestUtil.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -70,32 +71,97 @@ public class DataSetTest extends DBTestCase {
     expectException(InvalidOperationException.class,
         () -> theSUT.rows(data));
   }
+  
+  private Object[][] genData(int n) {
+    Object[][] r = new Object[n][];
+    for (int i = 0; i < n; i++) {
+      r[i] = rowFor(createNewUser());
+    }
+    return r;
+  }
+  
+  private List<Row> lRow(Object[][]... rSets) {
+    ArrayList<Row> list = new ArrayList<>();
+    for (Object[][] rSet : rSets) {
+      for (Object[] r : rSet) {
+        list.add(new Row(r));
+      }
+    }
+    return list;
+  }
 
-  private void testRowAddition(int n) {
-    ArrayList<Row> expected = new ArrayList<>();
-    for (int i=0; i < n; i++) {
-      Object[] data = rowFor(createNewUser());
-      theSUT.row(data);
-      expected.add(new Row(data));
+  private void testRowAddition(int n, boolean allAtOnce) {
+    Object[][] data = genData(n);
+    if (allAtOnce) {
+      theSUT.rows(data);
+    } else {
+      for (Object[] r : data) {
+        theSUT.row(r);
+      }
     }
     assertFalse(theSUT.isEmpty());
     assertEquals(n, theSUT.size());
+    assertEquals(lRow(data), theSUT.getRows());
+  }
+  
+  @Test
+  public void testRow1() {
+    testRowAddition(1, false);
+  }
+  
+  @Test
+  public void testRow5() {
+    testRowAddition(5, false);
+  }
+  
+  @Test
+  public void testRow500() {
+    testRowAddition(500, false);
+  }
+  
+  @Test
+  public void testRows1() {
+    testRowAddition(1, true);
+  }
+  
+  @Test
+  public void testRows5() {
+    testRowAddition(5, true);
+  }
+  
+  @Test
+  public void testRows500() {
+    testRowAddition(500, true);
+  }
+  
+  @Test
+  public void testAdd1() {
+    Object[][] data = genData(5);
+    DataSet other = data(table).rows(data);
+    theSUT.add(other);
+    assertEquals(data.length, theSUT.size());
+    assertEquals(lRow(data), theSUT.getRows());
+  }
+  
+  @Test
+  public void testAdd2() {
+    Object[][] r1 = genData(2);
+    Object[][] r2 = genData(5);
+    List<Row> expected = lRow(r1, r2);
+    theSUT.rows(r1);
+    DataSet other = data(table).rows(r2);
+    theSUT.add(other);
     assertEquals(expected, theSUT.getRows());
   }
   
   @Test
-  public void testRowAddition1() {
-    testRowAddition(1);
+  public void testAdd3() {
+    Object[][] r1 = genData(2);
+    theSUT.rows(r1);
+    DataSet other = data(table);
+    theSUT.add(other);
+    assertEquals(lRow(r1), theSUT.getRows());
   }
   
-  @Test
-  public void testRowAddition5() {
-    testRowAddition(5);
-  }
-  
-  @Test
-  public void testRowAddition5000() {
-    testRowAddition(5000);
-  }
-  
+ 
 }
