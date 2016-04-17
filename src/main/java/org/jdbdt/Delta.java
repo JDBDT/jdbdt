@@ -23,9 +23,9 @@ import java.util.NoSuchElementException;
  * @since 0.1
  * 
  */
-public final class Delta {
+final class Delta {
   /**
-   * Observer instance. 
+   * Data source.
    */
   private final DataSource source;
 
@@ -59,6 +59,14 @@ public final class Delta {
    */
   MetaData getMetaData() {
     return source.getMetaData();
+  }
+  
+  /**
+   * Get data source for delta.
+   * @return The data source instance associated to this delta.
+   */
+  DataSource getSource() {
+    return source;
   }
 
   /**
@@ -187,11 +195,7 @@ public final class Delta {
    * @throws DatabaseAssertionError in any case (unconditionally).
    */
   private void throwDeltaAssertionError(String msg) {
-    // TODO
-    //    Log errorLog = obs.getErrorLog();
-    //    if (errorLog != null) {
-    //      errorLog.write(this);
-    //    }
+    // TODO logging
     throw new DatabaseAssertionError(msg);
   }
 
@@ -308,7 +312,6 @@ public final class Delta {
       advance();
       return r;
     }
-
   }
 
 }

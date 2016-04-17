@@ -102,7 +102,7 @@ public final class JDBDT {
    * @throws UnexpectedDatabaseException if a database error occurs 
    * @return Data set representing the snapshot.
    * 
-   * @see #assertChanged(DataSet, DataSet)
+   * @see #assertDelta(DataSet, DataSet)
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
    * @see #delta(DataSource)
@@ -118,16 +118,16 @@ public final class JDBDT {
    * 
    * <p>
    * A new query will be issued for the given 
-   * snapshot provider instance, and the resulting delta will reflect 
+   * data source, and the resulting delta will reflect 
    * the difference between the last snapshot 
-   * (see {@link #takeSnapshot(DataSource)}) and the current database state.
+   * and the current database state.
    * </p>
    * 
    * @param s Data source.
    * @return A new {@link Delta} object.
    * @see #takeSnapshot(DataSource)
    */
-  public static Delta delta(DataSource s) {
+  static Delta delta(DataSource s) {
     return new Delta(s);
   }
 
@@ -143,12 +143,11 @@ public final class JDBDT {
    * @param sp SnapshotProvider provider.
    * @throws DatabaseAssertionError 
    *         if there are unverified changes for the delta
-   * @see #assertChanged(DataSet,DataSet)
+   * @see #assertDelta(DataSet,DataSet)
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
-   * @see Delta#end()
    */
-  public static void assertNoChanges(DataSource sp) throws DatabaseAssertionError {
+  public static void assertNotChanged(DataSource sp) throws DatabaseAssertionError {
     delta(sp).end(); 
   }
 
@@ -163,9 +162,8 @@ public final class JDBDT {
    * 
    * @param data Data set.
    * @throws DatabaseAssertionError if the assertion fails.
-   * @see #assertNoChanges(DataSource)
+   * @see #assertNotChanged(DataSource)
    * @see #assertInserted(DataSet)
-   * @see Delta#end()
    */
   public static void assertDeleted(DataSet data) throws DatabaseAssertionError {
     delta(data.getSource()).before(data).end(); 
@@ -182,14 +180,39 @@ public final class JDBDT {
    * 
    * @param data data set.
    * @throws DatabaseAssertionError if the assertion fails.
-   * @see #assertNoChanges(DataSource)
+   * @see #assertNotChanged(DataSource)
    * @see #assertDeleted(DataSet)
-   * @see #assertChanged(DataSet,DataSet)
-   * @see Delta#end()
+   * @see #assertDelta(DataSet,DataSet)
    */
   public static void assertInserted(DataSet data) throws DatabaseAssertionError {
     delta(data.getSource()).after(data).end(); 
   }
+
+//  /**
+//   * Assert that database was updated according
+//   * to given data set. 
+//   * 
+//   * <p>
+//   * This method behaves like {@link #assertUpdated(DataSet, DataSet)}
+//   * but does not verify which (old) rows were updated, 
+//   * but merely that there were exactly as much rows 
+//   * updated as those given in the data set argument.
+//   * </p>
+//   * 
+//   * @param data New Data in database.
+//   * @throws DatabaseAssertionError if the assertion fails.
+//   *
+//   * @see #assertNoChanges(DataSource)
+//   * @see #assertDeleted(DataSet)
+//   * @see #assertInserted(DataSet)
+//   */
+//  public static void assertUpdated(DataSet data) throws DatabaseAssertionError {
+//    Delta d = delta(data.getSource());
+//    d.after(data);
+//    if (d.size() != data.size()) {
+//      throw new DatabaseAssertionError("Expected equal 
+//    }
+//  }
 
   /**
    * Assert that database changed according
@@ -204,19 +227,17 @@ public final class JDBDT {
    * @param post New Data in database.
    * @throws DatabaseAssertionError if the assertion fails.
    *
-   * @see #assertNoChanges(DataSource)
+   * @see #assertNotChanged(DataSource)
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
-   * @see Delta#end()
    */
-  public static void assertChanged(DataSet pre, DataSet post) throws DatabaseAssertionError {
+  public static void assertDelta(DataSet pre, DataSet post) throws DatabaseAssertionError {
     if (pre.getSource() != post.getSource()) {
       throw new InvalidOperationException("Data sets associate to different data sources.");
     }
     delta(pre.getSource()).before(pre).after(post).end(); 
   }
 
-  
   /**
    * Assert database state is the given data set.
    * @param data Data set.

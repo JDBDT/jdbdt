@@ -74,7 +74,7 @@ public class DeltaTest extends DBTestCase {
 
   @Test
   public void testNoChanges2() {
-    assertNoChanges(dataSource);
+    assertNotChanged(dataSource);
   }
 
   @Test(expected=DatabaseAssertionError.class)
@@ -86,13 +86,13 @@ public class DeltaTest extends DBTestCase {
   @Test(expected=DatabaseAssertionError.class)
   public void testFailureDeleteCase() throws SQLException {
     getDAO().doDelete(EXISTING_DATA_ID1);
-    assertNoChanges(dataSource);
+    assertNotChanged(dataSource);
   }
 
   @Test(expected=DatabaseAssertionError.class)
   public void testFailureUpdateCase() throws SQLException {
     getDAO().doUpdate(new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-01-01")));
-    assertNoChanges(dataSource);
+    assertNotChanged(dataSource);
   }
 
   @Test
