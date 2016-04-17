@@ -155,7 +155,7 @@ public class DeltaTest extends DBTestCase {
     User u1 = getDAO().query(EXISTING_DATA_ID1);
     User u2 = new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-11-11"));
     getDAO().doUpdate(u2);
-    assertChanged( 
+    assertDelta( 
         data(dataSource)
         .row(u1.getLogin(), 
             u1.getName(), 
