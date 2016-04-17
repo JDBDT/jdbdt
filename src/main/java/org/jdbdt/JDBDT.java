@@ -271,39 +271,33 @@ public final class JDBDT {
   /**
    * Delete all data from a table. 
    *
-   * @param t Table.
+   * @param table Table.
    * @return Number of deleted entries.
    * @throws SQLException if a database error occurs.
    * @see #truncate(Table)
-   * @see #deleteAll(Query)
+   * @see #deleteAll(Table,String,Object...)
    */
-  public static int deleteAll(Table t) throws SQLException  {
-    return DBSetup.deleteAll(t);
+  public static int deleteAll(Table table) throws SQLException  {
+    return DBSetup.deleteAll(table);
   }
 
 
   /**
-   * Delete all data returned by a table query. 
+   * Delete all data from a table, subject to a <code>WHERE</code>
+   * clause. 
    * 
-   * <p>
-   * The query's where clause will 
-   * be used for the DELETE statement that is issued.
-   * 
-   * This method cannot be used with 
-   * queries that have GROUP BY or HAVING clauses set.
-   * </p>
    *
-   * @param q query.
+   * @param table Table.
+   * @param where <code>WHERE</code> clause
+   * @param args <code>WHERE</code> clause arguments, if any.
    * @return Number of deleted entries.
    * @throws SQLException if a database error occurs.
-   * @throws InvalidOperationException if the query has 
-   *    a GROUP BY or HAVING clause set, or if no WHERE
-   *    clause is set for it.
    * @see #deleteAll(Table)
    * @see #truncate(Table)
    */
-  public static int deleteAll(Query q) throws SQLException  {
-    return DBSetup.deleteAll(q);
+  public static int deleteAll(Table table, String where, Object... args) 
+  throws SQLException  {
+    return DBSetup.deleteAll(table, where, args);
   }
 
   /**
@@ -311,7 +305,7 @@ public final class JDBDT {
    * @param t Table.
    * @throws SQLException if a database error occurs.
    * @see #deleteAll(Table)
-   * @see #deleteAll(Query)
+   * @see #deleteAll(Table,String,Object...)
    */
   public static void truncate(Table t) throws SQLException  {
     DBSetup.truncate(t);

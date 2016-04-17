@@ -106,31 +106,18 @@ final class DBSetup {
   }
   
   /**
-   * Delete all data based on a query's WHERE clause.
-   * @param q Query.
+   * Delete all data based on a WHERE clause.
+   * @param table Table.
+   * @param where <code>WHERE</code> clause.
+   * @param args Optional arguments for <code>WHERE</code> clause.
    * @return The number of deleted rows.
    * @throws SQLException If a database error occurs.
    */
-  static int deleteAll(Query q) throws SQLException {
-    if (q.groupByClause() != null) {
-      throw new InvalidOperationException("GROUP BY clause is set!");
-    }
-    if (q.havingClause() != null) {
-      throw new InvalidOperationException("HAVING clause is set!");
-    }
-    String whereClause = q.whereClause();
-
-    if (whereClause == null) {
-      throw new InvalidOperationException("WHERE clause is not set!");
-    }
-    if (q.fromClause().length != 1) {
-      throw new InvalidOperationException("FROM clause specifies multiple data sources!");
-    }
+  static int deleteAll(Table table, String where, Object... args) throws SQLException {
     PreparedStatement deleteStmt = 
-      q.getDB().compile(
-        "DELETE FROM " + q.fromClause()[0] +
-        " WHERE " + whereClause);
-    Object[] args = q.getQueryArguments();
+      table.getDB().compile(
+        "DELETE FROM " + table.getName() +
+        " WHERE " + where);
     if (args != null && args.length > 0) {
       for (int i=0; i < args.length; i++) {
         deleteStmt.setObject(i + 1, args[i]);

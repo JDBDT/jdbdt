@@ -116,7 +116,8 @@ public class DBSetupTest extends DBTestCase {
   @Test
   public void testDeleteAll2() throws SQLException {
     int n = getDAO().count();
-    deleteAll(getDB().select().from(table).where("LOGIN='" + EXISTING_DATA_ID1+"'"));
+    int res = deleteAll(table, "LOGIN='" + EXISTING_DATA_ID1+"'");
+    assertEquals(1, res);
     assertEquals(n-1, getDAO().count());
     assertNull(getDAO().query(EXISTING_DATA_ID1));
   }
@@ -124,7 +125,8 @@ public class DBSetupTest extends DBTestCase {
   @Test
   public void testDeleteAll3() throws SQLException {
     int n = getDAO().count();
-    deleteAll(getDB().select().from(table).where("LOGIN=?").withArguments(EXISTING_DATA_ID1));
+    int res = deleteAll(table, "LOGIN=?", EXISTING_DATA_ID1);
+    assertEquals(1, res);
     assertEquals(n-1, getDAO().count());
     assertNull(getDAO().query(EXISTING_DATA_ID1));
   }
@@ -132,23 +134,10 @@ public class DBSetupTest extends DBTestCase {
   @Test
   public void testDeleteAll4() throws SQLException {
     int n = getDAO().count();
-    deleteAll(getDB().select().from(table).where("LOGIN='" +EXISTING_DATA_ID1 + "'"));
-    assertEquals(n-1, getDAO().count());
-    assertNull(getDAO().query(EXISTING_DATA_ID1));
+    int res = deleteAll(table, "LOGIN != ?", EXISTING_DATA_ID1);
+    assertEquals(n-1, res);
+    assertEquals(1, getDAO().count());
+    assertNotNull(getDAO().query(EXISTING_DATA_ID1));
   }
-  
-  @Test(expected=InvalidOperationException.class)
-  public void testDeleteAll5() throws SQLException {
-    deleteAll(getDB().select().from(table));
-  }
-  
-  @Test(expected=InvalidOperationException.class)
-  public void testDeleteAll7() throws SQLException {
-    deleteAll(getDB().select().from(table).where("w").groupBy("g"));
-  }
-  
-  @Test(expected=InvalidOperationException.class)
-  public void testDeleteAll8() throws SQLException {
-    deleteAll(getDB().select().from(table).where("w").having("h"));
-  }
+ 
 }
