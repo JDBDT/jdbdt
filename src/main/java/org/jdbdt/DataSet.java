@@ -98,13 +98,11 @@ public class DataSet implements Iterable<Row> {
     return new DataSetBuilder(this);
   }
   
-
-
   /**
-   * Test if set is empty.
-   * @return <code>true</code> is  set is empty.
+   * Check if the data set is empty.
+   * @return <code>true</code> is the data set has no rows.
    */
-  final boolean isEmpty() {
+  public final boolean isEmpty() {
     return rows.isEmpty();
   }
 
@@ -116,6 +114,14 @@ public class DataSet implements Iterable<Row> {
     return rows.size();
   }
 
+  /**
+   * Get internal list of rows (package access only)
+   * @return Internal ist of rows in the data set.
+   */
+  final List<Row> getRows() {
+    return rows;
+  }
+  
   /**
    * Clear contents (for package-private use), even if data set
    * is read-only.
@@ -129,7 +135,7 @@ public class DataSet implements Iterable<Row> {
    * @param columnValues Column values forming a row. 
    * @return The data set instance (for chained calls).
    * @throws InvalidOperationException if this data set is read-only.
-   * @see #row(Object[][])
+   * @see #rows(Object[][])
    * @see #add(DataSet)
    * @see #isReadOnly()
    */
@@ -153,7 +159,7 @@ public class DataSet implements Iterable<Row> {
    * @see #add(DataSet)
    * @see #isReadOnly()
    */
-  public final DataSet row(Object[][] rows) {
+  public final DataSet rows(Object[][] rows) {
     checkIfNotReadOnly();
     for (Object[] columnValues : rows) {
       addRow(new RowImpl(columnValues));
@@ -171,7 +177,7 @@ public class DataSet implements Iterable<Row> {
    *   if the data source of the other data set differs
    *   from this one.
    * @see #row(Object...)
-   * @see #row(Object[][])
+   * @see #rows(Object[][])
    * @see #isReadOnly()
    */
   public DataSet add(DataSet other) {
@@ -280,5 +286,7 @@ public class DataSet implements Iterable<Row> {
   final boolean sameDataAs(DataSet other) {
     return rows.equals(other.rows);
   }
+
+
 
 }
