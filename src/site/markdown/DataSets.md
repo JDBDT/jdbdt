@@ -121,18 +121,28 @@ set.
 Data sets are marked as read-only when they are set as [database snapshots](DBAssertions.html#Snapshots). After a data set is marked read-only, attempts
 to modify it will result in `org.jdbdt.InvalidOperationException` being thrown.
 
-## Utility methods
-<a name="UtilityMethods"></a>
+## Quick method reference
+<a name="MethodReference"></a>
 
-### Instance methods
+### Facade methods in `JDBDT`
 
-- `data.size()` returns the number of rows in `data`.
-- `data.isEmpty()` indicates if `data` is empty.
-- `dst.add(src)` adds all rows from `src` to `dst`.
-- `data.isReadOnly()` indicates if `data is read-only.
-- `data.setReadOnly()` sets `data` as read-only.
+For a [data source](DataSources.html) `s`:
 
-### Static methods
+- `data(s)` creates a new data set.
+- `data(s,c)` creates a new typed data set with conversion function `c`.
+- `builder(s)` creates a data set builder.
+
+### Instance methods 
+
+- `row` and `rows` add rows to the data set (see examples above).
+- `build` creates a new data set builder backed up by the data set (see example above).
+- `size()` returns the number of rows.
+- `isEmpty()` indicates if a data set is empty.
+- `add(other)` adds all rows from `other` to the data set.
+- `isReadOnly()` indicates if `data is read-only.
+- `setReadOnly()` sets `data` as read-only.
+
+### Static utility methods 
 
 - `subset(data, index, n)` returns a new data set containing `n` rows of `data` starting from the `index`-th row.
 - `singleton(data,i)` returns a new data set containing only the `index`-th row in `data`.
