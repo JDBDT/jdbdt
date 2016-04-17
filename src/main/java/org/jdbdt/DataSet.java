@@ -166,13 +166,19 @@ public class DataSet implements Iterable<Row> {
    * 
    * @param other The other data set.
    * @return The data set instance (for chained calls).
-   * @throws InvalidOperationException if this data set is read-only.
+   * @throws InvalidOperationException 
+   *   if this data set is read-only, or 
+   *   if the data source of the other data set differs
+   *   from this one.
    * @see #row(Object...)
    * @see #row(Object[][])
    * @see #isReadOnly()
    */
   public DataSet add(DataSet other) {
     checkIfNotReadOnly();
+    if (other.getSource() != source) {
+      throw new InvalidOperationException("Data source mismatch.");
+    }
     rows.addAll(other.rows);
     return this;
   }
