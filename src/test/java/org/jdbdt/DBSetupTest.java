@@ -57,6 +57,7 @@ public class DBSetupTest extends DBTestCase {
     if (populate) {
       populate(dataSet);
       assertSame(dataSet,table.getSnapshot());
+      assertTrue(dataSet.isReadOnly());
     } 
     else {
       nExpected += getDAO().count();
