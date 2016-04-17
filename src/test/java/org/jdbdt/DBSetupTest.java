@@ -30,16 +30,6 @@ public class DBSetupTest extends DBTestCase {
                    .columns(UserDAO.COLUMNS);
   }
 
-  private static int newUserCounter = 0;
-
-  private static User createNewUser() {
-    final int unique = newUserCounter++;
-    return new User("newUser" + unique, 
-        "New User" + unique, 
-        "pass" + unique, 
-        Date.valueOf("2015-01-01"));
-  }
-
   void doInsert(User... users) throws SQLException {
     executeTest(false, users);
   }

@@ -123,5 +123,18 @@ public class DBTestCase {
     return null;
   }
   
+  protected Object[] rowFor(User u) {
+    return getConversion().convert(u);
+  }
+  
+  private static int newUserCounter = 0;
+  
+  protected static User createNewUser() {
+    final int unique = newUserCounter++;
+    return new User("newUser" + unique, 
+        "New User" + unique, 
+        "pass" + unique, 
+        new Date(System.currentTimeMillis()));
+  }
 
 }
