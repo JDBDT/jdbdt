@@ -1,5 +1,5 @@
 # Before Maven Central release 
-* DataSource from PreparedStatement
+* Make DataSet non-iterable
 * Test refactoring round
 * Documentation round
 * Maven release plugin
