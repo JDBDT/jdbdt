@@ -28,35 +28,56 @@ public class DataSet implements Iterable<Row> {
   /**
    * Read-only flag.
    */
-  private final boolean readOnly;
+  private boolean readOnly;
 
   /**
    * Constructs a new data set.
    * @param ds Data source.
    */
   DataSet(DataSource ds) {
-    this(ds, new ArrayList<>(), false);
-  }
-
-  /**
-   * Constructs a new data set.
-   * @param ds Data source.
-   * @param readOnly Read-only flag.
-   */
-  DataSet(DataSource ds, boolean readOnly) {
-    this(ds, new ArrayList<>(), readOnly);
+    this(ds, new ArrayList<>());
   }
 
   /**
    * Constructs a new row set.
    * @param ds Data source.
    * @param list Row list. 
-   * @param readOnly Read-only flag
    */
-  DataSet(DataSource ds, List<Row> list, boolean readOnly) {
+  DataSet(DataSource ds, List<Row> list) {
     this.source = ds;
     this.rows = list;
-    this.readOnly = readOnly;
+    this.readOnly = false;
+  }
+  
+  /**
+   * Check if the data set is read-only.
+   * 
+   * <p>
+   * Adding rows to a read-only data set will result in an exception 
+   * of type {@link InvalidOperationException}.
+   * </p>
+   * 
+   * @see #setReadOnly()
+   * @return <code>true</code> if data set is read-only.
+   */
+  public final boolean isReadOnly() {
+    return readOnly;
+  }
+  /**
+   * Set data set as read-only.
+   * 
+   * <p>
+   * Adding rows to a read-only data set will result in an exception 
+   * of type {@link InvalidOperationException}.
+   * The read-only setting cannot be disabled after this method
+   * is called.
+   * </p>
+   * 
+   * @see #isReadOnly()
+   * 
+   */
+  public void setReadOnly() {
+    readOnly = true;
   }
 
   /**
@@ -76,19 +97,7 @@ public class DataSet implements Iterable<Row> {
     return new DataSetBuilder(this);
   }
   
-  /**
-   * Check if the data set is read-only.
-   * 
-   * <p>
-   * Adding rows to the data set will result in an exception 
-   * of type {@link InvalidOperationException}.
-   * </p>
-   * 
-   * @return <code>true</code> if data set is read-only.
-   */
-  public final boolean isReadOnly() {
-    return readOnly;
-  }
+
 
   /**
    * Test if set is empty.
@@ -107,7 +116,8 @@ public class DataSet implements Iterable<Row> {
   }
 
   /**
-   * Clear contents (package-private).
+   * Clear contents (for package-private use), even if data set
+   * is read-only.
    */
   final void clear() {
     rows.clear();
@@ -186,24 +196,60 @@ public class DataSet implements Iterable<Row> {
 
 
   /**
-   * Create sub-set of a given data set.
-   * @param data Data set.
-   * @param startIndex Start index.
-   * @param endIndex End index.
+   * Create a subset of the rows of given data set.
+   * @param data Source data set.
+   * @param startIndex Start index (from 0 to <code>data.size()-1</code>).
+   * @param n Number of rows.
    * @return A new data set containing 
    *        the rows in the specified range.
    */
-  public static DataSet subset(DataSet data, int startIndex, int endIndex) {
+  public static DataSet subset(DataSet data, int startIndex, int n) {
+    if (startIndex < 0 || n < 0 || startIndex + n >= data.size()) {
+      throw new InvalidOperationException("Invalid range.");
+    }
     DataSet sub = new DataSet(data.getSource());
     ListIterator<Row> itr = data.rows.listIterator(startIndex);
     int index = startIndex;
+    int endIndex = startIndex + n;
     while (itr.hasNext() && index < endIndex) {
       sub.rows.add(itr.next());
     }
     return sub;
   }
-
- 
+  
+  /**
+   * Create a data set with only one row from the given
+   * data set.
+   * @param data Source data set.
+   * @param index Row index (from 0 to <code>data.size()-1</code>).
+   * @return A new data set containing the <code>index</code>-th 
+   * row of the source data set.
+   */
+  public static DataSet singleton(DataSet data, int index) {
+    return subset(data, index, 1);
+  }
+  
+  /**
+   * Create sub-set with the first <code>n</code> rows.
+   * @param data Source data set.
+   * @param n Number of rows.
+   * @return A new data set containing the first 
+   * <code>n</code> rows in the source data set.
+   */
+  public static DataSet head(DataSet data, int n) {
+    return subset(data, 0, n);
+  }
+  
+  /**
+   * Create sub-set with the last <code>n</code> rows.
+   * @param data Source data set.
+   * @param n Number of rows.
+   * @return A new data set containing the last 
+   *        <code>n</code> rows in the source data set.
+   */
+  public static DataSet tail(DataSet data, int n) {
+    return subset(data, data.size() - n - 1, n);
+  }
 
   @SuppressWarnings("javadoc")
   private void checkIfNotReadOnly() {

@@ -176,7 +176,7 @@ public abstract class DataSource {
    * @return Result of query.
    */
   final DataSet executeQuery(boolean takeSnapshot) {
-    DataSet data = new DataSet(this, true);
+    DataSet data = new DataSet(this);
     executeQuery(getQueryStatement(), getMetaData(), getQueryArguments(), r -> data.addRow(r));
     if (takeSnapshot) {
       setSnapshot(data);
@@ -204,6 +204,7 @@ public abstract class DataSource {
     if (snapshot != null) {
       snapshot.clear();
     }
+    s.setReadOnly();
     snapshot = s;
   }
 
