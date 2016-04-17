@@ -4,11 +4,15 @@
 A `DataSet` object represents a collection of rows for a [data source](DataSources.html)
 that may be used for database [setup](DBSetup.html) or [verification](DBAssertions.html).
 
+## Creation
+<a name="Creation"></a>
+
 The examples below define data sets for a [table](DataSources.html#Table) (`Table`) object, 
 but the definition of data sets is similar for other data sources like 
 [queries](DataSources.html#Query) (`Query`) or [custom SQL data sources](DataSources.html#SQLDataSource) (`SQLDataSource`).
 
-## Plain definition 
+### Plain definition 
+<a name="Creation.Plain"></a>
 
 In the simplest manner, 
 `DataSet` objects are created through the `data` JDBDT facade method,
@@ -29,7 +33,8 @@ typically followed by a chained sequence of calls.
 	    .row(102, "harry", "Harry H",    "meta",      Date.valueOf("2016-01-01")
 	    .row(103, "guest", "Guest User",  "welcome",  Date.valueOf("2016-01-02");
 
-## Typed data sets.
+### Typed data sets
+<a name="Creation.Typed"></a>
 
 `TypedDataSet` is a typed extension of `DataSet`. It allows for a simple
 form of (one-way) object-relational mapping through conversion functions expressed
@@ -61,8 +66,9 @@ of column values.
 		.rows(john, kafka, guest)
 		.rows(listOfOtherUsers);
 
-## Data set builders
- 
+### Data set builders
+<a name="Creation.Builder"></a>
+
 A `DataSetBuilder` instance can be used to define or augment a data set 
 with the aid of expressive column filler methods. For instance,
 there are column fillers for value sequences or pseudo-random values.
@@ -109,3 +115,20 @@ set.
       .nullValue("CREATED") // set to NULL
       .generate(500);
  
+## Utility methods
+
+- `data.size()` returns the number of rows in `data`.
+- `dst.add(src)` adds all rows from `src` to `dst`.
+- `DataSet.subset(data, index, n)` returns a new data set containing `n` rows of `data` starting from the `index`-th row.
+- `DataSet.singleton(data,i)` returns a new data set containing only the `index`-th row in `data`.
+- `DataSet.head(data, n)` returns a new data set containing the first `n` rows of `data`.
+- `DataSet.tail(data,n)` returns a new data set containing the last `n` rows of `data`.
+
+
+## Read-only data sets
+
+Data sets are marked as read-only when they are set as [database snapshots](DBAssertions.html#Snapshots). After a data set is marked read-only, attempts
+to modify it will result in `org.jdbdt.InvalidOperationException` being thrown.
+
+
+
