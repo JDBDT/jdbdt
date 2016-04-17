@@ -136,8 +136,8 @@ For a [data source](DataSources.html) `s`:
 
 Mutators:
 
-- `row` and `rows` add rows to the data set (see examples above).
-- `build` creates a new data set builder backed up by the data set (see example above).
+- `row` and `rows` methods add rows to the data set (see examples above).
+- `build()` creates a new data set builder backed up by the data set (see example above).
 - `add(other)` adds all rows from `other` to the data set.
 - `setReadOnly()` sets the data set as read-only.
 
@@ -154,8 +154,8 @@ Properties:
 - `generate(n)` adds `n` rows to the underlying data set based on the current column filler settings.
 - `nullValue(column)` sets a `NULL` value filler for `column`.
 - `value(column, v)`  sets a constant filler with value `v` for `column`.
-- `sequence(column, ...)` defines a sequence fillers for `column`.
-- `random(column, ...)` defines a pseudo-random filler for `column`.
+- `sequence(column, ...)`  defines a sequence fillers for `column` (several method variants).
+- `random(column, ...)` defines a pseudo-random filler for `column` (several method variants).
 - `set(column, filler)` defines a custom column filler for `column`. 
  
 ### `DataSet` utility methods 
