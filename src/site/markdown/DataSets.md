@@ -116,6 +116,7 @@ set.
       .generate(500);
  
 ## Utility methods
+<a name="UtilityMethods"></a>
 
 - `data.size()` returns the number of rows in `data`.
 - `dst.add(src)` adds all rows from `src` to `dst`.
@@ -126,6 +127,7 @@ set.
 
 
 ## Read-only data sets
+<a name="ReadOnly"></a>
 
 Data sets are marked as read-only when they are set as [database snapshots](DBAssertions.html#Snapshots). After a data set is marked read-only, attempts
 to modify it will result in `org.jdbdt.InvalidOperationException` being thrown.
