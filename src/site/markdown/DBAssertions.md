@@ -11,6 +11,23 @@ and **N = S' - S** is **new** data in **S'**.
 
 ![Database delta](images/jdbdt-delta.png)
 
-## Snapshot definition 
+In line with this scheme, the programming pattern is:
+
+	Define reference snapshot(s) for data source(s) of interest
+	theSUT.changesTheDB();
+	Call assertion method(s)
+	
+## Snapshots 
+
+A reference snapshot for a data source can be defined in two ways:
+
+1.  A call to `populate(data)` for an (implicit) `Table` instance (i.e., `data.getSource()`)
+will set `data` as the snapshot for the table at stake. Since `populate(data)` resets the full
+contents exactly to `data`, by definition it will then be safe to assume it as the correct database state.
+2. A call to `takeSnaphot(source)` for any type of data source (`Table`, `Query`, `SQLDataSource`)
+will issue a fresh database query, and record the obtained data set as the reference snapshot for that
+source.
 
 ## Assertion methods 
+
+
