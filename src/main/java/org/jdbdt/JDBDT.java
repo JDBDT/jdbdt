@@ -147,7 +147,7 @@ public final class JDBDT {
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
    */
-  public static void assertNotChanged(DataSource sp) throws DatabaseAssertionError {
+  public static void assertUnchanged(DataSource sp) throws DatabaseAssertionError {
     delta(sp).end(); 
   }
 
@@ -162,7 +162,7 @@ public final class JDBDT {
    * 
    * @param data Data set.
    * @throws DatabaseAssertionError if the assertion fails.
-   * @see #assertNotChanged(DataSource)
+   * @see #assertUnchanged(DataSource)
    * @see #assertInserted(DataSet)
    */
   public static void assertDeleted(DataSet data) throws DatabaseAssertionError {
@@ -180,7 +180,7 @@ public final class JDBDT {
    * 
    * @param data data set.
    * @throws DatabaseAssertionError if the assertion fails.
-   * @see #assertNotChanged(DataSource)
+   * @see #assertUnchanged(DataSource)
    * @see #assertDeleted(DataSet)
    * @see #assertDelta(DataSet,DataSet)
    */
@@ -227,7 +227,7 @@ public final class JDBDT {
    * @param post New Data in database.
    * @throws DatabaseAssertionError if the assertion fails.
    *
-   * @see #assertNotChanged(DataSource)
+   * @see #assertUnchanged(DataSource)
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
    */
