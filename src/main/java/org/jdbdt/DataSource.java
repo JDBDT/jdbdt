@@ -101,7 +101,7 @@ public abstract class DataSource {
    */
   final DataSet theEmptySet() {
     if (theEmptyOne == null) {
-      theEmptyOne = new DataSet(this, null);
+      theEmptyOne = new DataSet(this);
       theEmptyOne.setReadOnly();
     }
     return theEmptyOne;
