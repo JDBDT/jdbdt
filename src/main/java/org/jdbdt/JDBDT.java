@@ -63,11 +63,14 @@ public final class JDBDT {
    * <p>
    * This convenience method is useful to denote the empty data set for 
    * a data source. It always returns an empty, read-only data set,
-   * and one that is guaranteed to be unique for each data source instance.
+   * and one that is guaranteed to be unique and for the given 
+   * data source instance.
    * </p>
    * 
    * @param source Data source.
    * @return A new data set for the given source.
+   * @see DataSet#isEmpty()
+   * @see DataSet#isReadOnly()
    */
   public static DataSet empty(DataSource source) {
     return source.theEmptySet();
