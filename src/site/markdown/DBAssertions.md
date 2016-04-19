@@ -19,15 +19,61 @@ In line with this scheme, the programming pattern is:
 	
 ## Snapshots 
 
-A reference snapshot for a data source can be defined in two ways:
+A data source **snapshot** is a data set that is used as reference for subsequent database
+assertions. It can be defined in two ways for a data source `s`:
 
-1.  A call to `populate(data)` for an (implicit) `Table` instance (i.e., `data.getSource()`)
-will set `data` as the snapshot for the table at stake. Since `populate(data)` resets the full
-contents exactly to `data`, by definition it will then be safe to assume it as the correct database state.
-2. A call to `takeSnaphot(source)` for any type of data source (`Table`, `Query`, `SQLDataSource`)
-will issue a fresh database query, and record the obtained data set as the reference snapshot for that
-source.
+1.  A call to `populate(data)`, s.t. `data.getSource() == s` and `s`is a `Table` instance 
+will set `data` as the snapshot for `s`. Since `populate(data)` resets the full table
+contents exactly to `data`, by definition it will be safe to assume it as the correct database state.
+2. A call to `takeSnaphot(source)`, regardless of the type of `s` (`Table`, `Query`, `SQLDataSource`)
+will issue a fresh database query, and record the obtained data set as the snapshot for `s`.
 
 ## Assertion methods 
+
+The elementary JDBT assertion method is `assertDelta`. 
+An `assertDelta(oldData, newData)` call,
+where `oldData` and `newData` are data sets for the same data source `s`,
+checks if the database delta is `(oldData,newData)`, as follows:
+
+1. It issues a new database query for `s`.
+2. It computes the actual delta between the query's result and the reference snapshot.
+3. It verifies if the expected and actual deltas match. If they do not match, `DBAssertionError`
+is thrown, and details on mismatched data are logged (unless `DB.Option.LogAssertionErrors` is disabled). 
+
+A number of other assertion methods are defined for convenience, all of which internally reduce 
+to `assertionDelta`, as follows:
+
+<table border="1">
+	<tr>
+		<th align="left">Method</th>
+		<th align="left">Description</th>
+		<th align="left">O</th>
+		<th align="left">N</th>
+	</tr>
+	<tr>
+		<td><code>assertDelta(oldData, newData)</code></td>
+	    <td>Asserts database delta.</td>
+	    <td><code>oldData</code></td>
+	    <td><code>newData</code></td>
+	</tr>
+    <tr>
+		<td><code>assertDeleted(data)</code></td>
+	    <td>Asserts removal of data.</td>
+	    <td><code>data</code></td>
+	    <td><code>&lt;empty&gt;</code></td>
+	</tr>
+	<tr>
+		<td><code>assertInserted(data)</code></td>
+	    <td>Asserts insertion of data.</td>
+	    <td><code>&lt;empty&gt;</code></td>
+	    <td><code>data</code></td>
+	</tr>
+	<tr>
+		<td><code>assertUnchanged(source)</code></td>
+	    <td>Asserts no database changes took place.</td>
+	    <td><code>&lt;empty&gt;</code></td>
+	    <td><code>&lt;empty&gt;</code></td>
+	</tr>
+</table>
 
 
