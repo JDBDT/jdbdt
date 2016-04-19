@@ -44,6 +44,12 @@ public abstract class DataSource {
   private DataSet snapshot = null;
 
   /**
+   * The empty data set, as returned by {@link JDBDT#empty(DataSource)}
+   * (computed lazily).
+   */
+  private DataSet theEmptyOne;
+  
+  /**
    * Constructor.
    * @param db Database instance.
    */
@@ -88,6 +94,18 @@ public abstract class DataSource {
     return columns.length;
   }
 
+  /**
+   * Return an eptpy, read-only data set,
+   * for use by {@link JDBDT#empty(DataSource)}
+   * @return Empty, read-only data set.
+   */
+  final DataSet theEmptySet() {
+    if (theEmptyOne == null) {
+      theEmptyOne = new DataSet(this, null);
+      theEmptyOne.setReadOnly();
+    }
+    return theEmptyOne;
+  }
   /**
    * Get query.
    * @return The query statement for the data source.
