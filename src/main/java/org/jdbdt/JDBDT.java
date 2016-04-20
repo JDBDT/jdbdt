@@ -128,9 +128,18 @@ public final class JDBDT {
    */
   public static DataSet
   takeSnapshot(DataSource source)  {
-    return source.executeQuery(true);
+    return source.executeQuery(CallInfo.create(), true);
   }
 
+  /**
+   * Query the data source, without setting a snapshot.
+   * @param source Data source.
+   * @return Query result.
+   */
+  static DataSet
+  query(DataSource source)  {
+    return source.executeQuery(CallInfo.create(), false);
+  }
   
   /**
    * Obtain delta.
@@ -147,7 +156,7 @@ public final class JDBDT {
    * @see #takeSnapshot(DataSource)
    */
   static Delta delta(DataSource s) {
-    return new Delta(s);
+    return new Delta(CallInfo.create(), s);
   }
 
 
@@ -264,8 +273,9 @@ public final class JDBDT {
    * @throws DBAssertionError if the assertion fails.
    */
   public static void assertState(DataSet data) throws DBAssertionError {
-    new Delta(data).end(); 
+    new Delta(CallInfo.create(), data).end(); 
   }
+  
   /**
    * Insert a data set onto database.
    * 
@@ -274,7 +284,7 @@ public final class JDBDT {
    *  
    */
   public static void insert(DataSet data) throws SQLException {
-    DBSetup.insert(data);
+    DBSetup.insert(CallInfo.create(), data);
   }
 
   /**
@@ -285,7 +295,7 @@ public final class JDBDT {
    *  
    */
   public static void populate(DataSet data) throws SQLException {
-    DBSetup.populate(data);
+    DBSetup.populate(CallInfo.create(), data);
   }
 
   /**

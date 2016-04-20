@@ -189,15 +189,16 @@ public abstract class DataSource {
   
   /**
    * Execute query.
+   * @param callInfo Call info.
    * @param takeSnapshot Indicates that a snapshot should be taken.
    * @return Result of query.
    */
-  final DataSet executeQuery(boolean takeSnapshot) {
+  final DataSet executeQuery(CallInfo callInfo, boolean takeSnapshot) {
     DataSet data = new DataSet(this);
     executeQuery(getQueryStatement(), getMetaData(), getQueryArguments(), r -> data.addRow(r));
+    getDB().logQuery(callInfo, data);
     if (takeSnapshot) {
       setSnapshot(data);
-      getDB().logSnapshot(data);
     }
     return data;
   }

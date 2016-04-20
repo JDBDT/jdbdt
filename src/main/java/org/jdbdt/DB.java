@@ -92,6 +92,7 @@ public final class DB {
   public void enableFullLogging() {
     enable(DB.Option.LOG_ASSERTION_ERRORS,
            DB.Option.LOG_DELTAS,
+           DB.Option.LOG_INSERTIONS,
            DB.Option.LOG_QUERIES,
            DB.Option.LOG_SQL);
   }
@@ -203,21 +204,23 @@ public final class DB {
   
   /**
    * Log snapshot.
+   * @param callInfo Call info.
    * @param data Data set.
    */
-  void logSnapshot(DataSet data) {
+  void logQuery(CallInfo callInfo, DataSet data) {
     if (isEnabled(Option.LOG_QUERIES)) {
-      log.write(data);
+      log.write(callInfo, data);
     }
   }
   
   /**
    * Log insertion.
+   * @param callInfo Call info.
    * @param data Data set.
    */
-  void logInsertion(DataSet data) {
+  void logInsertion(CallInfo callInfo, DataSet data) {
     if (isEnabled(Option.LOG_INSERTIONS)) {
-      log.write(data);
+      log.write(callInfo, data);
     }
   }
   

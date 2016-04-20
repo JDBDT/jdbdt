@@ -36,20 +36,21 @@ final class Delta {
 
   /**
    * Constructs a new database delta.
-   * 
+   * @param callInfo Call info.
    * @param s Data source.
    */
-  Delta(DataSource s) { 
-    this(s.getSnapshot());
+  Delta(CallInfo callInfo, DataSource s) { 
+    this(callInfo, s.getSnapshot());
   }
 
   /**
    * Construct a new delta.
+   * @param callInfo Call info.
    * @param pre Pre-state to assume.
    */
-  Delta(DataSet pre) {
+  Delta(CallInfo callInfo, DataSet pre) {
     source = pre.getSource();
-    diff = calcDiff(pre, source.executeQuery(false));
+    diff = calcDiff(pre, source.executeQuery(callInfo, false));
     source.getDB().logDelta(this);
   }
 

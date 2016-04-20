@@ -36,7 +36,7 @@ public class TableTest extends DBTestCase {
   
   @Test
   public void testQueryExecution() {
-    DataSet actual = theSUT.executeQuery(false);
+    DataSet actual = query(theSUT);
     DataSet expected = 
       data(theSUT, getConversion())
         .rows(INITIAL_DATA);

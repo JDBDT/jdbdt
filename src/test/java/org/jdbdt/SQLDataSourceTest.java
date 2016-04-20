@@ -55,8 +55,7 @@ public class SQLDataSourceTest extends DBTestCase {
   
   @Test
   public void testQueryExecution1() {
-    DataSet actual = 
-      theSUT.withArguments("%").executeQuery(false);
+    DataSet actual = query(theSUT.withArguments("%"));
     DataSet expected = data(theSUT);
     for (User u : INITIAL_DATA) {
       expected.row(u.getLogin(), u.getPassword());
@@ -67,9 +66,7 @@ public class SQLDataSourceTest extends DBTestCase {
   @Test
   public void testQueryExecution2() throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
-    DataSet actual = 
-      theSUT.withArguments(EXISTING_DATA_ID1)
-            .executeQuery(false);
+    DataSet actual = query(theSUT.withArguments(EXISTING_DATA_ID1));
     DataSet expected = 
       data(theSUT)
        .row(u.getLogin(), u.getPassword());

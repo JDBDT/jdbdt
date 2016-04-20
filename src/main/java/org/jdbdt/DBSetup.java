@@ -13,10 +13,11 @@ final class DBSetup {
 
   /**
    * Insert a data set onto the database.
+   * @param callInfo Call information.
    * @param data Data Set.
    * @throws SQLException If a database error occurs during insertion.
    */
-  static void insert(DataSet data) throws SQLException {
+  static void insert(CallInfo callInfo, DataSet data) throws SQLException {
     DataSource source = data.getSource();
     if ( ! (source instanceof Table)) {
       throw new InvalidOperationException("Data set is not defined for a table.");
@@ -24,15 +25,16 @@ final class DBSetup {
     if (data.isEmpty()) {
       throw new InvalidOperationException("Empty data set.");
     }
-    insert((Table) source, data);
+    insert(callInfo, (Table) source, data);
   }
   
   /**
    * Populate database with a data set.
+   * @param callInfo Call Info.
    * @param data Data Set.
    * @throws SQLException If a database error occurs during insertion.
    */
-  static void populate(DataSet data) throws SQLException {
+  static void populate(CallInfo callInfo, DataSet data) throws SQLException {
     DataSource source = data.getSource();
     if ( ! (source instanceof Table)) {
       throw new InvalidOperationException("Data set is not defined for a table.");
@@ -42,21 +44,22 @@ final class DBSetup {
     }
     Table t = (Table) source;
     deleteAll(t);
-    insert(t, data);
+    insert(callInfo, t, data);
     t.setSnapshot(data);
   }
   
   /**
    * Utility method to perform actual data insertion.
-   * @param t Table.
+   * @param callInfo Call Info.
+   * @param table Table.
    * @param data Data set.
    * @throws SQLException If a database error occurs.
    */
-  private static void insert(Table t, DataSet data) throws SQLException {
-    t.getDB().logInsertion(data);
+  private static void insert(CallInfo callInfo, Table table, DataSet data) throws SQLException {
+    table.getDB().logInsertion(callInfo, data);
     StringBuilder sql = new StringBuilder("INSERT INTO ");
-    String[] columnNames = t.getColumns();
-    sql.append(t.getName())
+    String[] columnNames = table.getColumns();
+    sql.append(table.getName())
     .append('(')
     .append(columnNames[0]);
     for (int i=1; i < columnNames.length; i++) {
@@ -67,11 +70,11 @@ final class DBSetup {
       sql.append(",?");
     }
     sql.append(')');
-    PreparedStatement  insertStmt = t.getDB().compile(sql.toString());
+    PreparedStatement  insertStmt = table.getDB().compile(sql.toString());
     for (Row r : data.getRows()) {
       final int n = r.length();
       final Object[] cols = r.data();
-      if (n != t.getColumnCount()) {
+      if (n != table.getColumnCount()) {
         throw new InvalidOperationException("Invalid number of columns for insertion.");
       }
       for (int i = 0; i < n; i++) {

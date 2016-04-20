@@ -61,7 +61,7 @@ public class DBTestCase {
       gDB.disable(DB.Option.STATEMENT_POOLING);
     }
     newUserCounter = 0;
-    // gDB.enableFullLogging();
+    gDB.enableFullLogging();
   }
   
   @AfterClass
