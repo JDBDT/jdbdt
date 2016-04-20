@@ -116,7 +116,7 @@ public class DBSetupTest extends DBTestCase {
   @Test
   public void testDeleteAll2() throws SQLException {
     int n = getDAO().count();
-    int res = deleteAll(table, "LOGIN='" + EXISTING_DATA_ID1+"'");
+    int res = deleteAllWhere(table, "LOGIN='" + EXISTING_DATA_ID1+"'");
     assertEquals(1, res);
     assertEquals(n-1, getDAO().count());
     assertNull(getDAO().query(EXISTING_DATA_ID1));
@@ -125,7 +125,7 @@ public class DBSetupTest extends DBTestCase {
   @Test
   public void testDeleteAll3() throws SQLException {
     int n = getDAO().count();
-    int res = deleteAll(table, "LOGIN=?", EXISTING_DATA_ID1);
+    int res = deleteAllWhere(table, "LOGIN=?", EXISTING_DATA_ID1);
     assertEquals(1, res);
     assertEquals(n-1, getDAO().count());
     assertNull(getDAO().query(EXISTING_DATA_ID1));
@@ -134,7 +134,7 @@ public class DBSetupTest extends DBTestCase {
   @Test
   public void testDeleteAll4() throws SQLException {
     int n = getDAO().count();
-    int res = deleteAll(table, "LOGIN != ?", EXISTING_DATA_ID1);
+    int res = deleteAllWhere(table, "LOGIN != ?", EXISTING_DATA_ID1);
     assertEquals(n-1, res);
     assertEquals(1, getDAO().count());
     assertNotNull(getDAO().query(EXISTING_DATA_ID1));

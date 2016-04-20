@@ -273,7 +273,7 @@ public final class JDBDT {
    * @return Number of deleted entries.
    * @throws SQLException if a database error occurs.
    * @see #truncate(Table)
-   * @see #deleteAll(Table,String,Object...)
+   * @see #deleteAllWhere(Table,String,Object...)
    */
   public static int deleteAll(Table table) throws SQLException  {
     return DBSetup.deleteAll(CallInfo.create(), table);
@@ -293,7 +293,7 @@ public final class JDBDT {
    * @see #deleteAll(Table)
    * @see #truncate(Table)
    */
-  public static int deleteAll(Table table, String where, Object... args) 
+  public static int deleteAllWhere(Table table, String where, Object... args) 
   throws SQLException  {
     return DBSetup.deleteAll(CallInfo.create(), table, where, args);
   }
@@ -303,7 +303,7 @@ public final class JDBDT {
    * @param t Table.
    * @throws SQLException if a database error occurs.
    * @see #deleteAll(Table)
-   * @see #deleteAll(Table,String,Object...)
+   * @see #deleteAllWhere(Table,String,Object...)
    */
   public static void truncate(Table t) throws SQLException  {
     DBSetup.truncate(CallInfo.create(), t);
