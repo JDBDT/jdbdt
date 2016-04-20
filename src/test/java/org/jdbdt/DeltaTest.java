@@ -67,20 +67,16 @@ public class DeltaTest extends DBTestCase {
     takeSnapshot(dataSource);
   }
 
-  @Test
-  public void testNoChanges() {
-    delta(dataSource).end();
-  }
 
   @Test
-  public void testNoChanges2() {
+  public void testNoChanges() {
     assertUnchanged(dataSource);
   }
 
   @Test(expected=DBAssertionError.class)
   public void testFailureInsertCase() throws SQLException {
     getDAO().doInsert(new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01")));
-    delta(dataSource).end();
+    assertUnchanged(dataSource);
   }
 
   @Test(expected=DBAssertionError.class)
@@ -99,9 +95,8 @@ public class DeltaTest extends DBTestCase {
   public void testSuccessInsertCase() throws SQLException {
     User u = new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01"));
     getDAO().doInsert(u);
-    delta(dataSource)
-    .after(u.getLogin(), u.getName(), u.getPassword(), dateValue(u.getCreated()))
-    .end();
+    assertInserted(data(dataSource)
+    .row(u.getLogin(), u.getName(), u.getPassword(), dateValue(u.getCreated())));
   }
 
   @Test
@@ -120,10 +115,13 @@ public class DeltaTest extends DBTestCase {
   @Test
   public void testSuccessDeleteCase() throws SQLException {
     User u = getTestData(EXISTING_DATA_ID1);
-    getDAO().doDelete(EXISTING_DATA_ID1);
-    delta(dataSource)
-    .before(EXISTING_DATA_ID1, u.getName(), u.getPassword(), dateValue(u.getCreated()))
-    .end();
+    getDAO().doDelete(EXISTING_DATA_ID1); 
+    assertDeleted(
+        data(dataSource)
+        .row(EXISTING_DATA_ID1, 
+             u.getName(), 
+             u.getPassword(), 
+             dateValue(u.getCreated())));
   }
 
   @Test
@@ -144,10 +142,13 @@ public class DeltaTest extends DBTestCase {
     User u1 = getDAO().query(EXISTING_DATA_ID1);
     User u2 = new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-11-11"));
     getDAO().doUpdate(u2);
-    delta(dataSource)
-    .before(EXISTING_DATA_ID1, u1.getName(), u1.getPassword(), dateValue(u1.getCreated()))
-    .after(EXISTING_DATA_ID1, u2.getName(), u2.getPassword(), dateValue(u2.getCreated()))
-    .end();
+    DataSet oldData = 
+      data(dataSource)
+        .row(EXISTING_DATA_ID1, u1.getName(), u1.getPassword(), dateValue(u1.getCreated()));
+    DataSet newData = 
+      data(dataSource)
+        .row(EXISTING_DATA_ID1, u2.getName(), u2.getPassword(), dateValue(u2.getCreated()));
+    assertDelta(oldData, newData);
   }
   
   @Test

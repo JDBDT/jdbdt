@@ -124,7 +124,6 @@ public final class JDBDT {
    * @see #assertDelta(DataSet, DataSet)
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
-   * @see #delta(DataSource)
    */
   public static DataSet
   takeSnapshot(DataSource source)  {
@@ -142,25 +141,6 @@ public final class JDBDT {
   }
   
   /**
-   * Obtain delta.
-   * 
-   * <p>
-   * A new query will be issued for the given 
-   * data source, and the resulting delta will reflect 
-   * the difference between the last snapshot 
-   * and the current database state.
-   * </p>
-   * 
-   * @param s Data source.
-   * @return A new {@link Delta} object.
-   * @see #takeSnapshot(DataSource)
-   */
-  static Delta delta(DataSource s) {
-    return new Delta(CallInfo.create(), s);
-  }
-
-
-  /**
    * Assert that no changes were made to the database.
    * 
    * <p>
@@ -177,7 +157,7 @@ public final class JDBDT {
    */
   public static void assertUnchanged(DataSource source) throws DBAssertionError {
     DataSet emptyDataSet = empty(source);
-    assertDelta(emptyDataSet, emptyDataSet);
+    assertDelta(CallInfo.create(), emptyDataSet, emptyDataSet);
   }
 
   /**
@@ -195,7 +175,7 @@ public final class JDBDT {
    * @see #assertInserted(DataSet)
    */
   public static void assertDeleted(DataSet data) throws DBAssertionError {
-    assertDelta(data, empty(data.getSource())); 
+    assertDelta(CallInfo.create(), data, empty(data.getSource())); 
   }
 
   /**
@@ -214,34 +194,8 @@ public final class JDBDT {
    * @see #assertDelta(DataSet,DataSet)
    */
   public static void assertInserted(DataSet data) throws DBAssertionError {
-    assertDelta(empty(data.getSource()), data);
+    assertDelta(CallInfo.create(), empty(data.getSource()), data);
   }
-
-//  /**
-//   * Assert that database was updated according
-//   * to given data set. 
-//   * 
-//   * <p>
-//   * This method behaves like {@link #assertUpdated(DataSet, DataSet)}
-//   * but does not verify which (old) rows were updated, 
-//   * but merely that there were exactly as much rows 
-//   * updated as those given in the data set argument.
-//   * </p>
-//   * 
-//   * @param data New Data in database.
-//   * @throws DatabaseAssertionError if the assertion fails.
-//   *
-//   * @see #assertNoChanges(DataSource)
-//   * @see #assertDeleted(DataSet)
-//   * @see #assertInserted(DataSet)
-//   */
-//  public static void assertUpdated(DataSet data) throws DatabaseAssertionError {
-//    Delta d = delta(data.getSource());
-//    d.after(data);
-//    if (d.size() != data.size()) {
-//      throw new DatabaseAssertionError("Expected equal 
-//    }
-//  }
 
   /**
    * Assert that database changed according
@@ -261,10 +215,24 @@ public final class JDBDT {
    * @see #assertInserted(DataSet)
    */
   public static void assertDelta(DataSet pre, DataSet post) throws DBAssertionError {
-    if (pre.getSource() != post.getSource()) {
+    assertDelta(CallInfo.create(), pre, post);
+  }
+  
+  /**
+   * The primitive delta assertion method.
+   * @param callInfo Call Info.
+   * @param oldData Expected old data.
+   * @param newData Expected new data.
+   * @throws DBAssertionError if the assertion fails.
+   */
+  private static void assertDelta(CallInfo callInfo, DataSet oldData, DataSet newData) throws DBAssertionError {
+    if (oldData.getSource() != newData.getSource()) {
       throw new InvalidOperationException("Data sets associate to different data sources.");
     }
-    delta(pre.getSource()).before(pre).after(post).end(); 
+    new Delta(callInfo, oldData.getSource())
+       .before(oldData)
+       .after(newData)
+       .end(); 
   }
 
   /**

@@ -6,20 +6,8 @@ import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 
 /**
- * Database delta, representing the incremental evolution 
- * of an observer's state.
+ * Database delta.
  * 
- * <p>
- * A delta object is created with a call to {@link JDBDT#delta(DataSource)}. 
- * The delta will reflect the changes to database state
- * that the observer relates to (a table or a query).
- * These changes may be verified using a sequence of
- * calls on the delta object using {@link #after(Object...)}, 
- * {@code #before(Object...)},
- * followed by a final call to {@link #end()}.
- * </p>
- * 
- * @see JDBDT#delta(DataSource)
  * @since 0.1
  * 
  */
