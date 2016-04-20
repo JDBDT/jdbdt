@@ -5,9 +5,10 @@ JDBDT assertions are of a special kind, called **delta assertions**.
 The idea is that programmers may state the expected incremental changes made to the database,
 i.e., the expected database delta. The figure below illustrates the mechanism. 
 Starting from state **S**, called the **reference snapshot**, the SUT acts on a database, 
-yielding a new database state, **S'**. **S** and **S'** will have in common **unchanged** data **U**,
-but will differ by delta **(O,N)**, where **O = S - S'** is **old** data in **S** no longer defined in **S'**, 
-and **N = S' - S** is **new** data in **S'**.
+yielding a new database state, **S'**. **S** and **S'** will have in common **unchanged** data 
+**U = S &cap; S'**,
+but will differ by **&delta; = (O, N)**, where **O = S &minus; S'** is the **old** data in **S** no longer defined in **S'**, 
+and **N = S' &minus; S** is the **new** data in **S'**.
 
 ![Database delta](images/jdbdt-delta.png)
 
@@ -47,32 +48,32 @@ to `assertionDelta`, as follows:
 	<tr>
 		<th align="left">Method</th>
 		<th align="left">Description</th>
-		<th align="left">O</th>
-		<th align="left">N</th>
+		<th align="center">O</th>
+		<th align="center">N</th>
 	</tr>
 	<tr>
 		<td><code>assertDelta(oldData, newData)</code></td>
-	    <td>Asserts database delta.</td>
-	    <td><code>oldData</code></td>
-	    <td><code>newData</code></td>
+	    <td>Asserts that <code>&delta; = (oldData,newData)</code>.</td>
+	    <td align="center"><code>oldData</code></td>
+	    <td align="center"><code>newData</code></td>
 	</tr>
     <tr>
 		<td><code>assertDeleted(data)</code></td>
-	    <td>Asserts removal of data.</td>
-	    <td><code>data</code></td>
-	    <td><code>&lt;empty&gt;</code></td>
+	    <td>Asserts that <code>data</code> was deleted.</td>
+	    <td align="center"><code>data</code></td>
+	    <td align="center"><code>&empty;</code></td>
 	</tr>
 	<tr>
 		<td><code>assertInserted(data)</code></td>
-	    <td>Asserts insertion of data.</td>
-	    <td><code>&lt;empty&gt;</code></td>
-	    <td><code>data</code></td>
+	    <td>Asserts that <code>data</code> was inserted.</td>
+	    <td align="center"><code>&empty;</code></td>
+	    <td align="center"><code>data</code></td>
 	</tr>
 	<tr>
 		<td><code>assertUnchanged(source)</code></td>
 	    <td>Asserts no database changes took place.</td>
-	    <td><code>&lt;empty&gt;</code></td>
-	    <td><code>&lt;empty&gt;</code></td>
+	    <td align="center"><code>&empty;</code></td>
+	    <td align="center"><code>&empty;</code></td>
 	</tr>
 </table>
 
