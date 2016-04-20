@@ -10,7 +10,7 @@ import org.junit.runners.MethodSorters;
 
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class CallInfoTest extends DBTestCase {
+public class CallInfoTest {
 
   @Rule public TestName testName = new TestName();
 
@@ -22,6 +22,7 @@ public class CallInfoTest extends DBTestCase {
       return CallInfo.create(msg); 
     }
   }
+  
   static void assertMethodInfo(CallInfo.MethodInfo ci, String className, String methodName) {
     assertEquals("class name", className, ci.getClassName());
     assertEquals("method name", methodName, ci.getMethodName());
