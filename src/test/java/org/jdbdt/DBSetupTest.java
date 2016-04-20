@@ -63,7 +63,7 @@ public class DBSetupTest extends DBTestCase {
     doInsert(); // Empty data set
   }
   
-  @Test(expected=InvalidOperationException.class) 
+  @Test 
   public void testPopulate0() throws SQLException {
     doPopulate(); // Empty data set
   }

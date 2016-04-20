@@ -39,11 +39,9 @@ final class DBSetup {
     if ( ! (source instanceof Table)) {
       throw new InvalidOperationException("Data set is not defined for a table.");
     }
-    if (data.isEmpty()) {
-      throw new InvalidOperationException("Empty data set.");
-    }
+    
     Table t = (Table) source;
-    deleteAll(t);
+    deleteAll(callInfo, t);
     insert(callInfo, t, data);
     t.setSnapshot(data);
   }
@@ -87,11 +85,12 @@ final class DBSetup {
   
   /**
    * Delete all data from table.
+   * @param callInfo Call info.
    * @param t Table.
    * @return Number of deleted rows.
    * @throws SQLException If a database error occurs.
    */
-  static int deleteAll(Table t) throws SQLException {
+  static int deleteAll(CallInfo callInfo, Table t) throws SQLException {
     return t.getDB()
             .compile("DELETE FROM " + t.getName())
             .executeUpdate();
@@ -99,10 +98,11 @@ final class DBSetup {
   
   /**
    * Truncate table.
+   * @param callInfo Call info.
    * @param t Table.
    * @throws SQLException If a database error occurs.
    */
-  static void truncate(Table t) throws SQLException {
+  static void truncate(CallInfo callInfo, Table t) throws SQLException {
     t.getDB()
      .compile("TRUNCATE TABLE " + t.getName())
      .execute();
@@ -110,13 +110,14 @@ final class DBSetup {
   
   /**
    * Delete all data based on a WHERE clause.
+   * @param callInfo Call info.
    * @param table Table.
    * @param where <code>WHERE</code> clause.
    * @param args Optional arguments for <code>WHERE</code> clause.
    * @return The number of deleted rows.
    * @throws SQLException If a database error occurs.
    */
-  static int deleteAll(Table table, String where, Object... args) throws SQLException {
+  static int deleteAll(CallInfo callInfo, Table table, String where, Object... args) throws SQLException {
     PreparedStatement deleteStmt = 
       table.getDB().compile(
         "DELETE FROM " + table.getName() +
