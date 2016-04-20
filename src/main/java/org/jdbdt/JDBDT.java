@@ -159,15 +159,16 @@ public final class JDBDT {
    * <code>delta(sp).end()</code>.
    * </p>
    * 
-   * @param sp SnapshotProvider provider.
+   * @param source Data source. 
    * @throws DatabaseAssertionError 
    *         if there are unverified changes for the delta
    * @see #assertDelta(DataSet,DataSet)
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
    */
-  public static void assertUnchanged(DataSource sp) throws DatabaseAssertionError {
-    delta(sp).end(); 
+  public static void assertUnchanged(DataSource source) throws DatabaseAssertionError {
+    DataSet emptyDataSet = empty(source);
+    assertDelta(emptyDataSet, emptyDataSet);
   }
 
   /**
@@ -185,7 +186,7 @@ public final class JDBDT {
    * @see #assertInserted(DataSet)
    */
   public static void assertDeleted(DataSet data) throws DatabaseAssertionError {
-    delta(data.getSource()).before(data).end(); 
+    assertDelta(data, empty(data.getSource())); 
   }
 
   /**
@@ -204,7 +205,7 @@ public final class JDBDT {
    * @see #assertDelta(DataSet,DataSet)
    */
   public static void assertInserted(DataSet data) throws DatabaseAssertionError {
-    delta(data.getSource()).after(data).end(); 
+    assertDelta(empty(data.getSource()), data);
   }
 
 //  /**
