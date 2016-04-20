@@ -26,7 +26,7 @@ public class CallInfoTest extends DBTestCase {
 
   @Rule public TestName testName = new TestName();
 
-  static class FakeClass {
+  private static class FakeClass {
     static CallInfo fake() { 
       return CallInfo.create(); 
     }
@@ -34,33 +34,29 @@ public class CallInfoTest extends DBTestCase {
       return CallInfo.create(msg); 
     }
   }
-  void assertCallInfo(CallInfo.MethodInfo ci, String className, String methodName) {
+  static void assertMethodInfo(CallInfo.MethodInfo ci, String className, String methodName) {
     assertEquals("class name", className, ci.getClassName());
     assertEquals("method name", methodName, ci.getMethodName());
   }
 
+  void assertCallInfo(CallInfo ci, String msg) {
+    assertMethodInfo(ci.getCallerMethodInfo(),
+        getClass().getName(),
+        testName.getMethodName());
+    assertMethodInfo(ci.getAPIMethodInfo(), 
+        FakeClass.class.getName(),
+        "fake");
+    assertEquals("message", msg, ci.getMessage());
+  }
+  
   @Test
   public void test1() {
-    CallInfo ci = FakeClass.fake();
-    assertCallInfo(ci.getCallerMethodInfo(),
-                   getClass().getName(),
-                   testName.getMethodName());
-    assertCallInfo(ci.getAPIMethodInfo(), 
-                   FakeClass.class.getName(),
-                   "fake");
-    assertEquals("message", "", ci.getMessage());
+    assertCallInfo( FakeClass.fake(), "");
   }
 
   @Test
   public void test2() {
     String msg = "this is the message";
-    CallInfo ci = FakeClass.fake(msg);
-    assertCallInfo(ci.getCallerMethodInfo(),
-                   getClass().getName(),
-                   testName.getMethodName());
-    assertCallInfo(ci.getAPIMethodInfo(), 
-                   FakeClass.class.getName(),
-                   "fake");
-    assertEquals("message", msg, ci.getMessage());
+    assertCallInfo( FakeClass.fake(msg), msg);
   }
 }
