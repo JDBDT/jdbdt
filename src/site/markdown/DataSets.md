@@ -131,6 +131,7 @@ For a [data source](DataSources.html) `s`:
 - `data(s)` creates a new data set.
 - `data(s,c)` creates a new typed data set with conversion function `c`.
 - `builder(s)` creates a data set builder with an underlying fresh data set.
+- `empty(s)` returns an empty & read-only data set that is unique for `s`. 
 
 ### `DataSet` and `TypedDataSet` instance methods 
 
