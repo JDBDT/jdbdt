@@ -127,7 +127,7 @@ public final class Log {
   private void writeContext(Element root, CallInfo info) {
     Element ctxNode = createNode(CONTEXT_TAG);
     if (info.getMessage().length() > 0) {
-      writeMethodInfo(ctxNode, CTX_MESSAGE_TAG, info.getMessage());
+      simpleNode(ctxNode, CTX_MESSAGE_TAG, info.getMessage());
     }
     writeMethodInfo(ctxNode, CTX_CALLER_TAG, info.getCallerMethodInfo());
     writeMethodInfo(ctxNode, CTX_API_METHOD_TAG, info.getAPIMethodInfo());
