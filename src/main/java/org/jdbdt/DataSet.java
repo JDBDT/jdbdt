@@ -2,6 +2,7 @@ package org.jdbdt;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -22,7 +23,7 @@ public class DataSet {
   /**
    * Rows in the data set.
    */
-  private final ArrayList<Row> rows;
+  private final List<Row> rows;
 
   /**
    * Read-only flag.
@@ -42,7 +43,7 @@ public class DataSet {
    * @param ds Data source.
    * @param list Row list. 
    */
-  DataSet(DataSource ds, ArrayList<Row> list) {
+  DataSet(DataSource ds, List<Row> list) {
     this.source = ds;
     this.rows = list;
   }
@@ -209,9 +210,9 @@ public class DataSet {
     }
     final DataSet sub = new DataSet(data.getSource());
     final int endIndex = startIndex + n;
-    final ArrayList<Row> dataRows = data.rows;
+    final Iterator<Row> itr = data.rows.listIterator(startIndex);
     for (int i = startIndex; i < endIndex; i++) {
-      sub.rows.add(dataRows.get(i));
+      sub.rows.add(itr.next());
     }
     return sub;
   }

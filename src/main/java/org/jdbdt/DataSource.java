@@ -3,6 +3,7 @@ package org.jdbdt;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.function.Consumer;
 
 /**
@@ -101,7 +102,7 @@ public abstract class DataSource {
    */
   final DataSet theEmptySet() {
     if (theEmptyOne == null) {
-      theEmptyOne = new DataSet(this);
+      theEmptyOne = new DataSet(this, Collections.emptyList());
       theEmptyOne.setReadOnly();
     }
     return theEmptyOne;
