@@ -145,7 +145,7 @@ final class CallInfo {
   
   @Override
   public String toString() {
-    return String.format(" %s --> %s \"%s\"", 
+    return String.format("%s --> %s \"%s\"", 
                          getCallerMethodInfo(), 
                          getAPIMethodInfo(),
                          getMessage());
