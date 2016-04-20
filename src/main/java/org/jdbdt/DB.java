@@ -194,11 +194,12 @@ public final class DB {
   
   /**
    * Log delta.
+   * @param callInfo  Call info.
    * @param delta Delta instance.
    */
-  void logDelta(Delta delta) {
+  void logDelta(CallInfo callInfo, Delta delta) {
     if (isEnabled(Option.LOG_DELTAS)) {
-      log.write(delta);
+      log.write(callInfo, delta);
     }
   }
   

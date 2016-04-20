@@ -39,7 +39,7 @@ final class Delta {
   Delta(CallInfo callInfo, DataSet pre) {
     source = pre.getSource();
     diff = calcDiff(pre, source.executeQuery(callInfo, false));
-    source.getDB().logDelta(this);
+    source.getDB().logDelta(callInfo, this);
   }
 
   /**

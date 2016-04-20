@@ -169,14 +169,16 @@ public final class Log {
   
   /**
    * Write the state of a delta to the log.
+   * @param callInfo Call info.
    * @param d Delta instance.
    */
-  public void write(Delta d) {
+  public void write(CallInfo callInfo, Delta d) {
     Element rootNode = root(),
             deltaNode = createNode(DELTA_TAG),
             queryNode = createNode(COLUMNS_TAG),
             bSetNode = createNode(BEFORE_TAG),
             aSetNode = createNode(AFTER_TAG);
+    writeContext(rootNode, callInfo);
     rootNode.appendChild(deltaNode);
     deltaNode.appendChild(queryNode);
     deltaNode.appendChild(bSetNode);
