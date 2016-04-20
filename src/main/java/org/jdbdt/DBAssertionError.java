@@ -5,13 +5,13 @@ package org.jdbdt;
  * 
  * @since 0.1
  */
-public final class DatabaseAssertionError extends AssertionError {
+public final class DBAssertionError extends AssertionError {
 
   /**
    * Constructs exception with given error message.
    * @param message Error message.
    */
-  public DatabaseAssertionError(String message) {
+  public DBAssertionError(String message) {
     super(message);
   }
   

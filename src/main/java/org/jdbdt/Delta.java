@@ -88,10 +88,10 @@ final class Delta {
    * 
    * @param row Column values defining the pre-existing database row.
    * @return The delta object instance (for chained calls).
-   * @throws DatabaseAssertionError in case the row is still defined.
+   * @throws DBAssertionError in case the row is still defined.
    *          
    */
-  public Delta before(Object... row) throws DatabaseAssertionError {
+  public Delta before(Object... row) throws DBAssertionError {
     before(new Row(row));
     return this;
   }
@@ -101,9 +101,9 @@ final class Delta {
    * 
    * @param row Column values for expected new row.
    * @return The delta object instance (for chained calls).
-   * @throws DatabaseAssertionError in case the new row is not defined.
+   * @throws DBAssertionError in case the new row is not defined.
    */
-  public Delta after(Object... row) throws DatabaseAssertionError {
+  public Delta after(Object... row) throws DBAssertionError {
     after(new Row(row));
     return this;
   }
@@ -113,9 +113,9 @@ final class Delta {
    * 
    * @param data Data set.
    * @return The delta object instance (for chained calls).
-   * @throws DatabaseAssertionError in case some row in the data set is still defined.         
+   * @throws DBAssertionError in case some row in the data set is still defined.         
    */
-  public Delta before(DataSet data)  throws DatabaseAssertionError {
+  public Delta before(DataSet data)  throws DBAssertionError {
     for (Row r : data.getRows()) {
       before(r);
     }
@@ -127,9 +127,9 @@ final class Delta {
    * 
    * @param data Data set.
    * @return The delta object instance (for chained calls).
-   * @throws DatabaseAssertionError in case some row in the data set is still defined.    
+   * @throws DBAssertionError in case some row in the data set is still defined.    
    */
-  public Delta after(DataSet data)  throws DatabaseAssertionError {
+  public Delta after(DataSet data)  throws DBAssertionError {
     for (Row r : data.getRows()) {
       after(r);
     }
@@ -143,13 +143,13 @@ final class Delta {
    * A call to this method will assert that there are 
    * no database changes left to verify.
    * If there are any unverified changes, 
-   * {@link DatabaseAssertionError} will be thrown.
+   * {@link DBAssertionError} will be thrown.
    * </p>
    * 
-   * @throws DatabaseAssertionError in case 
+   * @throws DBAssertionError in case 
    *         there are remaining changes to verify
    */
-  public void end() throws DatabaseAssertionError {
+  public void end() throws DBAssertionError {
     if (size() > 0) {
       throwDeltaAssertionError(size() + " unverified changes.");
     }
@@ -188,15 +188,15 @@ final class Delta {
   }
 
   /**
-   * Throw {@link DatabaseAssertionError} and,
+   * Throw {@link DBAssertionError} and,
    * if logging is enabled, write delta to log.
    * 
    * @param msg Error message.
-   * @throws DatabaseAssertionError in any case (unconditionally).
+   * @throws DBAssertionError in any case (unconditionally).
    */
   private void throwDeltaAssertionError(String msg) {
     // TODO logging
-    throw new DatabaseAssertionError(msg);
+    throw new DBAssertionError(msg);
   }
 
   /**

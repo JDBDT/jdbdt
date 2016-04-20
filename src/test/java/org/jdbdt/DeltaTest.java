@@ -77,19 +77,19 @@ public class DeltaTest extends DBTestCase {
     assertUnchanged(dataSource);
   }
 
-  @Test(expected=DatabaseAssertionError.class)
+  @Test(expected=DBAssertionError.class)
   public void testFailureInsertCase() throws SQLException {
     getDAO().doInsert(new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01")));
     delta(dataSource).end();
   }
 
-  @Test(expected=DatabaseAssertionError.class)
+  @Test(expected=DBAssertionError.class)
   public void testFailureDeleteCase() throws SQLException {
     getDAO().doDelete(EXISTING_DATA_ID1);
     assertUnchanged(dataSource);
   }
 
-  @Test(expected=DatabaseAssertionError.class)
+  @Test(expected=DBAssertionError.class)
   public void testFailureUpdateCase() throws SQLException {
     getDAO().doUpdate(new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-01-01")));
     assertUnchanged(dataSource);

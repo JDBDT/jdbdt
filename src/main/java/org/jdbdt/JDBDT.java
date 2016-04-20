@@ -160,13 +160,13 @@ public final class JDBDT {
    * </p>
    * 
    * @param source Data source. 
-   * @throws DatabaseAssertionError 
+   * @throws DBAssertionError 
    *         if there are unverified changes for the delta
    * @see #assertDelta(DataSet,DataSet)
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
    */
-  public static void assertUnchanged(DataSource source) throws DatabaseAssertionError {
+  public static void assertUnchanged(DataSource source) throws DBAssertionError {
     DataSet emptyDataSet = empty(source);
     assertDelta(emptyDataSet, emptyDataSet);
   }
@@ -181,11 +181,11 @@ public final class JDBDT {
    * </p>
    * 
    * @param data Data set.
-   * @throws DatabaseAssertionError if the assertion fails.
+   * @throws DBAssertionError if the assertion fails.
    * @see #assertUnchanged(DataSource)
    * @see #assertInserted(DataSet)
    */
-  public static void assertDeleted(DataSet data) throws DatabaseAssertionError {
+  public static void assertDeleted(DataSet data) throws DBAssertionError {
     assertDelta(data, empty(data.getSource())); 
   }
 
@@ -199,12 +199,12 @@ public final class JDBDT {
    * </p>
    * 
    * @param data data set.
-   * @throws DatabaseAssertionError if the assertion fails.
+   * @throws DBAssertionError if the assertion fails.
    * @see #assertUnchanged(DataSource)
    * @see #assertDeleted(DataSet)
    * @see #assertDelta(DataSet,DataSet)
    */
-  public static void assertInserted(DataSet data) throws DatabaseAssertionError {
+  public static void assertInserted(DataSet data) throws DBAssertionError {
     assertDelta(empty(data.getSource()), data);
   }
 
@@ -245,13 +245,13 @@ public final class JDBDT {
    * 
    * @param pre Old data no longer in database.
    * @param post New Data in database.
-   * @throws DatabaseAssertionError if the assertion fails.
+   * @throws DBAssertionError if the assertion fails.
    *
    * @see #assertUnchanged(DataSource)
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
    */
-  public static void assertDelta(DataSet pre, DataSet post) throws DatabaseAssertionError {
+  public static void assertDelta(DataSet pre, DataSet post) throws DBAssertionError {
     if (pre.getSource() != post.getSource()) {
       throw new InvalidOperationException("Data sets associate to different data sources.");
     }
@@ -261,9 +261,9 @@ public final class JDBDT {
   /**
    * Assert database state is the given data set.
    * @param data Data set.
-   * @throws DatabaseAssertionError if the assertion fails.
+   * @throws DBAssertionError if the assertion fails.
    */
-  public static void assertState(DataSet data) throws DatabaseAssertionError {
+  public static void assertState(DataSet data) throws DBAssertionError {
     new Delta(data).end(); 
   }
   /**
