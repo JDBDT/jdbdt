@@ -28,18 +28,31 @@ final class DBDelta {
    * 
    */
   static void verify(CallInfo callInfo,DataSet oldData, DataSet newData) {
+    validateVerificationArguments(oldData, newData);
+    final DataSource source = oldData.getSource();
+    final DB db = source.getDB();
+    final DataSet snapshot = source.getSnapshot();
+    DataSet stateNow = source.executeQuery(callInfo, false);
+    DBDelta delta = new DBDelta(snapshot, stateNow);
+    db.logDelta(callInfo, delta);
+    delta.before(oldData).after(newData).end();
+  }
+  
+  @SuppressWarnings("javadoc")
+  private static void
+  validateVerificationArguments(DataSet oldData, DataSet newData) {
     if (oldData == null) {
       throw new InvalidOperationException("Null argument for 'old' data set.");
     }
     if (newData == null) {
       throw new InvalidOperationException("Null argument for 'new' data set.");
     }
-    DataSource source = oldData.getSource();
-    if (source != newData.getSource()) {
+    if (oldData.getSource() != newData.getSource()) {
       throw new InvalidOperationException("Data source mismatch between data sets.");
     }
-    DBDelta delta = new DBDelta(callInfo, source);
-    delta.before(oldData).after(newData).end();
+    if (oldData.getSource().getSnapshot() == null) {
+      throw new InvalidOperationException("Undefined snapshot for data source.");
+    } 
   }
   
   /**
@@ -70,16 +83,6 @@ final class DBDelta {
    * Data source.
    */
   private final DataSource source;
-
-  /**
-   * Reference snapshot.
-   */
-  private final DataSet snapshot;
-  
-  /**
-   * Updated database state.
-   */
-  private final DataSet state;
   
   /**
    * Representation of differences.
@@ -87,25 +90,13 @@ final class DBDelta {
   private final LinkedHashMap<Row, Integer> diff = new LinkedHashMap<>();
 
   /**
-   * Constructs a new database delta.
-   * @param callInfo Call info.
-   * @param s Data source.
-   */
-  DBDelta(CallInfo callInfo, DataSource s) { 
-    this(callInfo, s.getSnapshot());
-  }
-
-  /**
    * Construct a new delta.
-   * @param callInfo Call info.
-   * @param data Reference snapshot.
+   * @param preState Pre-state.
+   * @param postState Post-state.
    */
-  DBDelta(CallInfo callInfo, DataSet data) {
-    source = data.getSource();
-    this.snapshot = data;
-    this.state = source.executeQuery(callInfo, false);
-    deriveDelta();
-    source.getDB().logDelta(callInfo, this);
+  DBDelta(DataSet preState, DataSet postState) {
+    source = preState.getSource();
+    deriveDelta(preState, postState);
   }
 
   /**
@@ -152,18 +143,6 @@ final class DBDelta {
   }
 
   /**
-   * Assert that the given row is now defined.
-   * 
-   * @param row Column values for expected new row.
-   * @return The delta object instance (for chained calls).
-   * @throws DBAssertionError in case the new row is not defined.
-   */
-  public DBDelta after(Object... row) throws DBAssertionError {
-    after(new Row(row));
-    return this;
-  }
-
-  /**
    * Assert that the given data set is no longer defined.
    * 
    * @param data Data set.
@@ -172,7 +151,18 @@ final class DBDelta {
    */
   public DBDelta before(DataSet data)  throws DBAssertionError {
     for (Row r : data.getRows()) {
-      before(r);
+      int n = diff.getOrDefault(r, 0);
+      if (n >= 0) {
+        throwDeltaAssertionError("Old query result expected: "
+            + r.toString());
+      }
+      ++n;
+      if (n == 0) {
+        diff.remove(r);
+      } 
+      else {
+        diff.put(r, n);
+      }
     }
     return this;
   }
@@ -186,7 +176,18 @@ final class DBDelta {
    */
   public DBDelta after(DataSet data)  throws DBAssertionError {
     for (Row r : data.getRows()) {
-      after(r);
+      int n = diff.getOrDefault(r, 0);
+      if (n <= 0) {
+        throwDeltaAssertionError("New query result expected: "
+            + r.toString());
+      }
+      --n;
+      if (n == 0) {
+        diff.remove(r);
+      } 
+      else {
+        diff.put(r, n);
+      }
     }
     return this;
   }
@@ -210,37 +211,6 @@ final class DBDelta {
     }
   }
 
-  @SuppressWarnings("javadoc")
-  private void after(Row r) {
-    int n = diff.getOrDefault(r, 0);
-    if (n <= 0) {
-      throwDeltaAssertionError("New query result expected: "
-          + r.toString());
-    }
-    --n;
-    if (n == 0) {
-      diff.remove(r);
-    } 
-    else {
-      diff.put(r, n);
-    }
-  }
-
-  @SuppressWarnings("javadoc")
-  private void before(Row r) {
-    int n = diff.getOrDefault(r, 0);
-    if (n >= 0) {
-      throwDeltaAssertionError("Old query result expected: "
-          + r.toString());
-    }
-    ++n;
-    if (n == 0) {
-      diff.remove(r);
-    } 
-    else {
-      diff.put(r, n);
-    }
-  }
 
   /**
    * Throw {@link DBAssertionError} and,
@@ -256,12 +226,14 @@ final class DBDelta {
 
   /**
    * Derive the delta.
+   * @param pre Pre-state.
+   * @param post Post-state.
    */
-  private void deriveDelta() {
+  private void deriveDelta(DataSet pre, DataSet post) {
     // Try to minimize space use by matching equal rows soon.
     Iterator<Row> 
-      a = snapshot.getRows().iterator(),
-      b = state.getRows().iterator();
+      a = pre.getRows().iterator(),
+      b = post.getRows().iterator();
     boolean done = false;
     while (!done) {
       if (!a.hasNext()) {

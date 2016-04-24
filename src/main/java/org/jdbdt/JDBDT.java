@@ -204,7 +204,8 @@ public final class JDBDT {
    * @throws DBAssertionError if the assertion fails.
    */
   public static void assertState(DataSet data) throws DBAssertionError {
-    new DBDelta(CallInfo.create(), data).end(); 
+    // TODO
+    // new DBDelta(CallInfo.create(), data).end(); 
   }
   
   /**
