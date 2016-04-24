@@ -157,7 +157,7 @@ public final class JDBDT {
    */
   public static void assertUnchanged(DataSource source) throws DBAssertionError {
     DataSet emptyDataSet = empty(source);
-    assertDelta(CallInfo.create(), emptyDataSet, emptyDataSet);
+    DBDelta.verify(CallInfo.create(), emptyDataSet, emptyDataSet);
   }
 
   /**
@@ -175,7 +175,7 @@ public final class JDBDT {
    * @see #assertInserted(DataSet)
    */
   public static void assertDeleted(DataSet data) throws DBAssertionError {
-    assertDelta(CallInfo.create(), data, empty(data.getSource())); 
+    DBDelta.verify(CallInfo.create(), data, empty(data.getSource())); 
   }
 
   /**
@@ -194,7 +194,7 @@ public final class JDBDT {
    * @see #assertDelta(DataSet,DataSet)
    */
   public static void assertInserted(DataSet data) throws DBAssertionError {
-    assertDelta(CallInfo.create(), empty(data.getSource()), data);
+    DBDelta.verify(CallInfo.create(), empty(data.getSource()), data);
   }
 
   /**
@@ -206,42 +206,25 @@ public final class JDBDT {
    * <code>delta(s).before(b).after(a).end()</code>.
    * </p>
    * 
-   * @param pre Old data no longer in database.
-   * @param post New Data in database.
+   * @param oldData Expected old data.
+   * @param newData Expected new data.
    * @throws DBAssertionError if the assertion fails.
    *
    * @see #assertUnchanged(DataSource)
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
    */
-  public static void assertDelta(DataSet pre, DataSet post) throws DBAssertionError {
-    assertDelta(CallInfo.create(), pre, post);
+  public static void assertDelta(DataSet oldData, DataSet newData) throws DBAssertionError {
+    DBDelta.verify(CallInfo.create(), oldData, newData);
   }
   
-  /**
-   * The primitive delta assertion method.
-   * @param callInfo Call Info.
-   * @param oldData Expected old data.
-   * @param newData Expected new data.
-   * @throws DBAssertionError if the assertion fails.
-   */
-  private static void assertDelta(CallInfo callInfo, DataSet oldData, DataSet newData) throws DBAssertionError {
-    if (oldData.getSource() != newData.getSource()) {
-      throw new InvalidOperationException("Data sets associate to different data sources.");
-    }
-    new Delta(callInfo, oldData.getSource())
-       .before(oldData)
-       .after(newData)
-       .end(); 
-  }
-
   /**
    * Assert database state is the given data set.
    * @param data Data set.
    * @throws DBAssertionError if the assertion fails.
    */
   public static void assertState(DataSet data) throws DBAssertionError {
-    new Delta(CallInfo.create(), data).end(); 
+    new DBDelta(CallInfo.create(), data).end(); 
   }
   
   /**

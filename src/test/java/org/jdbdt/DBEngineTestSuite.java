@@ -13,7 +13,7 @@ import org.junit.runners.Suite.SuiteClasses;
   SQLDataSourceTest.class,
   DataSetTest.class,
   DBSetupTest.class,
-  DeltaTest.class,
+  DBDeltaTest.class,
   DataSetBuilderCoreTest.class,
   DataSetBuilderCoreFillerTest.class,
   DataSetBuilderSequenceFillersTest.class,

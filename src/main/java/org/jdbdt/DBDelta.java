@@ -11,7 +11,30 @@ import java.util.NoSuchElementException;
  * @since 0.1
  * 
  */
-final class Delta {
+final class DBDelta {
+  /**
+   * Verification method.
+   * @param callInfo Call info.
+   * @param oldData Old data expected.
+   * @param newData New data expected.
+   * @throws DBAssertionError If the verification fails.
+   * @throws InvalidOperationException If the arguments are invalid.
+   */
+  static void verify(CallInfo callInfo,DataSet oldData, DataSet newData) {
+    if (oldData == null) {
+      throw new InvalidOperationException("Null argument for 'old' data set.");
+    }
+    if (newData == null) {
+      throw new InvalidOperationException("Null argument for 'new' data set.");
+    }
+    DataSource source = oldData.getSource();
+    if (source != newData.getSource()) {
+      throw new InvalidOperationException("Data source mismatch between data sets.");
+    }
+    DBDelta delta = new DBDelta(callInfo, source);
+    delta.before(oldData).after(newData).end();
+  }
+  
   /**
    * Iterator type for a delta object.
    * 
@@ -61,7 +84,7 @@ final class Delta {
    * @param callInfo Call info.
    * @param s Data source.
    */
-  Delta(CallInfo callInfo, DataSource s) { 
+  DBDelta(CallInfo callInfo, DataSource s) { 
     this(callInfo, s.getSnapshot());
   }
 
@@ -70,7 +93,7 @@ final class Delta {
    * @param callInfo Call info.
    * @param data Reference snapshot.
    */
-  Delta(CallInfo callInfo, DataSet data) {
+  DBDelta(CallInfo callInfo, DataSet data) {
     source = data.getSource();
     this.snapshot = data;
     this.state = source.executeQuery(callInfo, false);
@@ -116,7 +139,7 @@ final class Delta {
    * @throws DBAssertionError in case the row is still defined.
    *          
    */
-  public Delta before(Object... row) throws DBAssertionError {
+  public DBDelta before(Object... row) throws DBAssertionError {
     before(new Row(row));
     return this;
   }
@@ -128,7 +151,7 @@ final class Delta {
    * @return The delta object instance (for chained calls).
    * @throws DBAssertionError in case the new row is not defined.
    */
-  public Delta after(Object... row) throws DBAssertionError {
+  public DBDelta after(Object... row) throws DBAssertionError {
     after(new Row(row));
     return this;
   }
@@ -140,7 +163,7 @@ final class Delta {
    * @return The delta object instance (for chained calls).
    * @throws DBAssertionError in case some row in the data set is still defined.         
    */
-  public Delta before(DataSet data)  throws DBAssertionError {
+  public DBDelta before(DataSet data)  throws DBAssertionError {
     for (Row r : data.getRows()) {
       before(r);
     }
@@ -154,7 +177,7 @@ final class Delta {
    * @return The delta object instance (for chained calls).
    * @throws DBAssertionError in case some row in the data set is still defined.    
    */
-  public Delta after(DataSet data)  throws DBAssertionError {
+  public DBDelta after(DataSet data)  throws DBAssertionError {
     for (Row r : data.getRows()) {
       after(r);
     }

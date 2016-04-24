@@ -175,7 +175,7 @@ public final class Log {
    * @param callInfo Call info.
    * @param d Delta instance.
    */
-  public void write(CallInfo callInfo, Delta d) {
+  public void write(CallInfo callInfo, DBDelta d) {
     Element rootNode = root(),
             deltaNode = createNode(DELTA_TAG),
             queryNode = createNode(COLUMNS_TAG),
@@ -188,8 +188,8 @@ public final class Log {
     deltaNode.appendChild(aSetNode);
     write(queryNode, d.getMetaData());
     deltaNode.setAttribute(SIZE_ATTR, String.valueOf(d.size()));
-    write(bSetNode, d.getMetaData().columns(), d.getIterator(Delta.IteratorType.ACTUAL_OLD_DATA));
-    write(aSetNode, d.getMetaData().columns(), d.getIterator(Delta.IteratorType.ACTUAL_NEW_DATA));
+    write(bSetNode, d.getMetaData().columns(), d.getIterator(DBDelta.IteratorType.ACTUAL_OLD_DATA));
+    write(aSetNode, d.getMetaData().columns(), d.getIterator(DBDelta.IteratorType.ACTUAL_NEW_DATA));
     flush(rootNode);
   }
 
