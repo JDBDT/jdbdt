@@ -13,14 +13,48 @@ import java.util.NoSuchElementException;
  */
 final class Delta {
   /**
+   * Iterator type for a delta object.
+   * 
+   * @since 0.1
+   */
+  enum IteratorType {
+    /**
+     * Actual new data.
+     */
+    ACTUAL_NEW_DATA,
+    /**
+     * Actual old data. 
+     */
+    ACTUAL_OLD_DATA,
+    /**
+     * Expected new data.
+     */
+    EXPECTED_NEW_DATA,
+    /**
+     * Expected old data.
+     */
+    EXPECTED_OLD_DATA
+  }
+  
+  /**
    * Data source.
    */
   private final DataSource source;
 
   /**
+   * Reference snapshot.
+   */
+  private final DataSet snapshot;
+  
+  /**
+   * Updated database state.
+   */
+  private final DataSet state;
+  
+  /**
    * Representation of differences.
    */
-  private final LinkedHashMap<Row, Integer> diff;
+  private final LinkedHashMap<Row, Integer> diff = new LinkedHashMap<>();
 
   /**
    * Constructs a new database delta.
@@ -34,11 +68,13 @@ final class Delta {
   /**
    * Construct a new delta.
    * @param callInfo Call info.
-   * @param pre Pre-state to assume.
+   * @param data Reference snapshot.
    */
-  Delta(CallInfo callInfo, DataSet pre) {
-    source = pre.getSource();
-    diff = calcDiff(pre, source.executeQuery(callInfo, false));
+  Delta(CallInfo callInfo, DataSet data) {
+    source = data.getSource();
+    this.snapshot = data;
+    this.state = source.executeQuery(callInfo, false);
+    deriveDelta();
     source.getDB().logDelta(callInfo, this);
   }
 
@@ -189,44 +225,41 @@ final class Delta {
   }
 
   /**
-   * Calculate differences between two sets of rows.
-   * @param rs1 First set.
-   * @param rs2 Second set.
-   * @return Map reflecting differences between both sets.
+   * Derive the delta.
    */
-  static
-  LinkedHashMap<Row, Integer> calcDiff(DataSet rs1, DataSet rs2) {
-    LinkedHashMap<Row,Integer> diff = new LinkedHashMap<>();
+  private void deriveDelta() {
     // Try to minimize space use by matching equal rows soon.
     Iterator<Row> 
-      a = rs1.getRows().iterator(),
-      b = rs2.getRows().iterator();
+      a = snapshot.getRows().iterator(),
+      b = state.getRows().iterator();
     boolean done = false;
     while (!done) {
       if (!a.hasNext()) {
         while (b.hasNext()) {
-          update(diff, b.next(), +1);
+          update(b.next(), +1);
         }
         done = true;
       }
       else if (!b.hasNext()) {
         while (a.hasNext()) {
-          update(diff, a.next(), -1);
+          update(a.next(), -1);
         }
         done = true;
       } 
       else {
-        update(diff, a.next(), -1);
-        update(diff, b.next(), +1);
+        update(a.next(), -1);
+        update(b.next(), +1);
       }
     }
-
-    return diff;
   }
 
-  @SuppressWarnings("javadoc")
-  private static void 
-  update(LinkedHashMap<Row, Integer> diff, Row r, int d) {
+  /**
+   * Update the delta
+   * @param r Row.
+   * @param d Increment.
+   */
+  private void 
+  update(Row r, int d) {
     int n = diff.getOrDefault(r, 0) + d;
     if (n == 0) {
       diff.remove(r);
@@ -236,7 +269,30 @@ final class Delta {
     } 
   }
 
-
+  /**
+   * Get row iterator.
+   * @param type Type of iterator.
+   * @return An iterator for the specified type of data.
+   */
+  Iterator<Row> getIterator(IteratorType type) {
+    Iterator<Row> res = null;
+    switch(type) {
+      case ACTUAL_NEW_DATA:
+        res = new DeltaIterator(diff, false);
+        break;
+      case ACTUAL_OLD_DATA:
+        res = new DeltaIterator(diff, true);
+        break;
+      case EXPECTED_NEW_DATA:
+        break;
+      case EXPECTED_OLD_DATA:
+        break;
+      default:
+        throw new InternalAPIError();
+    }
+    return res;
+  }
+  
   /**
    * Get iterator for 'before' set.
    * @return An iterator instance.
@@ -258,12 +314,12 @@ final class Delta {
   class DeltaIterator implements Iterator<Row> {
     Iterator<Entry<Row,Integer>> supportItr;
     Entry<Row,Integer> nextEntry;
-    boolean preState;
+    boolean iterateOldData;
     int count;
 
-    DeltaIterator(LinkedHashMap<Row, Integer> diff, boolean pre) {
+    DeltaIterator(LinkedHashMap<Row, Integer> diff, boolean oldData) {
       supportItr = diff.entrySet().iterator();
-      preState = pre;
+      iterateOldData = oldData;
       count = 0;
       nextEntry = null;
       advance();
@@ -275,11 +331,11 @@ final class Delta {
         while (supportItr.hasNext() && nextEntry == null) {
           Entry<Row,Integer> entry = supportItr.next();
           if (entry.getValue() < 0) {
-            if (preState) {
+            if (iterateOldData) {
               nextEntry = entry; 
             }
           }
-          else if (!preState) {
+          else if (!iterateOldData) {
             nextEntry = entry;
           }
         }

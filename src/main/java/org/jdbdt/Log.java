@@ -188,8 +188,8 @@ public final class Log {
     deltaNode.appendChild(aSetNode);
     write(queryNode, d.getMetaData());
     deltaNode.setAttribute(SIZE_ATTR, String.valueOf(d.size()));
-    write(bSetNode, d.getMetaData().columns(), d.bIterator());
-    write(aSetNode, d.getMetaData().columns(), d.aIterator());
+    write(bSetNode, d.getMetaData().columns(), d.getIterator(Delta.IteratorType.ACTUAL_OLD_DATA));
+    write(aSetNode, d.getMetaData().columns(), d.getIterator(Delta.IteratorType.ACTUAL_NEW_DATA));
     flush(rootNode);
   }
 
