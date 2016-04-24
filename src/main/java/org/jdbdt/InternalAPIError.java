@@ -15,6 +15,12 @@ package org.jdbdt;
 final class InternalAPIError extends Error {
 
   /**
+   * Constructs exception with empty message.
+   */
+  public InternalAPIError() {
+    
+  }
+  /**
    * Constructs exception with given cause.
    * @param cause Cause for the exception.
    */
@@ -29,6 +35,8 @@ final class InternalAPIError extends Error {
   public InternalAPIError(String message) {
     super(message);
   }
+
+
 
   /**
    * Serial version UID.
