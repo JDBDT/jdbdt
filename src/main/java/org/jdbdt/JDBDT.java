@@ -141,16 +141,11 @@ public final class JDBDT {
   }
   
   /**
-   * Assert that no changes were made to the database.
+   * Assert that no changes occurred for the given data source.
    * 
-   * <p>
-   * A call to this method is shorthand for
-   * <code>delta(sp).end()</code>.
-   * </p>
    * 
    * @param source Data source. 
-   * @throws DBAssertionError 
-   *         if there are unverified changes for the delta
+   * @throws DBAssertionError if the assertion fails.
    * @see #assertDelta(DataSet,DataSet)
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
@@ -162,12 +157,7 @@ public final class JDBDT {
 
   /**
    * Assert that database changed only by removal of a given
-   * data set.
-   * 
-   * <p>
-   * A call to this method is shorthand for
-   * <code>delta(source).before(data).end()</code>.
-   * </p>
+   * data set. 
    * 
    * @param data Data set.
    * @throws DBAssertionError if the assertion fails.
@@ -181,12 +171,7 @@ public final class JDBDT {
   /**
    * Assert that database changed only by addition of a given
    * data set.
-   * 
-   * <p>
-   * A call to this method is shorthand for
-   * <code>delta(s).after(data).end()</code>.
-   * </p>
-   * 
+   *
    * @param data data set.
    * @throws DBAssertionError if the assertion fails.
    * @see #assertUnchanged(DataSource)
@@ -198,16 +183,11 @@ public final class JDBDT {
   }
 
   /**
-   * Assert that database changed according
-   * to given 'before' and 'after' data sets. 
+   * Assert database delta expressed by 'old' 
+   * and 'new' data sets.
    * 
-   * <p>
-   * A call to this method is shorthand for
-   * <code>delta(s).before(b).after(a).end()</code>.
-   * </p>
-   * 
-   * @param oldData Expected old data.
-   * @param newData Expected new data.
+   * @param oldData Expected 'old' data.
+   * @param newData Expected 'new' data.
    * @throws DBAssertionError if the assertion fails.
    *
    * @see #assertUnchanged(DataSource)
