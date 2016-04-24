@@ -13,12 +13,19 @@ import java.util.NoSuchElementException;
  */
 final class DBDelta {
   /**
-   * Verification method.
+   * Perform a delta verification.
+   * 
+   * <p>
+   * Delta assertion methods in the {@link JDBDT} delegate the
+   * actual verification to this method.
+   * </p>
+   * 
    * @param callInfo Call info.
    * @param oldData Old data expected.
    * @param newData New data expected.
    * @throws DBAssertionError If the verification fails.
    * @throws InvalidOperationException If the arguments are invalid.
+   * 
    */
   static void verify(CallInfo callInfo,DataSet oldData, DataSet newData) {
     if (oldData == null) {
