@@ -152,7 +152,7 @@ public final class JDBDT {
    */
   public static void assertUnchanged(DataSource source) throws DBAssertionError {
     DataSet emptyDataSet = empty(source);
-    DBDelta.verify(CallInfo.create(), emptyDataSet, emptyDataSet);
+    DBAssertion.verify(CallInfo.create(), emptyDataSet, emptyDataSet);
   }
 
   /**
@@ -165,7 +165,7 @@ public final class JDBDT {
    * @see #assertInserted(DataSet)
    */
   public static void assertDeleted(DataSet data) throws DBAssertionError {
-    DBDelta.verify(CallInfo.create(), data, empty(data.getSource())); 
+    DBAssertion.verify(CallInfo.create(), data, empty(data.getSource())); 
   }
 
   /**
@@ -179,7 +179,7 @@ public final class JDBDT {
    * @see #assertDelta(DataSet,DataSet)
    */
   public static void assertInserted(DataSet data) throws DBAssertionError {
-    DBDelta.verify(CallInfo.create(), empty(data.getSource()), data);
+    DBAssertion.verify(CallInfo.create(), empty(data.getSource()), data);
   }
 
   /**
@@ -195,7 +195,7 @@ public final class JDBDT {
    * @see #assertInserted(DataSet)
    */
   public static void assertDelta(DataSet oldData, DataSet newData) throws DBAssertionError {
-    DBDelta.verify(CallInfo.create(), oldData, newData);
+    DBAssertion.verify(CallInfo.create(), oldData, newData);
   }
   
   /**

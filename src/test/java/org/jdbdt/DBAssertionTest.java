@@ -24,7 +24,7 @@ import org.junit.runners.Parameterized.Parameters;
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(Parameterized.class)
-public class DBDeltaTest extends DBTestCase {
+public class DBAssertionTest extends DBTestCase {
 
   @Parameters
   public static Collection<Object[]> parameterData() {
@@ -48,7 +48,7 @@ public class DBDeltaTest extends DBTestCase {
   private final String whereClause;
   private final Object[] queryArgs;
 
-  public DBDeltaTest(String whereClause,Object[] queryArgs)  {
+  public DBAssertionTest(String whereClause,Object[] queryArgs)  {
     this.whereClause = whereClause;
     this.queryArgs = queryArgs;
   }
