@@ -6,7 +6,7 @@ package org.jdbdt;
  * @since 0.1
  * 
  */
-final class DBAssertion {
+final class DBAssertions {
   /**
    * Perform a delta verification.
    * 
@@ -53,5 +53,12 @@ final class DBAssertion {
     if (oldData.getSource().getSnapshot() == null) {
       throw new InvalidOperationException("Undefined snapshot for data source.");
     } 
+  }
+  
+  /**
+   * Private constructor, to prevent instantiation.
+   */
+  private DBAssertions() {
+    
   }
 }
