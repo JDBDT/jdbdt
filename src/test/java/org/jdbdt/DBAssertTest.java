@@ -47,7 +47,8 @@ public class DBAssertTest extends DBTestCase {
   
   private final String whereClause;
   private final Object[] queryArgs;
-
+  private DataSet initialState;
+  
   public DBAssertTest(String whereClause,Object[] queryArgs)  {
     this.whereClause = whereClause;
     this.queryArgs = queryArgs;
@@ -64,7 +65,7 @@ public class DBAssertTest extends DBTestCase {
       }
       dataSource = q;
     }
-    takeSnapshot(dataSource);
+    initialState = takeSnapshot(dataSource);
   }
 
 
@@ -90,7 +91,7 @@ public class DBAssertTest extends DBTestCase {
     getDAO().doUpdate(new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-01-01")));
     assertUnchanged(dataSource);
   }
-
+  
   @Test
   public void testSuccessInsertCase() throws SQLException {
     User u = new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01"));
@@ -169,4 +170,22 @@ public class DBAssertTest extends DBTestCase {
             dateValue(u2.getCreated()))
         ); 
   }
+  
+  @Test
+  public void testStateAssertion1() {
+    assertState(initialState);
+  }
+  
+  @Test(expected=DBAssertionError.class)
+  public void testStateAssertionFailure1() throws SQLException {
+    getDAO().doDelete(EXISTING_DATA_ID1);
+    assertState(initialState);
+  }
+  
+  @Test
+  public void testStateAssertion2() throws SQLException {
+    getDAO().doDeleteAll();
+    assertState(empty(dataSource));
+  }
+ 
 }

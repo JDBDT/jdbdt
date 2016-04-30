@@ -8,7 +8,7 @@ package org.jdbdt;
  */
 final class DBAssert {
   /**
-   * Perform a delta verification.
+   * Perform a delta assertion.
    * 
    * <p>
    * Delta assertion methods in the {@link JDBDT} delegate the
@@ -18,12 +18,11 @@ final class DBAssert {
    * @param callInfo Call info.
    * @param oldData Old data expected.
    * @param newData New data expected.
-   * @throws DBAssertionError If the verification fails.
-   * @throws InvalidOperationException If the arguments are invalid.
-   * 
+   * @throws DBAssertionError If the assertion fails.
+   * @throws InvalidOperationException If the arguments are invalid. 
    */
-  static void verify(CallInfo callInfo, DataSet oldData, DataSet newData) {
-    validateVerificationArguments(oldData, newData);
+  static void deltaAssertion(CallInfo callInfo, DataSet oldData, DataSet newData) {
+    validateDeltaAssertion(oldData, newData);
     final DataSource source = oldData.getSource();
     //final DB db = source.getDB();
     final DataSet snapshot = source.getSnapshot();
@@ -40,7 +39,7 @@ final class DBAssert {
   
   @SuppressWarnings("javadoc")
   private static void
-  validateVerificationArguments(DataSet oldData, DataSet newData) {
+  validateDeltaAssertion(DataSet oldData, DataSet newData) {
     if (oldData == null) {
       throw new InvalidOperationException("Null argument for 'old' data set.");
     }
@@ -56,9 +55,36 @@ final class DBAssert {
   }
   
   /**
+   * Perform a state assertion.
+   * 
+   * <p>
+   * State assertion methods in the {@link JDBDT} delegate the
+   * actual verification to this method.
+   * </p>
+   * 
+   * @param callInfo Call info.
+   * @param expected Expected data.
+   * @throws DBAssertionError If the assertion fails.
+   * @throws InvalidOperationException If the arguments are invalid. 
+   */
+  static void stateAssertion(CallInfo callInfo, DataSet expected) {
+    if (expected == null) {
+      throw new InvalidOperationException("Null data set");
+    }
+    final DataSet stateNow = expected.getSource().executeQuery(callInfo, false);
+    final Delta delta = new Delta(expected, stateNow); 
+    if (! delta.isEmpty()) {
+      throw new DBAssertionError(callInfo.getMessage());
+    }
+  }
+  
+
+  /**
    * Private constructor, to prevent instantiation.
    */
   private DBAssert() {
     
   }
+
+  
 }
