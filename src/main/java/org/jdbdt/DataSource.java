@@ -3,7 +3,7 @@ package org.jdbdt;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 /**
@@ -96,13 +96,19 @@ public abstract class DataSource {
   }
 
   /**
+   * Array list shared by all data set instances returned 
+   * by {@link #theEmptySet()}.
+   */
+  private static final ArrayList<Row> EMPTY_ROW_LIST = new ArrayList<>();
+  
+  /**
    * Return an eptpy, read-only data set,
    * for use by {@link JDBDT#empty(DataSource)}
    * @return Empty, read-only data set.
    */
   final DataSet theEmptySet() {
     if (theEmptyOne == null) {
-      theEmptyOne = new DataSet(this, Collections.emptyList());
+      theEmptyOne = new DataSet(this, EMPTY_ROW_LIST);
       theEmptyOne.setReadOnly();
     }
     return theEmptyOne;
