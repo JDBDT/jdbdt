@@ -54,8 +54,6 @@ final class Delta {
       }
     }
   }
-  
-
 
   @SuppressWarnings("javadoc")
   private void 
@@ -143,7 +141,4 @@ final class Delta {
       return r;
     }
   }
-
-
-  
 }
