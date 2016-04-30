@@ -52,25 +52,25 @@ to `assertionDelta`, as follows:
 		<th align="center">N</th>
 	</tr>
 	<tr>
-		<td><code>assertDelta(oldData, newData)</code></td>
+		<td><code>assertDelta([msg,] oldData, newData)</code></td>
 	    <td>Asserts that <code>&delta; = (oldData,newData)</code>.</td>
 	    <td align="center"><code>oldData</code></td>
 	    <td align="center"><code>newData</code></td>
 	</tr>
     <tr>
-		<td><code>assertDeleted(data)</code></td>
+		<td><code>assertDeleted([msg,] data)</code></td>
 	    <td>Asserts that <code>data</code> was deleted.</td>
 	    <td align="center"><code>data</code></td>
 	    <td align="center"><code>&empty;</code></td>
 	</tr>
 	<tr>
-		<td><code>assertInserted(data)</code></td>
+		<td><code>assertInserted([msg, ] data)</code></td>
 	    <td>Asserts that <code>data</code> was inserted.</td>
 	    <td align="center"><code>&empty;</code></td>
 	    <td align="center"><code>data</code></td>
 	</tr>
 	<tr>
-		<td><code>assertUnchanged(source)</code></td>
+		<td><code>assertUnchanged([msg,] source)</code></td>
 	    <td>Asserts no database changes took place.</td>
 	    <td align="center"><code>&empty;</code></td>
 	    <td align="center"><code>&empty;</code></td>
