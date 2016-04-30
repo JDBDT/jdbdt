@@ -34,7 +34,7 @@ final class DBAssertions {
     final Delta newDataMatch 
       = new Delta(newData.getRows().iterator(), dbDelta.inserted());
     if (!oldDataMatch.isEmpty() || !newDataMatch.isEmpty()) {
-      throw new DBAssertionError("Delta assertion failed");
+      throw new DBAssertionError(callInfo.getMessage());
     }   
   }
   
