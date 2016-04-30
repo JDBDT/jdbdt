@@ -141,8 +141,22 @@ public final class JDBDT {
   }
   
   /**
-   * Assert that no changes occurred for the given data source.
+   * Assert that no changes occurred for the given data source 
+   * (error message variant).
    * 
+   * @param message The message for assertion error.
+   * @param source Data source. 
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertDelta(DataSet,DataSet)
+   * @see #assertDeleted(String, DataSet)
+   * @see #assertInserted(String, DataSet)
+   */
+  public static void assertUnchanged(String message, DataSource source) throws DBAssertionError {
+    DataSet emptyDataSet = empty(source);
+    DBAssertions.verify(CallInfo.create(message), emptyDataSet, emptyDataSet);
+  }
+  /**
+   * Assert that no changes occurred for the given data source.
    * 
    * @param source Data source. 
    * @throws DBAssertionError if the assertion fails.
@@ -155,6 +169,21 @@ public final class JDBDT {
     DBAssertions.verify(CallInfo.create(), emptyDataSet, emptyDataSet);
   }
 
+  /**
+   * Assert that database changed only by removal of a given
+   * data set (error message variant).
+   * 
+   * @param message The message for the assertion error.
+   * @param data Data set.
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertDelta(String, DataSet,DataSet)
+   * @see #assertInserted(String, DataSet)
+   * @see #assertUnchanged(String, DataSource)
+   */
+  public static void assertDeleted(String message, DataSet data) throws DBAssertionError {
+    DBAssertions.verify(CallInfo.create(message), data, empty(data.getSource())); 
+  }
+  
   /**
    * Assert that database changed only by removal of a given
    * data set. 
@@ -170,6 +199,21 @@ public final class JDBDT {
 
   /**
    * Assert that database changed only by addition of a given
+   * data set (error message variant).
+   * 
+   * @param message The message for assertion error.
+   * @param data Data set.
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertUnchanged(DataSource)
+   * @see #assertDeleted(DataSet)
+   * @see #assertDelta(DataSet,DataSet)
+   */
+  public static void assertInserted(String message, DataSet data) throws DBAssertionError {
+    DBAssertions.verify(CallInfo.create(message), empty(data.getSource()), data);
+  }
+  
+  /**
+   * Assert that database changed only by addition of a given
    * data set.
    *
    * @param data data set.
@@ -182,6 +226,23 @@ public final class JDBDT {
     DBAssertions.verify(CallInfo.create(), empty(data.getSource()), data);
   }
 
+  /**
+   * Assert database delta expressed by 'old' 
+   * and 'new' data sets (error message variant).
+   * 
+   * @param message The error message for the assertion error.
+   * @param oldData Expected 'old' data.
+   * @param newData Expected 'new' data.
+   * @throws DBAssertionError if the assertion fails.
+   *
+   * @see #assertUnchanged(DataSource)
+   * @see #assertDeleted(DataSet)
+   * @see #assertInserted(DataSet)
+   */
+  public static void assertDelta(String message, DataSet oldData, DataSet newData) throws DBAssertionError {
+    DBAssertions.verify(CallInfo.create(message), oldData, newData);
+  }
+  
   /**
    * Assert database delta expressed by 'old' 
    * and 'new' data sets.
@@ -199,7 +260,18 @@ public final class JDBDT {
   }
   
   /**
-   * Assert database state is the given data set.
+   * Assert that the database state matches the given data set 
+   * (error message variant).
+   * @param message The message for assertion error.
+   * @param data Data set.
+   * @throws DBAssertionError if the assertion fails.
+   */
+  public static void assertState(String message, DataSet data) throws DBAssertionError {
+    // TODO
+    // new DBDelta(CallInfo.create(), data).end(); 
+  }
+  /**
+   * Assert that the database state matches the given data set.
    * @param data Data set.
    * @throws DBAssertionError if the assertion fails.
    */
