@@ -75,7 +75,7 @@ public class DataSet {
    * @see #isReadOnly()
    * 
    */
-  public void setReadOnly() {
+  public final void setReadOnly() {
     readOnly = true;
   }
 
@@ -92,7 +92,7 @@ public class DataSet {
    * Create a builder for this data set.
    * @return A new builder for this data set.
    */
-  public DataSetBuilder build() {
+  public final DataSetBuilder build() {
     return new DataSetBuilder(this);
   }
   
@@ -108,7 +108,7 @@ public class DataSet {
    * Get size of data set.
    * @return The number of rows in the set.
    */
-  public int size() {
+  public final int size() {
     return rows.size();
   }
 
@@ -178,7 +178,7 @@ public class DataSet {
    * @see #rows(Object[][])
    * @see #isReadOnly()
    */
-  public DataSet add(DataSet other) {
+  public final DataSet add(DataSet other) {
     checkIfNotReadOnly();
     if (other.getSource() != source) {
       throw new InvalidOperationException("Data source mismatch.");
