@@ -24,7 +24,7 @@ import org.junit.runners.Parameterized.Parameters;
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @RunWith(Parameterized.class)
-public class DBAssertionsTest extends DBTestCase {
+public class DBAssertTest extends DBTestCase {
 
   @Parameters
   public static Collection<Object[]> parameterData() {
@@ -48,7 +48,7 @@ public class DBAssertionsTest extends DBTestCase {
   private final String whereClause;
   private final Object[] queryArgs;
 
-  public DBAssertionsTest(String whereClause,Object[] queryArgs)  {
+  public DBAssertTest(String whereClause,Object[] queryArgs)  {
     this.whereClause = whereClause;
     this.queryArgs = queryArgs;
   }

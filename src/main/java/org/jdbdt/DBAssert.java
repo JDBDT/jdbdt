@@ -6,7 +6,7 @@ package org.jdbdt;
  * @since 0.1
  * 
  */
-final class DBAssertions {
+final class DBAssert {
   /**
    * Perform a delta verification.
    * 
@@ -35,7 +35,7 @@ final class DBAssertions {
       = new Delta(newData.getRows().iterator(), dbDelta.inserted());
     if (!oldDataMatch.isEmpty() || !newDataMatch.isEmpty()) {
       throw new DBAssertionError(callInfo.getMessage());
-    }   
+    }
   }
   
   @SuppressWarnings("javadoc")
@@ -58,7 +58,7 @@ final class DBAssertions {
   /**
    * Private constructor, to prevent instantiation.
    */
-  private DBAssertions() {
+  private DBAssert() {
     
   }
 }
