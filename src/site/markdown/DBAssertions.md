@@ -42,7 +42,7 @@ checks if the database delta is `(oldData,newData)`, as follows:
 is thrown, and details on mismatched data are logged (unless `DB.Option.LogAssertionErrors` is disabled). 
 
 A number of other assertion methods are defined for convenience, all of which internally reduce 
-to `assertionDelta`, as follows:
+to `assertDelta`, as follows:
 
 <table border="1">
 	<tr>
