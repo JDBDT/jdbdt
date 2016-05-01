@@ -1,37 +1,41 @@
 
 # Database assertions
 
-JDBDT assertions are of a special kind, called **delta assertions**. 
-The idea is that programmers may state the expected incremental changes made to the database,
-i.e., the expected database delta. The figure below illustrates the mechanism. 
-Starting from state **S**, called the **reference snapshot**, the SUT acts on a database, 
-yielding a new database state, **S'**. **S** and **S'** will have in common **unchanged** data 
-**U = S &cap; S'**,
-but will differ by **&delta; = (O, N)**, where **O = S &minus; S'** is the **old** data in **S** no longer defined in **S'**, 
-and **N = S' &minus; S** is the **new** data in **S'**.
+JDB&delta;t assertions are used to verify that the state of the database conforms to an expected one.
+There are two kinds of assertions. **Delta (&delta;) assertions** verify database state against user-specified
+incremental changes (a **database delta**), and (more traditional) **state assertions** verify that the database contents  match a given data set. 
+
+## Delta assertions
+
+Delta assertions state the expected incremental changes made to the database,
+i.e., an expected database delta. The figure below illustrates the mechanism. 
+Starting from state **S**, called the **reference snapshot**, the SUT (software under test)
+acts on the database, yielding a new database state, **S'**. **S** and **S'** 
+will have in common **unchanged** data **U = S &cap; S'**,
+but will differ by **&delta; = (O, N)**, where **O = S &minus; S'** is the **old** data in **S** no longer defined in **S'**, and **N = S' &minus; S** is the **new** data in **S'**.
 
 ![Database delta](images/jdbdt-delta.png)
 
-In line with this scheme, the programming pattern is:
+The programming pattern in line with this scheme will be:
 
 	Define reference snapshot(s) for data source(s) of interest
 	theSUT.changesTheDB();
-	Call assertion method(s)
+	Call delta assertion method(s)
 	
-## Snapshots 
+### Snapshots 
 
-A data source **snapshot** is a data set that is used as reference for subsequent database
+A data source **snapshot** is a data set that is used as reference for subsequent delta
 assertions. It can be defined in two ways for a data source `s`:
 
-1.  A call to `populate(data)`, s.t. `data.getSource() == s` and `s`is a `Table` instance 
+1.  A call to `populate(data)`, s.t. `data.getSource() == s` and `s` is a `Table` instance 
 will set `data` as the snapshot for `s`. Since `populate(data)` resets the full table
 contents exactly to `data`, by definition it will be safe to assume it as the correct database state.
-2. A call to `takeSnaphot(source)`, regardless of the type of `s` (`Table`, `Query`, `SQLDataSource`)
+2. A call to `takeSnaphot(source)`, regardless of the type of `s` (`Table`, `Query`)
 will issue a fresh database query, and record the obtained data set as the snapshot for `s`.
 
-## Assertion methods 
+### Assertion methods 
 
-The elementary JDBT assertion method is `assertDelta`. 
+The elementary &delta;-assertion method is `assertDelta`. 
 An `assertDelta(oldData, newData)` call,
 where `oldData` and `newData` are data sets for the same data source `s`,
 checks if the database delta is `(oldData,newData)`, as follows:
@@ -76,5 +80,8 @@ to `assertDelta`, as follows:
 	    <td align="center"><code>&empty;</code></td>
 	</tr>
 </table>
+
+## State assertions
+
 
 
