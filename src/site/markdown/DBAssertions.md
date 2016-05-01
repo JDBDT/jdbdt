@@ -3,7 +3,7 @@
 
 JDB&delta;t assertions are used to verify that the state of the database conforms to an expected one.
 There are two kinds of assertions. **Delta (&delta;) assertions** verify database state against user-specified
-incremental changes (a **database delta**), and (more traditional) **state assertions** verify that the database contents  match a given data set. 
+incremental changes (a **database delta**), and (more traditional) **state assertions** verify that the database contents match a given data set. 
 
 ## Delta assertions
 
@@ -82,6 +82,20 @@ to `assertDelta`, as follows:
 </table>
 
 ## State assertions
+
+A state assertion checks that the database contents in full, and
+is executed by calling `assertState`. 
+An `assertState([msg,] data)` call verifies that the data stored in
+the database for `data.getSource()` is (exactly) `data` as follows:
+
+1. It issues a new database query for `data.getSource()`.
+2. It verifies if the obtained data matches the expected `data`. If they do not match, `DBAssertionError`
+is thrown, and details on mismatched data are logged (unless `DB.Option.LogAssertionErrors` is disabled). 
+
+Unlike &delta;-assertions, no reference snapshot needs to be set for a state assertion.
+
+
+
 
 
 
