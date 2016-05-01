@@ -92,7 +92,7 @@ the database for `data.getSource()` is (exactly) `data` as follows:
 2. It verifies if the obtained data matches the expected `data`. If they do not match, `DBAssertionError`
 is thrown, and details on mismatched data are logged (unless `DB.Option.LogAssertionErrors` is disabled). 
 
-Unlike &delta;-assertions, no reference snapshot needs to be set for a state assertion.
+Unlike &delta;-assertions, no reference snapshot needs to be set previously for a state assertion.
 
 
 
