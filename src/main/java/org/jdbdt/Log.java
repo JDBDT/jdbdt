@@ -29,7 +29,7 @@ import org.w3c.dom.Element;
  * @since 0.1
  *
  */
-public final class Log {
+final class Log {
   /**
    * Output stream.
    */
@@ -48,16 +48,17 @@ public final class Log {
    * @param ouputFile Output file.
    * @throws FileNotFoundException If the file cannot be opened/created. 
    */
-  public Log(File ouputFile) throws FileNotFoundException {
+  Log(File ouputFile) throws FileNotFoundException {
     this(new PrintStream(new FileOutputStream(ouputFile)), false);
   }
   /**
    * Construct a log with an associated output stream.
    * @param out Output stream.
    */
-  public Log(PrintStream out) {
+  Log(PrintStream out) {
     this(out, true);
   }
+  
   /**
    * General constructor.
    * @param out Output stream.
@@ -72,9 +73,9 @@ public final class Log {
 
   @SuppressWarnings({ "javadoc" })
   private Element root() {
-    Element e = createNode(ROOT_TAG);
-    e.setAttribute(VERSION_ATTR, JDBDT.version());
-    e.setAttribute(TIME_ATTR, new Timestamp(System.currentTimeMillis()).toString());
+    Element e = createNode(null, ROOT_TAG);
+    e.setAttribute(VERSION_TAG, JDBDT.version());
+    e.setAttribute(TIME_TAG, new Timestamp(System.currentTimeMillis()).toString());
     return e;
   }
 
@@ -99,7 +100,7 @@ public final class Log {
    * </p>
    * 
    */
-  public void close() {
+  void close() {
     if (!ignoreClose) {
       out.close();
     }
@@ -109,52 +110,46 @@ public final class Log {
    * @param callInfo Call info.
    * @param data Data set.
    */
-  public void write(CallInfo callInfo, DataSet data) {
+  void write(CallInfo callInfo, DataSet data) {
     Element rootNode = root(),
-            dsNode = createNode(DATA_SET_TAG),
-            columnsNode = createNode(COLUMNS_TAG),
-            rowsNode = createNode(ROWS_TAG);
-    writeContext(rootNode, callInfo);
-    rootNode.appendChild(dsNode);
-    dsNode.appendChild(columnsNode);
-    dsNode.appendChild(rowsNode);
+            dsNode = createNode(rootNode, DATA_SET_TAG),
+            columnsNode = createNode(dsNode, COLUMNS_TAG),
+            rowsNode = createNode(dsNode, ROWS_TAG);
+    write(rootNode, callInfo);
     write(columnsNode, data.getSource().getMetaData());
     write(rowsNode, data.getSource().getMetaData().columns(), data.getRows().iterator());
     flush(rootNode);
   }
 
   @SuppressWarnings("javadoc")
-  private void writeContext(Element root, CallInfo info) {
-    Element ctxNode = createNode(CONTEXT_TAG);
+  private void write(Element root, CallInfo info) {
+    Element ctxNode = createNode(root, CONTEXT_TAG);
     if (info.getMessage().length() > 0) {
       simpleNode(ctxNode, CTX_MESSAGE_TAG, info.getMessage());
     }
-    writeMethodInfo(ctxNode, CTX_CALLER_TAG, info.getCallerMethodInfo());
-    writeMethodInfo(ctxNode, CTX_API_METHOD_TAG, info.getAPIMethodInfo());
-    root.appendChild(ctxNode);
+    write(ctxNode, CTX_CALLER_TAG, info.getCallerMethodInfo());
+    write(ctxNode, CTX_API_METHOD_TAG, info.getAPIMethodInfo());
   }
   
   @SuppressWarnings("javadoc")
-  private void writeMethodInfo
+  private void write
   (Element ctxNode, String tag, MethodInfo mi) {
-     Element miNode = createNode(tag);
+     Element miNode = createNode(ctxNode, tag);
      simpleNode(miNode, CTX_CLASS_TAG, mi.getClassName());
      simpleNode(miNode, CTX_METHOD_TAG, mi.getMethodName());
      simpleNode(miNode, CTX_FILE_TAG, mi.getFileName());
      simpleNode(miNode, CTX_LINE_TAG, String.valueOf(mi.getLineNumber()));
-     ctxNode.appendChild(miNode);
   }
   
   @SuppressWarnings("javadoc")
   private void write(Element topNode, MetaData md) {
     int index = 1;
-    topNode.setAttribute(COUNT_ATTR, String.valueOf(md.getColumnCount()));
+    topNode.setAttribute(COUNT_TAG, String.valueOf(md.getColumnCount()));
     for (MetaData.ColumnInfo col : md.columns()) {
-      Element colNode = createNode(COLUMN_TAG);
-      colNode.setAttribute(INDEX_ATTR, String.valueOf(index++));
-      colNode.setAttribute(LABEL_ATTR, col.label());
-      colNode.setAttribute(SQL_TYPE_ATTR, col.type().toString());
-      topNode.appendChild(colNode);
+      Element colNode = createNode(topNode, COLUMN_TAG);
+      colNode.setAttribute(INDEX_TAG, String.valueOf(index++));
+      colNode.setAttribute(LABEL_TAG, col.label());
+      colNode.setAttribute(SQL_TYPE_TAG, col.type().toString());
     } 
   }
   
@@ -162,11 +157,10 @@ public final class Log {
    * Log SQL code.
    * @param sql SQL code.
    */
-  public void writeSQL(String sql) {
+  void writeSQL(String sql) {
     Element rootNode = root(),
-            sqlNode = createNode(SQL_TAG);
-    rootNode.appendChild(sqlNode);
-    sqlNode.appendChild(xmlDoc.createCDATASection("\n" + sql + "\n"));
+            sqlNode = createNode(rootNode, SQL_TAG);
+    sqlNode.appendChild(xmlDoc.createCDATASection(sql));
     flush(rootNode);
   }
   
@@ -175,19 +169,15 @@ public final class Log {
    * @param callInfo Call info.
    * @param d Delta instance.
    */
-  public void write(CallInfo callInfo, Delta d) {
+  void write(CallInfo callInfo, Delta d) {
     Element rootNode = root(),
-            deltaNode = createNode(DELTA_TAG),
-            queryNode = createNode(COLUMNS_TAG),
-            bSetNode = createNode(BEFORE_TAG),
-            aSetNode = createNode(AFTER_TAG);
-    writeContext(rootNode, callInfo);
-    rootNode.appendChild(deltaNode);
-    deltaNode.appendChild(queryNode);
-    deltaNode.appendChild(bSetNode);
-    deltaNode.appendChild(aSetNode);
+            deltaNode = createNode(rootNode, DELTA_TAG),
+            queryNode = createNode(deltaNode, COLUMNS_TAG),
+            bSetNode = createNode(queryNode, BEFORE_TAG),
+            aSetNode = createNode(queryNode, AFTER_TAG);
+    write(rootNode, callInfo);
 //    write(queryNode, d.getMetaData());
-//    deltaNode.setAttribute(SIZE_ATTR, String.valueOf(d.size()));
+//    deltaNode.setAttribute(SIZE_TAG, String.valueOf(d.size()));
 //    write(bSetNode, d.getMetaData().columns(), d.getIterator(DBDelta.IteratorType.ACTUAL_OLD_DATA));
 //    write(aSetNode, d.getMetaData().columns(), d.getIterator(DBDelta.IteratorType.ACTUAL_NEW_DATA));
     flush(rootNode);
@@ -199,35 +189,37 @@ public final class Log {
     while (itr.hasNext()) {
       Row r = itr.next();
       Object[] data = r.data();
-      Element rowElem = createNode(ROW_TAG);
+      Element rowElem = createNode(topNode, ROW_TAG);
       for (int i=0; i < data.length; i++) {
-        Element colNode = createNode(COLUMN_TAG);
-        colNode.setAttribute(LABEL_ATTR, columns.get(i).label());
+        Element colNode = createNode(rowElem, COLUMN_TAG);
+        colNode.setAttribute(LABEL_TAG, columns.get(i).label());
         if (data[i] != null) {
-          colNode.setAttribute(JAVA_TYPE_ATTR, data[i].getClass().getName());
+          colNode.setAttribute(JAVA_TYPE_TAG, data[i].getClass().getName());
           colNode.setTextContent(data[i].toString());
         } else {
           colNode.setTextContent(NULL_VALUE);
         }
-        rowElem.appendChild(colNode);
       }
-      topNode.appendChild(rowElem);
       size++;
     }
-    topNode.setAttribute(COUNT_ATTR,  String.valueOf(size));
+    topNode.setAttribute(COUNT_TAG,  String.valueOf(size));
   }
   
   @SuppressWarnings("javadoc")
-  private Element createNode(String tag) {
-    return xmlDoc.createElement(tag);
+  private Element createNode(Element parent, String tag) {
+    Element node = xmlDoc.createElement(tag);
+    if (parent != null) {
+      parent.appendChild(node);
+    }
+    return node;
   }
 
   @SuppressWarnings("javadoc")
-  private void simpleNode(Element node, String tag, String value) {
-    Element child = createNode(tag);
+  private void simpleNode(Element parent, String tag, String value) {
+    Element child = createNode(parent, tag);
     child.setTextContent(value);
-    node.appendChild(child);
   }
+  
   /**
    * Document builder factory handle.
    */
@@ -241,15 +233,13 @@ public final class Log {
   @SuppressWarnings("javadoc")
   private static final String ROOT_TAG = "jdbdt-log-message";
   @SuppressWarnings("javadoc")
-  private static final String VERSION_ATTR = "version";
+  private static final String VERSION_TAG = "version";
   @SuppressWarnings("javadoc")
-  private static final String TIME_ATTR = "time";
+  private static final String TIME_TAG = "time";
   @SuppressWarnings("javadoc")
   private static final String DELTA_TAG = "delta";
   @SuppressWarnings("javadoc")
   private static final String DATA_SET_TAG = "data-set";
-  @SuppressWarnings("javadoc")
-  private static final String SIZE_ATTR = "size";
   @SuppressWarnings("javadoc")
   private static final String COLUMNS_TAG = "columns";
   @SuppressWarnings("javadoc")
@@ -265,15 +255,15 @@ public final class Log {
   @SuppressWarnings("javadoc")
   private static final String COLUMN_TAG = "column";
   @SuppressWarnings("javadoc")
-  private static final String LABEL_ATTR = "label";
+  private static final String LABEL_TAG = "label";
   @SuppressWarnings("javadoc")
-  private static final String SQL_TYPE_ATTR = "sql-type";
+  private static final String SQL_TYPE_TAG = "sql-type";
   @SuppressWarnings("javadoc")
-  private static final String JAVA_TYPE_ATTR = "java-type";
+  private static final String JAVA_TYPE_TAG = "java-type";
   @SuppressWarnings("javadoc")
-  private static final String INDEX_ATTR = "index";
+  private static final String INDEX_TAG = "index";
   @SuppressWarnings("javadoc")
-  private static final String COUNT_ATTR = "count";
+  private static final String COUNT_TAG = "count";
   @SuppressWarnings("javadoc")
   private static final String NULL_VALUE = "NULL";
   @SuppressWarnings("javadoc")
