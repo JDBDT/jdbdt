@@ -25,11 +25,11 @@ public final class DB {
      */
     STATEMENT_POOLING,
     /**
-     * Log deltas.
+     * Log assertions (including verified ones).
      */
-    LOG_DELTAS,
+    LOG_ASSERTIONS,
     /**
-     * Log assertion errors.
+     * Log assertion errors (excludes verified assertions).
      */
     LOG_ASSERTION_ERRORS,
     /**
@@ -74,6 +74,7 @@ public final class DB {
     this.connection = connection;
     log = new Log(System.err);
     enable(Option.STATEMENT_POOLING);
+    enable(Option.LOG_ASSERTION_ERRORS);
   }
 
   /**
@@ -91,7 +92,7 @@ public final class DB {
    */
   public void enableFullLogging() {
     enable(DB.Option.LOG_ASSERTION_ERRORS,
-           DB.Option.LOG_DELTAS,
+           DB.Option.LOG_ASSERTIONS,
            DB.Option.LOG_INSERTIONS,
            DB.Option.LOG_QUERIES,
            DB.Option.LOG_SQL);
@@ -192,16 +193,7 @@ public final class DB {
   }
 
   
-  /**
-   * Log delta.
-   * @param callInfo  Call info.
-   * @param delta Delta instance.
-   */
-  void logDelta(CallInfo callInfo, Delta delta) {
-    if (isEnabled(Option.LOG_DELTAS)) {
-      log.write(callInfo, delta);
-    }
-  }
+
   
   /**
    * Log snapshot.
@@ -229,6 +221,19 @@ public final class DB {
   void logSQL(String sql) {
     if (isEnabled(Option.LOG_SQL)) {
       log.writeSQL(sql);
+    }
+  }
+
+  /**
+   * Log delta assertion.
+   * @param callInfo Call info.
+   * @param da Delta assertion.
+   */
+  void logDeltaAssertion(CallInfo callInfo, DeltaAssertion da) {
+    if (isEnabled(Option.LOG_ASSERTIONS) ||
+        (    ! da.passed() 
+          && isEnabled(Option.LOG_ASSERTION_ERRORS) )) {
+      log.write(callInfo, da);
     }
   }
 

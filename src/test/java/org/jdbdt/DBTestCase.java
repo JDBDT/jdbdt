@@ -61,6 +61,7 @@ public class DBTestCase {
       gDB.disable(DB.Option.STATEMENT_POOLING);
     }
     newUserCounter = 0;
+    gDB.disable(DB.Option.LOG_ASSERTION_ERRORS);
     // gDB.enableFullLogging();
   }
   

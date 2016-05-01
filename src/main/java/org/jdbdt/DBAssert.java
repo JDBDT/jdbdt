@@ -24,7 +24,7 @@ final class DBAssert {
   static void deltaAssertion(CallInfo callInfo, DataSet oldData, DataSet newData) {
     validateDeltaAssertion(oldData, newData);
     final DataSource source = oldData.getSource();
-    //final DB db = source.getDB();
+    final DB db = source.getDB();
     final DataSet snapshot = source.getSnapshot();
     final DataSet stateNow = source.executeQuery(callInfo, false);
     final Delta dbDelta = new Delta(snapshot, stateNow);
@@ -32,7 +32,10 @@ final class DBAssert {
       = new Delta(oldData.getRows().iterator(), dbDelta.deleted());
     final Delta newDataMatch 
       = new Delta(newData.getRows().iterator(), dbDelta.inserted());
-    if (!oldDataMatch.isEmpty() || !newDataMatch.isEmpty()) {
+    final DeltaAssertion da = 
+      new DeltaAssertion(oldData, newData, oldDataMatch, newDataMatch);
+    db.logDeltaAssertion(callInfo, da);
+    if (!da.passed()) {
       throw new DBAssertionError(callInfo.getMessage());
     }
   }

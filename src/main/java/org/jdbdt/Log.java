@@ -112,12 +112,10 @@ final class Log {
    */
   void write(CallInfo callInfo, DataSet data) {
     Element rootNode = root(),
-            dsNode = createNode(rootNode, DATA_SET_TAG),
-            columnsNode = createNode(dsNode, COLUMNS_TAG),
-            rowsNode = createNode(dsNode, ROWS_TAG);
-    write(rootNode, callInfo);
-    write(columnsNode, data.getSource().getMetaData());
-    write(rowsNode, data.getSource().getMetaData().columns(), data.getRows().iterator());
+            dsNode = createNode(rootNode, DATA_SET_TAG);
+    write(rootNode, callInfo); 
+    write(dsNode, data.getSource().getMetaData());
+    write(dsNode, ROWS_TAG, data.getSource().getMetaData().columns(), data.getRows().iterator());
     flush(rootNode);
   }
 
@@ -142,11 +140,12 @@ final class Log {
   }
   
   @SuppressWarnings("javadoc")
-  private void write(Element topNode, MetaData md) {
+  private void write(Element parent, MetaData md) {
     int index = 1;
-    topNode.setAttribute(COUNT_TAG, String.valueOf(md.getColumnCount()));
+    Element node = createNode(parent, COLUMNS_TAG);
+    node.setAttribute(COUNT_TAG, String.valueOf(md.getColumnCount()));
     for (MetaData.ColumnInfo col : md.columns()) {
-      Element colNode = createNode(topNode, COLUMN_TAG);
+      Element colNode = createNode(node, COLUMN_TAG);
       colNode.setAttribute(INDEX_TAG, String.valueOf(index++));
       colNode.setAttribute(LABEL_TAG, col.label());
       colNode.setAttribute(SQL_TYPE_TAG, col.type().toString());
@@ -165,27 +164,55 @@ final class Log {
   }
   
   /**
-   * Write the state of a delta to the log.
+   * Log delta assertion.
    * @param callInfo Call info.
-   * @param d Delta instance.
+   * @param da Delta assertion.
    */
-  void write(CallInfo callInfo, Delta d) {
-    Element rootNode = root(),
-            deltaNode = createNode(rootNode, DELTA_TAG),
-            queryNode = createNode(deltaNode, COLUMNS_TAG),
-            bSetNode = createNode(queryNode, BEFORE_TAG),
-            aSetNode = createNode(queryNode, AFTER_TAG);
+  void write(CallInfo callInfo, DeltaAssertion da) {
+    final Element rootNode = root();
+            
+    final MetaData md = da.getMetaData();
+    final List<MetaData.ColumnInfo> mdCols = md.columns();
     write(rootNode, callInfo);
-//    write(queryNode, d.getMetaData());
-//    deltaNode.setAttribute(SIZE_TAG, String.valueOf(d.size()));
-//    write(bSetNode, d.getMetaData().columns(), d.getIterator(DBDelta.IteratorType.ACTUAL_OLD_DATA));
-//    write(aSetNode, d.getMetaData().columns(), d.getIterator(DBDelta.IteratorType.ACTUAL_NEW_DATA));
+    final Element daNode = createNode(rootNode, DELTA_ASSERTION_TAG);
+    write(daNode, md);
+    final Element expectedNode = createNode(daNode, EXPECTED_TAG);    
+    write(expectedNode, 
+          OLD_DATA_TAG, 
+          mdCols,
+          da.data(DeltaAssertion.IteratorType.OLD_DATA_EXPECTED));
+    write(expectedNode, 
+          NEW_DATA_TAG, 
+          mdCols,
+          da.data(DeltaAssertion.IteratorType.NEW_DATA_EXPECTED));
+    if (! da.passed()) {
+      Element errorsNode = createNode(daNode, ERRORS_TAG),
+              oldDataErrors = createNode(errorsNode, OLD_DATA_TAG),
+              newDataErrors = createNode(errorsNode, NEW_DATA_TAG);
+      write(oldDataErrors, 
+            EXPECTED_TAG, 
+            mdCols,
+            da.data(DeltaAssertion.IteratorType.OLD_DATA_ERRORS_EXPECTED));
+      write(oldDataErrors, 
+            ACTUAL_TAG, 
+            mdCols,
+            da.data(DeltaAssertion.IteratorType.OLD_DATA_ERRORS_ACTUAL));
+      write(newDataErrors, 
+          EXPECTED_TAG, 
+          mdCols,
+          da.data(DeltaAssertion.IteratorType.NEW_DATA_ERRORS_EXPECTED));
+      write(newDataErrors, 
+            ACTUAL_TAG, 
+            mdCols,
+            da.data(DeltaAssertion.IteratorType.NEW_DATA_ERRORS_ACTUAL));
+    }
     flush(rootNode);
   }
 
   @SuppressWarnings("javadoc")
-  private void write(Element topNode, List<MetaData.ColumnInfo> columns, Iterator<Row> itr) {
+  private void write(Element parent, String tag, List<MetaData.ColumnInfo> columns, Iterator<Row> itr) {
     int size = 0;
+    Element topNode = createNode(parent, tag);
     while (itr.hasNext()) {
       Row r = itr.next();
       Object[] data = r.data();
@@ -237,15 +264,21 @@ final class Log {
   @SuppressWarnings("javadoc")
   private static final String TIME_TAG = "time";
   @SuppressWarnings("javadoc")
-  private static final String DELTA_TAG = "delta";
+  private static final String DELTA_ASSERTION_TAG = "delta-assertion";
+  @SuppressWarnings("javadoc")
+  private static final String ERRORS_TAG = "errors";
+  @SuppressWarnings("javadoc")
+  private static final String EXPECTED_TAG = "expected";
+  @SuppressWarnings("javadoc")
+  private static final String ACTUAL_TAG = "actual";
   @SuppressWarnings("javadoc")
   private static final String DATA_SET_TAG = "data-set";
   @SuppressWarnings("javadoc")
   private static final String COLUMNS_TAG = "columns";
   @SuppressWarnings("javadoc")
-  private static final String BEFORE_TAG = "before";
+  private static final String OLD_DATA_TAG = "old-data";
   @SuppressWarnings("javadoc")
-  private static final String AFTER_TAG = "after";
+  private static final String NEW_DATA_TAG = "new-data";
   @SuppressWarnings("javadoc")
   private static final String ROWS_TAG = "rows";
   @SuppressWarnings("javadoc")

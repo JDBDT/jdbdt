@@ -101,5 +101,13 @@ final class DeltaAssertion {
     }
     return itr;
   }
+
+  /**
+   * Get meta-data for data source at stake.
+   * @return Meta-data for delta assertion.
+   */
+  MetaData getMetaData() {
+    return oldData.getSource().getMetaData();  
+  }
   
 }
