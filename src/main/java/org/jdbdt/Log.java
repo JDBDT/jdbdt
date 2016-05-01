@@ -209,6 +209,35 @@ final class Log {
     flush(rootNode);
   }
 
+  /**
+   * Log state assertion.
+   * @param callInfo Call info.
+   * @param sa State assertion.
+   */
+  void write(CallInfo callInfo, StateAssertion sa) {
+    final Element rootNode = root(); 
+    final MetaData md = sa.getMetaData();
+    final List<MetaData.ColumnInfo> mdCols = md.columns();
+    write(rootNode, callInfo);
+    final Element saNode = createNode(rootNode, STATE_ASSERTION_TAG);
+    write(saNode, md);
+    write(saNode, 
+          EXPECTED_TAG, 
+          mdCols,
+          sa.data(StateAssertion.IteratorType.EXPECTED_DATA));
+    if (! sa.passed()) {
+      Element errorsNode = createNode(saNode, ERRORS_TAG);
+      write(errorsNode, 
+            EXPECTED_TAG, 
+            mdCols,
+            sa.data(StateAssertion.IteratorType.ERRORS_EXPECTED));
+      write(errorsNode, 
+            ACTUAL_TAG, 
+            mdCols,
+            sa.data(StateAssertion.IteratorType.ERRORS_ACTUAL));
+    }
+    flush(rootNode);
+  }
   @SuppressWarnings("javadoc")
   private void write(Element parent, String tag, List<MetaData.ColumnInfo> columns, Iterator<Row> itr) {
     int size = 0;
@@ -265,6 +294,8 @@ final class Log {
   private static final String TIME_TAG = "time";
   @SuppressWarnings("javadoc")
   private static final String DELTA_ASSERTION_TAG = "delta-assertion";
+  @SuppressWarnings("javadoc")
+  private static final String STATE_ASSERTION_TAG = "state-assertion";
   @SuppressWarnings("javadoc")
   private static final String ERRORS_TAG = "errors";
   @SuppressWarnings("javadoc")

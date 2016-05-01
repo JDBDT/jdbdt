@@ -229,11 +229,24 @@ public final class DB {
    * @param callInfo Call info.
    * @param da Delta assertion.
    */
-  void logDeltaAssertion(CallInfo callInfo, DeltaAssertion da) {
+  void log(CallInfo callInfo, DeltaAssertion da) {
     if (isEnabled(Option.LOG_ASSERTIONS) ||
         (    ! da.passed() 
           && isEnabled(Option.LOG_ASSERTION_ERRORS) )) {
       log.write(callInfo, da);
+    }
+  }
+  
+  /**
+   * Log state assertion.
+   * @param callInfo Call info.
+   * @param sa state assertion.
+   */
+  void log(CallInfo callInfo, StateAssertion sa) {
+    if (isEnabled(Option.LOG_ASSERTIONS) ||
+        (    ! sa.passed() 
+          && isEnabled(Option.LOG_ASSERTION_ERRORS) )) {
+      log.write(callInfo, sa);
     }
   }
 

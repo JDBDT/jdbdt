@@ -34,7 +34,7 @@ final class DBAssert {
       = new Delta(newData.getRows().iterator(), dbDelta.inserted());
     final DeltaAssertion da = 
       new DeltaAssertion(oldData, newData, oldDataMatch, newDataMatch);
-    db.logDeltaAssertion(callInfo, da);
+    db.log(callInfo, da);
     if (!da.passed()) {
       throw new DBAssertionError(callInfo.getMessage());
     }
@@ -72,11 +72,15 @@ final class DBAssert {
    */
   static void stateAssertion(CallInfo callInfo, DataSet expected) {
     if (expected == null) {
-      throw new InvalidOperationException("Null data set");
+      throw new InvalidOperationException("Null data set.");
     }
-    final DataSet stateNow = expected.getSource().executeQuery(callInfo, false);
+    final DataSource source = expected.getSource();
+    final DataSet stateNow = source.executeQuery(callInfo, false);
     final Delta delta = new Delta(expected, stateNow); 
-    if (! delta.isEmpty()) {
+    final StateAssertion sa = 
+      new StateAssertion(expected, delta);
+    source.getDB().log(callInfo, sa);
+    if (! sa.passed()) {
       throw new DBAssertionError(callInfo.getMessage());
     }
   }
