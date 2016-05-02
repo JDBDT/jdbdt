@@ -7,7 +7,7 @@ incremental changes (a **database delta**), and (more traditional) **state asser
 
 ## Delta assertions
 
-Delta assertions state the expected incremental changes made to the database,
+&delta;-assertions state the expected incremental changes made to the database,
 i.e., an expected database delta. The figure below illustrates the mechanism. 
 Starting from state **S**, called the **reference snapshot**, the SUT (software under test)
 acts on the database, yielding a new database state, **S'**. **S** and **S'** 
@@ -16,9 +16,9 @@ but will differ by **&delta; = (O, N)**, where **O = S &minus; S'** is the **old
 
 ![Database delta](images/jdbdt-delta.png)
 
-The programming pattern in line with this scheme will be:
+The programming pattern in line with this scheme is as follows:
 
-	Define reference snapshot(s) for data source(s) of interest
+	Define reference snapshot(s) for the data source(s) of interest
 	theSUT.changesTheDB();
 	Call delta assertion method(s)
 	
@@ -92,7 +92,7 @@ the database for `data.getSource()` is (exactly) `data` as follows:
 2. It verifies if the obtained data matches the expected `data`. If they do not match, `DBAssertionError`
 is thrown, and details on mismatched data are logged (unless `DB.Option.LogAssertionErrors` is disabled). 
 
-Unlike &delta;-assertions, no reference snapshot needs to be set previously for a state assertion.
+Note that no reference snapshot needs to be set for a state assertion, unlike &delta;-assertions.
 
 
 
