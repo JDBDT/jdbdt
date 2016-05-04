@@ -27,6 +27,13 @@ public class SQLDataSourceTest extends DBTestCase {
   }
   
   @Test
+  public void testInit2() {
+    SQLDataSource theSUT = new SQLDataSource(getDB(), SQL_CODE);
+    assertEquals(SQL_CODE, theSUT.getSQLForQuery());
+    assertNull(theSUT.getQueryArguments());
+  }
+  
+  @Test
   public void testQueryExecution1() {
     SQLDataSource theSUT = new SQLDataSource(getDB(), SQL_CODE, "%");
     DataSet actual = query(theSUT);
