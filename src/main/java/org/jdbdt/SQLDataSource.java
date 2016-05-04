@@ -17,22 +17,14 @@ public final class SQLDataSource extends DataSource {
    * Constructor.
    * @param db Database handle.
    * @param sql SQL for query
+   * @param args Optional arguments for query.
    */
-  SQLDataSource(DB db, String sql) {
+  SQLDataSource(DB db, String sql, Object... args) {
     super(db);
     this.sqlForQuery = sql;
-  }
-
-  /**
-   * Set arguments for SQL query (if needed).
-   * @param args Query arguments.
-   * @return The data source instance, for chained calls.
-   */
-  @SafeVarargs
-  public final SQLDataSource withArguments(Object... args) {
-    checkNotCompiled();
-    super.setQueryArguments(args);
-    return this;
+    if (args != null && args.length > 0) {
+      super.setQueryArguments(args);
+    }
   }
   
   @Override

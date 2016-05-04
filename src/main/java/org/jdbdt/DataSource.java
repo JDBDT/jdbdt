@@ -32,12 +32,12 @@ public abstract class DataSource {
   /**
    * Column names.
    */
-  private String[] columns;
+  private String[] columns = null;
   
   /**
    * Query arguments (if any).
    */
-  private Object[] queryArgs;
+  private Object[] queryArgs = null;
   
   /**
    * Last snapshot (if any).
@@ -48,7 +48,7 @@ public abstract class DataSource {
    * The empty data set, as returned by {@link JDBDT#empty(DataSource)}
    * (computed lazily).
    */
-  private DataSet theEmptyOne;
+  private DataSet theEmptyOne = null;
   
   /**
    * Constructor.

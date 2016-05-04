@@ -207,7 +207,7 @@ public final class QueryBuilder  {
    * @return A new query instance.
    */
   public SQLDataSource build(DB db, Object... args) {
-    return new SQLDataSource(db, toSQL()); 
+    return new SQLDataSource(db, toSQL(), args); 
   }
   
   @SuppressWarnings("javadoc")
@@ -233,7 +233,6 @@ public final class QueryBuilder  {
       throw new InvalidOperationException(p + " needs to be set for query building.");
     }
   }
-  
 
   /**
    * Get textual representation.
@@ -243,5 +242,4 @@ public final class QueryBuilder  {
   public String toString() {
     return toSQL();
   }
-
 }
