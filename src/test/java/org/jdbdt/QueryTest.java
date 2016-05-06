@@ -30,7 +30,7 @@ public class QueryTest extends DBTestCase {
   public void testInit2() {
     DataSource theSUT = query(getDB(), SQL_CODE);
     assertEquals(SQL_CODE, theSUT.getSQLForQuery());
-    assertNull(theSUT.getQueryArguments());
+    assertArrayEquals(new Object[]{}, theSUT.getQueryArguments());
   }
   
   @Test

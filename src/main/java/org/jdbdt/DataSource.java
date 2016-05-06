@@ -53,9 +53,11 @@ public abstract class DataSource {
   /**
    * Constructor.
    * @param db Database instance.
+   * @param queryArgs Optional arguments for database query.
    */
-  DataSource(DB db) {
+  DataSource(DB db, Object... queryArgs) {
     this.db = db;
+    this.queryArgs = queryArgs;
   }
 
   /**
@@ -132,20 +134,6 @@ public abstract class DataSource {
     return metaData;
   }
   
-  /**
-   * Set arguments for issuing query.
-   * @param args Arguments to use for query.
-   */
-  final void setQueryArguments(Object[] args) {
-    if (queryArgs != null) {
-      throw new InvalidOperationException("Query arguments are already set.");
-    }
-    if (args == null || args.length == 0) {
-      throw new InvalidOperationException("Invalid query arguments (null / empty array?).");
-    }
-    queryArgs = args.clone();
-  }
-
   /**
    * Get query arguments.
    * @return Array of arguments if any, otherwise <code>null</code>.

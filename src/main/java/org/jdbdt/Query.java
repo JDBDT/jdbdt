@@ -20,11 +20,8 @@ final class Query extends DataSource {
    * @param args Optional arguments for query.
    */
   Query(DB db, String sql, Object... args) {
-    super(db);
+    super(db, args);
     this.sqlForQuery = sql;
-    if (args != null && args.length > 0) {
-      super.setQueryArguments(args);
-    }
   }
   
   @Override
