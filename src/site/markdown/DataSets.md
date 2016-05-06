@@ -24,8 +24,8 @@ typically followed by a chained sequence of calls.
     import org.jdbdt.Table;
     ...
 	DB db = ...;
-	Table table = db.table("Users")
-	                .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
+	Table table = table(db, "USER")
+	             .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
 	DataSet userSet 
        = data(t)
 		.row(0,   "root",  "Root User",  "god",       null)
@@ -48,8 +48,8 @@ of column values.
     import org.jdbdt.Table;
     ...
 	DB db = ...;
-	Table table = db.table("Users")
-	                .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
+	Table table = table(db, "USER")
+	             .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
      
 	Conversion<User> conv = u -> new Object[] {  
 	                          u.getID(), 
@@ -85,11 +85,8 @@ set.
     import org.jdbdt.DataSet;
     ...
 	DB db = ...;
-	DataSet data = builder(
-	
-	DB db = ...;
-	Table table = db.table("Users")
-	                .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");	
+	Table table = table(db, "USER")
+	             .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");	
     
     // Create a fresh data set with 9 rows
     DataSet data = 
@@ -108,12 +105,12 @@ set.
       
     // Add 500 more rows to the data set
     data.build()
-      .sequence("ID", 1000) // 1000, 1001, ... 
-      .sequence("LOGIN", i -> "anotherUser" + i, 1000)
-      .sequence("NAME", i -> "Yet Another User" + i, 1000)
-      .random("PASSWORD", "aeiou", "qwerty", "12345", "pass is the password")
-      .nullValue("CREATED") // set to NULL
-      .generate(500);
+        .sequence("ID", 1000) // 1000, 1001, ... 
+        .sequence("LOGIN", i -> "anotherUser" + i, 1000)
+        .sequence("NAME", i -> "Yet Another User" + i, 1000)
+        .random("PASSWORD", "aeiou", "qwerty", "12345", "pass is the password")
+        .nullValue("CREATED") // set to NULL
+        .generate(500);
  
 ## Read-only data sets
 <a name="ReadOnly"></a>
@@ -165,5 +162,4 @@ Properties:
 - `singleton(data,i)` returns a new data set containing only the `index`-th row in `data`.
 - `head(data, n)` returns a new data set containing the first `n` rows of `data`.
 - `tail(data,n)` returns a new data set containing the last `n` rows of `data`.
-
 
