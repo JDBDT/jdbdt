@@ -107,6 +107,28 @@ public final class JDBDT {
   }
   
   /**
+   * Create a query data source from given SQL code.
+   * @param db Database handle.
+   * @param sql SQL code.
+   * @param args Optional query arguments.
+   * @return A new query data source.
+   */
+  public static SQLDataSource query(DB db, String sql, Object... args) {
+    return new SQLDataSource(db, sql, args);
+  }
+  
+  /**
+   * Create a query builder.
+   * @param db Database handle.
+   * @param columns Columns for query.
+   * @return A new query builder.
+   */
+  public static QueryBuilder select(DB db, String... columns) {
+    return new QueryBuilder(db, columns);
+  }
+  
+
+  /**
    * Take a database snapshot.
    * 
    * <p>

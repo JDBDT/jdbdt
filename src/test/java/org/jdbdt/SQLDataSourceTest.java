@@ -21,21 +21,21 @@ public class SQLDataSourceTest extends DBTestCase {
   @Test
   public void testInit() {
     Object[] qargs = { "x" };
-    SQLDataSource theSUT = new SQLDataSource(getDB(), SQL_CODE, qargs);
+    SQLDataSource theSUT = query(getDB(), SQL_CODE, qargs);
     assertEquals(SQL_CODE, theSUT.getSQLForQuery());
     assertArrayEquals(qargs, theSUT.getQueryArguments());
   }
   
   @Test
   public void testInit2() {
-    SQLDataSource theSUT = new SQLDataSource(getDB(), SQL_CODE);
+    SQLDataSource theSUT = query(getDB(), SQL_CODE);
     assertEquals(SQL_CODE, theSUT.getSQLForQuery());
     assertNull(theSUT.getQueryArguments());
   }
   
   @Test
   public void testQueryExecution1() {
-    SQLDataSource theSUT = new SQLDataSource(getDB(), SQL_CODE, "%");
+    SQLDataSource theSUT = query(getDB(), SQL_CODE, "%");
     DataSet actual = query(theSUT);
     DataSet expected = data(theSUT);
     for (User u : INITIAL_DATA) {
@@ -46,7 +46,7 @@ public class SQLDataSourceTest extends DBTestCase {
   
   @Test
   public void testQueryExecution2() throws SQLException {
-    SQLDataSource theSUT = new SQLDataSource(getDB(), SQL_CODE, EXISTING_DATA_ID1);
+    SQLDataSource theSUT = query(getDB(), SQL_CODE, EXISTING_DATA_ID1);
     User u = getDAO().query(EXISTING_DATA_ID1);
     DataSet actual = query(theSUT);
     DataSet expected = 

@@ -75,15 +75,22 @@ public final class QueryBuilder  {
   }
   
   /**
+   * Database handle.
+   */
+  private final DB db;
+  
+  /**
    * Parameter values.
    */
   private final String[] paramValues = new String[Param.values().length];
 
   /**
    * Constructs a new query.
+   * @param db Database handle.
    * @param columns Columns for query.
    */
-  QueryBuilder(String... columns) {
+  QueryBuilder(DB db, String... columns) {
+    this.db = db;
     set(Param.COLUMNS, columns);
   }
 
@@ -202,11 +209,10 @@ public final class QueryBuilder  {
 
   /**
    * Build the query.
-   * @param db Database handle.
    * @param args Optional query arguments.
    * @return A new query instance.
    */
-  public SQLDataSource build(DB db, Object... args) {
+  public SQLDataSource build(Object... args) {
     return new SQLDataSource(db, toSQL(), args); 
   }
   

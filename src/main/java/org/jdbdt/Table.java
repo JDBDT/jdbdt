@@ -10,7 +10,7 @@ package org.jdbdt;
  * </p>
  * <ul>
  * <li>
- * must be created using {@link DB#table(String)};
+ * must be created using {@link JDBDT#table(DB,String)};
  * </li>
  * <li>
  * may have an associated subset of the table's columns using {@link #columns(String...)} - 
@@ -41,7 +41,7 @@ public final class Table extends DataSource {
    * Constructor.
    * @param db Database instance.
    * @param tableName Table name
-   * @see DB#table(String)
+   * @see JDBDT#table(DB,String)
    */
   Table(DB db, String tableName) {
     super(db);
