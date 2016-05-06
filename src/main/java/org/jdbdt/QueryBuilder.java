@@ -4,8 +4,6 @@ package org.jdbdt;
 /**
  * Query builder.
  * 
- * @see Query
- * 
  * 
  * @since 0.1
  */
