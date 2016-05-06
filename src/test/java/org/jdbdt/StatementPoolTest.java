@@ -1,6 +1,8 @@
 package org.jdbdt;
 
 import static org.junit.Assert.*;
+import static org.jdbdt.JDBDT.*;
+
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -21,8 +23,8 @@ public class StatementPoolTest extends DBTestCase {
   
   @BeforeClass
   public static void globalSetup() throws SQLException {
-    table = getDB().table(UserDAO.TABLE_NAME)
-                   .columns(UserDAO.COLUMNS);
+    table = table(getDB(), UserDAO.TABLE_NAME)
+           .columns(UserDAO.COLUMNS);
   }
   
   private PreparedStatement compile(String sql) throws SQLException {

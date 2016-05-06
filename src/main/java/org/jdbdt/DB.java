@@ -131,15 +131,6 @@ public final class DB {
   }
 
   /**
-   * Create a table data source.
-   * @param name Table name.
-   * @return A new {@link Table} instance.
-   */
-  public Table table(String name) {
-    return new Table(this, name);
-  }
-
-  /**
    * Create a query data source.
    * @return A new {@link Query} instance.
    */

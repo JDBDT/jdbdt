@@ -19,7 +19,7 @@ public class TableTest extends DBTestCase {
   
   @Before
   public void createTable() throws SQLException {
-    theSUT = getDB().table(UserDAO.TABLE_NAME);
+    theSUT = table(getDB(), UserDAO.TABLE_NAME);
   }
   
   @Test

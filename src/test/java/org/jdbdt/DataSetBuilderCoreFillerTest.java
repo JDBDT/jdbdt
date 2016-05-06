@@ -1,7 +1,7 @@
 package org.jdbdt;
 
 import static org.junit.Assert.*;
-import static org.jdbdt.JDBDT.builder;
+import static org.jdbdt.JDBDT.*;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -25,7 +25,7 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
 
   @BeforeClass
   public static void globalSetup() throws SQLException {
-    table = getDB().table(UserDAO.TABLE_NAME).columns(UserDAO.COLUMNS);
+    table = table(getDB(), UserDAO.TABLE_NAME).columns(UserDAO.COLUMNS);
   }
 
   DataSetBuilder theSUT;

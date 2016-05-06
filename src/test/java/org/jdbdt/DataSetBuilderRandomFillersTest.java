@@ -1,7 +1,7 @@
 package org.jdbdt;
 
 import static org.junit.Assert.*;
-import static org.jdbdt.JDBDT.builder;
+import static org.jdbdt.JDBDT.*;
 
 import java.math.BigInteger;
 import java.sql.Date;
@@ -50,7 +50,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     BASE_DATA.put("cDate", new Date(0L));
     String[] columns = new String[BASE_DATA.size()];
     BASE_DATA.keySet().toArray(columns);
-    table = getDB().table(TABLE_NAME).columns(columns);
+    table = table(getDB(), TABLE_NAME).columns(columns);
   }
 
   @Rule 

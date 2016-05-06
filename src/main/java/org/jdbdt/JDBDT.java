@@ -97,6 +97,16 @@ public final class JDBDT {
   }
 
   /**
+   * Create a table data source.
+   * @param db Database handle.
+   * @param name Table name.
+   * @return A new {@link Table} instance.
+   */
+  public static Table table(DB db, String name) {
+    return new Table(db, name);
+  }
+  
+  /**
    * Take a database snapshot.
    * 
    * <p>

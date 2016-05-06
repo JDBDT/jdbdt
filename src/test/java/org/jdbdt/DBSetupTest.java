@@ -25,8 +25,8 @@ public class DBSetupTest extends DBTestCase {
 
   @BeforeClass
   public static void globalSetup() throws SQLException {
-    table = getDB().table(UserDAO.TABLE_NAME)
-                   .columns(UserDAO.COLUMNS);
+    table = table(getDB(), UserDAO.TABLE_NAME)
+           .columns(UserDAO.COLUMNS);
   }
 
   void doInsert(User... users) throws SQLException {
