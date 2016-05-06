@@ -210,8 +210,8 @@ public final class QueryBuilder  {
    * @param args Optional query arguments.
    * @return A new query instance.
    */
-  public SQLDataSource build(Object... args) {
-    return new SQLDataSource(db, toSQL(), args); 
+  public DataSource build(Object... args) {
+    return new Query(db, toSQL(), args); 
   }
   
   @SuppressWarnings("javadoc")

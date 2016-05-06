@@ -10,7 +10,7 @@ import org.junit.runners.Suite.SuiteClasses;
   StatementPoolTest.class,
   TableTest.class,
   QueryBuilderTest.class,
-  SQLDataSourceTest.class,
+  QueryTest.class,
   DataSetTest.class,
   DBSetupTest.class,
   DBAssertTest.class,

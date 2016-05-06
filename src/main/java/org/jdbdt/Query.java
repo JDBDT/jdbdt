@@ -6,7 +6,7 @@ package org.jdbdt;
  * @since 0.1 
  *
  */
-public final class SQLDataSource extends DataSource {
+final class Query extends DataSource {
 
   /**
    * SQL code for query.
@@ -19,7 +19,7 @@ public final class SQLDataSource extends DataSource {
    * @param sql SQL for query
    * @param args Optional arguments for query.
    */
-  SQLDataSource(DB db, String sql, Object... args) {
+  Query(DB db, String sql, Object... args) {
     super(db);
     this.sqlForQuery = sql;
     if (args != null && args.length > 0) {
