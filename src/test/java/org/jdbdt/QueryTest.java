@@ -34,7 +34,7 @@ public class QueryTest extends DBTestCase {
 
   @Before
   public void createQuery() throws SQLException {
-    theSUT = getDB().select().from(UserDAO.TABLE_NAME);
+    theSUT = new Query(getDB()).from(UserDAO.TABLE_NAME);
     qsetup = new EnumMap<>(S.class);
     for (S s : S.values()) {
       qsetup.put(s, null);
@@ -197,7 +197,7 @@ public class QueryTest extends DBTestCase {
 
   @Test
   public void testExecPlain() {
-    DataSet actual = query(theSUT);
+    DataSet actual = executeQuery(theSUT);
     DataSet expected = 
         data(theSUT, getConversion())
         .rows(INITIAL_DATA);
@@ -208,7 +208,7 @@ public class QueryTest extends DBTestCase {
   public void testExecWhere() throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
     DataSet actual = 
-        query(theSUT.where("login='" + EXISTING_DATA_ID1 + "'"));
+        executeQuery(theSUT.where("login='" + EXISTING_DATA_ID1 + "'"));
     DataSet expected = 
         data(theSUT, getConversion())
         .row(u);
@@ -221,7 +221,7 @@ public class QueryTest extends DBTestCase {
     User u = getDAO().query(EXISTING_DATA_ID1);
     assertNotNull(u);
     DataSet actual = 
-        query(theSUT
+        executeQuery(theSUT
             .where("login=?")
             .withArguments(EXISTING_DATA_ID1));
     DataSet expected = 
@@ -233,7 +233,7 @@ public class QueryTest extends DBTestCase {
   public void testExecColumns1() throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
     DataSet actual = 
-       query(theSUT
+       executeQuery(theSUT
         .columns("password")
         .where("login=?")
         .withArguments(EXISTING_DATA_ID1));
@@ -247,7 +247,7 @@ public class QueryTest extends DBTestCase {
   public void testExecColumns2() throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
     DataSet actual = 
-      query(theSUT
+      executeQuery(theSUT
         .columns("password","name")
         .where("login=?")
         .withArguments(EXISTING_DATA_ID1));
@@ -259,7 +259,7 @@ public class QueryTest extends DBTestCase {
 
   @Test
   public void testExecWithDistinct1() {
-    DataSet actual = query(theSUT.distinct());
+    DataSet actual = executeQuery(theSUT.distinct());
     DataSet expected = 
         data(theSUT, getConversion())
         .rows(INITIAL_DATA);
@@ -269,7 +269,7 @@ public class QueryTest extends DBTestCase {
   @Test
   public void testExecWithDistinct2() {
     DataSet actual = 
-     query(theSUT.distinct().columns("password"));
+     executeQuery(theSUT.distinct().columns("password"));
     HashSet<String> distinctPass = new HashSet<>();
     DataSet expected = data(theSUT);
     for (User u : INITIAL_DATA) {
@@ -282,7 +282,7 @@ public class QueryTest extends DBTestCase {
 
   @Test
   public void testExecWithOrderBy1() {
-    DataSet actual = query(theSUT.orderBy("login"));
+    DataSet actual = executeQuery(theSUT.orderBy("login"));
     User[] sortedUsers = INITIAL_DATA.clone();
     Arrays.sort(sortedUsers, 
         (a,b) -> 
@@ -295,7 +295,7 @@ public class QueryTest extends DBTestCase {
 
   @Test
   public void testExecWithOrderBy2() {
-    DataSet actual = query(theSUT.orderBy("password", "login"));
+    DataSet actual = executeQuery(theSUT.orderBy("password", "login"));
     User[] sortedUsers = INITIAL_DATA.clone();
     Arrays.sort(sortedUsers, 
         (a,b) -> {
@@ -328,7 +328,7 @@ public class QueryTest extends DBTestCase {
   @Test
   public void testExecWithGroupBy1() {
     DataSet actual =
-      query(theSUT
+      executeQuery(theSUT
         .columns("password","count(login)")
         .groupBy("password"));
     DataSet expected = 
@@ -341,7 +341,7 @@ public class QueryTest extends DBTestCase {
   @Test
   public void testExecWithGroupBy2() {
     DataSet actual = 
-        query (theSUT
+        executeQuery (theSUT
             .columns("password","count(login)")
             .groupBy("password")
             .having("count(login) > 1"));

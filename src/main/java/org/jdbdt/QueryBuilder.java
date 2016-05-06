@@ -14,7 +14,7 @@ public final class QueryBuilder  {
   /**
    * Clauses/parameters that may be set for a builder.
    */
-  private enum Param {
+  enum Param {
     /** Columns (mandatory). */
     COLUMNS {
       @Override
@@ -44,9 +44,9 @@ public final class QueryBuilder  {
         return "GROUP BY";
       }
     },
-    /** HAVING CLAUSE */
+    /** HAVING clause */
     HAVING,
-    /** ORDER BY CLAUSE */
+    /** ORDER BY clause */
     ORDER_BY {
       @Override
       String sqlKeywords() {
@@ -233,7 +233,7 @@ public final class QueryBuilder  {
   private void build(StringBuilder sb, Param p) {
     String value = get(p);
     if (value != null) {
-      sb.append(p.sqlKeywords()).append(' ').append(value);
+      sb.append(p.sqlKeywords()).append(' ').append(value).append(' ');
     }
     else if (p.mandatory()) {
       throw new InvalidOperationException(p + " needs to be set for query building.");

@@ -59,11 +59,9 @@ public class DBAssertTest extends DBTestCase {
     if (whereClause == null) {
       dataSource = table;
     } else {
-      Query q = getDB().select().from(table).where(whereClause);
-      if (queryArgs != null) {
-        q.withArguments(queryArgs);
-      }
-      dataSource = q;
+      dataSource = 
+        select(getDB(), UserDAO.COLUMNS)
+       .from(table).where(whereClause).build(queryArgs);
     }
     initialState = takeSnapshot(dataSource);
   }

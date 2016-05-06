@@ -130,15 +130,6 @@ public final class DB {
     return connection;
   }
 
-  /**
-   * Create a query data source.
-   * @return A new {@link Query} instance.
-   */
-  public Query select() {
-    return new Query(this);
-  }
-
-
   
   /**
    * Prepare a SQL statement.

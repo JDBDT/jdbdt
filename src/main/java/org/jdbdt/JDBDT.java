@@ -168,7 +168,7 @@ public final class JDBDT {
    * @return Query result.
    */
   static DataSet
-  query(DataSource source)  {
+  executeQuery(DataSource source)  {
     return source.executeQuery(CallInfo.create(), false);
   }
   
