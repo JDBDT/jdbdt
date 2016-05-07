@@ -67,7 +67,7 @@ public class QueryBuilderTest extends DBTestCase {
   @Test
   public void testExecColumns1() throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
-    DataSource q =
+    Query q =
         select(getDB(), "password")
         .from(UserDAO.TABLE_NAME)
         .where("login=?")
@@ -82,7 +82,7 @@ public class QueryBuilderTest extends DBTestCase {
   @Test
   public void testExecColumns2() throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
-    DataSource q =
+    Query q =
         select(getDB(), "password", "name")
         .from(UserDAO.TABLE_NAME)
         .where("login=?")
@@ -97,7 +97,7 @@ public class QueryBuilderTest extends DBTestCase {
 
   @Test
   public void testExecWithDistinct1() {
-    DataSource q =
+    Query q =
         select(getDB(), UserDAO.COLUMNS)
         .distinct()
         .from(UserDAO.TABLE_NAME)
@@ -111,7 +111,7 @@ public class QueryBuilderTest extends DBTestCase {
 
   @Test
   public void testExecWithDistinct2() {
-    DataSource q =
+    Query q =
         select(getDB(), "password")
         .distinct()
         .from(UserDAO.TABLE_NAME)
@@ -131,7 +131,7 @@ public class QueryBuilderTest extends DBTestCase {
   
   @Test
   public void testExecWithOrderBy1() {
-    DataSource q =
+    Query q =
         select(getDB(), UserDAO.COLUMNS)
         .from(UserDAO.TABLE_NAME)
         .orderBy("login")
@@ -146,7 +146,7 @@ public class QueryBuilderTest extends DBTestCase {
 
   @Test
   public void testExecWithOrderBy2() {
-    DataSource q =
+    Query q =
         select(getDB(), UserDAO.COLUMNS)
         .from(UserDAO.TABLE_NAME)
         .orderBy("password", "login")
@@ -185,7 +185,7 @@ public class QueryBuilderTest extends DBTestCase {
   
   @Test
   public void testExecWithGroupBy1() {
-    DataSource q = select(getDB(), "password","count(*)")
+    Query q = select(getDB(), "password","count(*)")
         .from(UserDAO.TABLE_NAME)
         .groupBy("password")
         .build();
@@ -201,7 +201,7 @@ public class QueryBuilderTest extends DBTestCase {
   
   @Test
   public void testExecWithGroupBy2() {
-    DataSource q = select(getDB(), "password","count(*)")
+    Query q = select(getDB(), "password","count(*)")
         .from(UserDAO.TABLE_NAME)
         .groupBy("password")
         .having("count(*) > 1")
@@ -218,7 +218,7 @@ public class QueryBuilderTest extends DBTestCase {
   
   @Test
   public void testExecWithMultipleSources() {
-    DataSource q =
+    Query q =
         select(getDB(), "u1.LOGIN", "u2.LOGIN")
         .from(UserDAO.TABLE_NAME + " u1", UserDAO.TABLE_NAME + " u2" )
         .where("u1.login <> u2.login AND u1.PASSWORD = u2.PASSWORD")
