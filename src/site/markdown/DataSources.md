@@ -120,7 +120,7 @@ to the order of query results, but `orderBy` may make it easier to inspect
 * `getName()` returns the table name.
 * `columns(cols)` specifies the columns of interest.
 
-### `QueryBuilder` methods
+### `QueryBuilder`
 
 * `from`, `where`, `distinct`, `groupBy`, `orderBy`, `having` are used to 
 parameterize the query (see [above](DataSources.html#QueryBuilder)).
