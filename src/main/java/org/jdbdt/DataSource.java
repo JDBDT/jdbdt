@@ -104,7 +104,7 @@ public abstract class DataSource {
   private static final ArrayList<Row> EMPTY_ROW_LIST = new ArrayList<>();
   
   /**
-   * Return an eptpy, read-only data set,
+   * Return an empty, read-only data set,
    * for use by {@link JDBDT#empty(DataSource)}
    * @return Empty, read-only data set.
    */
