@@ -143,10 +143,8 @@ public final class JDBDT {
    * 
    * <p>
    * Note that the method returns the data set instance representing the snapshot,
-   * but assertion methods do not require any book-keeping 
-   * by the caller, hence the result may be ignored for this
-   * purpose. Note also that the returned
-   * data set is read-only (see {@link DataSet#isReadOnly()}).
+   * but subsequent use of assertion methods does not require any book-keeping 
+   * by the caller. Note also that this data set is read-only (see {@link DataSet#isReadOnly()}).
    * </p>
    * 
    * @param source Data source.
