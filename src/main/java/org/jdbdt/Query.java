@@ -32,4 +32,5 @@ public final class Query extends DataSource {
   public String getSQLForQuery() {
     return sqlForQuery;
   } 
+  
 }

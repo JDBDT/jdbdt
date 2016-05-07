@@ -6,6 +6,9 @@ import java.util.Collection;
  * Typed data set.
  * @param <T> Type of objects.
  *
+ * @see JDBDT#data(DataSource, Conversion)
+ * @see Conversion
+ * 
  * @since 0.1
  */
 public final class TypedDataSet<T> extends DataSet {
