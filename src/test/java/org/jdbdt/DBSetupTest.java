@@ -92,7 +92,7 @@ public class DBSetupTest extends DBTestCase {
              createNewUser());
   }
 
-  @Test(expected=SQLException.class)
+  @Test(expected=DBExecutionException.class)
   public void testInsert3() throws SQLException {
     doInsert(getTestData(EXISTING_DATA_ID1));
   }
@@ -101,6 +101,7 @@ public class DBSetupTest extends DBTestCase {
   public void testPopulate3() throws SQLException {
     doPopulate(getTestData(EXISTING_DATA_ID1));
   }
+  
   @Test @Category(TruncateSupportEnabled.class)
   public void testTruncate() throws SQLException {
     truncate(table);
