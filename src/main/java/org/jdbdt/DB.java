@@ -226,8 +226,11 @@ public final class DB {
     }
   }
   
-  @SuppressWarnings("javadoc")
-  void logSQL(String sql) {
+  /**
+   * Log SQL code.
+   * @param sql SQL code to log.
+   */
+  private void logSQL(String sql) {
     if (isEnabled(Option.LOG_SQL)) {
       log.writeSQL(sql);
     }
