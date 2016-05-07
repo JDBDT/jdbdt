@@ -8,8 +8,8 @@ that may be used for database [setup](DBSetup.html) or [verification](DBAssertio
 <a name="Creation"></a>
 
 The examples below define data sets for a [table](DataSources.html#Table) (`Table`) object, 
-but the definition of data sets is similar for other data sources like 
-[queries](DataSources.html#Query) (`Query`) or [custom SQL data sources](DataSources.html#SQLDataSource) (`SQLDataSource`).
+but the definition of data sets works similarly for
+[queries](DataSources.html#Query) (`Query`).
 
 ### Plain definition 
 <a name="Creation.Plain"></a>
@@ -121,7 +121,7 @@ to modify it will result in `org.jdbdt.InvalidOperationException` being thrown.
 ## Quick method reference
 <a name="MethodReference"></a>
 
-### Factory methods in the `JDBDT` facade
+### `JDBDT`
 
 For a [data source](DataSources.html) `s`:
 
@@ -130,14 +130,7 @@ For a [data source](DataSources.html) `s`:
 - `builder(s)` creates a data set builder with an underlying fresh data set.
 - `empty(s)` returns an empty & read-only data set that is unique for `s`. 
 
-### `DataSet` and `TypedDataSet` instance methods 
-
-Mutators:
-
-- `row` and `rows` methods add rows to the data set (see examples above).
-- `build()` creates a new data set builder backed up by the data set (see example above).
-- `add(other)` adds all rows from `other` to the data set.
-- `setReadOnly()` sets the data set as read-only.
+### `DataSet` / `TypedDataSet`
 
 Properties:
 
@@ -146,7 +139,21 @@ Properties:
 - `isReadOnly()` indicates if the data set is read-only.
 - `getDataSource()` returns the [data source](DataSources.html) instance for the data set.
 
-### `DataSetBuilder` methods
+Mutators:
+
+- `row` and `rows` methods add rows to the data set (see examples above).
+- `build()` creates a new data set builder backed up by the data set (see example above).
+- `add(other)` adds all rows from `other` to the data set.
+- `setReadOnly()` sets the data set as read-only.
+
+Utility methods (`static`) 
+
+- `subset(data, index, n)` returns a new data set containing `n` rows of `data` starting from the `index`-th row.
+- `singleton(data,i)` returns a new data set containing only the `index`-th row in `data`.
+- `head(data, n)` returns a new data set containing the first `n` rows of `data`.
+- `tail(data,n)` returns a new data set containing the last `n` rows of `data`.
+
+### `DataSetBuilder`
 
 - `data()` returns the underlying data set.
 - `generate(n)` adds `n` rows to the underlying data set based on the current column filler settings.
@@ -155,11 +162,7 @@ Properties:
 - `sequence(column, ...)`  defines a sequence fillers for `column` (several method variants).
 - `random(column, ...)` defines a pseudo-random filler for `column` (several method variants).
 - `set(column, filler)` defines a custom column filler for `column`. 
- 
-### `DataSet` utility methods 
 
-- `subset(data, index, n)` returns a new data set containing `n` rows of `data` starting from the `index`-th row.
-- `singleton(data,i)` returns a new data set containing only the `index`-th row in `data`.
-- `head(data, n)` returns a new data set containing the first `n` rows of `data`.
-- `tail(data,n)` returns a new data set containing the last `n` rows of `data`.
+
+
 

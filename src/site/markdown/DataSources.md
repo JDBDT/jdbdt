@@ -102,7 +102,7 @@ to the order of query results, but `orderBy` may make it easier to inspect
    
 ## Method reference
 
-### `JDBDT` facade
+### `JDBDT`
 
 * `table(db, tableName)` creates a new `Table` data source.
 * `query(db, sql [,args])` creates a new `Query` data source from SQL code.
