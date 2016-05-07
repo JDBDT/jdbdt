@@ -24,7 +24,7 @@ public class DBSetupTest extends DBTestCase {
   private static Table table;
 
   @BeforeClass
-  public static void globalSetup() throws SQLException {
+  public static void globalSetup() {
     table = table(getDB(), UserDAO.TABLE_NAME)
            .columns(UserDAO.COLUMNS);
   }

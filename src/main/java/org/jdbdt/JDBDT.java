@@ -1,7 +1,6 @@
 package org.jdbdt;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * JDBDT main API facade.
@@ -313,10 +312,10 @@ public final class JDBDT {
    * Insert a data set onto database.
    * 
    * @param data Data set for insertion.
-   * @throws SQLException If a database error occurs.
+   * @throws DBExecutionException If a database error occurs.
    *  
    */
-  public static void insert(DataSet data) throws SQLException {
+  public static void insert(DataSet data) throws DBExecutionException {
     DBSetup.insert(CallInfo.create(), data);
   }
 
@@ -324,10 +323,10 @@ public final class JDBDT {
    * Populate database with given data set.
    * 
    * @param data Data set for insertion.
-   * @throws SQLException If a database error occurs.
+   * @throws DBExecutionException If a database error occurs.
    *  
    */
-  public static void populate(DataSet data) throws SQLException {
+  public static void populate(DataSet data) throws DBExecutionException {
     DBSetup.populate(CallInfo.create(), data);
   }
 
@@ -336,11 +335,11 @@ public final class JDBDT {
    *
    * @param table Table.
    * @return Number of deleted entries.
-   * @throws SQLException if a database error occurs.
+   * @throws DBExecutionException if a database error occurs.
    * @see #truncate(Table)
    * @see #deleteAllWhere(Table,String,Object...)
    */
-  public static int deleteAll(Table table) throws SQLException  {
+  public static int deleteAll(Table table) throws DBExecutionException  {
     return DBSetup.deleteAll(CallInfo.create(), table);
   }
 
@@ -354,23 +353,23 @@ public final class JDBDT {
    * @param where <code>WHERE</code> clause
    * @param args <code>WHERE</code> clause arguments, if any.
    * @return Number of deleted entries.
-   * @throws SQLException if a database error occurs.
+   * @throws DBExecutionException if a database error occurs.
    * @see #deleteAll(Table)
    * @see #truncate(Table)
    */
   public static int deleteAllWhere(Table table, String where, Object... args) 
-  throws SQLException  {
+  throws DBExecutionException  {
     return DBSetup.deleteAll(CallInfo.create(), table, where, args);
   }
 
   /**
    * Truncate table.
    * @param t Table.
-   * @throws SQLException if a database error occurs.
+   * @throws DBExecutionException if a database error occurs.
    * @see #deleteAll(Table)
    * @see #deleteAllWhere(Table,String,Object...)
    */
-  public static void truncate(Table t) throws SQLException  {
+  public static void truncate(Table t) throws DBExecutionException  {
     DBSetup.truncate(CallInfo.create(), t);
   }
 

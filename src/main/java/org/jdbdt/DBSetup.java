@@ -15,9 +15,9 @@ final class DBSetup {
    * Insert a data set onto the database.
    * @param callInfo Call information.
    * @param data Data Set.
-   * @throws SQLException If a database error occurs during insertion.
+   * @throws DBExecutionException If a database error occurs during insertion.
    */
-  static void insert(CallInfo callInfo, DataSet data) throws SQLException {
+  static void insert(CallInfo callInfo, DataSet data) throws DBExecutionException {
     DataSource source = data.getSource();
     if ( ! (source instanceof Table)) {
       throw new InvalidOperationException("Data set is not defined for a table.");
@@ -27,87 +27,106 @@ final class DBSetup {
     }
     insert(callInfo, (Table) source, data);
   }
-  
+
   /**
    * Populate database with a data set.
    * @param callInfo Call Info.
    * @param data Data Set.
-   * @throws SQLException If a database error occurs during insertion.
+   * @throws DBExecutionException If a database error occurs.
    */
-  static void populate(CallInfo callInfo, DataSet data) throws SQLException {
+  static void populate(CallInfo callInfo, DataSet data) 
+  throws DBExecutionException {
     DataSource source = data.getSource();
     if ( ! (source instanceof Table)) {
       throw new InvalidOperationException("Data set is not defined for a table.");
     }
-    
+
     Table t = (Table) source;
     deleteAll(callInfo, t);
     insert(callInfo, t, data);
     t.setSnapshot(data);
   }
-  
+
   /**
    * Utility method to perform actual data insertion.
    * @param callInfo Call Info.
    * @param table Table.
    * @param data Data set.
-   * @throws SQLException If a database error occurs.
+   * @throws DBExecutionException If a database error occurs.
    */
-  private static void insert(CallInfo callInfo, Table table, DataSet data) throws SQLException {
-    table.getDB().logInsertion(callInfo, data);
-    StringBuilder sql = new StringBuilder("INSERT INTO ");
-    String[] columnNames = table.getColumns();
-    sql.append(table.getName())
-    .append('(')
-    .append(columnNames[0]);
-    for (int i=1; i < columnNames.length; i++) {
-      sql.append(',').append(columnNames[i]);
-    }
-    sql.append(") VALUES (?");
-    for (int i=1; i < columnNames.length; i++) {
-      sql.append(",?");
-    }
-    sql.append(')');
-    PreparedStatement  insertStmt = table.getDB().compile(sql.toString());
-    for (Row r : data.getRows()) {
-      final int n = r.length();
-      final Object[] cols = r.data();
-      if (n != table.getColumnCount()) {
-        throw new InvalidOperationException("Invalid number of columns for insertion.");
+  private static void insert(CallInfo callInfo, Table table, DataSet data)
+  throws DBExecutionException {
+    try {
+      table.getDB().logInsertion(callInfo, data);
+      StringBuilder sql = new StringBuilder("INSERT INTO ");
+      String[] columnNames = table.getColumns();
+      sql.append(table.getName())
+      .append('(')
+      .append(columnNames[0]);
+      for (int i=1; i < columnNames.length; i++) {
+        sql.append(',').append(columnNames[i]);
       }
-      for (int i = 0; i < n; i++) {
-        insertStmt.setObject(i+1, cols[i]);
+      sql.append(") VALUES (?");
+      for (int i=1; i < columnNames.length; i++) {
+        sql.append(",?");
       }
-      insertStmt.execute();
-      insertStmt.clearParameters();
+      sql.append(')');
+      PreparedStatement  insertStmt = table.getDB().compile(sql.toString());
+      for (Row r : data.getRows()) {
+        final int n = r.length();
+        final Object[] cols = r.data();
+        if (n != table.getColumnCount()) {
+          throw new InvalidOperationException("Invalid number of columns for insertion.");
+        }
+        for (int i = 0; i < n; i++) {
+          insertStmt.setObject(i+1, cols[i]);
+        }
+        insertStmt.execute();
+        insertStmt.clearParameters();
+      }
+    }
+    catch(SQLException e) {
+      throw new DBExecutionException(e);
     }
   }
-  
+
   /**
    * Delete all data from table.
    * @param callInfo Call info.
    * @param t Table.
    * @return Number of deleted rows.
-   * @throws SQLException If a database error occurs.
+   * @throws DBExecutionException If a database error occurs.
    */
-  static int deleteAll(CallInfo callInfo, Table t) throws SQLException {
-    return t.getDB()
-            .compile("DELETE FROM " + t.getName())
-            .executeUpdate();
+  static int deleteAll(CallInfo callInfo, Table t) 
+  throws DBExecutionException {
+    try {
+      return t.getDB()
+          .compile("DELETE FROM " + t.getName())
+          .executeUpdate();
+    } 
+    catch (SQLException e) {
+      throw new DBExecutionException(e);
+    }
   }
-  
+
   /**
    * Truncate table.
    * @param callInfo Call info.
    * @param t Table.
-   * @throws SQLException If a database error occurs.
+   * @throws DBExecutionException If a database error occurs.
    */
-  static void truncate(CallInfo callInfo, Table t) throws SQLException {
-    t.getDB()
-     .compile("TRUNCATE TABLE " + t.getName())
-     .execute();
+  static void truncate(CallInfo callInfo, Table t) 
+  throws DBExecutionException {
+    try {
+      t.getDB()
+      .compile("TRUNCATE TABLE " + t.getName())
+      .execute();
+    } 
+    catch (SQLException e) {
+      throw new DBExecutionException(e);
+    }
   }
-  
+
   /**
    * Delete all data based on a WHERE clause.
    * @param callInfo Call info.
@@ -115,25 +134,31 @@ final class DBSetup {
    * @param where <code>WHERE</code> clause.
    * @param args Optional arguments for <code>WHERE</code> clause.
    * @return The number of deleted rows.
-   * @throws SQLException If a database error occurs.
+   * @throws DBExecutionException If a database error occurs.
    */
-  static int deleteAll(CallInfo callInfo, Table table, String where, Object... args) throws SQLException {
-    PreparedStatement deleteStmt = 
-      table.getDB().compile(
-        "DELETE FROM " + table.getName() +
-        " WHERE " + where);
-    if (args != null && args.length > 0) {
-      for (int i=0; i < args.length; i++) {
-        deleteStmt.setObject(i + 1, args[i]);
+  static int deleteAll(CallInfo callInfo, Table table, String where, Object... args) 
+  throws DBExecutionException {
+    try {
+      PreparedStatement deleteStmt = 
+          table.getDB().compile(
+              "DELETE FROM " + table.getName() +
+              " WHERE " + where);
+      if (args != null && args.length > 0) {
+        for (int i=0; i < args.length; i++) {
+          deleteStmt.setObject(i + 1, args[i]);
+        }
       }
+      return deleteStmt.executeUpdate(); 
     }
-    return deleteStmt.executeUpdate(); 
+    catch (SQLException e) {
+      throw new DBExecutionException(e);
+    }
   }
 
   /**
    * Private constructor to prevent instantiation.
    */
   private DBSetup() {
-    
+
   }
 }

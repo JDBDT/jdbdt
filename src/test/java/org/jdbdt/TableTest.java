@@ -1,8 +1,5 @@
 package org.jdbdt;
 
-
-import java.sql.SQLException;
-
 import static org.junit.Assert.*;
 import static org.jdbdt.JDBDT.*;
 import static org.jdbdt.TestUtil.*;
@@ -18,7 +15,7 @@ public class TableTest extends DBTestCase {
   private Table theSUT;
   
   @Before
-  public void createTable() throws SQLException {
+  public void createTable() {
     theSUT = table(getDB(), UserDAO.TABLE_NAME);
   }
   

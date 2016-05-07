@@ -238,7 +238,4 @@ public class QueryBuilderTest extends DBTestCase {
     DataSet actual = executeQuery(q);
     assertDataSet(expected, actual);
   }
-  
- 
-
 }

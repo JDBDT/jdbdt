@@ -40,7 +40,7 @@ public class DBAssertTest extends DBTestCase {
   private DataSource dataSource;
 
   @BeforeClass
-  public static void globalSetup() throws SQLException {
+  public static void globalSetup() {
     table = table(getDB(), UserDAO.TABLE_NAME)
            .columns(UserDAO.COLUMNS);
   }
@@ -55,7 +55,7 @@ public class DBAssertTest extends DBTestCase {
   }
 
   @Before 
-  public void takeDBSnapshot() throws SQLException {
+  public void takeDBSnapshot() {
     if (whereClause == null) {
       dataSource = table;
     } else {

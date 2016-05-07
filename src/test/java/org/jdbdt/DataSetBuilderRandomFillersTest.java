@@ -5,7 +5,6 @@ import static org.jdbdt.JDBDT.*;
 
 import java.math.BigInteger;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
   private static final int COUNT = 10;
 
   @BeforeClass
-  public static void globalSetup() throws SQLException {
+  public static void globalSetup() {
     BASE_DATA.put("cInteger", -1);
     BASE_DATA.put("cLong", -1L);
     BASE_DATA.put("cBigInteger", BigInteger.valueOf(-1L));

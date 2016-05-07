@@ -3,7 +3,6 @@ package org.jdbdt;
 import static org.jdbdt.JDBDT.*;
 import static org.jdbdt.TestUtil.*;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,7 +28,7 @@ public class DataSetTest extends DBTestCase {
   private static Table table;
  
   @BeforeClass
-  public static void globalSetup() throws SQLException {
+  public static void globalSetup() {
     table = table(getDB(), UserDAO.TABLE_NAME)
            .columns(UserDAO.COLUMNS);
   }
