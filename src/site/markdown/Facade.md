@@ -106,7 +106,6 @@ may be convenient to refer to the API methods concisely.
 			<code>assertInserted</code><br/> 
 			<code>assertState</code><br/>
 			<code>assertUnchanged</code><br/> 
-			<code>assumeSnapshot</code><br/>
 			<code>takeSnapshot</code><br/> 
 		</td>
 		<td align="left">
