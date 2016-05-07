@@ -30,15 +30,11 @@ public final class DB {
    */
   public enum Option {
     /**
-     * Statement pooling (enabled by default).
-     */
-    REUSE_STATEMENTS,
-    /**
-     * Log assertions (including verified ones).
+     * Log assertions (both failed and passed).
      */
     LOG_ASSERTIONS,
     /**
-     * Log assertion errors (excludes verified assertions).
+     * Log assertion errors (only for failed assertions).
      */
     LOG_ASSERTION_ERRORS,
     /**
@@ -56,8 +52,13 @@ public final class DB {
     /**
      * Log SQL statements.
      */
-    LOG_SQL;
+    LOG_SQL,
+    /**
+     * Reuse statements (enabled by default).
+     */
+    REUSE_STATEMENTS;
   }
+  
   /**
    * Connection.
    */
@@ -66,7 +67,7 @@ public final class DB {
   /**
    * Trace options.
    */
-  private EnumSet<Option> optionSet = EnumSet.noneOf(Option.class);
+  private final EnumSet<Option> optionSet = EnumSet.noneOf(Option.class);
 
   /**
    * Log to use. 
@@ -76,7 +77,7 @@ public final class DB {
   /**
    * Statement pool.
    */
-  private Map<String,PreparedStatement> pool;
+  private Map<String, PreparedStatement> pool;
 
 
   /**
