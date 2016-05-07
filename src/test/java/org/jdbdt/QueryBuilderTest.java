@@ -184,7 +184,7 @@ public class QueryBuilderTest extends DBTestCase {
   
   @Test
   public void testExecWithGroupBy1() {
-    DataSource q = select(getDB(), "password","count(login)")
+    DataSource q = select(getDB(), "password","count(*)")
         .from(UserDAO.TABLE_NAME)
         .groupBy("password")
         .build();
@@ -200,10 +200,10 @@ public class QueryBuilderTest extends DBTestCase {
   
   @Test
   public void testExecWithGroupBy2() {
-    DataSource q = select(getDB(), "password","count(login)")
+    DataSource q = select(getDB(), "password","count(*)")
         .from(UserDAO.TABLE_NAME)
         .groupBy("password")
-        .having("count(login) > 1")
+        .having("count(*) > 1")
         .build();
     
     DataSet expected = 
