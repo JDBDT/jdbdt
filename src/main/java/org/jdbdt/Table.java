@@ -1,34 +1,9 @@
 package org.jdbdt;
 
 /**
- * Database table representation.
+ * Table data source.
  * 
- * 
- * <p>
- * An object of this kind models access to a database table 
- * An instance of {@link Table}:
- * </p>
- * <ul>
- * <li>
- * must be created using {@link JDBDT#table(DB,String)};
- * </li>
- * <li>
- * may have an associated subset of the table's columns using {@link #columns(String...)} - 
- * otherwise, by default, all table columns will be considered;
- * </li>
- * </ul>
- * 
- * <p><b>Illustration</b></p>
- * <blockquote><pre>
- * import static org.jdbdt.JDBDT.*;
- * import org.jdbdt.Table;
- * import java.sql.Connection;
- * ...
- * DB db = ...;
- * Table t = table("TableName")
- *          .columns("A", "B", "C", "D");
- * </pre></blockquote>
- * 
+ * @see JDBDT#table(DB, String)
  * @since 0.1
  */
 public final class Table extends DataSource {

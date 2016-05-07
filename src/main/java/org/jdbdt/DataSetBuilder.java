@@ -11,7 +11,7 @@ import java.util.Random;
 import java.util.function.Function;
 
 /**
- * Data builder. 
+ * Data set builder. 
  * 
  * <p>
  * Objects of this kind provide a convenient manner to 
@@ -44,32 +44,6 @@ import java.util.function.Function;
  * </li>
  * </ul>
  * 
- * <p><b>Example</b></p>
- * <blockquote><pre>
- * import static org.jdbdt.JDBDT.*;
- * import org.jdbdt.Table;
- * import org.jdbdt.DataSet;
- * import java.sql.Connection;
- * import java.sql.Date;
- * ...
- * Connection conn = ...;
- * Table t = table("User")
- *          .columns("id", "login", "password", "since")
- *          .boundTo(c);
- * DataSet ds = 
- *     build(t)
- *    .sequence("id", 1) // 1, 2, 3, ...
- *    .sequence("login", "harry", "mark", "john")
- *    .nullValue("password")
- *    .random("since", Date.valueOf("2015-01-01"), Date.valueOf("2015-12-31"))
- *    .generate(3) // generate 3 rows
- *    .sequence("login", i -&gt; "user_" + i, 4)  // "user_4", ... , "user_7"
- *    .value("password", "dumbPass")
- *    .generate(4) // generate 4 more rows 
- *    .getData();   
- *    
- * log(System.err).write(ds);
- * </pre></blockquote>
  * 
  * @since 0.1 
  * @see JDBDT#builder(DataSource)

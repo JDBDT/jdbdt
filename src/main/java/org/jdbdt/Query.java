@@ -1,8 +1,12 @@
 package org.jdbdt;
 
 /**
- * Data source created from arbitrary SQL query statement.
+ * Query data source.
  *
+ * @see JDBDT#query(DB, String, Object...)
+ * @see JDBDT#select(DB, String...)
+ * @see QueryBuilder
+ * 
  * @since 0.1 
  *
  */

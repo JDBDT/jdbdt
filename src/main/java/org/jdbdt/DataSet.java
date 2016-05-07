@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Data set.
  * 
- * <p>A data set represents a collection of rows.</p>
+ * <p>A data set represents a collection of database rows.</p>
  * 
  * @since 0.1
  *

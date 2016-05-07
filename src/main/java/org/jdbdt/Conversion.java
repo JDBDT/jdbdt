@@ -15,7 +15,8 @@ package org.jdbdt;
  * The types of objects in the array must be compliant
  * with the JDBC constraints for mapping Java to SQL types
  * (<a href="https://jcp.org/en/jsr/detail?id=221">JDBC 4.x Specification</a>, 
- * Appendix B / "Data Type Conversion Tables").
+ * Appendix B / "Data Type Conversion Tables"), and any
+ * additional conventions for the database driver in use.
  * </p>
  * 
  * @param <T> Type of objects.
