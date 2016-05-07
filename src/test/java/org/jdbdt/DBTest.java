@@ -6,7 +6,6 @@ import static org.junit.Assert.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -14,7 +13,6 @@ import org.junit.runners.MethodSorters;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @SuppressWarnings("javadoc")
-
 public class DBTest extends DBTestCase {
   
   private PreparedStatement compile(String sql) throws SQLException {
