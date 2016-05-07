@@ -10,11 +10,6 @@
     <src>images/jdbdt-logo.png</src>
     <href>http://jdbdt.org/</href>
   </bannerLeft>
-<!--
-  <bannerRight>
-    <src>http://maven.apache.org/images/maven-small.gif</src>
-  </bannerRight>
--->
   <body>
     <links>
     </links>
@@ -33,8 +28,8 @@
 -->
     </menu>
     <menu name="Reference">
-      <item name="Getting started" href="GettingStarted.html"/>
-      <item name="Database handlers" href="DB.html"/>
+      <item name="API facade" href="Facade.html"/>
+      <item name="Database handles" href="DB.html"/>
       <item name="Data sources" href="DataSources.html"/>
       <item name="Data sets" href="DataSets.html"/>
       <item name="Database setup" href="DBSetup.html"/>
