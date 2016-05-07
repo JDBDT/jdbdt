@@ -190,9 +190,11 @@ public abstract class DataSource {
   final DataSet executeQuery(CallInfo callInfo, boolean takeSnapshot) {
     DataSet data = new DataSet(this);
     executeQuery(getQueryStatement(), getMetaData(), getQueryArguments(), r -> data.addRow(r));
-    getDB().logQuery(callInfo, data);
     if (takeSnapshot) {
       setSnapshot(data);
+      getDB().logSnapshot(callInfo, data);
+    } else {
+      getDB().logQuery(callInfo, data);
     }
     return data;
   }

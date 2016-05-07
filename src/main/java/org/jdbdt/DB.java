@@ -42,13 +42,17 @@ public final class DB {
      */
     LOG_ASSERTION_ERRORS,
     /**
-     * Log data set insertions.
+     * Log database queries. 
+     */
+    LOG_QUERIES,
+    /**
+     * Log database setup operations.
      */
     LOG_SETUP,
     /**
-     * Log data set snapshots.
+     * Log database snapshots. 
      */
-    LOG_QUERIES,
+    LOG_SNAPSHOTS,
     /**
      * Log SQL statements.
      */
@@ -104,6 +108,7 @@ public final class DB {
            DB.Option.LOG_ASSERTIONS,
            DB.Option.LOG_SETUP,
            DB.Option.LOG_QUERIES,
+           DB.Option.LOG_SNAPSHOTS,
            DB.Option.LOG_SQL);
   }
 
@@ -188,12 +193,23 @@ public final class DB {
   }
 
   /**
-   * Log snapshot.
+   * Log query result.
    * @param callInfo Call info.
    * @param data Data set.
    */
   void logQuery(CallInfo callInfo, DataSet data) {
     if (isEnabled(Option.LOG_QUERIES)) {
+      log.write(callInfo, data);
+    }
+  }
+  
+  /**
+   * Log query result.
+   * @param callInfo Call info.
+   * @param data Data set.
+   */
+  void logSnapshot(CallInfo callInfo, DataSet data) {
+    if (isEnabled(Option.LOG_SNAPSHOTS)) {
       log.write(callInfo, data);
     }
   }
