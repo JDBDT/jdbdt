@@ -79,11 +79,26 @@ to the order of query results, but `orderBy` may make it easier to inspect
     import org.jdbdt.DataSource;
     ...
     DB db = ...;
-    Query q = select(db, "PASSWORD", "COUNT(*)")
-             .from("USER")
-             .groupBy("PASSWORD")
-             .having("COUNT(*) > 1")
-             .build();
+    
+    // Get distinct passwords in use
+    Query q1 = select(db, "PASSWORD")
+              .distinct()
+              .from("USER")
+              .orderBy("PASSWORD")
+              .build();
+              
+    // Get passwords that are used by more than one user and their count.
+    Query q2 = select(db, "PASSWORD", "COUNT(*)")
+              .from("USER")
+              .groupBy("PASSWORD")
+              .having("COUNT(*) > 1")
+              .build();
+              
+    // Get pairs of users that have the same password
+    Query q3 = select(db, "u1.LOGIN", "u2.LOGIN")
+              .from("USER u1", "USER u2")
+              .where("u1.LOGIN <> u2.LOGIN AND u1.PASSWORD = u2.PASSWORD")
+              .build();
    
 ## Method reference
 
@@ -108,7 +123,7 @@ to the order of query results, but `orderBy` may make it easier to inspect
 ### `QueryBuilder` methods
 
 * `from`, `where`, `distinct`, `groupBy`, `orderBy`, `having` are used to 
-build the query (see [above](DataSources.html#QueryBuilder)).
-* `build([args])` builds a query with optional arguments `args`.
+parameterize the query (see [above](DataSources.html#QueryBuilder)).
+* `build([args])` builds the final `Query` with optional arguments `args`.
 
 
