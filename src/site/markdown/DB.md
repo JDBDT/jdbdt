@@ -68,14 +68,11 @@ The `enableFullLogging()` convenience method enables all logging options at once
 ### Statement reuse
 <a name="StatementReuse"></a>
 
-A database handle may maintain a pool of reusable `java.sql.PreparedStatement` object
-to avoid re-compiling SQL code it needs to execute. This happens whether or not some form of
-statement pooling is implemented for the underlying JDBC driver. 
-
-The scheme is enabled by default and, generally, it should provide
-more efficiency and cause no problems during statement execution.
-A few drivers, however, may not work well with statement reuse.
-In those cases, the `REUSE_STATEMENTS` option should be disabled as follows:
+A database handle internally reuses `java.sql.PreparedStatement` objects
+to avoid re-compiling SQL code.  The scheme is enabled by default and, generally, 
+it should provide more efficiency and cause no problems.
+For drivers that do not deal well with statement reuse, however,
+the `REUSE_STATEMENTS` option should be disabled as follows:
 
     import org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
