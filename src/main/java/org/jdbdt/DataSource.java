@@ -161,7 +161,7 @@ public abstract class DataSource {
         metaData = md;
       }
       catch (SQLException e) {
-        throw new UnexpectedDBErrorException(e);
+        throw new DBExecutionException(e);
       }
     }
   }
@@ -255,7 +255,7 @@ public abstract class DataSource {
       }
     } 
     catch(SQLException e) {
-      throw new UnexpectedDBErrorException(e);
+      throw new DBExecutionException(e);
     } 
   }
 

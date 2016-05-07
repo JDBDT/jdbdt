@@ -74,7 +74,7 @@ final class MetaData {
       }
       columns = Collections.unmodifiableList(info);
     } catch(SQLException e) {
-      throw new UnexpectedDBErrorException(e);
+      throw new DBExecutionException(e);
     }
   }
   /**
