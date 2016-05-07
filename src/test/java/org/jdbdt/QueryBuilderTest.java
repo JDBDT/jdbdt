@@ -225,7 +225,6 @@ public class QueryBuilderTest extends DBTestCase {
         .build();
 
     DataSet expected = data(q);
-    getDB().enable(DB.Option.LOG_QUERIES);
     for (int i=0; i < INITIAL_DATA.length; i++) {
       User a = INITIAL_DATA[i];
       for (int j=i+1; j < INITIAL_DATA.length; j++) {
