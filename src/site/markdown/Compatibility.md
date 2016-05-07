@@ -2,7 +2,7 @@
 # Compatibility
 
 JDBDT is expected to work with any (sane) JDBC driver.
-The JDBDT build currently tests integration with the following engines:
+The JDBDT build currently tests integration with:
 
 * [Derby](https://db.apache.org/derby)
 * [H2](http://www.h2database.com)
@@ -13,5 +13,5 @@ The JDBDT build currently tests integration with the following engines:
 
 # Known issues
 
-* [Statement pooling should be disabled for xerial's JDBC driver for sqlite](DB.html#StatementPooling).
+* [Statement reuse should be disabled for xerial's JDBC driver for sqlite](DB.html#StatementReuse).
 
