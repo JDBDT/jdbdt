@@ -5,6 +5,7 @@
  [setup](DBSetup.html) or [assertions](DBAssertions.html).
  
 ## Tables
+<a name="Table"></a>
 
 Tables are represented by `Table`, a subclass of `DataSource`, and created
 using the `table` facade method in association to a [database handle](DB.html). 
@@ -21,11 +22,13 @@ columns will be considered by default otherwise.
 	                 .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
 
 ## Queries
+<a name="Query"></a>
 
 Queries are represented by `Query`, a subclass of `DataSource`. 
 A `Query` object can be created from a raw SQL statements or using a `QueryBuilder`.    
              
 ### Definition from raw SQL 
+<a name="RawQuery"></a>
 
 The `query` facade method may be used to define a query using raw SQL.
         
@@ -38,6 +41,7 @@ The `query` facade method may be used to define a query using raw SQL.
     Query q = query(db, "SELECT LOGIN,NAME FROM USER WHERE ID > ?", idArgument);
 
 ### Definition using `QueryBuilder`
+<a name="QueryBuilder"></a>
 
 `QueryBuilder` objects can be used to define queries programmatically.
 The `select` facade method creates a query builder that can be parameterized
@@ -80,4 +84,31 @@ to the order of query results, but `orderBy` may make it easier to inspect
              .groupBy("PASSWORD")
              .having("COUNT(LOGIN) > 1")
              .build();
-    
+   
+## Method reference
+
+### `JDBDT` facade
+
+* `table(db, tableName)` creates a new `Table` data source.
+* `query(db, sql [,args])` creates a new `Query` data source from SQL code.
+* `select(db, cols)` creates a new `QueryBuilder`.
+
+### `DataSource`
+
+* `getDB()` returns the database handle.
+* `getSQLForQuery()` yields the SQL code used for querying the database.
+* `getColumnCount()` returns the number of columns for the data source.
+* `getColumns()` returns an array with the column names for the data source. 
+
+### `Table` 
+
+* `getName()` returns the table name.
+* `columns(cols)` specifies the columns of interest.
+
+### `QueryBuilder` methods
+
+* `from`, `where`, `distinct`, `groupBy`, `orderBy`, `having` are used to 
+build the query (see [above](DataSources.html#QueryBuilder)).
+* `build([args])` builds a query with optional arguments `args`.
+
+
