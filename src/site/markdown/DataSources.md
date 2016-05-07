@@ -79,10 +79,10 @@ to the order of query results, but `orderBy` may make it easier to inspect
     import org.jdbdt.DataSource;
     ...
     DB db = ...;
-    Query q = select(db, "PASSWORD", "COUNT(LOGIN)")
+    Query q = select(db, "PASSWORD", "COUNT(*)")
              .from("USER")
              .groupBy("PASSWORD")
-             .having("COUNT(LOGIN) > 1")
+             .having("COUNT(*) > 1")
              .build();
    
 ## Method reference
