@@ -35,11 +35,11 @@ public final class JDBDT {
   }
   
   /**
-   * Create a database handle.
+   * Create a new database handle.
    * 
    * <p>The given connection is associated to the handle.
    * A reference to the connection can later be retrieved 
-   * using {@link DB#getConnection()}</p>.
+   * using {@link DB#getConnection()}.</p>
    * 
    * @param c Connection.
    * @return A new database handle for the given connection.
