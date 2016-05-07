@@ -128,6 +128,7 @@ public class QueryBuilderTest extends DBTestCase {
     assertDataSet(expected, actual);
   }
 
+  
   @Test
   public void testExecWithOrderBy1() {
     DataSource q =
@@ -214,4 +215,31 @@ public class QueryBuilderTest extends DBTestCase {
     DataSet actual = executeQuery(q);
     assertDataSet(expected, actual);
   }
+  
+  @Test
+  public void testExecWithMultipleSources() {
+    DataSource q =
+        select(getDB(), "u1.LOGIN", "u2.LOGIN")
+        .from(UserDAO.TABLE_NAME + " u1", UserDAO.TABLE_NAME + " u2" )
+        .where("u1.login <> u2.login AND u1.PASSWORD = u2.PASSWORD")
+        .build();
+
+    DataSet expected = data(q);
+    getDB().enable(DB.Option.LOG_QUERIES);
+    for (int i=0; i < INITIAL_DATA.length; i++) {
+      User a = INITIAL_DATA[i];
+      for (int j=i+1; j < INITIAL_DATA.length; j++) {
+        User b = INITIAL_DATA[j];
+        if (a.getPassword().equals(b.getPassword())) {
+          expected.row(a.getLogin(), b.getLogin())
+                  .row(b.getLogin(), a.getLogin());
+        }
+      }
+    }
+    DataSet actual = executeQuery(q);
+    assertDataSet(expected, actual);
+  }
+  
+ 
+
 }
