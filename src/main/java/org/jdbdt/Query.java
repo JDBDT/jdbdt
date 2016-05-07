@@ -6,7 +6,7 @@ package org.jdbdt;
  * @since 0.1 
  *
  */
-final class Query extends DataSource {
+public final class Query extends DataSource {
 
   /**
    * SQL code for query.
@@ -25,7 +25,7 @@ final class Query extends DataSource {
   }
   
   @Override
-  String getSQLForQuery() {
+  public String getSQLForQuery() {
     return sqlForQuery;
   } 
 }

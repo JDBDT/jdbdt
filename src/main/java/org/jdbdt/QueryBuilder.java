@@ -210,7 +210,7 @@ public final class QueryBuilder  {
    * @param args Optional query arguments.
    * @return A new query instance.
    */
-  public DataSource build(Object... args) {
+  public Query build(Object... args) {
     return new Query(db, toSQL(), args); 
   }
   

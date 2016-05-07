@@ -84,7 +84,7 @@ public abstract class DataSource {
    * Get column names.
    * @return Array of column names.
    */
-  final String[] getColumns() {
+  public final String[] getColumns() {
     return columns;
   }
   
@@ -92,7 +92,7 @@ public abstract class DataSource {
    * Get column count.
    * @return Column count.
    */
-  final int getColumnCount() {
+  public final int getColumnCount() {
     ensureCompiled();
     return columns.length;
   }
@@ -179,7 +179,7 @@ public abstract class DataSource {
    * Get SQL code for query.
    * @return SQL code for the database query.
    */
-  abstract String getSQLForQuery();
+  public abstract String getSQLForQuery();
   
   /**
    * Execute query.

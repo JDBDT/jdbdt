@@ -22,25 +22,27 @@ columns will be considered by default otherwise.
 
 ## Queries
 
-Queries can be created from raw SQL statements or using `QueryBuilder` objects.    
+Queries are represented by `Query`, a subclass of `DataSource`. 
+A `Query` object can be created from a raw SQL statements or using a `QueryBuilder`.    
              
-### Definition from SQL code
+### Definition from raw SQL 
 
-The `query` facade method may be used to define a data source from a plain SQL query.
+The `query` facade method may be used to define a query using raw SQL.
         
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
-    import org.jdbdt.DataSource;
+    import org.jdbdt.Query;
     ...
     DB db = ...;
     int idArgument = ...;
-    DataSource q = query(db, "SELECT LOGIN,NAME FROM USER WHERE ID > ?", idArgument);
+    Query q = query(db, "SELECT LOGIN,NAME FROM USER WHERE ID > ?", idArgument);
 
 ### Definition using `QueryBuilder`
 
 `QueryBuilder` objects can be used to define queries programmatically.
 The `select` facade method creates a query builder that can be parameterized
-by a chained sequence of calls that ends with a call to `QueryBuilder.build`.
+using a chained sequence of calls. A final call to `QueryBuilder.build` in 
+such a sequence creates a `Query` object.
 
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
@@ -48,13 +50,14 @@ by a chained sequence of calls that ends with a call to `QueryBuilder.build`.
     ...
     DB db = ...;
     int idArgument = ...;
-    DataSource q = select(db, "LOGIN", "NAME")
-                  .from("USER")
-                  .where("ID > ?")
-                  .build(idArgument); 
+    Query q = select(db, "LOGIN", "NAME")
+             .from("USER")
+             .where("ID > ?")
+             .build(idArgument); 
 
-The `from` and `where` build methods are in correspondence to `FROM` and `WHERE` clauses in SQL,
-as illustrated above. Additional parameterization is possible through:
+As illustrated above, the `from` and `where` builder methods 
+correspond to the `FROM` and `WHERE` SQL clauses. 
+Additional parameterization is possible through:
 
 * `distinct` to set the `DISTINCT` modifier for the query;
 * `orderBy` to set up an `ORDER BY` clause;
@@ -72,9 +75,9 @@ to the order of query results, but `orderBy` may make it easier to inspect
     import org.jdbdt.DataSource;
     ...
     DB db = ...;
-    DataSource q = select(db, "PASSWORD", "COUNT(LOGIN)")
-                  .from("USER")
-                  .groupBy("PASSWORD")
-                  .having("COUNT(LOGIN) > 1")
-                  .build();
+    Query q = select(db, "PASSWORD", "COUNT(LOGIN)")
+             .from("USER")
+             .groupBy("PASSWORD")
+             .having("COUNT(LOGIN) > 1")
+             .build();
     

@@ -68,7 +68,7 @@ public final class Table extends DataSource {
   }
 
   @Override
-  String getSQLForQuery() {
+  public String getSQLForQuery() {
     StringBuilder sql = new StringBuilder("SELECT\n ");
     String[] columns = getColumns();
     if (columns == null) {

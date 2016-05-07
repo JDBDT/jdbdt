@@ -113,7 +113,7 @@ public final class JDBDT {
    * @param args Optional query arguments.
    * @return A new query data source.
    */
-  public static DataSource query(DB db, String sql, Object... args) {
+  public static Query query(DB db, String sql, Object... args) {
     return new Query(db, sql, args);
   }
   
