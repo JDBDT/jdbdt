@@ -7,7 +7,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuppressWarnings("javadoc")
 @RunWith(Suite.class)
 @SuiteClasses({
-  StatementPoolTest.class,
+  DBTest.class,
   TableTest.class,
   QueryBuilderTest.class,
   QueryTest.class,

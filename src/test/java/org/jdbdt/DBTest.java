@@ -14,29 +14,26 @@ import org.junit.runners.MethodSorters;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @SuppressWarnings("javadoc")
-@Category(StatementPoolingEnabled.class)
-public class StatementPoolTest extends DBTestCase {
+
+public class DBTest extends DBTestCase {
   
   private PreparedStatement compile(String sql) throws SQLException {
     return getDB().compile(sql);
   }
-  @Before 
-  public void setup() {
-    getDB().enable(DB.Option.REUSE_STATEMENTS);
-  }
   
-  @Test
-  public void test01() throws SQLException {
+  @Test @Category(StatementReuseEnabled.class)
+  public void testReuse1() throws SQLException {
     PreparedStatement s1 = compile("SELECT * FROM " + UserDAO.TABLE_NAME);
     PreparedStatement s2 = compile("SELECT * FROM " + UserDAO.TABLE_NAME);
     assertSame(s1, s2);
   }
   
-  @Test
-  public void test02() throws SQLException {
+  @Test @Category(StatementReuseEnabled.class)
+  public void testReuse2() throws SQLException {
     getDB().disable(DB.Option.REUSE_STATEMENTS);
     PreparedStatement s1 = compile("SELECT * FROM " + UserDAO.TABLE_NAME);
     PreparedStatement s2 = compile("SELECT * FROM " + UserDAO.TABLE_NAME);
+    getDB().enable(DB.Option.REUSE_STATEMENTS);
     assertNotSame(s1, s2);
   }
   

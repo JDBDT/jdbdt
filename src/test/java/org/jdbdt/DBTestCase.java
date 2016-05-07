@@ -57,7 +57,7 @@ public class DBTestCase {
     gDAO = new UserDAO(getConnection());
     gConversion = cfg.isDateSupported() ? STD_CONVERSION : ALT_CONVERSION;
     gDB = JDBDT.database(gConn);
-    if (!cfg.useStatementPooling()) {
+    if (!cfg.reuseStatements()) {
       gDB.disable(DB.Option.REUSE_STATEMENTS);
     }
     newUserCounter = 0;

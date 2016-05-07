@@ -2,7 +2,7 @@ package org.jdbdt.tcfg.sqlite;
 
 import org.jdbdt.DBCfg;
 import org.jdbdt.DBEngineTestSuite;
-import org.jdbdt.StatementPoolingEnabled;
+import org.jdbdt.StatementReuseEnabled;
 import org.jdbdt.TruncateSupportEnabled;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
@@ -13,7 +13,7 @@ import org.junit.experimental.categories.Categories.ExcludeCategory;
 @RunWith(Categories.class)
 @ExcludeCategory({
   TruncateSupportEnabled.class,
-  StatementPoolingEnabled.class
+  StatementReuseEnabled.class
 })
 public class SQLiteSuite extends DBEngineTestSuite {
   @BeforeClass 
@@ -24,6 +24,6 @@ public class SQLiteSuite extends DBEngineTestSuite {
       .setURL("jdbc:sqlite:jdbdt-sqlite-test.db")
       .dateNotSupported()
       .countReturnsInteger()
-      .noStatementPooling();
+      .doNotReuseStatements();
   }
 }

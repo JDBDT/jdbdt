@@ -16,7 +16,7 @@ public class DBCfg {
   private String driver;    
   private boolean dateSupported;
   private boolean countIsAnInt;
-  private boolean statementPooling;
+  private boolean reuseStatements;
   
   private DBCfg() {
     reset();
@@ -27,7 +27,7 @@ public class DBCfg {
     driver = HSQLDBSuite.DRIVER;    
     dateSupported = true;
     countIsAnInt = false;
-    statementPooling = true;
+    reuseStatements = true;
     return this;
   }
   
@@ -66,14 +66,12 @@ public class DBCfg {
     return countIsAnInt;
   }
 
-  public DBCfg noStatementPooling() {
-    statementPooling = false;
+  public DBCfg doNotReuseStatements() {
+    reuseStatements = false;
     return this;    
   }
   
-  public boolean useStatementPooling() {
-    return statementPooling;
+  public boolean reuseStatements() {
+    return reuseStatements;
   }
-  
-
 }

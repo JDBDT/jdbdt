@@ -1,6 +1,6 @@
 package org.jdbdt;
 
 @SuppressWarnings("javadoc")
-public interface StatementPoolingEnabled {
+public interface StatementReuseEnabled {
 
 }
