@@ -18,6 +18,8 @@ In the simplest manner,
 `DataSet` objects are created through the `data` JDBDT facade method,
 typically followed by a chained sequence of calls.
 
+*Example*
+
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DataSet;
     import org.jdbdt.DB;
@@ -41,6 +43,8 @@ form of (one-way) object-relational mapping through conversion functions express
 by the `Conversion` interface. A `Conversion` instance 
 defines a mapping from objects to rows, where each row is expressed as an array 
 of column values.
+
+*Example*
 
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.TypedDataSet;
@@ -78,7 +82,9 @@ making use of lambda expressions, arrays, or collections.
 The `builder` facade method creates a builder for a fresh data set and
 the `DataSet.build` method lets you add rows to a previously defined data
 set.
-    
+
+*Example*
+
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
     import org.jdbdt.Table;

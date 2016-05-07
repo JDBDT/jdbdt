@@ -12,6 +12,9 @@ The JDBDT build currently tests integration with:
 * [SQLite](https://www.sqlite.org) through [xerial's JDBC driver](https://github.com/xerial/sqlite-jdbc)
 
 # Known issues
+<a name="KnownIssues"></a>
+
+## sqlite
 
 * [Statement reuse should be disabled for xerial's JDBC driver for sqlite](DB.html#StatementReuse).
-
+* `JDBT.truncate` should not be used, since sqlite does not support TRUNCATE statements.

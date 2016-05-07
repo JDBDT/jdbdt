@@ -12,7 +12,11 @@ Database data may be cleaned up as follows:
 * `deleteAllWhere(t, w, [,args])`: clears the contents of table `t` subject to WHERE clause `w` 
 and optional WHERE clause arguments `args`, using a DELETE statement;
 
-Example:
+Note that `truncate` (i.e., a TRUNCATE statement) may typically execute faster than `deleteAll` 
+(a DELETE statement). However, TRUNCATE may not respect integrity constraints and has variable semantics 
+across database engines; check some details [here](https://en.wikipedia.org/wiki/Truncate_(SQL). Additionally, the TRUNCATE statement is [not supported](Compatibility.html#KnownIssues) by some database engines.
+
+*Example*
 
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
@@ -36,13 +40,16 @@ Example:
 
 Database data may be inserted up as follows:
 
-* `insert(data)` inserts the rows in data set `data` to the table given by `data.getSource()`;
-* `populate(data)` adds rows like `insert`, but clears the table first and sets `data` as 
-the [snapshot for subsequent delta assertions](DBAssert.html#Snapshots); 
+* `insert(data)`: inserts the rows in `data` into the table given by `data.getSource()`;
+* `populate(data)` inserts rows like `insert`, but clears the table first using a DELETE statement,
+and sets `data` as the [snapshot for subsequent delta assertions](DBAssert.html#Snapshots); 
 
 Hence, `insert` should be used for incremental additions to a table, whereas
-`populate` should be used to reset a table contents. The latter in particular
-is also best suited for the use of &delta;-assertions.
+`populate` should be used to reset the contents of a table contents entirely. 
+The use of `populate` may be adequate in particular if &delta;-assertions are performed over the table
+subsequently.
+
+
 
 
 

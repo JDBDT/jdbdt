@@ -12,6 +12,7 @@ using the `table` facade method in association to a [database handle](DB.html).
 The `columns` method may be used to specify the table columns of interest; all
 columns will be considered by default otherwise.
 
+*Example*
 
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
@@ -31,6 +32,8 @@ A `Query` object can be created from a raw SQL statements or using a `QueryBuild
 <a name="RawQuery"></a>
 
 The `query` facade method may be used to define a query using raw SQL.
+ 
+ *Example*
         
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
@@ -47,6 +50,8 @@ The `query` facade method may be used to define a query using raw SQL.
 The `select` facade method creates a query builder that can be parameterized
 using a chained sequence of calls. A final call to `QueryBuilder.build` in 
 such a sequence creates a `Query` object.
+
+*Example*
 
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
@@ -73,6 +78,8 @@ The code below illustrates the use of some of these methods.
 Note to `orderBy`: [database assertions](DBAssertions.html) are insensitive 
 to the order of query results, but `orderBy` may make it easier to inspect
 [logs](Logs.html) in some cases.
+
+*Example*
 
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
