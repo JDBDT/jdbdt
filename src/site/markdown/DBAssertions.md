@@ -23,6 +23,7 @@ The programming pattern in line with this scheme is as follows:
 	Call delta assertion method(s)
 	
 ### Snapshots 
+<a name="Snapshots"></a>
 
 A data source **snapshot** is a data set that is used as reference for subsequent delta
 assertions. It can be defined in two ways for a data source `s`:

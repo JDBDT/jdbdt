@@ -100,7 +100,7 @@ to the order of query results, but `orderBy` may make it easier to inspect
               .where("u1.LOGIN <> u2.LOGIN AND u1.PASSWORD = u2.PASSWORD")
               .build();
    
-## Method reference
+## Summary of methods
 
 ### `JDBDT`
 
@@ -124,6 +124,6 @@ to the order of query results, but `orderBy` may make it easier to inspect
 
 * `from`, `where`, `distinct`, `groupBy`, `orderBy`, `having` are used to 
 parameterize the query (see [above](DataSources.html#QueryBuilder)).
-* `build([args])` builds the final `Query` with optional arguments `args`.
+* `build(args)` builds the final `Query` with optional arguments `args`.
 
 

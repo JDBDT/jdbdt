@@ -118,7 +118,7 @@ set.
 Data sets are marked as read-only when they are set as [database snapshots](DBAssertions.html#Snapshots). After a data set is marked read-only, attempts
 to modify it will result in `org.jdbdt.InvalidOperationException` being thrown.
 
-## Quick method reference
+## Summary of methods
 <a name="MethodReference"></a>
 
 ### `JDBDT`
