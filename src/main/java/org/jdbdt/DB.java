@@ -8,8 +8,14 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 
 /**
- * Database instance.
+ * Database handle.
  * 
+ * <p>
+ * An object of this kind is used to encapsulate access
+ * to a database connection.
+ * </p>
+ * 
+ * @see JDBDT#database(Connection)
  * @since 0.1
  *
  */
