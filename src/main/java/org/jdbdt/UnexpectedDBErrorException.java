@@ -13,13 +13,13 @@ import java.sql.SQLException;
  * 
  * @since 0.1
  */
-public final class UnexpectedDatabaseException extends RuntimeException {
+public final class UnexpectedDBErrorException extends RuntimeException {
 
   /**
    * Constructs the exception with given cause.
    * @param cause Cause for the exception.
    */
-  public UnexpectedDatabaseException(SQLException cause) {
+  public UnexpectedDBErrorException(SQLException cause) {
     super("Unexpected database error", cause);
   }
   

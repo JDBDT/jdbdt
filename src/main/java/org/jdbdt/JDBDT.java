@@ -150,7 +150,7 @@ public final class JDBDT {
    * </p>
    * 
    * @param source Data source.
-   * @throws UnexpectedDatabaseException if a database error occurs 
+   * @throws UnexpectedDBErrorException if a database error occurs 
    * @return Data set representing the snapshot.
    * 
    * @see #assertDelta(DataSet, DataSet)
