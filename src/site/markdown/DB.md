@@ -1,14 +1,13 @@
 # Database handles
 
-A database handle encapsulates JDBT data for interface with a database 
-connection (a `java.sql.Connection` instance), and provides factory 
-methods for creating [data sources](DataSources.html). 
+A database handle encapsulates access to a database 
+connection.
 
 ## Creation  
 <a name="Creation"></a>
 
-A database handled is created using the `database` facade method, supplying as
-argument a `java.sql.Connection` instance.
+A database handle is created using the `database` facade method, supplying as argument
+`java.sql.Connection` instance.
 
 Example:
 
@@ -23,7 +22,6 @@ Example:
 ## Configuration 
 <a name="Configuration"></a>
 
-
 Database handle options are defined by the `DB.Option` enumeration.
 They may be enabled and disabled using  `enable` and `disable`, respectively. 
 
@@ -34,16 +32,17 @@ They may be enabled and disabled using  `enable` and `disable`, respectively.
 	DB db = database(...);
 	db.enable(Option.LOG_ASSERTION_ERRORS, Option.LOG_INSERTIONS);
 
-Currently, the available options relate to logging and statement polling, discussed below. 
+The available options relate to logging and other features, discussed below. 
 
 ### Logging
 <a name="Logging"></a>
 
 
-For debugging purposes or report generation, trace output for JDBDT operations may be written to a [JDBDT log](Logs.html). At creation time, no logging options are enabled,
-and the internal log writes to `System.err`.  Subsequently,
-logging options may be set selectively using `enable` (as in the snippet above) or 
-all at once using `enableFullLogging()`, and the output log may be changed using `setLog`.
+For debugging purposes or report generation, trace output may be written to a [log file](Logs.html).
+At creation time, by default, the `DB.Option.LogAssertionErrors` option is set, and log output is
+set to `System.err`. Subsequently, logging options may be enabled/disabled (as in the snippet above), 
+and the output log may be changed using `setLog`.
+The `enableFullLogging()` convenience method enables all logging options at once.
 
 	import org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
@@ -54,8 +53,8 @@ all at once using `enableFullLogging()`, and the output log may be changed using
 	db.setLog(log);
 	db.enableFullLogging();
 	
-### Statement pooling and re-use
-<a name="StatementPooling"></a>
+### Statement re-use
+<a name="StatementReuse"></a>
 
 A database handle may maintain a pool of reusable `java.sql.PreparedStatement` object
 to avoid re-compiling SQL code it needs to execute. This happens whether or not some form of
