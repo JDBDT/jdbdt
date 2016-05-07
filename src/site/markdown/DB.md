@@ -30,7 +30,7 @@ They may be enabled and disabled using  `enable` and `disable`, respectively.
     import org.jdbdt.DB.Option;
     ...
 	DB db = database(...);
-	db.enable(Option.LOG_ASSERTION_ERRORS, Option.LOG_INSERTIONS);
+	db.enable(Option.LOG_SETUP);
 
 The available options relate to logging and other features, discussed below. 
 
@@ -39,8 +39,17 @@ The available options relate to logging and other features, discussed below.
 
 
 For debugging purposes or report generation, trace output may be written to a [log file](Logs.html).
-At creation time, by default, the `DB.Option.LogAssertionErrors` option is set, and log output is
-set to `System.err`. Subsequently, logging options may be enabled/disabled (as in the snippet above), 
+The following logging options are defined in `DB.Option`
+
+* `LOG_ASSERTION_ERRORS`: log failed assertions
+* `LOG_ASSERTIONS`: log all assertions (passed or failed)
+* `LOG_QUERIES`: log the result of database queries;
+* `LOG_SETUP`: log database setup operations;
+* `LOG_SQL`: log compilation of SQL statements
+
+At creation time, the `DB.Option.LogAssertionErrors` option is enabled by default, 
+and log output is set to `System.err`. 
+Subsequently, logging options may be enabled/disabled using `enable` / `disable` 
 and the output log may be changed using `setLog`.
 The `enableFullLogging()` convenience method enables all logging options at once.
 
@@ -48,32 +57,34 @@ The `enableFullLogging()` convenience method enables all logging options at once
     import org.jdbdt.DB;
     import org.jdbdt.Log;
     ...
-    Log log = new Log(new File("MyLog.jdbdt.xml"));
 	DB db = database(...);
-	db.setLog(log);
+
+	// Write log output to a file
+	db.setLog(new File("MyLog.jdbdt.xml"));
+	
+	// Enable full logging
 	db.enableFullLogging();
 	
-### Statement re-use
+### Statement reuse
 <a name="StatementReuse"></a>
 
 A database handle may maintain a pool of reusable `java.sql.PreparedStatement` object
 to avoid re-compiling SQL code it needs to execute. This happens whether or not some form of
-pooling is implemented for the underlying JDBC driver. 
+statement pooling is implemented for the underlying JDBC driver. 
 
 The scheme is enabled by default and, generally, it should provide
 more efficiency and cause no problems during statement execution.
 A few drivers, however, may not work well with statement reuse.
-In those cases, statement pooling should be disabled as follows:
+In those cases, the `REUSE_STATEMENTS` option should be disabled as follows:
 
     import org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
     import org.jdbdt.DB.Option;
     ...
 	DB db = database(...);
-	db.disable(Option.STATEMENT_POOLING)
+	db.disable(Option.REUSE_STATEMENTS)
 
-**Known issue**: statement pooling should be disabled for 
+**Known issue**: statement reuse should be disabled for 
 [xerial's JDBC driver for sqlite](https://github.com/xerial/sqlite-jdbc). 
 No problems were detected for [all other JDBC drivers tested in the JDBDT build](Compatibility.html).
 
-	

@@ -22,7 +22,7 @@ public class StatementPoolTest extends DBTestCase {
   }
   @Before 
   public void setup() {
-    getDB().enable(DB.Option.STATEMENT_POOLING);
+    getDB().enable(DB.Option.REUSE_STATEMENTS);
   }
   
   @Test
@@ -34,7 +34,7 @@ public class StatementPoolTest extends DBTestCase {
   
   @Test
   public void test02() throws SQLException {
-    getDB().disable(DB.Option.STATEMENT_POOLING);
+    getDB().disable(DB.Option.REUSE_STATEMENTS);
     PreparedStatement s1 = compile("SELECT * FROM " + UserDAO.TABLE_NAME);
     PreparedStatement s2 = compile("SELECT * FROM " + UserDAO.TABLE_NAME);
     assertNotSame(s1, s2);

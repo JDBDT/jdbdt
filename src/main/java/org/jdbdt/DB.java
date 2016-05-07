@@ -1,5 +1,8 @@
 package org.jdbdt;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -29,7 +32,7 @@ public final class DB {
     /**
      * Statement pooling (enabled by default).
      */
-    STATEMENT_POOLING,
+    REUSE_STATEMENTS,
     /**
      * Log assertions (including verified ones).
      */
@@ -41,7 +44,7 @@ public final class DB {
     /**
      * Log data set insertions.
      */
-    LOG_INSERTIONS,
+    LOG_SETUP,
     /**
      * Log data set snapshots.
      */
@@ -79,7 +82,7 @@ public final class DB {
   DB(Connection connection) {
     this.connection = connection;
     log = new Log(System.err);
-    enable(Option.STATEMENT_POOLING);
+    enable(Option.REUSE_STATEMENTS);
     enable(Option.LOG_ASSERTION_ERRORS);
   }
 
@@ -99,7 +102,7 @@ public final class DB {
   public void enableFullLogging() {
     enable(DB.Option.LOG_ASSERTION_ERRORS,
            DB.Option.LOG_ASSERTIONS,
-           DB.Option.LOG_INSERTIONS,
+           DB.Option.LOG_SETUP,
            DB.Option.LOG_QUERIES,
            DB.Option.LOG_SQL);
   }
@@ -145,7 +148,7 @@ public final class DB {
    */
   PreparedStatement 
   compile(String sql) throws SQLException {    
-    if (! isEnabled(Option.STATEMENT_POOLING)) {
+    if (! isEnabled(Option.REUSE_STATEMENTS)) {
       logSQL(sql);
       return connection.prepareStatement(sql);
     }
@@ -164,18 +167,26 @@ public final class DB {
 
 
   /**
-   * Set log to use.
+   * Redirect log output to a stream.
    * The log set at creation time
    * writes to <code>System.err</code>.
-   * @param log Logging instance.
+   * @param out Output stream.
    */
-  public void setLog(Log log) {
-    this.log = log;
+  public void setLog(PrintStream out) {
+    this.log = new Log(out);
   }
 
-  
+  /**
+   * Set output file for log output.
+   * The log set at creation time
+   * writes to <code>System.err</code>.
+   * @param outputFile Logging instance.
+   * @throws IOException If the file cannot be opened.
+   */
+  public void setLog(File outputFile) throws IOException {
+    this.log = new Log(outputFile);
+  }
 
-  
   /**
    * Log snapshot.
    * @param callInfo Call info.
@@ -193,7 +204,7 @@ public final class DB {
    * @param data Data set.
    */
   void logInsertion(CallInfo callInfo, DataSet data) {
-    if (isEnabled(Option.LOG_INSERTIONS)) {
+    if (isEnabled(Option.LOG_SETUP)) {
       log.write(callInfo, data);
     }
   }
