@@ -101,6 +101,6 @@ No problems were detected for [all other JDBC drivers tested in the JDBDT build]
 - `getConnection()` returns the connection associated to the handle.
 - `enable(o1, ...)` enables given options.
 - `disable(o1, ...)` disables given options.
-- `enableFullLogging()` enables all logging options.
 - `isEnabled(o)` tests if option `o` is enabled.
+- `enableFullLogging()` enables all logging options.
 - `setLog(out)` redirects log output to `out`, a `java.io.File` or `java.io.PrintStream`.

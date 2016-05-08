@@ -81,4 +81,16 @@ are performed over the table subsequently.
     // 2. Insert data in USER table (does not clear previous contents).
     insert(data);
 
+## Summary of methods
+<a name="MethodReference"></a>
+
+### `JDBDT`
+
+- `delete(t)` clear table `t` with a DELETE statement.
+- `deleteAll(t,w,a)` deletes data from table `t` subject to WHERE clause `w` and optional
+WHERE clause arguments.
+- `truncate(t)` clear table `t` with a TRUNCATE TABLE statement.
+- `insert(data)` inserts `data` into a table (`data.getSource()`).
+- `populate(data)` sets `data` as the contents of a table (`data.getSource()`).
+
 
