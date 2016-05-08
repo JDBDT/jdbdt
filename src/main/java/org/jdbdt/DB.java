@@ -50,10 +50,6 @@ public final class DB {
      */
     LOG_SNAPSHOTS,
     /**
-     * Log SQL statements.
-     */
-    LOG_SQL,
-    /**
      * Reuse statements (enabled by default).
      */
     REUSE_STATEMENTS;
@@ -109,8 +105,7 @@ public final class DB {
            DB.Option.LOG_ASSERTIONS,
            DB.Option.LOG_SETUP,
            DB.Option.LOG_QUERIES,
-           DB.Option.LOG_SNAPSHOTS,
-           DB.Option.LOG_SQL);
+           DB.Option.LOG_SNAPSHOTS);
   }
 
   /**
@@ -155,7 +150,6 @@ public final class DB {
   PreparedStatement 
   compile(String sql) throws SQLException {    
     if (! isEnabled(Option.REUSE_STATEMENTS)) {
-      logSQL(sql);
       return connection.prepareStatement(sql);
     }
     if (pool == null) {
@@ -164,7 +158,6 @@ public final class DB {
     String sqlI = sql.intern();
     PreparedStatement ps = pool.get(sqlI);
     if (ps == null) {
-      logSQL(sqlI);
       ps = connection.prepareStatement(sqlI);
       pool.put(sqlI, ps);
     }
@@ -223,16 +216,6 @@ public final class DB {
   void logInsertion(CallInfo callInfo, DataSet data) {
     if (isEnabled(Option.LOG_SETUP)) {
       log.write(callInfo, data);
-    }
-  }
-  
-  /**
-   * Log SQL code.
-   * @param sql SQL code to log.
-   */
-  private void logSQL(String sql) {
-    if (isEnabled(Option.LOG_SQL)) {
-      log.writeSQL(sql);
     }
   }
 
