@@ -172,7 +172,7 @@ final class Log {
   }
   
   @SuppressWarnings("javadoc")
-  void writeSQL(Element parent, String sql) {
+  private void writeSQL(Element parent, String sql) {
     Element sqlNode = createNode(parent, SQL_TAG);
     sqlNode.appendChild(xmlDoc.createCDATASection(sql));
   }
