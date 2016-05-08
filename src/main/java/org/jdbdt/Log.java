@@ -114,11 +114,19 @@ final class Log {
   void write(CallInfo callInfo, DataSet data) {
     Element rootNode = root(callInfo);
     Element dsNode = createNode(rootNode, DATA_SET_TAG);
-    write(dsNode, data.getSource().getMetaData());
+    write(dsNode, data.getSource());
     write(dsNode, ROWS_TAG, data.getSource().getMetaData().columns(), data.getRows().iterator());
     flush(rootNode);
   }
 
+  @SuppressWarnings("javadoc")
+  private void write(Element parent, DataSource source) {
+    Element node = createNode(parent, DATA_SOURCE_TAG);
+    node.setAttribute(JAVA_TYPE_TAG, source.getClass().getName());
+    write(node, source.getMetaData());
+    writeSQL(node, source.getSQLForQuery());
+  }
+  
   @SuppressWarnings("javadoc")
   private void write(Element root, CallInfo info) {
     Element ctxNode = createNode(root, CONTEXT_TAG);
@@ -159,9 +167,14 @@ final class Log {
    */
   void writeSQL(CallInfo callInfo, String sql) {
     Element rootNode = root(callInfo);
-    Element sqlNode = createNode(rootNode, SQL_TAG);
-    sqlNode.appendChild(xmlDoc.createCDATASection(sql));
+    writeSQL(rootNode, sql);
     flush(rootNode);
+  }
+  
+  @SuppressWarnings("javadoc")
+  void writeSQL(Element parent, String sql) {
+    Element sqlNode = createNode(parent, SQL_TAG);
+    sqlNode.appendChild(xmlDoc.createCDATASection(sql));
   }
   
   /**
@@ -171,10 +184,10 @@ final class Log {
    */
   void write(CallInfo callInfo, DeltaAssertion da) {
     final Element rootNode = root(callInfo);
-    final MetaData md = da.getMetaData();
-    final List<MetaData.ColumnInfo> mdCols = md.columns();
     final Element daNode = createNode(rootNode, DELTA_ASSERTION_TAG);
-    write(daNode, md);
+    final DataSource ds = da.getSource();
+    write(daNode, ds);
+    final List<MetaData.ColumnInfo> mdCols = ds.getMetaData().columns();
     final Element expectedNode = createNode(daNode, EXPECTED_TAG);    
     write(expectedNode, 
           OLD_DATA_TAG, 
@@ -215,10 +228,10 @@ final class Log {
    */
   void write(CallInfo callInfo, StateAssertion sa) {
     final Element rootNode = root(callInfo); 
-    final MetaData md = sa.getMetaData();
-    final List<MetaData.ColumnInfo> mdCols = md.columns();
     final Element saNode = createNode(rootNode, STATE_ASSERTION_TAG);
-    write(saNode, md);
+    final DataSource ds = sa.getSource();
+    write(saNode, ds);
+    final List<MetaData.ColumnInfo> mdCols = ds.getMetaData().columns();
     write(saNode, 
           EXPECTED_TAG, 
           mdCols,
@@ -302,6 +315,8 @@ final class Log {
   private static final String ACTUAL_TAG = "actual";
   @SuppressWarnings("javadoc")
   private static final String DATA_SET_TAG = "data-set";
+  @SuppressWarnings("javadoc")
+  private static final String DATA_SOURCE_TAG = "data-source";
   @SuppressWarnings("javadoc")
   private static final String COLUMNS_TAG = "columns";
   @SuppressWarnings("javadoc")

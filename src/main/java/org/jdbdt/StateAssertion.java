@@ -74,11 +74,11 @@ final class StateAssertion {
   }
 
   /**
-   * Get meta-data for data source at stake.
-   * @return Meta-data for delta assertion.
+   * Get data source.
+   * @return Data source associated to state assertion.
    */
-  MetaData getMetaData() {
-    return data.getSource().getMetaData();  
+  public DataSource getSource() {
+    return data.getSource();
   }
   
 }

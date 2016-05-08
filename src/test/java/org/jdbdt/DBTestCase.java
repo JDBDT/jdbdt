@@ -62,7 +62,7 @@ public class DBTestCase {
     }
     newUserCounter = 0;
     gDB.disable(DB.Option.LOG_ASSERTION_ERRORS);
-    // gDB.enableFullLogging();
+    gDB.enableFullLogging();
   }
   
   @AfterClass

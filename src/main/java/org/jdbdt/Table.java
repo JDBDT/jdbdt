@@ -44,17 +44,17 @@ public final class Table extends DataSource {
 
   @Override
   public String getSQLForQuery() {
-    StringBuilder sql = new StringBuilder("SELECT\n ");
+    StringBuilder sql = new StringBuilder("SELECT ");
     String[] columns = getColumns();
     if (columns == null) {
       sql.append('*');
     } else {
       sql.append(columns[0]);
       for (int i = 1; i < columns.length;i++) {
-        sql.append(',').append('\n').append(' ').append(columns[i]);
+        sql.append(',').append(' ').append(columns[i]);
       }
     }
-    sql.append("\nFROM ").append(tableName);
+    sql.append(" FROM ").append(tableName);
     return sql.toString();
   }
 
