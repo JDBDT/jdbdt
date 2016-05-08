@@ -121,8 +121,8 @@ set.
 ## Read-only data sets
 <a name="ReadOnly"></a>
 
-Data sets are marked as read-only when they are set as [database snapshots](DBAssertions.html#Snapshots). 
-Any attempt to modify a read-only data set will lead cause an `InvalidOperationException`.
+A data set is marked read-only when defined as a [database snapshot](DBAssertions.html#Snapshots).
+Any attempt to modify it subsequently will cause an `InvalidOperationException`.
 
 ## Summary of methods
 <a name="MethodReference"></a>

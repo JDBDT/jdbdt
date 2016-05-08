@@ -7,16 +7,17 @@ in the `JDBDT` facade.
 
 Database data may be cleaned up as follows:
 
-* `truncate(t)`: clears the entire contents of table `t` using a TRUNCATE statement;
 * `deleteAll(t)`: clears  the entire contents of table `t` using a DELETE statement;
 * `deleteAllWhere(t, w, [,args])`: clears the contents of table `t` subject to WHERE clause `w` 
 and optional WHERE clause arguments `args`, using a DELETE statement;
+* `truncate(t)`: clears the entire contents of table `t` using a TRUNCATE statement;
 
-Note that `truncate` (i.e., a TRUNCATE statement) may typically execute faster than `deleteAll` 
-(a DELETE statement). However, TRUNCATE may not respect integrity constraints and has variable semantics 
-across database engines; check some details [here](https://en.wikipedia.org/wiki/Truncate_(SQL). Additionally, the TRUNCATE statement is [not supported](Compatibility.html#KnownIssues) by some database engines.
+Note that `truncate` executes a TRUNCATE TABLE statement, and may typically execute faster than `deleteAll`,
+which in turn uses DELETE statement (with no WHERE clause). The TRUNCATE TABLE statement, however, 
+may not respect integrity constraints and has variable semantics 
+for different database engines; check some details [here](https://en.wikipedia.org/wiki/Truncate_(SQL). Additionally, note that the TRUNCATE TABLE statement is [not supported](Compatibility.html#KnownIssues) by some database engines.
 
-*Example*
+*Illustration*
 
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
@@ -46,7 +47,7 @@ and sets `data` as the [snapshot for subsequent delta assertions](DBAssert.html#
 
 Hence, `insert` should be used for incremental additions to a table, whereas
 `populate` should be used to reset the contents of a table contents entirely. 
-The use of `populate` may be adequate in particular if &delta;-assertions are performed over the table
+The use of `populate` is adequate in particular if &delta;-assertions are performed over the table
 subsequently.
 
 

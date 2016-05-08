@@ -9,9 +9,9 @@ connection.
 A database handle is created using the `database` facade method, supplying as argument
 `java.sql.Connection` instance.
 
-Example:
+*Illustration*
 
-	import org.jdbdt.JDBDT.*;
+	import static org.jdbdt.JDBDT.*;
 	import org.jdbdt.DB; 
 	import java.sql.Connection;
 	import java.sql.DriverManager;
@@ -24,19 +24,19 @@ Example:
 
 Database handle options are defined by the `DB.Option` enumeration.
 They may be enabled and disabled using  `enable` and `disable`, respectively. 
+The available options relate to logging and a few other features discussed below. 
 
-    import org.jdbdt.JDBDT.*;
+*Illustration*
+
+    import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
     import org.jdbdt.DB.Option;
     ...
 	DB db = database(...);
 	db.enable(Option.LOG_SETUP);
 
-The available options relate to logging and other features, discussed below. 
-
 ### Logging
 <a name="Logging"></a>
-
 
 For debugging purposes or report generation, trace output may be written to a [log file](Logs.html).
 The following logging options are defined in `DB.Option`
@@ -54,7 +54,9 @@ Subsequently, logging options may be enabled/disabled using `enable` / `disable`
 and the output log may be changed using `setLog`.
 The `enableFullLogging()` convenience method enables all logging options at once.
 
-	import org.jdbdt.JDBDT.*;
+*Illustration*
+
+	import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
     import org.jdbdt.Log;
     ...
@@ -75,7 +77,9 @@ it should provide more efficiency and cause no problems.
 For drivers that do not deal well with statement reuse, however,
 the `REUSE_STATEMENTS` option should be disabled as follows:
 
-    import org.jdbdt.JDBDT.*;
+*Illustration*
+
+    import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
     import org.jdbdt.DB.Option;
     ...

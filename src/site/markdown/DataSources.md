@@ -40,6 +40,7 @@ The `query` facade method may be used to define a query using raw SQL.
     import org.jdbdt.Query;
     ...
     DB db = ...;
+    // Query user login and name by id.
     int idArgument = ...;
     Query q = query(db, "SELECT LOGIN, NAME FROM USER WHERE ID = ?", idArgument);
 
