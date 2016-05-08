@@ -19,8 +19,6 @@ import org.junit.runners.MethodSorters;
 public class DBSetupTest extends DBTestCase {
 
   @Rule public TestName testName = new TestName();
-
-
   private static Table table;
 
   @BeforeClass
