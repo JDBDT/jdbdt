@@ -50,6 +50,36 @@ Hence, `insert` should be used for incremental additions to a table, whereas
 The use of `populate` is adequate in particular if &delta;-assertions are performed over the table
 subsequently.
 
+*Illustration*
+
+    import static org.jdbdt.JDBDT.*;
+    import org.jdbdt.DB;
+    import org.jdbdt.Table;
+    import org.jdbdt.DataSet;
+    import java.sql.Date;
+    ...
+	DB db = ...;
+	Table t = table(db, "USER")
+	         .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");	
+    
+    // Create a data set with 500 rows.
+    DataSet data = 
+       builder(t)
+      .sequence("ID", 0) // 0, 1, ... 
+      .sequence("LOGIN", i -> "user_" + i) // "user_0", ...
+      .sequence("NAME", i -> "Yet Another User" + i) 
+      .sequence("PASSWORD", i -> "password_" + i) 
+      .random("CREATED", Date.valueOf("2016-01-01"), Date.valueOf("2016-12-31"))
+      .generate(500);
+    ...
+    
+    // Reset contents of USER to data.
+    populate(data); 
+    ...
+    
+    // Insert data in USER table (does not clear previous contents).
+    insert(data);
+    
 
 
 
