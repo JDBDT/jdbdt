@@ -111,9 +111,9 @@ final class Log {
    * @param data Data set.
    */
   void write(CallInfo callInfo, DataSet data) {
-    Element rootNode = root(),
-            dsNode = createNode(rootNode, DATA_SET_TAG);
-    write(rootNode, callInfo); 
+    Element rootNode = root();
+    write(rootNode, callInfo);
+    Element dsNode = createNode(rootNode, DATA_SET_TAG);
     write(dsNode, data.getSource().getMetaData());
     write(dsNode, ROWS_TAG, data.getSource().getMetaData().columns(), data.getRows().iterator());
     flush(rootNode);
