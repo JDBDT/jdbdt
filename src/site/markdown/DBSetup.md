@@ -5,17 +5,18 @@ in the `JDBDT` facade.
 
 ## Cleaning data
 
-Database data may be cleaned up as follows:
+Database data may be cleaned up using one of the following methods:
 
-* `deleteAll(t)`: clears  the entire contents of table `t` using a DELETE statement;
-* `deleteAllWhere(t, w, [,args])`: clears the contents of table `t` subject to WHERE clause `w` 
-and optional WHERE clause arguments `args`, using a DELETE statement;
-* `truncate(t)`: clears the entire contents of table `t` using a TRUNCATE statement;
+1. `deleteAll(t)` clears  the entire contents of table `t` using a DELETE statement without an associated
+WHERE clause.
+2. `deleteAllWhere(table, where, [,args])` clears the contents of `t` using a DELETE
+statement with a WHERE clause `where` and optional WHERE clause arguments `args`.
+3. `truncate(t)` clears `t` using a TRUNCATE TABLE statement.
 
-Note that `truncate` executes a TRUNCATE TABLE statement, and may typically execute faster than `deleteAll`,
-which in turn uses DELETE statement (with no WHERE clause). The TRUNCATE TABLE statement, however, 
+Note that `truncate` may  be faster than `deleteAll`, but the associated TRUNCATE TABLE statement 
 may not respect integrity constraints and has variable semantics 
-for different database engines; check some details [here](https://en.wikipedia.org/wiki/Truncate_(SQL). Additionally, note that the TRUNCATE TABLE statement is [not supported](Compatibility.html#KnownIssues) by some database engines.
+for different database engines; check some details [here](https://en.wikipedia.org/wiki/Truncate_(SQL). 
+Also, the TRUNCATE TABLE statement is [not supported](Compatibility.html#KnownIssues) at all by some database engines.
 
 *Illustration*
 
@@ -27,28 +28,28 @@ for different database engines; check some details [here](https://en.wikipedia.o
     Table t = table(db, "USER")
 	         .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
 	...
-	// Clear table using TRUNCATE.
-	truncate(t);
-	
-	// Clear table using DELETE.
+	// 1. Clear table using a DELETE statement.
 	deleteAll(t);
 	
-	// Delete all users whose login matches a certain filter
+	// 2. Delete all users whose login matches a certain filter
 	String loginFilter = ...;
 	deleteAll(t, "LOGIN LIKE ?", loginFilter);
+	
+	// 3. Clear table using TRUNCATE.
+	truncate(t);
 	  
 ## Inserting data
 
-Database data may be inserted up as follows:
+Database data may be inserted using one the following methods:
 
-* `insert(data)`: inserts the rows in `data` into the table given by `data.getSource()`;
-* `populate(data)` inserts rows like `insert`, but clears the table first using a DELETE statement,
-and sets `data` as the [snapshot for subsequent delta assertions](DBAssert.html#Snapshots); 
+1. `insert(data)` inserts `data` into the table given by `data.getSource()`.
+2. `populate(data)` inserts `data` like `insert`, but clears the table first using a DELETE statement,
+and also records `data` as the [snapshot for subsequent delta assertions](DBAssert.html#Snapshots).
 
-Hence, `insert` should be used for incremental additions to a table, whereas
+Thus, `insert` should be used for incremental additions to a table, whereas
 `populate` should be used to reset the contents of a table contents entirely. 
-The use of `populate` is adequate in particular if &delta;-assertions are performed over the table
-subsequently.
+The use of `populate` is adequate in particular if [delta assertions](DBAssert.html) 
+are performed over the table subsequently.
 
 *Illustration*
 
@@ -73,14 +74,11 @@ subsequently.
       .generate(500);
     ...
     
-    // Reset contents of USER to data.
+    // 1. Reset contents of USER to data.
     populate(data); 
     ...
     
-    // Insert data in USER table (does not clear previous contents).
+    // 2. Insert data in USER table (does not clear previous contents).
     insert(data);
-    
-
-
 
 
