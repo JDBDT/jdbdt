@@ -18,7 +18,7 @@ In the simplest manner,
 `DataSet` objects are created through the `data` JDBDT facade method,
 typically followed by a chained sequence of calls.
 
-*Example*
+*Illustration*
 
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DataSet;
@@ -44,7 +44,7 @@ by the `Conversion` interface. A `Conversion` instance
 defines a mapping from objects to rows, where each row is expressed as an array 
 of column values.
 
-*Example*
+*Illustration*
 
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.TypedDataSet;
@@ -83,7 +83,7 @@ The `builder` facade method creates a builder for a fresh data set and
 the `DataSet.build` method lets you add rows to a previously defined data
 set.
 
-*Example*
+*Illustration*
 
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
@@ -121,8 +121,8 @@ set.
 ## Read-only data sets
 <a name="ReadOnly"></a>
 
-Data sets are marked as read-only when they are set as [database snapshots](DBAssertions.html#Snapshots). After a data set is marked read-only, attempts
-to modify it will result in `org.jdbdt.InvalidOperationException` being thrown.
+Data sets are marked as read-only when they are set as [database snapshots](DBAssertions.html#Snapshots). 
+Any attempt to modify a read-only data set will lead cause an `InvalidOperationException`.
 
 ## Summary of methods
 <a name="MethodReference"></a>
@@ -136,7 +136,7 @@ For a [data source](DataSources.html) `s`:
 - `builder(s)` creates a data set builder with an underlying fresh data set.
 - `empty(s)` returns an empty & read-only data set that is unique for `s`. 
 
-### `DataSet` / `TypedDataSet`
+### `DataSet`, `TypedDataSet`
 
 Properties:
 

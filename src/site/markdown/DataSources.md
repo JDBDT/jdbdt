@@ -12,7 +12,7 @@ using the `table` facade method in association to a [database handle](DB.html).
 The `columns` method may be used to specify the table columns of interest; all
 columns will be considered by default otherwise.
 
-*Example*
+*Illustration*
 
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
@@ -33,7 +33,7 @@ A `Query` object can be created from a raw SQL statements or using a `QueryBuild
 
 The `query` facade method may be used to define a query using raw SQL.
  
- *Example*
+ *Illustration*
         
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
@@ -41,7 +41,7 @@ The `query` facade method may be used to define a query using raw SQL.
     ...
     DB db = ...;
     int idArgument = ...;
-    Query q = query(db, "SELECT LOGIN,NAME FROM USER WHERE ID > ?", idArgument);
+    Query q = query(db, "SELECT LOGIN, NAME FROM USER WHERE ID = ?", idArgument);
 
 ### Definition using `QueryBuilder`
 <a name="QueryBuilder"></a>
@@ -49,60 +49,50 @@ The `query` facade method may be used to define a query using raw SQL.
 `QueryBuilder` objects can be used to define queries programmatically.
 The `select` facade method creates a query builder that can be parameterized
 using a chained sequence of calls. A final call to `QueryBuilder.build` in 
-such a sequence creates a `Query` object.
+such a sequence creates a `Query` object. The parameterization methods are:
 
-*Example*
-
-    import static org.jdbdt.JDBDT.*;
-    import org.jdbdt.DB;
-    import org.jdbdt.DataSource;
-    ...
-    DB db = ...;
-    int idArgument = ...;
-    Query q = select(db, "LOGIN", "NAME")
-             .from("USER")
-             .where("ID > ?")
-             .build(idArgument); 
-
-As illustrated above, the `from` and `where` builder methods 
-correspond to the `FROM` and `WHERE` SQL clauses. 
-Additional parameterization is possible through:
-
+* `from` to set the `FROM` clause;
+* `where` to set the `WHERE` clause; 
 * `distinct` to set the `DISTINCT` modifier for the query;
 * `orderBy` to set up an `ORDER BY` clause;
 * `groupBy` to set up a `GROUP BY` clause;
 * `having` to set up a `HAVING` clause.
 
-The code below illustrates the use of some of these methods.
-
 Note to `orderBy`: [database assertions](DBAssertions.html) are insensitive 
 to the order of query results, but `orderBy` may make it easier to inspect
 [logs](Logs.html) in some cases.
 
-*Example*
+*Illustration*
 
     import static org.jdbdt.JDBDT.*;
     import org.jdbdt.DB;
-    import org.jdbdt.DataSource;
+    import org.jdbdt.Query;
     ...
     DB db = ...;
     
-    // Get distinct passwords in use
-    Query q1 = select(db, "PASSWORD")
+    // [1] Query user login and name by id 
+    int userId = ...;
+    Query q1 = select(db, "LOGIN", "NAME")
+              .from("USER")
+              .where("ID = ?")
+              .build(userId); 
+              
+    // [2] Query distinct passwords in use
+    Query q2 = select(db, "PASSWORD")
               .distinct()
               .from("USER")
               .orderBy("PASSWORD")
               .build();
               
-    // Get passwords that are used by more than one user and their count.
-    Query q2 = select(db, "PASSWORD", "COUNT(*)")
+    // [3] Get passwords that are used by more than one user and their count.
+    Query q3 = select(db, "PASSWORD", "COUNT(*)")
               .from("USER")
               .groupBy("PASSWORD")
               .having("COUNT(*) > 1")
               .build();
               
-    // Get pairs of users that have the same password
-    Query q3 = select(db, "u1.LOGIN", "u2.LOGIN")
+    // [4] Get pairs of users that have the same password.
+    Query q4 = select(db, "u1.LOGIN", "u2.LOGIN")
               .from("USER u1", "USER u2")
               .where("u1.LOGIN <> u2.LOGIN AND u1.PASSWORD = u2.PASSWORD")
               .build();
