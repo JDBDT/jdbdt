@@ -39,9 +39,7 @@ public class DeltaTest {
   void assertIteration(Iterator<Row> exp, Iterator<Row> actual) {
     while (exp.hasNext()) {
       assertTrue(actual.hasNext());
-      //Row r;
       assertEquals(exp.next(), actual.next()); 
-      //System.out.println(r + " " + actual.hasNext() + " " +( actual.hasNext() ? actual.next() : ""));
     }
     assertFalse(actual.hasNext());
   }
@@ -129,5 +127,19 @@ public class DeltaTest {
     Delta d = new Delta(rows(7,7,6,5,4,3,2,1,0), rows(8,1,2,3,4,5,6,7));
     assertIteration(rows(7,0), d.deleted());
     assertIteration(rows(8), d.inserted());
+  }
+  
+  @Test 
+  public void testDiff8() {
+    Delta d = new Delta(rows(7,7,6,7,6,5,4,3,2,1,0), rows(1,2,3,4));
+    assertIteration(rows(7,7,7,6,6,5,0), d.deleted());
+    assertIteration(empty(), d.inserted());
+  }
+  
+  @Test 
+  public void testDiff9() {
+    Delta d = new Delta(rows(1,2,3,4), rows(7,7,6,7,6,5,4,3,2,1,0));
+    assertIteration(empty(), d.deleted());
+    assertIteration(rows(7,7,7,6,6,5,0), d.inserted());
   }
 }
