@@ -89,3 +89,18 @@ the `REUSE_STATEMENTS` option should be disabled as follows:
 [xerial's JDBC driver for sqlite](https://github.com/xerial/sqlite-jdbc). 
 No problems were detected for [all other JDBC drivers tested in the JDBDT build](Compatibility.html).
 
+## Summary of methods
+<a name="MethodReference"></a>
+
+### `JDBDT`
+
+- `database(c)` creates a database handle for database connection `c`.
+
+### `DB`
+
+- `getConnection()` returns the connection associated to the handle.
+- `enable(o1, ...)` enables given options.
+- `disable(o1, ...)` disables given options.
+- `enableFullLogging()` enables all logging options.
+- `isEnabled(o)` tests if option `o` is enabled.
+- `setLog(out)` redirects log output to `out`, a `java.io.File` or `java.io.PrintStream`.
