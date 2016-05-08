@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.NoSuchElementException;
 import java.util.Map.Entry;
 
+
 /**
  * Delta between row sets.
  * 
@@ -30,27 +31,27 @@ final class Delta {
   
   /**
    * Constructs a new delta.
-   * @param ref Iterator for reference data.
-   * @param upd Iterator for updated data.
+   * @param a Iterator for 1st row set. 
+   * @param b Iterator for 2nd row set.
    */
-  Delta(Iterator<Row> ref, Iterator<Row> upd) {
+  Delta(Iterator<Row> a, Iterator<Row> b) {
     boolean done = false;
     while (!done) {
-      if (!ref.hasNext()) {
-        while (upd.hasNext()) {
-          update(upd.next(), +1);
+      if (!a.hasNext()) {
+        while (b.hasNext()) {
+          update(b.next(), +1);
         }
         done = true;
       }
-      else if (!upd.hasNext()) {
-        while (ref.hasNext()) {
-          update(ref.next(), -1);
+      else if (!b.hasNext()) {
+        while (a.hasNext()) {
+          update(a.next(), -1);
         }
         done = true;
       } 
       else {
-        update(ref.next(), -1);
-        update(upd.next(), +1);
+        update(a.next(), -1);
+        update(b.next(), +1);
       }
     }
   }
@@ -80,7 +81,7 @@ final class Delta {
    * @return Iterator that allows the traversal of deleted rows.
    */
   Iterator<Row> deleted() {
-    return new DeltaIterator(diff, true);
+    return new DeltaIterator(diff.entrySet().iterator(), DELETED_FILTER);
   }
   
   /**
@@ -88,41 +89,47 @@ final class Delta {
    * @return Iterator that allows the traversal of deleted rows.
    */
   Iterator<Row> inserted() {
-    return new DeltaIterator(diff, false);
+    return new DeltaIterator(diff.entrySet().iterator(), INSERTED_FILTER);
   }
   
+  @SuppressWarnings("javadoc")
+  private static interface IteratorFilter {
+    int eval(int v);    
+  }
   
   @SuppressWarnings("javadoc")
-  private static
-  class DeltaIterator implements Iterator<Row> {
-    Iterator<Entry<Row,Integer>> supportItr;
-    Entry<Row,Integer> nextEntry;
-    boolean iterateOldData;
-    int count;
+  private static final IteratorFilter DELETED_FILTER = n -> n < 0 ? -n : 0;
+  @SuppressWarnings("javadoc")
+  private static final IteratorFilter INSERTED_FILTER = n -> n > 0 ? n : 0;
 
-    DeltaIterator(LinkedHashMap<Row, Integer> diff, boolean deletedData) {
-      supportItr = diff.entrySet().iterator();
-      iterateOldData = deletedData;
-      count = 0;
-      nextEntry = null;
+  @SuppressWarnings("javadoc")
+  private static final
+  class DeltaIterator implements Iterator<Row> {
+    final Iterator<Entry<Row,Integer>> mapItr;
+    final IteratorFilter filter;
+    Entry<Row,Integer> nextEntry = null;
+    int repeat = 0;
+
+    DeltaIterator(Iterator<Entry<Row,Integer>> itr, IteratorFilter f) {
+      mapItr = itr;
+      filter = f;
       advance();
     }
 
     private void advance() {
-      if (count == 0) {
+      if (repeat == 0) {
         nextEntry = null;
-        while (supportItr.hasNext() && nextEntry == null) {
-          Entry<Row,Integer> entry = supportItr.next();
-          if (entry.getValue() < 0) {
-            if (iterateOldData) {
-              nextEntry = entry; 
-            }
-          }
-          else if (!iterateOldData) {
-            nextEntry = entry;
+        while (mapItr.hasNext()) {
+          Entry<Row,Integer> entry = mapItr.next();
+          int v = filter.eval(entry.getValue());
+          if (v != 0) {
+            repeat = v - 1;
+            nextEntry = entry; 
+            break;
           }
         }
-
+      } else {
+        repeat--;
       }
     }
 
