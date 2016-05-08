@@ -100,9 +100,10 @@ final class DBSetup {
   static int deleteAll(CallInfo callInfo, Table t) 
   throws DBExecutionException {
     try {
-      return t.getDB()
-          .compile("DELETE FROM " + t.getName())
-          .executeUpdate();
+      String sql = "DELETE FROM " + t.getName();
+      DB db = t.getDB();
+      db.logSetup(callInfo, sql);
+      return db.compile(sql).executeUpdate();
     } 
     catch (SQLException e) {
       throw new DBExecutionException(e);
@@ -118,10 +119,11 @@ final class DBSetup {
   static void truncate(CallInfo callInfo, Table t) 
   throws DBExecutionException {
     try {
-      t.getDB()
-      .compile("TRUNCATE TABLE " + t.getName())
-      .execute();
-    } 
+      String sql = "TRUNCATE TABLE " + t.getName();
+      DB db = t.getDB();
+      db.logSetup(callInfo, sql);
+      t.getDB().compile(sql).execute();
+    }
     catch (SQLException e) {
       throw new DBExecutionException(e);
     }
@@ -139,10 +141,13 @@ final class DBSetup {
   static int deleteAll(CallInfo callInfo, Table table, String where, Object... args) 
   throws DBExecutionException {
     try {
-      PreparedStatement deleteStmt = 
-          table.getDB().compile(
-              "DELETE FROM " + table.getName() +
-              " WHERE " + where);
+      String sql = 
+        "DELETE FROM " + table.getName() +
+        " WHERE " + where;
+      
+      DB db = table.getDB();
+      db.logSetup(callInfo, sql);
+      PreparedStatement deleteStmt = db.compile(sql);       
       if (args != null && args.length > 0) {
         for (int i=0; i < args.length; i++) {
           deleteStmt.setObject(i + 1, args[i]);

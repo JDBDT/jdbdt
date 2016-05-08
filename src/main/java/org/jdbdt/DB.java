@@ -262,5 +262,16 @@ public final class DB {
     }
   }
 
+  /**
+   * Log database setup command.
+   * @param callInfo Call info.
+   * @param sql SQL code.
+   */
+  void logSetup(CallInfo callInfo, String sql) {
+    if (isEnabled(Option.LOG_SETUP)) {
+      log.writeSQL(sql);
+    }
+  }
+
 
 }
