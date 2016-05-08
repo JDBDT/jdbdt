@@ -3,7 +3,7 @@
 The contents of database tables may be defined using database setup methods 
 in the `JDBDT` facade.
 
-## Cleanup methods
+## Cleaning data
 
 Database data may be cleaned up as follows:
 
@@ -37,7 +37,7 @@ for different database engines; check some details [here](https://en.wikipedia.o
 	String loginFilter = ...;
 	deleteAll(t, "LOGIN LIKE ?", loginFilter);
 	  
-## Database insertions
+## Inserting data
 
 Database data may be inserted up as follows:
 
