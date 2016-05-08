@@ -252,7 +252,7 @@ public final class DB {
    */
   void logSetup(CallInfo callInfo, String sql) {
     if (isEnabled(Option.LOG_SETUP)) {
-      log.writeSQL(sql);
+      log.writeSQL(callInfo, sql);
     }
   }
 
