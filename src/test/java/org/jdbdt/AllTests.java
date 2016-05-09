@@ -13,7 +13,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuppressWarnings("javadoc")
 @RunWith(Suite.class)
 @SuiteClasses({
-  NonDBTests.class,
+  AllNonDBTests.class,
   DerbySuite.class,
   HSQLDBSuite.class,
   H2Suite.class,

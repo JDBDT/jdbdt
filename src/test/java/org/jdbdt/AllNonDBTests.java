@@ -11,6 +11,6 @@ import org.junit.runners.Suite.SuiteClasses;
   CallInfoTest.class,
   DeltaTest.class,
 })
-public class NonDBTests {
+public class AllNonDBTests {
   
 }
