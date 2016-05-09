@@ -95,6 +95,8 @@ is thrown, and details on mismatched data are logged (unless `DB.Option.LogAsser
 
 Note that no reference snapshot needs to be set for a state assertion, unlike &delta;-assertions.
 
+An `assertEmpty([msg,], source)` call is equivalent to `assertState([msg,], empty(source))`, i.e.,
+it verifies that the given data source has no rows.
 
 
 

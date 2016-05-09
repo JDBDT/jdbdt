@@ -102,6 +102,7 @@ may be convenient to refer to the API methods concisely.
      	</td>
 		<td align="left">
 			<code>assertDeleted</code><br/> 
+			<code>assertEmpty</code><br/> 
 			<code>assertDelta</code><br/>
 			<code>assertInserted</code><br/> 
 			<code>assertState</code><br/>

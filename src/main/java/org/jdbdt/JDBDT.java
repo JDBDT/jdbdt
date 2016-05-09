@@ -173,7 +173,7 @@ public final class JDBDT {
    * Assert that no changes occurred for the given data source 
    * (error message variant).
    * 
-   * @param message The message for assertion error.
+   * @param message Assertion error message.
    * @param source Data source. 
    * @throws DBAssertionError if the assertion fails.
    * @see #assertDelta(DataSet,DataSet)
@@ -230,7 +230,7 @@ public final class JDBDT {
    * Assert that database changed only by addition of a given
    * data set (error message variant).
    * 
-   * @param message The message for assertion error.
+   * @param message Assertion error message.
    * @param data Data set.
    * @throws DBAssertionError if the assertion fails.
    * @see #assertUnchanged(DataSource)
@@ -291,7 +291,7 @@ public final class JDBDT {
   /**
    * Assert that the database state matches the given data set 
    * (error message variant).
-   * @param message The message for assertion error.
+   * @param message Assertion error message.
    * @param data Data set.
    * @throws DBAssertionError if the assertion fails.
    */
@@ -306,6 +306,39 @@ public final class JDBDT {
    */
   public static void assertState(DataSet data) throws DBAssertionError {
     DBAssert.stateAssertion(CallInfo.create(), data);
+  }
+  
+  /**
+   * Assert that the given data source 
+   * has no rows (error message variant).
+   * 
+   * <p>A call to this method is equivalent to
+   * <code>assertState(message, empty(source))</code>.
+   * 
+   * @param message Assertion error message.
+   * @param source Data source.
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertState(String,DataSet)
+   * @see #empty(DataSource)
+   */
+  public static void assertEmpty(String message, DataSource source) 
+  throws DBAssertionError {
+    DBAssert.stateAssertion(CallInfo.create(message), empty(source));
+  }
+  
+  /**
+   * Assert that the given data source has no rows.
+   * 
+   * <p>A call to this method is equivalent to
+   * <code>assertState(empty(source))</code>.
+   * @param source Data source.
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertState(DataSet)
+   * @see #empty(DataSource)
+   */
+  public static void assertEmpty(DataSource source) 
+  throws DBAssertionError {
+    DBAssert.stateAssertion(CallInfo.create(), empty(source));
   }
   
   /**

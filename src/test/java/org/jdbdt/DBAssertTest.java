@@ -183,7 +183,7 @@ public class DBAssertTest extends DBTestCase {
   @Test
   public void testStateAssertion2() throws SQLException {
     getDAO().doDeleteAll();
-    assertState(empty(dataSource));
+    assertEmpty(dataSource);
   }
  
 }
