@@ -405,5 +405,29 @@ public final class JDBDT {
   public static void truncate(Table t) throws DBExecutionException  {
     DBSetup.truncate(CallInfo.create(), t);
   }
+  
+  /**
+   * Set savepoint.
+   * @param db Database handle.
+   */
+  public static void savepoint(DB db) {
+    db.savepoint(CallInfo.create());
+  }
+
+  /**
+   * Roll back state to last save point.
+   * @param db Database handle.
+   */
+  public static void rollback(DB db) {
+    db.rollback(CallInfo.create());
+  }
+
+  /**
+   * Commit changes in current transaction.
+   * @param db Database handle.
+   */
+  public static void commit(DB db) {
+    db.commit(CallInfo.create());
+  }
 
 }

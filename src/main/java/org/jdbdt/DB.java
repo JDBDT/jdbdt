@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 import java.util.EnumSet;
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -75,6 +76,10 @@ public final class DB {
    */
   private Map<String, PreparedStatement> pool;
 
+  /**
+   * Savepoint, if set.
+   */
+  private Savepoint savepoint;
 
   /**
    * Constructor.
@@ -255,6 +260,60 @@ public final class DB {
       log.writeSQL(callInfo, sql);
     }
   }
-
+  /**
+   * Set save-point.
+   * @param callInfo Call info.
+   */
+  void savepoint(CallInfo callInfo) {
+    try {
+      if (connection.getAutoCommit()) {
+        throw new InvalidOperationException("Auto-commit is set for database connection.");
+      }
+      if (savepoint != null) {
+        connection.releaseSavepoint(savepoint);
+      }
+      savepoint = connection.setSavepoint(SAVEPOINT_ID);
+    } catch (SQLException e) {
+      throw new DBExecutionException(e);
+    }
+    logSetup(callInfo, "savepoint");
+  }
+  
+  /**
+   * Commit changes in the current transaction.
+   * @param callInfo Call info.
+   */
+  void commit(CallInfo callInfo) {
+    try {
+      if (savepoint != null) {
+        connection.releaseSavepoint(savepoint);
+        savepoint = null;
+      }
+      connection.commit();
+    } 
+    catch(SQLException e) {
+      throw new DBExecutionException(e); 
+    }
+  }
+  
+  /**
+   * Commit changes in the current transaction.
+   * @param callInfo Call info.
+   */
+  void rollback(CallInfo callInfo) {
+    try {
+      if (savepoint == null) {
+        throw new InvalidOperationException("Save point is not set.");
+      }
+      connection.rollback(savepoint);
+    } 
+    catch(SQLException e) {
+      throw new DBExecutionException(e); 
+    }
+  }
+  /**
+   * Save-point id constant.
+   */
+  private static final String SAVEPOINT_ID = "_jdbdtSavepoint_";
 
 }
