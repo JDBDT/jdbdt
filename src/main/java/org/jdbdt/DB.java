@@ -261,10 +261,10 @@ public final class DB {
     }
   }
   /**
-   * Set save-point.
+   * Set JDBDT save-point.
    * @param callInfo Call info.
    */
-  void savepoint(CallInfo callInfo) {
+  void save(CallInfo callInfo) {
     try {
       if (connection.getAutoCommit()) {
         throw new InvalidOperationException("Auto-commit is set for database connection.");
@@ -297,10 +297,10 @@ public final class DB {
   }
   
   /**
-   * Commit changes in the current transaction.
+   * Roll back changes to JDBDT save-point.
    * @param callInfo Call info.
    */
-  void rollback(CallInfo callInfo) {
+  void restore(CallInfo callInfo) {
     try {
       if (savepoint == null) {
         throw new InvalidOperationException("Save point is not set.");

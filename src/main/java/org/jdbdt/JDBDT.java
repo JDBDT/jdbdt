@@ -407,24 +407,51 @@ public final class JDBDT {
   }
   
   /**
-   * Set savepoint.
+   * Set JDBDT save-point for database.
+   * 
+   * <p>
+   * This method creates a save-point (through an internal 
+   * {@link java.sql.Savepoint}) which can later
+   * be restored (rolled back to) using {@link #restore(DB)}.
+   * Note that JDBDT maintains only one save-point per database
+   * handle, hence successive calls to this method discard the previous
+   * save-point set (if any).
+   * </p>
+   * 
    * @param db Database handle.
    */
-  public static void savepoint(DB db) {
-    db.savepoint(CallInfo.create());
+  public static void save(DB db) {
+    db.save(CallInfo.create());
   }
 
   /**
-   * Roll back state to last save point.
+   * Restore database state to the last JDBDT save-point.
+   * 
+   * <p>
+   * For the underlying database of the given handler,
+   * a call to this method restores (rolls back) the state 
+   * to the last JDBDT save-point set using {@link #save(DB)}.
+   * </p>
+   * 
    * @param db Database handle.
    */
-  public static void rollback(DB db) {
-    db.rollback(CallInfo.create());
+  public static void restore(DB db) {
+    db.restore(CallInfo.create());
   }
 
   /**
    * Commit changes in current transaction.
+   * 
+   * <p>
+   * In database terms the method is simply a shorthand
+   * for <code>db.getConnection().commit()</code>.
+   * Note that, any database save-points will be discarded,
+   * including the JDBDT save-point set through 
+   * {@link #save(DB)}.
+   * </p>
+   * 
    * @param db Database handle.
+   * @see Connection#commit()
    */
   public static void commit(DB db) {
     db.commit(CallInfo.create());
