@@ -147,7 +147,7 @@ final class DBSetup {
       
       DB db = table.getDB();
       db.logSetup(callInfo, sql);
-      PreparedStatement deleteStmt = db.compile(sql);   
+      PreparedStatement deleteStmt = db.compile(sql);
       if (args != null && args.length > 0) {
         for (int i=0; i < args.length; i++) {
           deleteStmt.setObject(i + 1, args[i]);
