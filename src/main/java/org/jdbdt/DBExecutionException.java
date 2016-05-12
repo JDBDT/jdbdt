@@ -19,7 +19,7 @@ public final class DBExecutionException extends RuntimeException {
    * @param cause Cause for the exception.
    */
   public DBExecutionException(SQLException cause) {
-    super("Unexpected database error", cause);
+    super("Database execution error", cause);
   }
   
   /**
