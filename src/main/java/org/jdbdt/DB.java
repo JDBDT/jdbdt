@@ -296,13 +296,16 @@ public final class DB {
    * @param callInfo Call info.
    */
   void restore(CallInfo callInfo) {
+    // Note: this is a conservative implementation, it sets another save-point
+    // after roll-back, some engines seem to implicitly release the save point on roll-back
+    // (an issue with HSQLDB)
     try {
       if (savepoint == null) {
         throw new InvalidOperationException("Save point is not set.");
       }
       connection.rollback(savepoint);
       savepoint = connection.setSavepoint();
-    } 
+    }
     catch(SQLException e) {
       savepoint = null; // ensuring null in case of error
       throw new DBExecutionException(e); 
