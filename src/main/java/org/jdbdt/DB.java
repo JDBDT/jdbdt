@@ -308,9 +308,6 @@ public final class DB {
       throw new DBExecutionException(e); 
     }
   }
-  /**
-   * Save-point id constant.
-   */
-  private static final String SAVEPOINT_ID = "_jdbdtSavepoint_";
+ 
 
 }
