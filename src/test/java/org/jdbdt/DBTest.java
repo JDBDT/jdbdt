@@ -36,48 +36,115 @@ public class DBTest extends DBTestCase {
     assertNotSame(s1, s2);
   }
 
-  private class RestoreAutoCommit implements AutoCloseable {
-    boolean initially;
-    Connection connection;
-    RestoreAutoCommit(DB db, boolean enable) throws SQLException {
-      connection = db.getConnection();
-      initially = db.getConnection().getAutoCommit();
-      db.getConnection().setAutoCommit(enable);
-    }
-    @Override
-    public void close() throws SQLException {
-      connection.setAutoCommit(initially);
+  class SaveRestoreTestHelper implements AutoCloseable {
+    User user;
+    boolean autoCommitInitialSetting;
+
+    SaveRestoreTestHelper(boolean enableAC) throws SQLException {
+      autoCommitInitialSetting = getDB().getConnection().getAutoCommit();
+      getDB().getConnection().setAutoCommit(enableAC);
+      query();
     }
     
-  }
-  
-  @Test(expected=InvalidOperationException.class)
-  public void testSaveAndRestore0() throws SQLException {
-    try (RestoreAutoCommit r = new RestoreAutoCommit(getDB(), true)) {
-      save(getDB());
+    @Override
+    public void close() throws SQLException {
+      getDB().getConnection().setAutoCommit(autoCommitInitialSetting);
+    }
+    
+    void update(String name) throws SQLException {
+      user.setName(name);
+      getDAO().doUpdate(user);
+    }
+    String query() throws SQLException {
+      user = getDAO().query(EXISTING_DATA_ID1);
+      return user.getName();
     }
   }
   
   @Test(expected=InvalidOperationException.class)
-  public void testSaveAndRestore1() throws SQLException {
+  public void testRestoreWithoutSavepoint() throws SQLException {
     restore(getDB());
   }
   
-  @Test
-  public void testSaveAndRestore2() throws SQLException {
-    try (RestoreAutoCommit r = new RestoreAutoCommit(getDB(), false))
-    {
-      User u = getDAO().query(EXISTING_DATA_ID1);
-      String name1 = u.getName();
-      String name2 = "Mr. " + u.getName();
+  @Test(expected=InvalidOperationException.class)
+  public void testSavepointWithAutoCommitOn() throws SQLException {
+    try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(true)) {
       save(getDB());
-      u.setName(name2);
-      getDAO().doUpdate(u);
-      String qname2 = getDAO().query(EXISTING_DATA_ID1).getName();
+    }
+  }
+  
+  @Test
+  public void testSavepointRestore() throws SQLException {
+    try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
+      String originalName = h.query(); 
+      String changedName = "Mr. " + originalName; 
+      
+      // Set save-point
+      save(getDB());
+      
+      // Make changes, then restore
+      h.update(changedName);
+      String qAfterChange = h.query();
       restore(getDB());
-      String qname1 = getDAO().query(EXISTING_DATA_ID1).getName();
-      assertEquals(name1, qname1);
-      assertEquals(name2, qname2);
+      String qAfterRestore = h.query();
+      
+      // Assert that changes and restore were effective
+      assertEquals(changedName, qAfterChange);
+      assertEquals(originalName, qAfterRestore);
+    }
+  }
+  
+  @Test
+  public void testSavepointRestoreTwice() throws SQLException {
+    try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
+      String originalName = h.query(); 
+      String changedName1 = "Mr. " + originalName; 
+      String changedName2 = "Mr. " + originalName; 
+      
+      // Set save-point
+      save(getDB());
+   
+      // Make a change, then restore
+      h.update(changedName1);
+      restore(getDB());
+      String qAfterRestore1 = h.query();
+      
+      // Make a second change, then restore
+      h.update(changedName2);
+      restore(getDB());
+      String qAfterRestore2 = h.query();
+      
+      // Assert that both restores were effective
+      assertEquals(originalName, qAfterRestore1);
+      assertEquals(originalName, qAfterRestore2);
+    }
+  }
+  
+  @Test
+  public void testSavepointDiscard() throws SQLException {
+    try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
+      String originalName = h.query(); 
+      String changedName1 = "Mr. " + originalName; 
+      String changedName2 = "Dr. " + originalName; 
+      
+      // Set save-point
+      save(getDB());
+      
+      // Make changes, set save-point again
+      h.update(changedName1);
+      String qAfterChange = h.query();
+      save(getDB());
+      
+      // Make changes, and restore
+      h.update(changedName2);
+      String qAfterChange2 = h.query();
+      restore(getDB());
+      String qAfterRestore = h.query();
+      
+      // Assert that data from first save-point was lost
+      assertEquals(changedName1, qAfterRestore);
+      assertEquals(changedName1, qAfterChange);
+      assertEquals(changedName2, qAfterChange2);
     }
   }
 }

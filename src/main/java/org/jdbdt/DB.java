@@ -269,9 +269,6 @@ public final class DB {
       if (connection.getAutoCommit()) {
         throw new InvalidOperationException("Auto-commit is set for database connection.");
       }
-      if (savepoint != null) {
-        connection.releaseSavepoint(savepoint);
-      }
       savepoint = connection.setSavepoint(SAVEPOINT_ID);
     } catch (SQLException e) {
       throw new DBExecutionException(e);
@@ -285,10 +282,6 @@ public final class DB {
    */
   void commit(CallInfo callInfo) {
     try {
-      if (savepoint != null) {
-        connection.releaseSavepoint(savepoint);
-        savepoint = null;
-      }
       connection.commit();
     } 
     catch(SQLException e) {
@@ -306,6 +299,7 @@ public final class DB {
         throw new InvalidOperationException("Save point is not set.");
       }
       connection.rollback(savepoint);
+      savepoint = connection.setSavepoint(SAVEPOINT_ID);
     } 
     catch(SQLException e) {
       throw new DBExecutionException(e); 
