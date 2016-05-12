@@ -3,7 +3,6 @@ package org.jdbdt;
 import static org.junit.Assert.*;
 import static org.jdbdt.JDBDT.*;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -72,7 +71,7 @@ public class DBTest extends DBTestCase {
       save(getDB());
     }
   }
-  
+   
   @Test
   public void testSavepointRestore() throws SQLException {
     try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
@@ -145,6 +144,60 @@ public class DBTest extends DBTestCase {
       assertEquals(changedName1, qAfterRestore);
       assertEquals(changedName1, qAfterChange);
       assertEquals(changedName2, qAfterChange2);
+    }
+  }
+  
+  @Test
+  public void testRestoreAfterCommit() throws SQLException {
+    try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
+      String originalName = h.query(); 
+      String changedName = "Mr. " + originalName; 
+      
+      // Set save-point
+      save(getDB());
+      
+      // Make changes and commit them
+      h.update(changedName);
+      String qAfterChange = h.query();
+      commit(getDB());
+      
+      // Expect exception
+      TestUtil.expectException
+      (InvalidOperationException.class, 
+       () -> restore(getDB()) );
+      String qAfterRestoreAttempt = h.query();
+
+      // Assert that change took place, and that restore
+      // attempted failed
+      assertEquals(changedName, qAfterChange);
+      assertEquals(changedName, qAfterRestoreAttempt);
+    }
+  }
+  
+  @Test
+  public void testRestoreAfterExternalCommit() throws SQLException {
+    try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
+      String originalName = h.query(); 
+      String changedName = "Mr. " + originalName; 
+      
+      // Set save-point
+      save(getDB());
+      
+      // Make changes and commit them "externally"
+      h.update(changedName);
+      String qAfterChange = h.query();
+      getDB().getConnection().commit();
+      
+      // Expect exception
+      TestUtil.expectException
+      (DBExecutionException.class, 
+       () -> restore(getDB()) );
+      String qAfterRestoreAttempt = h.query();
+
+      // Assert that change took place, and that restore
+      // attempted failed
+      assertEquals(changedName, qAfterChange);
+      assertEquals(changedName, qAfterRestoreAttempt);
     }
   }
 }
