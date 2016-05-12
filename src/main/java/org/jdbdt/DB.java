@@ -270,7 +270,7 @@ public final class DB {
         throw new InvalidOperationException("Auto-commit is set for database connection.");
       }      
       savepoint = null; // ensuring null if the following call fails
-      savepoint = connection.setSavepoint(SAVEPOINT_ID);
+      savepoint = connection.setSavepoint();
     } catch (SQLException e) {
       throw new DBExecutionException(e);
     }
@@ -301,7 +301,7 @@ public final class DB {
         throw new InvalidOperationException("Save point is not set.");
       }
       connection.rollback(savepoint);
-      savepoint = connection.setSavepoint(SAVEPOINT_ID);
+      savepoint = connection.setSavepoint();
     } 
     catch(SQLException e) {
       savepoint = null; // ensuring null in case of error
