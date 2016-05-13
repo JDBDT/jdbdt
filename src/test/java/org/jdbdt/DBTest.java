@@ -204,7 +204,7 @@ public class DBTest extends DBTestCase {
   static final int INTENSIVE_TEST_ITERATIONS = 100;
   
   @Test
-  public void testIntensiveRestore(Runnable pre, Runnable iter, Runnable post) throws SQLException {
+  public void testIntensiveRestore() throws SQLException {
     try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
       String originalName = h.query();
       save(getDB());
