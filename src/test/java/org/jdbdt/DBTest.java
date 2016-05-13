@@ -200,4 +200,19 @@ public class DBTest extends DBTestCase {
       assertEquals(changedName, qAfterRestoreAttempt);
     }
   }
+  
+  static final int INTENSIVE_TEST_ITERATIONS = 100;
+  
+  @Test
+  public void testIntensiveRestore(Runnable pre, Runnable iter, Runnable post) throws SQLException {
+    try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
+      String originalName = h.query();
+      save(getDB());
+      for (int i = 0; i < INTENSIVE_TEST_ITERATIONS; i++) {
+        h.update(originalName + "_" + i);
+        restore(getDB());
+      }
+      assertEquals(originalName, h.query());
+    }
+  } 
 }
