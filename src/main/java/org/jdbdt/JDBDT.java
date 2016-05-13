@@ -143,7 +143,7 @@ public final class JDBDT {
    * <p>
    * Note that the method returns the data set instance representing the snapshot,
    * but subsequent use of assertion methods does not require any book-keeping 
-   * by the caller. Note also that this data set is read-only (see {@link DataSet#isReadOnly()}).
+   * by the caller. Also, the returned data set is read-only (see {@link DataSet#isReadOnly()}).
    * </p>
    * 
    * @param source Data source.
@@ -445,8 +445,8 @@ public final class JDBDT {
    * <p>
    * In database terms the method is simply a shorthand
    * for <code>db.getConnection().commit()</code>.
-   * Note that, any database save-points will be discarded,
-   * including the JDBDT save-point set through 
+   * Any database save-points will be discarded,
+   * including the JDBDT save-point, if set through 
    * {@link #save(DB)}.
    * </p>
    * 
