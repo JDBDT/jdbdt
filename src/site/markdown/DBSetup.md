@@ -1,9 +1,12 @@
 # Database setup
 
-The contents of database tables may be defined using database setup methods 
-in the `JDBDT` facade.
+The contents of a database may be defined using setup methods 
+in the `JDBDT` facade. The methods can be used for [cleaning up data](DBSetup.html#Clean),
+[inserting data / populating tables](DBSetup.html#Insert), 
+and [restore state back to a save-point](DBSetup.html#SaveAndRestore).
 
 ## Cleaning data
+<a name="Clean"></a>
 
 Database data may be cleaned up using one of the following methods:
 
@@ -39,6 +42,7 @@ Also, the TRUNCATE TABLE statement is [not supported](Compatibility.html#KnownIs
 	truncate(t);
 	  
 ## Inserting data
+<a name="Insert"></a>
 
 Database data may be inserted using one the following methods:
 
@@ -81,16 +85,65 @@ are performed over the table subsequently.
     // 2. Insert data in USER table (does not clear previous contents).
     insert(data);
 
+## Save and restore
+<a name="SaveAndRestore"></a>
+
+Database state may be saved and restored as follows per [database handle](DB.html) `db`:
+
+1. A call to `save(db)` sets a database save-point. Internally, the 
+save-point is set `java.sql.Connection.setSavepoint()` 
+for the underlying database connection, which must have auto-commit
+disabled. Nested save points are not supported for simplicity,
+i.e., only one save-point is maintained per database handle.
+2. A call to `restore(db)` restores (rolls back) the database state corresponding to the 
+last JDBDT save-point  defined using `save(db)`,
+as long as there were no intervening database commits.
+
+In relation to `save` and `restore`, `commit(db)` is a shorthand for
+`db.getConnection().commit()`. Such a call commits all database changes
+and discards the JDBDT save-point (or any other save-point set otherwise) .
+
+*Illustration*
+
+    import static org.jdbdt.JDBDT.*;
+    import java.sql.Connection;
+    import org.jdbdt.DB;
+    ...
+    // Database handle ...
+    // The associated connection should have auto-commit disabled.
+    Connection conn = ...;
+    conn.setAutoCommit(false);
+    DB db = database(conn);
+    
+    // Set save-point
+    save(db);
+    
+    // Exercise the SUT and perform assertions  
+    letTheSUTWork();
+    doSomeAssertions();
+    
+    // Restore database state
+    restore(db);
+    
 ## Summary of methods
 <a name="MethodReference"></a>
 
 ### `JDBDT`
 
+Clean-up:
+
 - `delete(t)` clear table `t` with a DELETE statement.
 - `deleteAll(t,w,a)` deletes data from table `t` subject to WHERE clause `w` and optional
 WHERE clause arguments.
 - `truncate(t)` clear table `t` with a TRUNCATE TABLE statement.
+
+Insertion:
+
 - `insert(data)` inserts `data` into a table (`data.getSource()`).
 - `populate(data)` sets `data` as the contents of a table (`data.getSource()`).
 
+Save and restore:
 
+- `save(db)` sets the JDBDT save-point;
+- `restore(db)` restores database state back to the JDBDT save-point;
+- `commit(db)` performs a database commit, discarding the JDBDT save-point (or any other set);
