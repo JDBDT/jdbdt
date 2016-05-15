@@ -7,7 +7,7 @@ connection.
 <a name="Creation"></a>
 
 A database handle is created using the `database` facade method, supplying as argument
-`java.sql.Connection` instance.
+a `java.sql.Connection` instance.
 
 *Illustration*
 
@@ -86,21 +86,21 @@ the `REUSE_STATEMENTS` option should be disabled as follows:
 	db.disable(Option.REUSE_STATEMENTS)
 
 **Known issue**: statement reuse should be disabled for 
-[xerial's JDBC driver for sqlite](https://github.com/xerial/sqlite-jdbc). 
-No problems were detected for [all other JDBC drivers tested in the JDBDT build](Compatibility.html).
+[xerial's JDBC driver for sqlite](Compatibility.html#KnownIssues)
+No problems were detected for [all other JDBC drivers tested in the JDBDT build](Compatibility.html#Drivers).
 
 ## Summary of methods
 <a name="MethodReference"></a>
 
 ### `JDBDT`
 
-- `database(c)` creates a database handle for database connection `c`.
+- `database(c)` creates a handle for database connection `c`.
 
 ### `DB`
 
 - `getConnection()` returns the connection associated to the handle.
-- `enable(o1, ...)` enables given options.
-- `disable(o1, ...)` disables given options.
+- `enable(o1, o2, ...)` enables given options.
+- `disable(o1, o2, ...)` disables given options.
 - `isEnabled(o)` tests if option `o` is enabled.
 - `enableFullLogging()` enables all logging options.
 - `setLog(out)` redirects log output to `out`, a `java.io.File` or `java.io.PrintStream`.

@@ -31,9 +31,9 @@ typically followed by a chained sequence of calls.
 	DataSet userSet 
        = data(t)
 		.row(0,   "root",  "Root User",  "god",       null)
-	    .row(101, "john",  "John Doe",   "justDoeIt", Date.valueOf("2014-07-12")
-	    .row(102, "harry", "Harry H",    "meta",      Date.valueOf("2016-01-01")
-	    .row(103, "guest", "Guest User",  "welcome",  Date.valueOf("2016-01-02");
+	    .row(101, "john",  "John Doe",   "justDoeIt", Date.valueOf("2014-07-12"))
+	    .row(102, "harry", "Harry H",    "meta",      Date.valueOf("2016-01-01"))
+	    .row(103, "guest", "Guest User",  "welcome",  Date.valueOf("2016-01-02"));
 
 ### Typed data sets
 <a name="Creation.Typed"></a>

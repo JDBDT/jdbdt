@@ -1,6 +1,9 @@
 
 # Compatibility
 
+## JDBC drivers
+<a name="Drivers"></a>
+
 JDBDT is expected to work with any (sane) JDBC driver.
 The JDBDT build currently tests integration with:
 
@@ -11,10 +14,10 @@ The JDBDT build currently tests integration with:
 * [PostgreSQL](http://postgresql.org)
 * [SQLite](https://www.sqlite.org) through [xerial's JDBC driver](https://github.com/xerial/sqlite-jdbc)
 
-# Known issues
+## Known issues
 <a name="KnownIssues"></a>
 
-## sqlite
+### sqlite
 
 * [Statement reuse should be disabled for xerial's JDBC driver for sqlite](DB.html#StatementReuse).
-* `JDBT.truncate` should not be used, since sqlite does not support TRUNCATE statements.
+* The `JDBDT.truncate(Table)` method should not be used, since sqlite does not support TRUNCATE statements.
