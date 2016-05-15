@@ -119,9 +119,9 @@ and discards the JDBDT save-point (or any other save-point set otherwise) .
     // Set save-point
     save(db);
     
-    // Exercise the SUT and perform assertions  
+    // Exercise the SUT, then execute some assertions  
     letTheSUTWork();
-    doSomeAssertions();
+    assert...();
     
     // Restore database state
     restore(db);
@@ -141,15 +141,16 @@ with `@AfterClass`) in the illustration below.
 
 *Illustration* 
 
+	import java.sql.Connection;
 	import org.junit.BeforeClass;
 	import org.junit.AfterClass;
 	import org.junit.After;
 	import org.junit.Test;
+
 	import static org.jdbdt.JDBDT.*;
 	import org.jdbdt.DB;
 	import org.jdbdt.DataSet;
 	import org.jdbdt.Table;
-	import org.sql.Connection;
 	
 	public class MyTest {
 	

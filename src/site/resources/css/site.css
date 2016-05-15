@@ -1,3 +1,4 @@
-code { background-color: transparent; }
+tt { font-weight: bold; background-color: transparent; }
+pre.prettyprint { border-style: none; background-color: transparent; margin-left: 25px; }
 h1 { font-size: 48 px; }
 h2 { font-size: 32 px; }
