@@ -1,10 +1,10 @@
 
-# The `jdb&delta;t` facade
+# The JDBDT facade
 
 
-The `org.jdbdt.JDBDT` class is the main facade for the `jdb&delta;t` 
-API. It provides the core methods for database setup, verification,
-and object creation. 
+The `org.jdbdt.JDBDT` class is the facade for the JDBDT API, 
+providing the core interface methods for database setup, verification,
+and API object creation. 
 
 ## Static import
 
@@ -44,9 +44,9 @@ may be convenient to refer to the API methods concisely.
      	  	A data source represents a database table or query.
      	</td>
 		<td align="left">
-			<code>table</code><br/>
 			<code>query</code><br/>
 			<code>select</code><br/>
+			<code>table</code><br/>
 		</td>
 		<td align="left">
 			<code>DataSource</code><br/>
@@ -63,15 +63,15 @@ may be convenient to refer to the API methods concisely.
      	  	A data set represents a collection of rows.
      	</td>
 		<td align="left">
-			<code>data</code><br/>
 			<code>builder</code><br/> 
+			<code>data</code><br/>
 			<code>empty</code><br/>
 		</td>
 		<td align="left">
+		    <code>Conversion</code>
 			<code>DataSet</code><br/>
 			<code>DataSetBuilder</code><br/>
 			<code>TypedDataSet</code><br/>
-			<code>Conversion</code>
 		</td>
     </tr>
     <tr>
@@ -82,15 +82,19 @@ may be convenient to refer to the API methods concisely.
      	  	Setup methods can be used to define the contents of a database.
      	</td>
 		<td align="left">
+			<code>commit</code><br/>
 			<code>deleteAll</code><br/>
 			<code>deleteAllWhere</code><br/> 
 			<code>insert</code><br/>
 			<code>populate</code><br/>
+			<code>restore</code><br/>
+			<code>save</code><br/>
 			<code>truncate</code><br/>
 		</td>
 		<td align="left">
+		    <code>DataSet</code><br/>
+		    <code>DB</code><br/>
 			<code>Table</code><br/>
-			<code>DataSet</code>
 		</td>
     </tr>
     <tr>
@@ -102,8 +106,8 @@ may be convenient to refer to the API methods concisely.
      	</td>
 		<td align="left">
 			<code>assertDeleted</code><br/> 
-			<code>assertEmpty</code><br/> 
 			<code>assertDelta</code><br/>
+			<code>assertEmpty</code><br/> 
 			<code>assertInserted</code><br/> 
 			<code>assertState</code><br/>
 			<code>assertUnchanged</code><br/> 
@@ -111,8 +115,8 @@ may be convenient to refer to the API methods concisely.
 		</td>
 		<td align="left">
 			<code>DBAssertionError</code><br/>
-			<code>DataSource</code><br/>
 			<code>DataSet</code><br/>
+			<code>DataSource</code><br/>
 		</td>
     </tr>
 </table>
