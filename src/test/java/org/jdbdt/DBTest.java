@@ -215,4 +215,17 @@ public class DBTest extends DBTestCase {
       assertEquals(originalName, h.query());
     }
   } 
+  
+  @Test
+  public void testIntensiveRestore2() throws SQLException {
+    try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
+      String originalName = h.query();
+      for (int i = 0; i < INTENSIVE_TEST_ITERATIONS; i++) {
+        save(getDB());
+        h.update(originalName + "_" + i);
+        restore(getDB());
+      }
+      assertEquals(originalName, h.query());
+    }
+  } 
 }
