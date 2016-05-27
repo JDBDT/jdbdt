@@ -183,6 +183,7 @@ with `@AfterClass`) in the illustration below.
 	    truncate(myTable1);
 	    truncate(myTable2);
 	    ...
+	    teardown(myDB); // free resources 
 	  }
 	  
 	  @Before
@@ -229,4 +230,4 @@ Save and restore:
 
 - `save(db)` sets the JDBDT save-point;
 - `restore(db)` restores database state back to the JDBDT save-point;
-- `commit(db)` performs a database commit, discarding the JDBDT save-point (or any other set);
+- `commit(db)` performs a database commit, discarding the JDBDT save-point (or any other save-point set);
