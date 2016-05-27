@@ -286,14 +286,14 @@ public class DataSetTest extends DBTestCase {
   @Test
   public void testTail1() {
     final int size = 10, n = 1;
-    testSubsetMethod(size, size - n - 1, n, 
+    testSubsetMethod(size, size - n, n, 
         () -> DataSet.tail(theSUT, n));
   }
   
   @Test
   public void testTail2() {
     final int size = 10, n = 9;
-    testSubsetMethod(size, size - n - 1, n, 
+    testSubsetMethod(size, size - n, n, 
         () -> DataSet.tail(theSUT, n));
   }
   

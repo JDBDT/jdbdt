@@ -246,7 +246,41 @@ public class DataSet {
    *        <code>n</code> rows in the source data set.
    */
   public static DataSet tail(DataSet data, int n) {
-    return subset(data, data.size() - n - 1, n);
+    return subset(data, data.size() - n, n);
+  }
+  
+  /**
+   * Create data set with the same contents of given data set.
+   * @param data Source data set.
+   * @return A new data set containing all
+   *        rows in the source data set.
+   */
+  public static DataSet copyOf(DataSet data) {
+    DataSet r = new DataSet(data.getSource());
+    r.getRows().addAll(data.getRows());
+    return r;
+  }
+  
+  /**
+   * Create data set that results from joining
+   * several data sets.
+   * @param dataSets Source Data sets.
+   * @return A new data set containing the last 
+   *        <code>n</code> rows in the source data set.
+   */
+  public static DataSet join(DataSet... dataSets) {
+    if (dataSets == null || dataSets.length == 0) {
+      throw new InvalidOperationException("No source data sets given for joining.");
+    }
+    DataSet r = copyOf(dataSets[0]);
+    for (int i = 1; i < dataSets.length; i++) {
+      DataSet d = dataSets[i];
+      if (d.getSource() != r.getSource()) {
+        throw new InvalidOperationException("Data source mismatch.");
+      }
+      r.getRows().addAll(d.getRows());
+    }
+    return r;
   }
   
   @SuppressWarnings("javadoc")

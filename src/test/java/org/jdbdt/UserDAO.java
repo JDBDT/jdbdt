@@ -14,7 +14,7 @@ public class UserDAO {
   };
 
   private final PreparedStatement[] stmts; 
-
+    
   public UserDAO(Connection c) throws SQLException {
     Op[] ops = Op.values();
     stmts = new PreparedStatement[ops.length];

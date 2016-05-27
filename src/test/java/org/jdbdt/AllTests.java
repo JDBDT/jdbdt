@@ -15,8 +15,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
   AllNonDBTests.class,
   DerbySuite.class,
-  HSQLDBSuite.class,
   H2Suite.class,
+  HSQLDBSuite.class,
   MySQLSuite.class,
   PostgreSQLSuite.class,
   SQLiteSuite.class

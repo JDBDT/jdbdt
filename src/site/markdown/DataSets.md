@@ -152,8 +152,10 @@ Mutators:
 - `add(other)` adds all rows from `other` to the data set.
 - `setReadOnly()` sets the data set as read-only.
 
-Utility methods (`static`) 
+Utility methods (all `static`) 
 
+- `copyOf(data)` returns a new data set that has the same rows as `data`.
+- `join(data1, data2, ...,)` returns a new data set that contains all the rows in `data1`, `data2`, ...
 - `subset(data, index, n)` returns a new data set containing `n` rows of `data` starting from the `index`-th row.
 - `singleton(data,i)` returns a new data set containing only the `index`-th row in `data`.
 - `head(data, n)` returns a new data set containing the first `n` rows of `data`.

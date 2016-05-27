@@ -3,11 +3,12 @@
 A database handle encapsulates access to a database 
 connection.
 
-## Creation  
+## Creation and teardown
 <a name="Creation"></a>
 
 A database handle is created using the `database` facade method, supplying as argument
-a `java.sql.Connection` instance.
+a `java.sql.Connection` instance. Once the database handle is no longer required,
+internal resources may be freed up using the `teardown` method.
 
 *Illustration*
 
@@ -16,8 +17,12 @@ a `java.sql.Connection` instance.
 	import java.sql.Connection;
 	import java.sql.DriverManager;
 	...
+	// Creation
 	Connection c = DriverManager.getConnection("jdbc:myFavoriteDB://options");
 	DB dbHandle = database(c);
+	...
+	// Tear-down
+	teardown(db);
 
 ## Configuration 
 <a name="Configuration"></a>
@@ -95,6 +100,7 @@ No problems were detected for [all other JDBC drivers tested in the JDBDT build]
 ### `JDBDT`
 
 - `database(c)` creates a handle for database connection `c`.
+- `teardown(db)` frees up internal resources used by `db` (if `db` is no longer required).
 
 ### `DB`
 

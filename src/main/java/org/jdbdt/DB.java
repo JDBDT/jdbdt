@@ -145,6 +145,27 @@ public final class DB {
     return connection;
   }
 
+
+  /**
+   * Redirect log output to a stream.
+   * The log set at creation time
+   * writes to <code>System.err</code>.
+   * @param out Output stream.
+   */
+  public void setLog(PrintStream out) {
+    this.log = new Log(out);
+  }
+
+  /**
+   * Set output file for log output.
+   * The log set at creation time
+   * writes to <code>System.err</code>.
+   * @param outputFile Logging instance.
+   * @throws IOException If the file cannot be opened.
+   */
+  public void setLog(File outputFile) throws IOException {
+    this.log = new Log(outputFile);
+  }
   
   /**
    * Prepare a SQL statement.
@@ -169,28 +190,98 @@ public final class DB {
     return ps;
   }
 
-
   /**
-   * Redirect log output to a stream.
-   * The log set at creation time
-   * writes to <code>System.err</code>.
-   * @param out Output stream.
+   * Set JDBDT save-point.
+   * @param callInfo Call info.
    */
-  public void setLog(PrintStream out) {
-    this.log = new Log(out);
+  void save(CallInfo callInfo) {
+    logSetup(callInfo, "savepoint");
+    try {
+      if (connection.getAutoCommit()) {
+        throw new InvalidOperationException("Auto-commit is set for database connection.");
+      }      
+      savepoint = null; // ensuring null if the following call fails
+      savepoint = connection.setSavepoint();
+    } catch (SQLException e) {
+      throw new DBExecutionException(e);
+    }
   }
-
+  
   /**
-   * Set output file for log output.
-   * The log set at creation time
-   * writes to <code>System.err</code>.
-   * @param outputFile Logging instance.
-   * @throws IOException If the file cannot be opened.
+   * Commit changes in the current transaction.
+   * @param callInfo Call info.
    */
-  public void setLog(File outputFile) throws IOException {
-    this.log = new Log(outputFile);
+  void commit(CallInfo callInfo) {
+    logSetup(callInfo, "commit");
+    try {
+      savepoint = null;
+      connection.commit();
+    } 
+    catch(SQLException e) {
+      throw new DBExecutionException(e); 
+    }
   }
-
+  
+  /**
+   * Roll back changes to JDBDT save-point.
+   * @param callInfo Call info.
+   */
+  void restore(CallInfo callInfo) {
+    // Note: this is a conservative implementation, it sets another save-point
+    // after roll-back, some engines seem to implicitly release the save point on roll-back
+    // (an issue with HSQLDB)
+    logSetup(callInfo, "restore");
+    try {
+      if (savepoint == null) {
+        throw new InvalidOperationException("Save point is not set.");
+      }
+      connection.rollback(savepoint);
+      savepoint = connection.setSavepoint();
+    }
+    catch(SQLException e) {
+      savepoint = null; // ensuring null in case of error
+      throw new DBExecutionException(e); 
+    }
+  }
+  
+  /**
+   * Tear down the database handle, freeing any internal
+   * resources. 
+   * @param callInfo Call info.
+   */
+  void teardown(CallInfo callInfo) {
+    logSetup(callInfo, "teardown");
+    if (pool != null) {
+      for (PreparedStatement stmt : pool.values()) {
+        ignoreSQLException( () -> stmt.close());
+      }
+      pool.clear();
+      pool = null;
+    }
+    if (savepoint != null) {
+      ignoreSQLException( () -> connection.releaseSavepoint(savepoint));
+      savepoint = null;
+    }
+    log.close();
+    log = null;
+  }
+  
+ 
+  @SuppressWarnings("javadoc")
+  private interface SQLOperation {
+    void run() throws SQLException;
+  }
+  
+  @SuppressWarnings("javadoc")
+  private void ignoreSQLException(SQLOperation op) {
+    try {
+      op.run();
+    }
+    catch (SQLException e) { 
+      // e.printStackTrace();
+      // do nothing
+    }
+  }
   /**
    * Log query result.
    * @param callInfo Call info.
@@ -260,57 +351,7 @@ public final class DB {
       log.writeSQL(callInfo, sql);
     }
   }
-  /**
-   * Set JDBDT save-point.
-   * @param callInfo Call info.
-   */
-  void save(CallInfo callInfo) {
-    try {
-      if (connection.getAutoCommit()) {
-        throw new InvalidOperationException("Auto-commit is set for database connection.");
-      }      
-      savepoint = null; // ensuring null if the following call fails
-      savepoint = connection.setSavepoint();
-    } catch (SQLException e) {
-      throw new DBExecutionException(e);
-    }
-    logSetup(callInfo, "savepoint");
-  }
   
-  /**
-   * Commit changes in the current transaction.
-   * @param callInfo Call info.
-   */
-  void commit(CallInfo callInfo) {
-    try {
-      savepoint = null;
-      connection.commit();
-    } 
-    catch(SQLException e) {
-      throw new DBExecutionException(e); 
-    }
-  }
   
-  /**
-   * Roll back changes to JDBDT save-point.
-   * @param callInfo Call info.
-   */
-  void restore(CallInfo callInfo) {
-    // Note: this is a conservative implementation, it sets another save-point
-    // after roll-back, some engines seem to implicitly release the save point on roll-back
-    // (an issue with HSQLDB)
-    try {
-      if (savepoint == null) {
-        throw new InvalidOperationException("Save point is not set.");
-      }
-      connection.rollback(savepoint);
-      savepoint = connection.setSavepoint();
-    }
-    catch(SQLException e) {
-      savepoint = null; // ensuring null in case of error
-      throw new DBExecutionException(e); 
-    }
-  }
- 
 
 }

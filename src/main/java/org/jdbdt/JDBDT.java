@@ -48,6 +48,25 @@ public final class JDBDT {
   }
   
   /**
+   * Tear down a database handle.
+   * 
+   * <p>Calling this method releases any associated resources
+   * to the given database handle.  The database handle should
+   * not be used after a call to this method is made.
+   * </p>
+   * <p>
+   * The freed-up resources include any save points, 
+   * prepared statements, and opened log files.
+   * The underlying database connection is <b>not</b> closed, though.
+   * </p>
+   * 
+   * @param db Database handle
+   */
+  public static void teardown(DB db) {
+    db.teardown(CallInfo.create());
+  }
+  
+  /**
    * Create a builder for a fresh data set.
    * @param source Data source.
    * @return A new data set builder.

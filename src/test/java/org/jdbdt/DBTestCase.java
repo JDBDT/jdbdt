@@ -62,12 +62,14 @@ public class DBTestCase {
     }
     newUserCounter = 0;
     gDB.disable(DB.Option.LOG_ASSERTION_ERRORS);
-    // gDB.enableFullLogging();
+   // gDB.enableFullLogging();
   }
   
   @AfterClass
   public static void teardownDB() throws SQLException {
+    JDBDT.teardown(gDB);
     gConn.close();
+    useCustomInit = false;
   }
 
   protected static DB getDB() {
@@ -82,12 +84,18 @@ public class DBTestCase {
     return gDAO;
   }
 
-
+  private static boolean useCustomInit = false;
+  
+  static void useCustomInit() {
+    useCustomInit = true;
+  }
  
   @Before
-  public void setup() throws SQLException {
-    getDAO().doDeleteAll();
-    getDAO().doInsert(INITIAL_DATA);
+  public void populateByDefault() throws SQLException {
+    if (!useCustomInit) {
+      getDAO().doDeleteAll();
+      getDAO().doInsert(INITIAL_DATA);
+    }
   }
   
   
