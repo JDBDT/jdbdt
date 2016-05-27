@@ -222,6 +222,16 @@ final class Log {
   }
 
   /**
+   * Log plain call information.
+   * @param callInfo Call information.
+   */
+  void writeCallInfo(CallInfo callInfo) {
+    final Element rootNode = root(callInfo); 
+    createNode(rootNode, callInfo.getAPIMethodInfo().getMethodName());
+    flush(rootNode);
+  }
+  
+  /**
    * Log state assertion.
    * @param callInfo Call info.
    * @param sa State assertion.
@@ -374,6 +384,7 @@ final class Log {
       throw new InternalAPIError(e);
     }
   }
+
 
 
 

@@ -195,7 +195,7 @@ public final class DB {
    * @param callInfo Call info.
    */
   void save(CallInfo callInfo) {
-    logSetup(callInfo, "savepoint");
+    logSetup(callInfo);
     clearSavePointIfSet();
     try {
       if (connection.getAutoCommit()) {
@@ -220,7 +220,7 @@ public final class DB {
    * @param callInfo Call info.
    */
   void commit(CallInfo callInfo) {
-    logSetup(callInfo, "commit");
+    logSetup(callInfo);
     clearSavePointIfSet();
     try {
       connection.commit();
@@ -238,7 +238,7 @@ public final class DB {
     // Note: this is a conservative implementation, it sets another save-point
     // after roll-back, some engines seem to implicitly release the save point on roll-back
     // (an issue with HSQLDB)
-    logSetup(callInfo, "restore");
+    logSetup(callInfo);
     try {
       if (savepoint == null) {
         throw new InvalidOperationException("Save point is not set.");
@@ -260,7 +260,7 @@ public final class DB {
    * @param callInfo Call info.
    */
   void teardown(CallInfo callInfo) {
-    logSetup(callInfo, "teardown");
+    logSetup(callInfo);
     if (pool != null) {
       for (PreparedStatement stmt : pool.values()) {
         ignoreSQLException( () -> stmt.close());
@@ -360,6 +360,13 @@ public final class DB {
     }
   }
   
-  
-
+  /**
+   * Log database setup call.
+   * @param callInfo Call info.
+   */
+  void logSetup(CallInfo callInfo) {
+    if (isEnabled(Option.LOG_SETUP)) {
+      log.writeCallInfo(callInfo);
+    }
+  }
 }
