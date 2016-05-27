@@ -274,22 +274,7 @@ public final class DB {
   }
   
  
-  @SuppressWarnings("javadoc")
-  private interface SQLOperationThatMayFail {
-    void run() throws SQLException;
-  }
-  
-  @SuppressWarnings("javadoc")
-  private void ignoreSQLException(SQLOperationThatMayFail op) {
-    try {
-      op.run();
-    }
-    catch (SQLException e) { 
-      e.printStackTrace();
-      // do nothing
-    }
-  }
-  
+
   /**
    * Log query result.
    * @param callInfo Call info.
@@ -369,4 +354,21 @@ public final class DB {
       log.writeCallInfo(callInfo);
     }
   }
+  
+  @SuppressWarnings("javadoc")
+  private interface SQLOperationThatMayFail {
+    void run() throws SQLException;
+  }
+  
+  @SuppressWarnings("javadoc")
+  private void ignoreSQLException(SQLOperationThatMayFail op) {
+    try {
+      op.run();
+    }
+    catch (SQLException e) { 
+      // e.printStackTrace();
+      // do nothing
+    }
+  }
+  
 }
