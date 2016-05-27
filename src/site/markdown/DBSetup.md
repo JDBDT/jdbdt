@@ -96,13 +96,13 @@ save-point is set `java.sql.Connection.setSavepoint()`
 for the underlying database connection, which must have auto-commit
 disabled. Nested save points are not supported for simplicity,
 i.e., only one save-point is maintained per database handle.
-2. A call to `restore(db)` restores (rolls back) the database state corresponding to the 
-last JDBDT save-point  defined using `save(db)`,
+2. A call to `restore(db)` restores (rolls back) the database state to the 
+JDBDT save-point defined using the last call to `save(db)`,
 as long as there were no intervening database commits.
 
 In relation to `save` and `restore`, `commit(db)` is a shorthand for
 `db.getConnection().commit()`. Such a call commits all database changes
-and discards the JDBDT save-point (or any other save-point set otherwise) .
+and discards the JDBDT save-point (or any other save-point set otherwise).
 
 *Illustration*
 
@@ -134,7 +134,8 @@ For instance, in the illustration below (assuming [JUnit](http://junit.org)-base
 provides a skeleton for the implementation of two patterns described in [xunitpatterns.com](http://xunitpatterns.com):
 
 1. [Transaction Rollback Teardown](http://xunitpatterns.com/Transaction%20Rollback%20Teardown.html):
-changes to the database are rolled back at the end of each test, back to an initial configuration. In the illustration below, the initial database state is set once in `oneTimeSetup` (annotated with `@BeforeClass`) and restored in `perTestTeardown` (annotated with `@After`) after each test.
+changes to the database are rolled back at the end of each test, back to an initial configuration. In the illustration below, the reference database state is set once in `oneTimeSetup` (annotated with `@BeforeClass`). This state is respectively saved and restored, before and after each test executes,
+in `setSavePoint` (annotated with `@Before`) and `restoreSavePoint` (annotated with `@After`), .
 2. [Table Truncation Teardown](http://xunitpatterns.com/Table%20Truncation%20Teardown.html):
 clean up each table on tear-down after conducting tests, as shown for `oneTimeTeardown` (annotated
 with `@AfterClass`) in the illustration below.
@@ -144,6 +145,7 @@ with `@AfterClass`) in the illustration below.
 	import java.sql.Connection;
 	import org.junit.BeforeClass;
 	import org.junit.AfterClass;
+    import org.junit.Before;
 	import org.junit.After;
 	import org.junit.Test;
 
@@ -173,11 +175,26 @@ with `@AfterClass`) in the illustration below.
 	    // etc for myTable2 ...
 	    myTable2 = table("...").columns(...);
 	    ...
-	    
-	    // Set save-point
+	  }
+	  
+	  @AferClass
+	  public void oneTimeTeardown() {
+	    // Alternatively use deleteAll ...
+	    truncate(myTable1);
+	    truncate(myTable2);
+	    ...
+	  }
+	  
+	  @Before
+	  public void setSavePoint() {
 	    save(myDB);
 	  }
-	    
+	  
+	  @After
+	  public void restoreSavePoint() {
+	    restore(myDB);
+	  }
+	  
 	  @Test 
 	  public void test1() {
 	    // Specific setup for test
@@ -189,19 +206,7 @@ with `@AfterClass`) in the illustration below.
 	  @Test 
 	  public void test2() { ... etc ... } 
 	  ...
-	  
-	  @After
-	  public void perTestTeardown() {
-	    restore(myDB);
-	  }
-	  
-	  @AferClass
-	  public void oneTimeTeardown() {
-	    // Alternatively use deleteAll ...
-	    truncate(myTable1);
-	    truncate(myTable2);
-	    ...
-	  }
+	 
 	  
 ## Summary of methods
 <a name="MethodReference"></a>

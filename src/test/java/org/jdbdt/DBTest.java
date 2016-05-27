@@ -106,16 +106,17 @@ public class DBTest extends DBTestCase {
       // Make a change, then restore
       h.update(changedName1);
       restore(getDB());
-      String qAfterRestore1 = h.query();
+      String qAfterRestore = h.query();
       
       // Make a second change, then restore
       h.update(changedName2);
-      restore(getDB());
-      String qAfterRestore2 = h.query();
+      TestUtil.expectException(InvalidOperationException.class,
+          () -> restore(getDB()));
+      String qAfterFailedRestore = h.query();
       
       // Assert that both restores were effective
-      assertEquals(originalName, qAfterRestore1);
-      assertEquals(originalName, qAfterRestore2);
+      assertEquals(originalName, qAfterRestore);
+      assertEquals(changedName2, qAfterFailedRestore);
     }
   }
   
@@ -201,23 +202,9 @@ public class DBTest extends DBTestCase {
     }
   }
   
-  static final int INTENSIVE_TEST_ITERATIONS = 100;
-  
   @Test
-  public void testIntensiveRestore() throws SQLException {
-    try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
-      String originalName = h.query();
-      save(getDB());
-      for (int i = 0; i < INTENSIVE_TEST_ITERATIONS; i++) {
-        h.update(originalName + "_" + i);
-        restore(getDB());
-      }
-      assertEquals(originalName, h.query());
-    }
-  } 
-  
-  @Test
-  public void testIntensiveRestore2() throws SQLException {
+  public void testIntensiveSaveRestore() throws SQLException {
+    final int INTENSIVE_TEST_ITERATIONS = 100;
     try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
       String originalName = h.query();
       for (int i = 0; i < INTENSIVE_TEST_ITERATIONS; i++) {
@@ -228,4 +215,5 @@ public class DBTest extends DBTestCase {
       assertEquals(originalName, h.query());
     }
   } 
+
 }

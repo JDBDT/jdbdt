@@ -196,14 +196,22 @@ public final class DB {
    */
   void save(CallInfo callInfo) {
     logSetup(callInfo, "savepoint");
+    clearSavePointIfSet();
     try {
       if (connection.getAutoCommit()) {
         throw new InvalidOperationException("Auto-commit is set for database connection.");
       }      
-      savepoint = null; // ensuring null if the following call fails
       savepoint = connection.setSavepoint();
     } catch (SQLException e) {
       throw new DBExecutionException(e);
+    }
+  }
+  
+  @SuppressWarnings("javadoc")
+  private void clearSavePointIfSet() {
+    if (savepoint != null) {
+      ignoreSQLException( () -> connection.releaseSavepoint(savepoint));
+      savepoint = null;
     }
   }
   
@@ -213,8 +221,8 @@ public final class DB {
    */
   void commit(CallInfo callInfo) {
     logSetup(callInfo, "commit");
+    clearSavePointIfSet();
     try {
-      savepoint = null;
       connection.commit();
     } 
     catch(SQLException e) {
@@ -236,11 +244,13 @@ public final class DB {
         throw new InvalidOperationException("Save point is not set.");
       }
       connection.rollback(savepoint);
-      savepoint = connection.setSavepoint();
     }
     catch(SQLException e) {
       savepoint = null; // ensuring null in case of error
       throw new DBExecutionException(e); 
+    }
+    finally {
+      clearSavePointIfSet();
     }
   }
   
@@ -258,30 +268,28 @@ public final class DB {
       pool.clear();
       pool = null;
     }
-    if (savepoint != null) {
-      ignoreSQLException( () -> connection.releaseSavepoint(savepoint));
-      savepoint = null;
-    }
+    clearSavePointIfSet();
     log.close();
     log = null;
   }
   
  
   @SuppressWarnings("javadoc")
-  private interface SQLOperation {
+  private interface SQLOperationThatMayFail {
     void run() throws SQLException;
   }
   
   @SuppressWarnings("javadoc")
-  private void ignoreSQLException(SQLOperation op) {
+  private void ignoreSQLException(SQLOperationThatMayFail op) {
     try {
       op.run();
     }
     catch (SQLException e) { 
-      // e.printStackTrace();
+      e.printStackTrace();
       // do nothing
     }
   }
+  
   /**
    * Log query result.
    * @param callInfo Call info.

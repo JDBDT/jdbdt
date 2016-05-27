@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import org.junit.AfterClass;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -43,7 +44,6 @@ public class IntegrationTest extends DBTestCase {
     getConnection().setAutoCommit(true);
     populate(initialData);
     getConnection().setAutoCommit(false);
-    save(getDB());
   }
   
   @AfterClass
@@ -51,6 +51,10 @@ public class IntegrationTest extends DBTestCase {
     getConnection().setAutoCommit(true);
   }
 
+  @Before
+  public void saveDBState() {
+    save(getDB());
+  }
   
   @After
   public void restoreDBState() {

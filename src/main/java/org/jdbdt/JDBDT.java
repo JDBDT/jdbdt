@@ -447,9 +447,11 @@ public final class JDBDT {
    * Restore database state to the last JDBDT save-point.
    * 
    * <p>
-   * For the underlying database of the given handler,
-   * a call to this method restores (rolls back) the state 
+   * A call to this method restores (rolls back) the state 
    * to the last JDBDT save-point set using {@link #save(DB)}.
+   * The save-point cannot be subsequently restored, i.e., only
+   * one call to this method is allowed after each call to
+   * {@link #save(DB)}.
    * </p>
    * 
    * @param db Database handle.
