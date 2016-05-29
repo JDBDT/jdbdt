@@ -1,5 +1,6 @@
 package org.jdbdt;
 
+import java.io.PrintStream;
 import java.sql.Connection;
 
 /**
@@ -478,4 +479,22 @@ public final class JDBDT {
     db.commit(CallInfo.create());
   }
 
+  /**
+   * Print debug info listing the rows in a data set.
+   * @param data Data set.
+   * @param out Output stream.
+   */
+  public void debug(DataSet data, PrintStream out) {
+    new Log(out).write(CallInfo.create(), data);
+  }
+  
+  /**
+   * Print debug info listing the database contents for a data source.
+   * @param source Data source.
+   * @param out Output stream.
+   */
+  public void debug(DataSource source, PrintStream out) {
+    CallInfo callInfo = CallInfo.create();
+    new Log(out).write(callInfo, executeQuery(source));
+  }
 }

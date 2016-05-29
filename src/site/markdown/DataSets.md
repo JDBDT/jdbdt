@@ -129,12 +129,18 @@ Any attempt to modify it subsequently will cause an `InvalidOperationException`.
 
 ### `JDBDT`
 
-For a [data source](DataSources.html) `s`:
+
+Object creation - for a [data source](DataSources.html) `s`:
 
 - `data(s)` creates a new data set.
 - `data(s,c)` creates a new typed data set with conversion function `c`.
 - `builder(s)` creates a data set builder with an underlying fresh data set.
 - `empty(s)` returns an empty & read-only data set that is unique for `s`. 
+
+Debug:
+
+- `debug(s, out)` prints debug output to `out`, listing the current database rows of data source `s`.
+- `debug(data, out)` prints debug output to `out`, listing the contents of data set `data`. 
 
 ### `DataSet`, `TypedDataSet`
 
