@@ -1,7 +1,7 @@
 
 # Database assertions
 
-JDB&delta;t assertions are used to verify that the state of the database conforms to an expected one.
+JDBDT assertions are used to verify that the state of the database conforms to an expected one.
 There are two kinds of assertions. **Delta (&delta;) assertions** verify database state against user-specified
 incremental changes (a **database delta**), and (more traditional) **state assertions** verify that the database contents match a given data set. 
 
@@ -34,6 +34,22 @@ contents exactly to `data`, by definition it will be safe to assume it as the co
 2. A call to `takeSnaphot(source)`, regardless of the type of `s` (`Table`, `Query`)
 will issue a fresh database query, and record the obtained data set as the snapshot for `s`.
 
+*Illustration*
+
+	import static org.jdbdt.JDBDT.*;
+	import org.jdbdt.DataSet;
+	import org.jdbdt.Table;
+	import org.jdbdt.DataSource;
+	...
+	// [1] Populate a table with some data.
+	Table t = ...;
+	DataSet data = data(t). ...;
+	populate(data); // --> data becomes the reference snapshot
+	
+	// [2] Take a snapshot
+	DataSource s = ... ; // s is of type Table or Query
+	takeSnapshot(s); // --> internally takes and records a snapshot 
+	
 ### Assertion methods 
 
 The elementary &delta;-assertion method is `assertDelta`. 
@@ -82,6 +98,35 @@ to `assertDelta`, as follows:
 	</tr>
 </table>
 
+*Illustration*
+
+	DB db = ... ;
+	Table t = table(db, "USER")
+	          .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
+	...        
+	// Assert an insertion
+	... define snapshot with populate or takeSnapshot ...
+	letTheSUT_insertOneUser( ... ); 
+	assertInserted(data(t).row(999, "john", "John Doe", "justDoeIt", Date.valueOf("2016-01-01"));
+	
+	// Assert a removal
+    ... define snapshot with populate or takeSnapshot ...
+    letTheSUT_removeUserById( 999 ); 
+    assertDeleted(data(t).row(999, "john", "John Doe", "justDoeIt", Date.valueOf("2016-01-01"));
+	
+	// Assert an update
+	... define snapshot with populate or takeSnapshot ...
+	DataSet before = data(t).row(999, "john", "John Doe", "justDoeIt", Date.valueOf("2016-01-01"));
+    DataSet after = data(t).row(999, "john", "John Doe", "justDoeIt", Date.valueOf("2016-01-01"));
+	letTheSUT_updatePassword(999, "new password")
+	assertDelta(before, after);
+	
+	// Assert that no changes took place.
+	... define snapshot with populate or takeSnapshot ...
+	letTheSUT_doNoChangesToDB();
+	assertUnchanged(t);
+	
+	
 ## State assertions
 
 A state assertion checks that the database contents in full, and
@@ -98,7 +143,21 @@ Note that no reference snapshot needs to be set for a state assertion, unlike &d
 An `assertEmpty([msg,], source)` call is equivalent to `assertState([msg,], empty(source))`, i.e.,
 it verifies that the given data source has no rows.
 
+*Illustration*
 
-
-
-
+	DB db = ... ;
+	Table t = table(db, "USER")
+	          .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
+	...        
+	// Assert that table is empty.
+	letTheSUT_deleteAllUsers( ... );
+	assertEmpty(t);
+	
+	// Assert 
+	DataSet initialData = ...;
+	populate(initialData);
+	...
+	DataSet expected = DataSet.join(initialData, data(t).row(999, "john", "John Doe", "justDoeIt")); 
+	letTheSUT_insertOneUser( ... ); 
+	assertState(expected);
+	
