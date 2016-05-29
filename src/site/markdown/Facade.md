@@ -30,7 +30,8 @@ may be convenient to refer to the API methods concisely.
      	  	A database handle mediates access to a database connection.
      	</td>
 		<td align="left">
-		 	<code>database</code>
+		 	<code>database</code><br/>
+		 	<code>teardown</code><br/>
 		</td>
 		<td align="left">
 			<code>DB</code>
@@ -65,6 +66,7 @@ may be convenient to refer to the API methods concisely.
 		<td align="left">
 			<code>builder</code><br/> 
 			<code>data</code><br/>
+			<code>debug</code><br/>
 			<code>empty</code><br/>
 		</td>
 		<td align="left">
