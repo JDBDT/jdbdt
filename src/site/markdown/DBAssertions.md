@@ -153,7 +153,7 @@ it verifies that the given data source has no rows.
 	letTheSUT_deleteAllUsers( ... );
 	assertEmpty(t);
 	
-	// Assert 
+	// Assert state after insertion
 	DataSet initialData = ...;
 	populate(initialData);
 	...
