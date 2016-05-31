@@ -44,10 +44,10 @@ will issue a fresh database query, and record the obtained data set as the snaps
 	// [1] Populate a table with some data.
 	Table t = ...;
 	DataSet data = data(t). ...;
-	populate(data); // --> data becomes the reference snapshot
+	populate(data); // --> 'data' becomes the reference snapshot
 	
-	// [2] Take a snapshot
-	DataSource s = ... ; // s is of type Table or Query
+	// [2] OR take a snapshot.
+	DataSource s = ... ; // 's' can be a Table or Query
 	takeSnapshot(s); // --> internally takes and records a snapshot 
 	
 ### Assertion methods 
@@ -114,11 +114,11 @@ to `assertDelta`, as follows:
     letTheSUT_removeUserById( 999 ); 
     assertDeleted(data(t).row(999, "john", "John Doe", "justDoeIt", Date.valueOf("2016-01-01"));
 	
-	// Assert an update
+	// Assert an update.
 	... define snapshot with populate or takeSnapshot ...
 	DataSet before = data(t).row(999, "john", "John Doe", "justDoeIt", Date.valueOf("2016-01-01"));
-    DataSet after = data(t).row(999, "john", "John Doe", "justDoeIt", Date.valueOf("2016-01-01"));
-	letTheSUT_updatePassword(999, "new password")
+    DataSet after  = data(t).row(999, "john", "John Doe", "dontDoeIt", Date.valueOf("2016-01-01"));
+	letTheSUT_updatePassword(999, "dontDoeIt")
 	assertDelta(before, after);
 	
 	// Assert that no changes took place.
@@ -157,7 +157,9 @@ it verifies that the given data source has no rows.
 	DataSet initialData = ...;
 	populate(initialData);
 	...
-	DataSet expected = DataSet.join(initialData, data(t).row(999, "john", "John Doe", "justDoeIt")); 
+	DataSet expected = 
+	  DataSet.join(initialData, 
+	               data(t).row(999, "john", "John Doe", "justDoeIt", Date.valueOf("2016-01-01"))); 
 	letTheSUT_insertOneUser( ... ); 
 	assertState(expected);
 	
