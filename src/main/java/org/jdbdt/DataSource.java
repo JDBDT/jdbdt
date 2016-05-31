@@ -1,5 +1,6 @@
 package org.jdbdt;
 
+import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +19,7 @@ public abstract class DataSource {
    * Database instance for this data source.
    */
   private final DB db;
-  
+
   /**
    * Query statement.
    */
@@ -33,12 +34,12 @@ public abstract class DataSource {
    * Column names.
    */
   private String[] columns = null;
-  
+
   /**
    * Query arguments (if any).
    */
   private Object[] queryArgs = null;
-  
+
   /**
    * Last snapshot (if any).
    */
@@ -49,7 +50,7 @@ public abstract class DataSource {
    * (computed lazily).
    */
   private DataSet theEmptyOne = null;
-  
+
   /**
    * Constructor.
    * @param db Database instance.
@@ -67,7 +68,7 @@ public abstract class DataSource {
   public final DB getDB() {
     return db;
   }
-  
+
   /**
    * Set columns for data source.
    * 
@@ -79,7 +80,7 @@ public abstract class DataSource {
     }
     this.columns = columns.clone();    
   }
- 
+
   /** 
    * Get column names.
    * @return Array of column names.
@@ -87,7 +88,7 @@ public abstract class DataSource {
   public final String[] getColumns() {
     return columns;
   }
-  
+
   /**
    * Get column count.
    * @return Column count.
@@ -102,7 +103,7 @@ public abstract class DataSource {
    * by {@link #theEmptySet()}.
    */
   private static final ArrayList<Row> EMPTY_ROW_LIST = new ArrayList<>();
-  
+
   /**
    * Return an empty, read-only data set,
    * for use by {@link JDBDT#empty(DataSource)}
@@ -133,7 +134,7 @@ public abstract class DataSource {
     ensureCompiled();
     return metaData;
   }
-  
+
   /**
    * Get query arguments.
    * @return Array of arguments if any, otherwise <code>null</code>.
@@ -141,7 +142,7 @@ public abstract class DataSource {
   final Object[] getQueryArguments() {
     return queryArgs;
   }
-  
+
   /**
    * Ensure query is compiled.
    */
@@ -180,7 +181,7 @@ public abstract class DataSource {
    * @return SQL code for the database query.
    */
   public abstract String getSQLForQuery();
-  
+
   /**
    * Execute query.
    * @param callInfo Call info.
@@ -230,9 +231,9 @@ public abstract class DataSource {
    * @param c Row consumer.
    */
   static void executeQuery(PreparedStatement queryStmt, 
-      MetaData md, 
-      Object[] queryArgs, 
-      Consumer<Row> c) {
+                           MetaData md, 
+                           Object[] queryArgs, 
+                           Consumer<Row> c) {
     try { 
       if (queryArgs != null && queryArgs.length > 0) {
         for (int i=0; i < queryArgs.length; i++) {
@@ -244,7 +245,7 @@ public abstract class DataSource {
         int colCount = md.getColumnCount();
         while (rs.next()) {
           Object[] data = new Object[colCount];
-          for (int i = 0; i < colCount; i++) {          
+          for (int i = 0; i < colCount; i++) {  
             data[i] = rs.getObject(i+1);
           }
           c.accept(new Row(data));
@@ -259,5 +260,5 @@ public abstract class DataSource {
     } 
   }
 
- 
+
 }
