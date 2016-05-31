@@ -18,14 +18,14 @@ public class UserDAO {
   public UserDAO(Connection c) throws SQLException {
     connection = c;
     try {
-      Op.DROP.compile(c).execute();
-
-    } catch(SQLException e) { }
-    Op.CREATE.compile(c).execute();
+      stmt(Op.DROP).execute();
+    } 
+    catch(SQLException e) { }
+    stmt(Op.CREATE).execute();
   }
 
   private PreparedStatement stmt(Op op) throws SQLException {
-    return op.compile(connection);
+    return connection.prepareStatement(op.getSQL());
   }
 
   @SafeVarargs
@@ -97,28 +97,26 @@ public class UserDAO {
 
 
   private enum Op { 
-    DROP("DROP TABLE " + TABLE_NAME),
-    CREATE("CREATE TABLE " + TABLE_NAME + " ("
+    DROP("DROP TABLE %s"),
+    CREATE("CREATE TABLE %s ("
         + "LOGIN VARCHAR(10) PRIMARY KEY NOT NULL,"
         + "NAME VARCHAR(40) NOT NULL, " + "PASSWORD VARCHAR(32) NOT NULL,"
         + "CREATED DATE)"),
-        DELETE_ALL("DELETE FROM " + TABLE_NAME),
-        DELETE("DELETE FROM " + TABLE_NAME + " WHERE login = ?"),
-        INSERT("INSERT INTO " + TABLE_NAME
-            + "(login, name, password, created) VALUES (?,?,?,?)"),
-            SELECT("SELECT name, password, created FROM "
-                + TABLE_NAME + " WHERE login = ?"),
-                UPDATE("UPDATE " + TABLE_NAME 
-                    + " set name=?,password=?,created=? WHERE login=?"),
-                    COUNT("SELECT COUNT(*) FROM " + TABLE_NAME);
+    DELETE_ALL("DELETE FROM %s"),
+    DELETE("DELETE FROM %s WHERE login = ?"),
+    INSERT("INSERT INTO %s(login, name, password, created) VALUES (?,?,?,?)"),
+    SELECT("SELECT name, password, created FROM %s WHERE LOGIN = ? "),
+    UPDATE("UPDATE %s set name=?,password=?,created=? WHERE login=?"),
+    COUNT("SELECT COUNT(*) FROM %s");
 
-    Op(String sql) {
-      this.sql = sql;
-    }
     private String sql; 
 
-    PreparedStatement compile(Connection c) throws SQLException {
-      return c.prepareStatement(sql);
+    Op(String sqlFmt) {
+      this.sql = String.format(sqlFmt, TABLE_NAME);
+    }
+    
+    String getSQL() {
+      return sql;
     }
   }
 }
