@@ -258,8 +258,9 @@ public final class DB {
    * Tear down the database handle, freeing any internal
    * resources. 
    * @param callInfo Call info.
+   * @param closeConn Close underlying connection.
    */
-  void teardown(CallInfo callInfo) {
+  void teardown(CallInfo callInfo, boolean closeConn) {
     logSetup(callInfo);
     if (pool != null) {
       for (PreparedStatement stmt : pool.values()) {
@@ -271,6 +272,9 @@ public final class DB {
     clearSavePointIfSet();
     log.close();
     log = null;
+    if (closeConn) {
+      ignoreSQLException( () -> connection.close());
+    }
   }
   
  

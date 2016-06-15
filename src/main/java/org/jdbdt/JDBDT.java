@@ -2,6 +2,8 @@ package org.jdbdt;
 
 import java.io.PrintStream;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  * JDBDT main API facade.
@@ -49,6 +51,44 @@ public final class JDBDT {
   }
   
   /**
+   * Create a new database handle for given database URL.
+   * 
+   * <p>Calling this method is shorthand for
+   * <code>database(DriverManager.getConnection(url))</code>
+   * </p>
+   * 
+   * @param url Database URL.
+   * @return A new database handle for the given connection.
+   * @throws SQLException If the connection cannot be created.
+   * @see #database(Connection)
+   * @see DriverManager#getConnection(String)
+   */
+  public static DB database(String url) throws SQLException {
+    return database(DriverManager.getConnection(url));
+  }
+  
+  /**
+   * Create a new database handle for given database
+   * URL, user and password .
+   * 
+   * <p>Calling this method is shorthand for
+   * <code>database(DriverManager.getConnection(url, user, pass))</code>
+   * (see {@link #database(Connection)}).
+   * </p>
+   * 
+   * @param url Database URL.
+   * @param user Database user.
+   * @param pass Database password.
+   * @return A new database handle for the given connection.
+   * @throws SQLException If the connection cannot be created.
+   * @see #database(Connection)
+   * @see DriverManager#getConnection(String, String, String)
+   */
+  public static DB database(String url, String user, String pass) throws SQLException {
+    return database(DriverManager.getConnection(url, user, pass));
+  }
+  
+  /**
    * Tear down a database handle.
    * 
    * <p>Calling this method releases any associated resources
@@ -58,13 +98,17 @@ public final class JDBDT {
    * <p>
    * The freed-up resources include any save points, 
    * prepared statements, and opened log files.
-   * The underlying database connection is <b>not</b> closed, though.
+   * The second parameter specifies if the
+   * underlying database connection should be closed
+   * as well or not.
    * </p>
    * 
    * @param db Database handle
+   * @param closeConn Indicates 
+   *                  if underlying connection should be closed.
    */
-  public static void teardown(DB db) {
-    db.teardown(CallInfo.create());
+  public static void teardown(DB db, boolean closeConn) {
+    db.teardown(CallInfo.create(), closeConn);
   }
   
   /**

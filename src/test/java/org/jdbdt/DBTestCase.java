@@ -2,7 +2,6 @@ package org.jdbdt;
 
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import org.junit.AfterClass;
@@ -18,7 +17,6 @@ import org.junit.BeforeClass;
 @SuppressWarnings("javadoc")
 public class DBTestCase {
 
-  private static Connection gConn;
   private static DB gDB;
   private static UserDAO gDAO;
   private static Conversion<User> gConversion;
@@ -52,11 +50,11 @@ public class DBTestCase {
   public static void setupDB() throws Exception {
     DBCfg cfg = DBCfg.getConfig();
     Class.forName(cfg.getDriver());
-    gConn = DriverManager.getConnection(cfg.getURL());
-    gConn.setAutoCommit(true);
-    gDAO = new UserDAO(getConnection());
+    gDB = JDBDT.database(cfg.getURL());
+    Connection c = gDB.getConnection();
+    c.setAutoCommit(true);
+    gDAO = new UserDAO(c);
     gConversion = cfg.isDateSupported() ? STD_CONVERSION : ALT_CONVERSION;
-    gDB = JDBDT.database(gConn);
     if (!cfg.reuseStatements()) {
       gDB.disable(DB.Option.REUSE_STATEMENTS);
     }
@@ -67,17 +65,12 @@ public class DBTestCase {
   
   @AfterClass
   public static void teardownDB() throws SQLException {
-    JDBDT.teardown(gDB);
-    gConn.close();
+    JDBDT.teardown(gDB, true);
     useCustomInit = false;
   }
 
   protected static DB getDB() {
     return gDB;
-  }
-  
-  protected static Connection getConnection() {
-    return gConn;
   }
   
   protected static UserDAO getDAO() {

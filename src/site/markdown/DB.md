@@ -6,8 +6,8 @@ connection.
 ## Creation and teardown
 <a name="Creation"></a>
 
-A database handle is created using the `database` facade method, supplying as argument
-a `java.sql.Connection` instance. Once the database handle is no longer required,
+A database handle is created using the `database` facade method, for instance
+supplying as argument a database URL. Once the database handle is no longer required,
 internal resources may be freed up using the `teardown` method.
 
 *Illustration*
@@ -18,11 +18,14 @@ internal resources may be freed up using the `teardown` method.
 	import java.sql.DriverManager;
 	...
 	// Creation
-	Connection c = DriverManager.getConnection("jdbc:myFavoriteDB://options");
-	DB dbHandle = database(c);
+	String dbURL = ...;
+	DB dbHandle = database("jdbc:myFaveDBEngine://myDB");
 	...
-	// Tear-down
-	teardown(db);
+	// Tear-down.
+	// The second parameter indicates if the underlying 
+	// JDBDT connection should be closed or kept open.
+	// In this case we close the connection.
+	teardown(db, true);
 
 ## Configuration 
 <a name="Configuration"></a>
@@ -100,7 +103,10 @@ No problems were detected for [all other JDBC drivers tested in the JDBDT build]
 ### `JDBDT`
 
 - `database(c)` creates a handle for database connection `c`.
-- `teardown(db)` frees up internal resources used by `db` (if `db` is no longer required).
+- `database(url)` creates a handle for the given database URL..
+- `database(url, user, pass)` creates a handle for the given database URL, user name, and
+password.
+- `teardown(db, closeConn)` frees up internal resources used by `db` (if `db` is no longer required), and closes underlying connection when `closeConn == true`.
 
 ### `DB`
 

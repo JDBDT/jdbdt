@@ -41,14 +41,14 @@ public class IntegrationTest extends DBTestCase {
     }
     initialData = dsb.generate(10).data();
     // getDB().enableFullLogging();
-    getConnection().setAutoCommit(true);
+    getDB().getConnection().setAutoCommit(true);
     populate(initialData);
-    getConnection().setAutoCommit(false);
+    getDB().getConnection().setAutoCommit(false);
   }
   
   @AfterClass
   public static void restoreAutoCommit() throws SQLException {
-    getConnection().setAutoCommit(true);
+    getDB().getConnection().setAutoCommit(true);
   }
 
   @Before
