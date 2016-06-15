@@ -103,7 +103,7 @@ No problems were detected for [all other JDBC drivers tested in the JDBDT build]
 ### `JDBDT`
 
 - `database(c)` creates a handle for database connection `c`.
-- `database(url)` creates a handle for the given database URL..
+- `database(url)` creates a handle for the given database URL.
 - `database(url, user, pass)` creates a handle for the given database URL, user name, and
 password.
 - `teardown(db, closeConn)` frees up internal resources used by `db` (if `db` is no longer required), and closes underlying connection when `closeConn == true`.
