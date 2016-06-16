@@ -61,8 +61,8 @@ final class DBSetup {
       StringBuilder sql = new StringBuilder("INSERT INTO ");
       String[] columnNames = table.getColumns();
       sql.append(table.getName())
-      .append('(')
-      .append(columnNames[0]);
+         .append('(')
+         .append(columnNames[0]);
       for (int i=1; i < columnNames.length; i++) {
         sql.append(',').append(columnNames[i]);
       }
