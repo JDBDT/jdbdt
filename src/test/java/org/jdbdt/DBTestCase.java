@@ -92,7 +92,7 @@ public class DBTestCase {
   }
   
   
-  protected static final User[] INITIAL_DATA = {
+  static final User[] INITIAL_DATA = {
     new User("linus", "Linus Torvalds", "linux", Date.valueOf("2015-01-01")),
     new User("steve", "Steve Jobs", "macos", Date.valueOf("2015-12-31")),
     new User("bill", "Bill Gates", "windows", Date.valueOf("2015-09-12")),

@@ -15,7 +15,7 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class QueryTest extends DBTestCase { 
   
-  private final String SQL_CODE = 
+  private final static String SQL_CODE = 
       "SELECT login, password FROM Users WHERE login LIKE ?";
  
   @Test

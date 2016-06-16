@@ -6,10 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @SuppressWarnings("javadoc")
-public class UserDAO {
-  public static final String TABLE_NAME = "Users";
+class UserDAO {
+  static final String TABLE_NAME = "Users";
 
-  public static final String[] COLUMNS = { 
+  static final String[] COLUMNS = { 
     "login", "name", "password", "created" 
   };
 
