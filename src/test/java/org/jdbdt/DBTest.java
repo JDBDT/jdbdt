@@ -35,7 +35,7 @@ public class DBTest extends DBTestCase {
     assertNotSame(s1, s2);
   }
 
-  class SaveRestoreTestHelper implements AutoCloseable {
+  static class SaveRestoreTestHelper implements AutoCloseable {
     User user;
     boolean autoCommitInitialSetting;
 

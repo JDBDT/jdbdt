@@ -23,15 +23,6 @@ public final class DBExecutionException extends RuntimeException {
   }
   
   /**
-   * Get SQL exception that cause this exception.
-   * @return The SQL exception at stake.
-   */
-  @Override
-  public SQLException getCause() {
-    return (SQLException) super.getCause();
-  }
-  
-  /**
    * Serial version UID.
    */
   private static final long serialVersionUID = 1L;

@@ -1,6 +1,7 @@
 package org.jdbdt;
 
 import java.sql.Date;
+import java.util.Arrays;
 
 @SuppressWarnings("javadoc")
 public final class User implements Cloneable {
@@ -74,4 +75,11 @@ public final class User implements Cloneable {
     }
   }
 
+  @Override 
+  public int hashCode() {
+    return Arrays.hashCode(
+      new Object[] { 
+         login, name, password, created
+      });
+  }
 }
