@@ -49,7 +49,7 @@ public class DBAssertTest extends DBTestCase {
   private final Object[] queryArgs;
   private DataSet initialState;
   
-  public DBAssertTest(String whereClause,Object[] queryArgs)  {
+  public DBAssertTest(String whereClause, Object[] queryArgs)  {
     this.whereClause = whereClause;
     this.queryArgs = queryArgs;
   }
