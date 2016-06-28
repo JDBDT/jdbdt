@@ -84,7 +84,7 @@ public abstract class DataSource {
    * Get column names.
    * @return Array of column names.
    */
-  public final String[] getColumns() {
+  final String[] getColumns() {
     return columns;
   }
 
@@ -95,6 +95,17 @@ public abstract class DataSource {
   public final int getColumnCount() {
     ensureCompiled();
     return columns.length;
+  }
+  /**
+   * Get column name.
+   * @param index Column index between <code>0</code> and <code>getColumnCount() - 1</code>
+   * @return Name of column.
+   */
+  public String getColumnName(int index) {
+    if (index < 0 || columns == null || index >= columns.length) {
+      throw new InvalidOperationException("Invalid column index: " + index);
+    }
+    return columns[index];
   }
 
   /**

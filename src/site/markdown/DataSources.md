@@ -111,7 +111,7 @@ to the order of query results, but `orderBy` may make it easier to inspect
 * `getDB()` returns the database handle.
 * `getSQLForQuery()` yields the SQL code used for querying the database.
 * `getColumnCount()` returns the number of columns for the data source.
-* `getColumns()` returns an array with the column names for the data source. 
+* `getColumnName(i)` returns the name of column with index `i. 
 
 ### `Table` 
 
