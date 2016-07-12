@@ -102,11 +102,11 @@ set.
       .sequence("NAME", "Harry H", "Mark M", "John J")
       .sequence("PASSWORD", i -> "password " + i , 1)
       .random("CREATED", Date.valueOf("2015-01-01"), Date.valueOf("2015-12-31"))
-      .generate(3) // generate 3 rows, keep with ID sequence and CREATED random filler
+      .generate(3) // generate 3 rows, 
       .sequence("LOGIN", i -> "guest_" + i, 4)  // "user_4", "user_5", ...
       .sequence("NAME", i -> "Guest User " + i, 4) // "Guest User 4", ...
       .value("password", "samePasswordForAllGuests") 
-      .generate(6)  
+      .generate(6) // 6 more rows keeping ID sequence and CREATED random filler
       .data();   
       
     // Add 500 more rows to the data set
