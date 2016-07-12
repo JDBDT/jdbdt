@@ -538,7 +538,6 @@ public final class JDBDT {
    * @param out Output stream.
    */
   public void debug(DataSource source, PrintStream out) {
-    CallInfo callInfo = CallInfo.create();
-    new Log(out).write(callInfo, executeQuery(source));
+    new Log(out).write(CallInfo.create(), executeQuery(source));
   }
 }
