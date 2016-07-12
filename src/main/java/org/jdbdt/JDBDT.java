@@ -24,16 +24,11 @@ public final class JDBDT {
   private JDBDT() { }
 
   /**
-   * Version identifier.
-   */
-  private static final String VERSION = "0.1.0-SNAPSHOT";
-
-  /**
    * Get JDBDT version identifier.
    * @return An identifier for the JDBDT version.
    */
   public static String version() { 
-    return VERSION;
+    return VersionInfo.ID;
   }
   
   /**

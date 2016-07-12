@@ -176,6 +176,34 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>replacer</artifactId>
+				<version>1.5.3</version>
+				<configuration>
+					<ignoreMissingFile>false</ignoreMissingFile>
+					<regex>false</regex>
+					<replacements>
+						<replacement>
+							<token>@jdbdt.version@</token>
+							<value>${project.version}</value>
+						</replacement>
+					</replacements>
+				</configuration>
+				<executions>
+					<execution>
+						<id>version-class</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+						<configuration>
+							<file>src/main/java/org/jdbdt/VersionInfo.java.template</file>
+							<outputFile>src/main/java/org/jdbdt/VersionInfo.java</outputFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<artifactId>maven-source-plugin</artifactId>
 				<version>2.4</version>
 			</plugin>
