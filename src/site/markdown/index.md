@@ -1,25 +1,30 @@
 # JDBDT 
 
-JDBDT (Java DataBase Delta Testing) is a Java library for 
+JDBDT (Java DataBase Delta Testing) is an open-source Java library for 
 testing database applications, helping you write tests
 that include database setup and verification.
 The main features are as follows:
 
-* Data sets are defined programmatically, and can be used
-for database setup or verification. Hence data sets 
+* [Data sets](DataSets.html) are defined programmatically, and can be used
+for database [setup](DBSetup.html) or [verification](DBAssertions.html). Thus data sets 
 are an integral part of test specifications, 
-and there is no need to maintain external "data set files".
-* &delta;-assertions can be used to verify 
+without no need to maintain external "data set files".
+* [&delta;-assertions](DBAssertions.html) can be used to verify 
 database changes incrementally, in addition to standard
 state assertions.
-* Setup methods can be used to manage the contents of database
+* [Setup](DBSetup.html) methods can be used to manage the contents of database
 tables, through insertions, clean-up operations, and 
 save-points.
+* The entire functionality is exposed by a "minimalistic" 
+[API facade](Facade.html).
 
 ## Installation 
 
+**Pre-requisite:** JDBDT can be used with Java 8, it will not work 
+with earlier Java versions. 
+
 JDBDT is available from Maven Central.
-If you use Maven, then add the following dependency to your POM file
+If you use Maven (3.2 or later), then add the following dependency to your POM file
 to install the latest stable release.
 
 	<dependency>
@@ -41,10 +46,3 @@ the following commands:
 
 * [Github issue tracker](https://github.com/edrdo/jdbdt/issues): for bug reports and feature requests.
  
-
-## Compiling from scratch 
-
-
-
-
-
