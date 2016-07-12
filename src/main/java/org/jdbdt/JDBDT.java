@@ -528,7 +528,7 @@ public final class JDBDT {
    * @param data Data set.
    * @param out Output stream.
    */
-  public void debug(DataSet data, PrintStream out) {
+  public static void debug(DataSet data, PrintStream out) {
     new Log(out).write(CallInfo.create(), data);
   }
   
@@ -537,7 +537,7 @@ public final class JDBDT {
    * @param source Data source.
    * @param out Output stream.
    */
-  public void debug(DataSource source, PrintStream out) {
+  public static void debug(DataSource source, PrintStream out) {
     new Log(out).write(CallInfo.create(), executeQuery(source));
   }
 }
