@@ -7,7 +7,7 @@ import java.util.Iterator;
  * 
  * @since 0.1
  */
-final class StateAssertion {
+final class DataSetAssertion {
 
   /**
    * Iterator type enumeration.
@@ -37,7 +37,7 @@ final class StateAssertion {
    * @param data Expected data
    * @param delta Actual delta (empty if assertion passes)
    */
-  StateAssertion(DataSet data, Delta delta) {
+  DataSetAssertion(DataSet data, Delta delta) {
     this.data = data;
     this.delta = delta;
   }

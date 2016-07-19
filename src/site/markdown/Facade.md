@@ -104,11 +104,13 @@ may be convenient to refer to the API methods concisely.
      		<a href="DBAssertions.html">Database assertions</a>
      	</td>
     	<td align="left">
-     	  	Assertion methods can be used to verify the contents of a database.
+     	  	Assertion methods can be used to verify the contents of a database
+     	  	or compare data sets.
      	</td>
 		<td align="left">
 			<code>assertDeleted</code><br/> 
 			<code>assertDelta</code><br/>
+			<code>assertEquals</code><br/> 
 			<code>assertEmpty</code><br/> 
 			<code>assertInserted</code><br/> 
 			<code>assertState</code><br/>

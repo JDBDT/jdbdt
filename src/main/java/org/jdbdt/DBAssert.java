@@ -58,12 +58,7 @@ final class DBAssert {
   }
   
   /**
-   * Perform a state assertion.
-   * 
-   * <p>
-   * State assertion methods in the {@link JDBDT} delegate the
-   * actual verification to this method.
-   * </p>
+   * Perform a database state assertion.
    * 
    * @param callInfo Call info.
    * @param expected Expected data.
@@ -71,21 +66,29 @@ final class DBAssert {
    * @throws InvalidOperationException If the arguments are invalid. 
    */
   static void stateAssertion(CallInfo callInfo, DataSet expected) {
-    if (expected == null) {
-      throw new InvalidOperationException("Null data set.");
-    }
-    final DataSource source = expected.getSource();
-    final DataSet stateNow = source.executeQuery(callInfo, false);
-    final Delta delta = new Delta(expected, stateNow); 
-    final StateAssertion sa = 
-      new StateAssertion(expected, delta);
-    source.getDB().log(callInfo, sa);
-    if (! sa.passed()) {
+    dataSetAssertion(callInfo, 
+                     expected,   
+                     expected.getSource().executeQuery(callInfo, false));
+  }
+  
+  /**
+   * Perform a data set assertion.
+   * 
+   * 
+   * @param callInfo Call info.
+   * @param expected Expected data.
+   * @param actual Actual data.
+   * @throws DBAssertionError If the assertion fails.
+   */
+  static void dataSetAssertion(CallInfo callInfo, DataSet expected, DataSet actual) {
+    final Delta delta = new Delta(expected, actual); 
+    final DataSetAssertion assertion = 
+      new DataSetAssertion(expected, delta);
+    expected.getSource().getDB().log(callInfo, assertion);
+    if (! assertion.passed()) {
       throw new DBAssertionError(callInfo.getMessage());
     }
   }
-  
-  
 
   /**
    * Private constructor, to prevent instantiation.

@@ -229,6 +229,41 @@ public final class JDBDT {
   }
   
   /**
+   * Assert that two data sets are equivalent (error message variant).
+   * 
+   * <p>
+   * Note that the executed data set comparison is insensitive
+   * to the order of rows in both data sets.
+   * </p> 
+   * 
+   * @param expected Expected data.
+   * @param actual Actual data.  
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertEquals(String,DataSet,DataSet)
+   */
+  public static void assertEquals(DataSet expected, DataSet actual) throws DBAssertionError {
+    DBAssert.dataSetAssertion(CallInfo.create(), expected, actual);
+  }
+  
+  /**
+   * Assert that two data sets are equivalent (error message variant).
+   * 
+   * <p>
+   * Note that the executed data set comparison is insensitive
+   * to the order of rows in both data sets.
+   * </p> 
+   * 
+   * @param message Assertion error message.
+   * @param expected Expected data.
+   * @param actual Actual data.  
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertEquals(DataSet,DataSet)
+   */
+  public static void assertEquals(String message, DataSet expected, DataSet actual) throws DBAssertionError {
+    DBAssert.dataSetAssertion(CallInfo.create(message), expected, actual);
+  }
+  
+  /**
    * Assert that no changes occurred for the given data source 
    * (error message variant).
    * 
@@ -243,6 +278,7 @@ public final class JDBDT {
     DataSet emptyDataSet = empty(source);
     DBAssert.deltaAssertion(CallInfo.create(message), emptyDataSet, emptyDataSet);
   }
+  
   /**
    * Assert that no changes occurred for the given data source.
    * 

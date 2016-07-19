@@ -1,9 +1,12 @@
 
-# Database assertions
+# Assertions
 
-JDBDT assertions are used to verify that the state of the database conforms to an expected one.
-There are two kinds of assertions. **Delta (&delta;) assertions** verify database state against user-specified
-incremental changes (a **database delta**), and (more traditional) **state assertions** verify that the database contents match a given data set. 
+There are three kinds of JDBDT assertions:
+
+1. **Delta (&delta;) assertions** verify database state against user-specified
+incremental changes (a **database delta**).
+2. More traditional **state assertions** verify that the database contents match a given data set. 
+3. Finally, **data set assertions** let you verify if two data sets are equivalent.
 
 ## Delta assertions
 
@@ -150,7 +153,7 @@ it verifies that the given data source has no rows.
 	          .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
 	...        
 	// Assert that table is empty.
-	letTheSUT_deleteAllUsers( ... );
+	letTheSUTDeleteAllUsers( ... );
 	assertEmpty(t);
 	
 	// Assert state after insertion
@@ -163,3 +166,26 @@ it verifies that the given data source has no rows.
 	letTheSUT_insertOneUser( ... ); 
 	assertState(expected);
 	
+## Data set assertions
+	
+A data set assertion verifies that two data sets are equivalent.
+It is performed using the `assertEquals` method.
+
+*Illustration*
+
+    // Fill a database table.
+	DB db = ... ;
+	Table t = table(db, "USER")
+	          .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
+	DataSet initialData = ...; 
+	populate(initialData);
+	...      
+	// Assert that all data is returned.
+	DataSet expected = initialData; 
+	List<User> listOfUsers = letTheSUTQueryAllUsers( ... );
+	DataSet actual = data(t, conv).rows(listOfUsers),
+	assertEquals(expected, actual);
+	
+
+*Note for JUnit users*: beware not to confuse `assertEquals` with the [JUnit](http://junit.org) method that goes by the same name. The JUnit variant will not work, since `DataSet` (deliberately) does *not* override `equals`. All will go well if you use [a static import for all methods in the JDBDT facade](Facade.html#StaticImport).
+

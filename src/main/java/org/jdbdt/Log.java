@@ -180,43 +180,43 @@ final class Log {
   /**
    * Log delta assertion.
    * @param callInfo Call info.
-   * @param da Delta assertion.
+   * @param assertion Delta assertion.
    */
-  void write(CallInfo callInfo, DeltaAssertion da) {
+  void write(CallInfo callInfo, DeltaAssertion assertion) {
     final Element rootNode = root(callInfo);
     final Element daNode = createNode(rootNode, DELTA_ASSERTION_TAG);
-    final DataSource ds = da.getSource();
+    final DataSource ds = assertion.getSource();
     write(daNode, ds);
     final List<MetaData.ColumnInfo> mdCols = ds.getMetaData().columns();
     final Element expectedNode = createNode(daNode, EXPECTED_TAG);    
     write(expectedNode, 
           OLD_DATA_TAG, 
           mdCols,
-          da.data(DeltaAssertion.IteratorType.OLD_DATA_EXPECTED));
+          assertion.data(DeltaAssertion.IteratorType.OLD_DATA_EXPECTED));
     write(expectedNode, 
           NEW_DATA_TAG, 
           mdCols,
-          da.data(DeltaAssertion.IteratorType.NEW_DATA_EXPECTED));
-    if (! da.passed()) {
+          assertion.data(DeltaAssertion.IteratorType.NEW_DATA_EXPECTED));
+    if (! assertion.passed()) {
       Element errorsNode = createNode(daNode, ERRORS_TAG),
               oldDataErrors = createNode(errorsNode, OLD_DATA_TAG),
               newDataErrors = createNode(errorsNode, NEW_DATA_TAG);
       write(oldDataErrors, 
             EXPECTED_TAG, 
             mdCols,
-            da.data(DeltaAssertion.IteratorType.OLD_DATA_ERRORS_EXPECTED));
+            assertion.data(DeltaAssertion.IteratorType.OLD_DATA_ERRORS_EXPECTED));
       write(oldDataErrors, 
             ACTUAL_TAG, 
             mdCols,
-            da.data(DeltaAssertion.IteratorType.OLD_DATA_ERRORS_ACTUAL));
+            assertion.data(DeltaAssertion.IteratorType.OLD_DATA_ERRORS_ACTUAL));
       write(newDataErrors, 
           EXPECTED_TAG, 
           mdCols,
-          da.data(DeltaAssertion.IteratorType.NEW_DATA_ERRORS_EXPECTED));
+          assertion.data(DeltaAssertion.IteratorType.NEW_DATA_ERRORS_EXPECTED));
       write(newDataErrors, 
             ACTUAL_TAG, 
             mdCols,
-            da.data(DeltaAssertion.IteratorType.NEW_DATA_ERRORS_ACTUAL));
+            assertion.data(DeltaAssertion.IteratorType.NEW_DATA_ERRORS_ACTUAL));
     }
     flush(rootNode);
   }
@@ -234,28 +234,28 @@ final class Log {
   /**
    * Log state assertion.
    * @param callInfo Call info.
-   * @param sa State assertion.
+   * @param assertion State assertion.
    */
-  void write(CallInfo callInfo, StateAssertion sa) {
+  void write(CallInfo callInfo, DataSetAssertion assertion) {
     final Element rootNode = root(callInfo); 
-    final Element saNode = createNode(rootNode, STATE_ASSERTION_TAG);
-    final DataSource ds = sa.getSource();
+    final Element saNode = createNode(rootNode, DATA_SET_ASSERTION_TAG);
+    final DataSource ds = assertion.getSource();
     write(saNode, ds);
     final List<MetaData.ColumnInfo> mdCols = ds.getMetaData().columns();
     write(saNode, 
           EXPECTED_TAG, 
           mdCols,
-          sa.data(StateAssertion.IteratorType.EXPECTED_DATA));
-    if (! sa.passed()) {
+          assertion.data(DataSetAssertion.IteratorType.EXPECTED_DATA));
+    if (! assertion.passed()) {
       Element errorsNode = createNode(saNode, ERRORS_TAG);
       write(errorsNode, 
             EXPECTED_TAG, 
             mdCols,
-            sa.data(StateAssertion.IteratorType.ERRORS_EXPECTED));
+            assertion.data(DataSetAssertion.IteratorType.ERRORS_EXPECTED));
       write(errorsNode, 
             ACTUAL_TAG, 
             mdCols,
-            sa.data(StateAssertion.IteratorType.ERRORS_ACTUAL));
+            assertion.data(DataSetAssertion.IteratorType.ERRORS_ACTUAL));
     }
     flush(rootNode);
   }
@@ -316,7 +316,7 @@ final class Log {
   @SuppressWarnings("javadoc")
   private static final String DELTA_ASSERTION_TAG = "delta-assertion";
   @SuppressWarnings("javadoc")
-  private static final String STATE_ASSERTION_TAG = "state-assertion";
+  private static final String DATA_SET_ASSERTION_TAG = "data-set-assertion";
   @SuppressWarnings("javadoc")
   private static final String ERRORS_TAG = "errors";
   @SuppressWarnings("javadoc")

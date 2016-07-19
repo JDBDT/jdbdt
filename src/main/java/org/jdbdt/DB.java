@@ -330,7 +330,7 @@ public final class DB {
    * @param callInfo Call info.
    * @param sa state assertion.
    */
-  void log(CallInfo callInfo, StateAssertion sa) {
+  void log(CallInfo callInfo, DataSetAssertion sa) {
     if (isEnabled(Option.LOG_ASSERTIONS) ||
         (    ! sa.passed() 
           && isEnabled(Option.LOG_ASSERTION_ERRORS) )) {

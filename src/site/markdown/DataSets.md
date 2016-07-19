@@ -67,7 +67,7 @@ of column values.
 	TypedDataSet<User> userSet  
 	   = data(t, conv)
 		.row(root)
-		.rows(john, kafka, guest)
+		.rows(john, harry, guest)
 		.rows(listOfOtherUsers);
 
 ### Data set builders
