@@ -9,7 +9,7 @@ final class VersionInfo {
   /**
    * Version Id.
    */
-  public static final String ID = "@jdbdt.version@x";
+  static final String ID = "@jdbdt.version@";
   
   /**
    * Private constructor to avoid instantiation.
