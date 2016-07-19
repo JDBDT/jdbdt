@@ -195,6 +195,28 @@
 							<outputFile>src/main/java/org/jdbdt/VersionInfo.java</outputFile>
 						</configuration>
 					</execution>
+					<execution>
+						<id>package-info-file</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+						<configuration>
+							<file>src/main/java/org/jdbdt/package-info.java.template</file>
+							<outputFile>src/main/java/org/jdbdt/package-info.java</outputFile>
+						</configuration>
+					</execution>
+					<execution>
+						<id>index-of-site</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+						<configuration>
+							<file>src/site/markdown/index.md.template</file>
+							<outputFile>src/site/markdown/index.md</outputFile>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
