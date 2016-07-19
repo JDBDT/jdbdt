@@ -79,8 +79,10 @@ final class DBAssert {
    * @param expected Expected data.
    * @param actual Actual data.
    * @throws DBAssertionError If the assertion fails.
+   * @throws InvalidOperationException If the arguments are invalid. 
    */
   static void dataSetAssertion(CallInfo callInfo, DataSet expected, DataSet actual) {
+    validateDataSetAssertion(expected, actual);
     final Delta delta = new Delta(expected, actual); 
     final DataSetAssertion assertion = 
       new DataSetAssertion(expected, delta);
@@ -90,12 +92,25 @@ final class DBAssert {
     }
   }
 
+  @SuppressWarnings("javadoc")
+  private static void
+  validateDataSetAssertion(DataSet expected, DataSet actual) {
+    if (expected == null) {
+      throw new InvalidOperationException("Null argument for 'old' data set.");
+    }
+    if (actual == null) {
+      throw new InvalidOperationException("Null argument for 'new' data set.");
+    }
+    if (expected.getSource() != actual.getSource()) {
+      throw new InvalidOperationException("Data source mismatch between data sets.");
+    }
+  }
+  
   /**
-   * Private constructor, to prevent instantiation.
+   * Private constructor to prevent instantiation.
    */
   private DBAssert() {
     
   }
 
-  
 }
