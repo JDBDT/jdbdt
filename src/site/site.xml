@@ -24,6 +24,7 @@
       <item name="Inception" href="Inception.html"/>
     </menu>
     <menu name="Reference">
+      <item name="Tutorial" href="Tutorial.html"/>
       <item name="Javadoc" href="apidocs/index.html"/>
       <item name="API facade" href="Facade.html"/>
       <item name="Database handles" href="DB.html"/>
