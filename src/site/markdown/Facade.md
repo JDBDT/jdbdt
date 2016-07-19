@@ -7,6 +7,7 @@ providing the core interface methods for database setup, verification,
 and API object creation. 
 
 ## Static import
+<a name="StaticImport"></a>
 
 The following static import 
 may be convenient to refer to the API methods concisely.
