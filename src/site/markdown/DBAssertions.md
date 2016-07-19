@@ -183,9 +183,10 @@ It is performed using the `assertEquals` method.
 	// Assert that all data is returned.
 	DataSet expected = initialData; 
 	List<User> listOfUsers = letTheSUTQueryAllUsers( ... );
-	DataSet actual = data(t, conv).rows(listOfUsers),
+	Conversion<User> conv = ...;
+	DataSet actual = data(t, conv).rows(listOfUsers);
 	assertEquals(expected, actual);
 	
 
-*Note for JUnit users*: beware not to confuse `assertEquals` with the [JUnit](http://junit.org) method that goes by the same name. The JUnit variant will not work, since `DataSet` (deliberately) does *not* override `equals`. All will go well if you use [a static import for all methods in the JDBDT facade](Facade.html#StaticImport).
+**Note for JUnit users**: beware not to confuse `assertEquals` with [JUnit](http://junit.org) methods that go by the same name. JUnit's `assertEquals` will not work properly, since `DataSet` (deliberately) does *not* override `Object.equals`. All will go well if you use [a static import for all methods in the JDBDT facade](Facade.html#StaticImport).
 

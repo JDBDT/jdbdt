@@ -21,7 +21,7 @@ save-points.
 
 ## Installation 
 
-**Pre-requisite:** JDBDT can be used with Java 8, it will not work 
+**Pre-requisite:** JDBDT requires Java 8, it will not work 
 with earlier Java versions. 
 
 JDBDT is available from Maven Central.
