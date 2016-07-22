@@ -377,8 +377,9 @@ final class Log {
       XML_TRANSFORMER.setOutputProperty(OutputKeys.METHOD, "xml");
       XML_TRANSFORMER.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
       XML_TRANSFORMER.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-      XML_TRANSFORMER.setOutputProperty(OutputKeys.STANDALONE, "yes");
+      XML_TRANSFORMER.setOutputProperty(OutputKeys.STANDALONE, "no");
       XML_TRANSFORMER.setOutputProperty(OutputKeys.VERSION, "1.0");
+      XML_TRANSFORMER.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
     } catch (ParserConfigurationException | TransformerConfigurationException
         | TransformerFactoryConfigurationError e) {
       throw new InternalAPIError(e);
