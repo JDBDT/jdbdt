@@ -16,7 +16,8 @@ The code is organized as a Maven project. It comprises the following 4 artifacts
 (`src/main/resources/tableCreation.sql`).	
 2. `User`, a POJO class to store user data (`src/main/java/org/jdbdt/tutorial/User.java`)
 3. `UserDAO`,  a data-access object (DAO) class for user data (`src/main/java/org/jdbdt/tutorial/UserDAO.java`);
-4. `UserDAOTest`, a JUnit class containing tests for `UserDAO`, that makes use of JDBDT (`src/test/java/org/jdbdt/tutorial/UserDAOTest.java`)
+4. `UserDAOTest`, a JUnit class containing tests for `UserDAO`, making use of JDBDT (`src/test/java/org/jdbdt/tutorial/UserDAOTest.java`).
+This class will be our point of interest.
 
 ## Test subject
 
@@ -27,15 +28,20 @@ a glimpse of the remaining ones (1-3 above).
 
 The `USERS` table represents user data in the form of a numeric id, a login, a name,
 a password, a role, and a creation date. The code for table creation below should be 
-self-explanatory. It is just worth remarking that we'd be better off in database design terms if we used a reference table for user roles instead of the `ROLE` field as it is below.
+self-explanatory.  A sequence or identity column setting could be associated to the `ID` column, but 
+we keep the example as simple as possible to ensure the script runs for different database engines.
+Also, a reference table (for a better design style) for roles or an enum type (as supported by some engines) 
+could be used in association to the `ROLE` field.
 
-	CREATE TABLE IF NOT EXISTS USERS 
+	CREATE TABLE USERS 
 	(
-        ID INTEGER PRIMARY KEY NOT NULL,
-        LOGIN VARCHAR(10) UNIQUE NOT NULL,
-        NAME VARCHAR(40) NOT NULL,
-        PASSWORD VARCHAR(32) NOT NULL,
-        CREATED DATE
+		ID INTEGER PRIMARY KEY NOT NULL ,
+		LOGIN VARCHAR(16) UNIQUE NOT NULL,
+		NAME VARCHAR(32) NOT NULL,
+		PASSWORD VARCHAR(32) NOT NULL,
+		ROLE VARCHAR(7) DEFAULT 'REGULAR' NOT NULL
+		CHECK (ROLE IN ('ADMIN', 'REGULAR', 'GUEST')),
+		CREATED DATE
 	);
 	
 ### `User`  
@@ -54,7 +60,8 @@ for user insertion, update, removal and retrieval:
 * `deleteAllUsers()`: delete all users;
 * `getUser(id)`: get user data by id;
 * `getUser(login)`: get user data by login; 
-* `getAllUsers()`: get all users;
+* `getAllUsers()`: get a list of all users;
+* `getUsers(r)`: get a list of all users with role `r`;
 
 ## Test class
 
