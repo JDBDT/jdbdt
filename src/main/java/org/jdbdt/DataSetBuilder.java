@@ -263,13 +263,29 @@ public final class DataSetBuilder {
   }
 
   /**
-   * Set a fixed value filler for a column.
+   * Set a constant value filler for a column.
    * @param column Column name.
-   * @param value Value to use.
+   * @param constant Value of the constant .
    * @return The data set instance (for chained calls).
    */
-  public DataSetBuilder value(String column, Object value) {
-    return set(column, new ConstantFiller<Object>(value)); 
+  public DataSetBuilder value(String column, Object constant) {
+    return set(column, new ConstantFiller<Object>(constant)); 
+  }
+  
+  /**
+   * Set a constant enum value for a column, converting the enumeration constant to a string.
+   * 
+   * <p>
+   * A call to this method is shorthand for <code>value(column, enumConstant.toString())</code>.
+   * </p>
+   * 
+   * @param <E> Enumeration type.
+   * @param column Column name.
+   * @param enumConstant Value of the constant.
+   * @return The data set instance (for chained calls).
+   */
+  public <E extends Enum<?>> DataSetBuilder value(String column, E enumConstant) {
+    return value(column, enumConstant.toString()); 
   }
 
   /**
