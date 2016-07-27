@@ -11,7 +11,7 @@ public class DerbySuite extends DBEngineTestSuite {
   public static void setup() throws ClassNotFoundException { 
     DBCfg.getConfig()
       .reset()
-      .setDriver("org.h2.Driver")
+      .setDriver("org.apache.derby.jdbc.EmbeddedDriver")
       .setURL("jdbc:derby:jdbdt-derby-test;create=true")
       .countReturnsInteger();
   }
