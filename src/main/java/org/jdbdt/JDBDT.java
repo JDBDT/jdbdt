@@ -48,7 +48,7 @@ public final class JDBDT {
   /**
    * Create a new database handle for given database URL.
    * 
-  * <p>Calling this method is shorthand for:<br/>
+  * <p>Calling this method is shorthand for:<br>
    * &nbsp;&nbsp;&nbsp;&nbsp;
    * <code>database( DriverManager.getConnection(url) )</code>.
    * </p>
@@ -67,7 +67,7 @@ public final class JDBDT {
    * Create a new database handle for given database
    * URL, user and password .
    * 
-   * <p>Calling this method is shorthand for:<br/>
+   * <p>Calling this method is shorthand for:<br>
    * &nbsp;&nbsp;&nbsp;&nbsp;
    * <code>database( DriverManager.getConnection(url, user, pass) )</code>.
    * </p>
