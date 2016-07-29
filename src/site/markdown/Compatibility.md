@@ -39,11 +39,14 @@ When using JDBDT, this may affect tests that validate invalid uses of a database
 
 The `assertXXX` method (or any other database operation for that matter) may fail with the following message
 	
-	org.postgresql.util.PSQLException: ERROR: current transaction is aborted, commands 	ignored until end of transaction block 
+	org.postgresql.util.PSQLException: 
+	   ERROR: current transaction is aborted, commands ignored until 
+	          end of transaction block 
 
 The workaround is to issue a rollback statement (before `assertXXX` in the snippet above). This may be less than perfect if you're using [JDBDT save-points](DBSetup.html#SaveAndRestore) simultaneously.
 
 ### sqlite
+<a name="KnownIssues_sqlite"></a>
 
 * [Statement reuse should be disabled for xerial's JDBC driver for sqlite](DB.html#StatementReuse).
 * sqlite does not support `TRUNCATE` statements, hence `JDBDT.truncate` will not work.
