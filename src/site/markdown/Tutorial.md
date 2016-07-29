@@ -1,37 +1,57 @@
 # Tutorial
 
-This tutorial will help you understand how to use the essential
-features of JDBDT. 
+This tutorial helps you understand how to use the essential
+features of JDBDT.  It assumes that you are reasonably familiar with [Maven](http://maven.org) and [JUnit](http://junit.org), since that the tutorial code is organized as a Maven project (you can download), and that JUnit tests are used as illustration.
 
+**Contents**
+
+* 	[Tutorial code](Tutorial.html#TheCode)
+	*	[Getting the code](Tutorial.html#TheCode_GetIt)
+	*	[Maven project overview](Tutorial.html#TheCode_MavenProject)
+* 	[Test subject](Tutorial.html#TheTestSubject)
+	*	[The USERS table](Tutorial.html#TheTestSubject_Table)
+	*	[The User class](Tutorial.html#TheTestSubject_UserClass)
+	*	[The UserDAO class](Tutorial.html#TheTestSubject_UserDAOClass)
+* 	[Test code](Tutorial.html#TheTestCode)
 
 ## Tutorial code
+<a name="#TheCode"></a>
 
-To get started you may clone the tutorial code from github
+### Getting the code
+<a name="TheCode_GetIt"></a>
+
+You may clone the tutorial code from [the github repository](http://github.com/edrdo/jdbdt-tutorial):
 	
 	git clone git@github.com:edrdo/jdbdt-tutorial.git
-	
-The code is organized as a Maven project. It comprises the following 4 artifacts:
 
-1. A simple database defined a single table called `USERS`
-(`src/main/resources/tableCreation.sql`).	
+### Maven project overview
+<a name="TheCode_MavenProject"></a>
+
+The code is organized as a Maven project, that comprises the following artifacts:
+
+1. A simple database containing a single table called `USERS`
+(in `src/main/resources/tableCreation.sql`).	
 2. `User`, a POJO class to store user data (`src/main/java/org/jdbdt/tutorial/User.java`)
 3. `UserDAO`,  a data-access object (DAO) class for user data (`src/main/java/org/jdbdt/tutorial/UserDAO.java`);
-4. `UserDAOTest`, a JUnit class containing tests for `UserDAO`, making use of JDBDT (`src/test/java/org/jdbdt/tutorial/UserDAOTest.java`).
-This class will be our point of interest.
+4. `UserDAOTest`, a class containing JUnit tests for `UserDAO`, making use of JDBDT (`src/test/java/org/jdbdt/tutorial/UserDAOTest.java`).
+This class will be our main point of interest.
+5. Subclasses of `UserDAOTest`, that merely configure the database driver to use.
+There are three such classes `DerbyTest`, `H2Test`, `HSQLDBTest` in `src/test/java/org/jdbdt/tutorial`. As their name indicates, they make use of JDBC drivers for [Apache Derby](http://db.apache.org/derby), [H2](http://h2database.com), and [HSQLDB](http://hsqldb.org).
 
-## Test subject
+## The test subject
+<a name="TheTestSubject"></a>
 
-Throughout this tutorial we will mostly focus on `UserDAOTest`, the last item (item 4 above), since this is where the JDBDT functionality is used. But first let us provide
-a glimpse of the remaining ones (1-3 above).
+The SUT of the tutorial is a `UserDAO` class. Objects of this kind 
+works as a data-access object for a database table called `USERS`,
+whose Java representation is defined by the POJO `User` class. 
+We describe these items below.
 
-### `USERS` table 
+### The `USERS` table 
+<a name="TheTestSubject_Table"></a>
 
 The `USERS` table represents user data in the form of a numeric id, a login, a name,
 a password, a role, and a creation date. The code for table creation below should be 
-self-explanatory.  A sequence or identity column setting could be associated to the `ID` column, but 
-we keep the example as simple as possible to ensure the script runs for different database engines.
-Also, a reference table (for a better design style) for roles or an enum type (as supported by some engines) 
-could be used in association to the `ROLE` field.
+self-explanatory.  A sequence or identity column setting could be associated to the `ID` column, but we keep the example as simple as possible and ensure the model runs for different database engines. Likewise, for `ROLE`, a reference table or an `ENUM` type (as supported by some engines) could be used alternatively.
 
 	CREATE TABLE USERS 
 	(
@@ -40,18 +60,21 @@ could be used in association to the `ROLE` field.
 		NAME VARCHAR(32) NOT NULL,
 		PASSWORD VARCHAR(32) NOT NULL,
 		ROLE VARCHAR(7) DEFAULT 'REGULAR' NOT NULL
-		CHECK (ROLE IN ('ADMIN', 'REGULAR', 'GUEST')),
+		  CHECK (ROLE IN ('ADMIN', 'REGULAR', 'GUEST')),
 		CREATED DATE
-	);
+	)
 	
-### `User`  
+### The `User` class
+<a name="TheTestSubject_UserClass"></a>
 
-The `User` class defines getter and setter methods (e.g., `getId()`, `setId`) for each of the user attributes. Plus, it overrides a number of `java.lang.Object` methods for convenience of use in test code (e.g., `equals`). 
+The `User` class is a POJO class with getter and setter methods for each of the user attributes (e.g., `getId()`, `setId`). Additionally, it overrides a number of `java.lang.Object` methods for convenience of use in test code (e.g., `equals`). 
 
-### `UserDAO` 
+### The `UserDAO` class
+
+<a name="TheTestSubject_UserDAOClass"></a>
 
 The `UserDAO` class defines methods for interfacing with the `USERS` table 
-using `User` instances. The methods are correspondence to elementary database operations
+using `User` objects. The methods are correspondence to database operations
 for user insertion, update, removal and retrieval:
 
 * `insertUser(u)`: inserts a new user;
