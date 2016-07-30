@@ -8,6 +8,7 @@ features of JDBDT.  It assumes that you are reasonably familiar with [Maven](htt
 * 	[Tutorial code](Tutorial.html#TheCode)
 	*	[Getting the code](Tutorial.html#TheCode_GetIt)
 	*	[Maven project overview](Tutorial.html#TheCode_MavenProject)
+	*   [Running the tests](Tutorial.html#TheCode_RunningTheTests)
 * 	[Test subject](Tutorial.html#TheTestSubject)
 	*	[The USERS table](Tutorial.html#TheTestSubject_Table)
 	*	[The User class](Tutorial.html#TheTestSubject_UserClass)
@@ -27,7 +28,7 @@ You may clone the tutorial code from [the github repository](http://github.com/e
 ### Maven project overview
 <a name="TheCode_MavenProject"></a>
 
-The code is organized as a Maven project, that comprises the following artifacts:
+The code is organized as a Maven project that comprises the following artifacts:
 
 1. A simple database containing a single table called `USERS`
 (in `src/main/resources/tableCreation.sql`).	
@@ -36,15 +37,22 @@ The code is organized as a Maven project, that comprises the following artifacts
 4. `UserDAOTest`, a class containing JUnit tests for `UserDAO`, making use of JDBDT (`src/test/java/org/jdbdt/tutorial/UserDAOTest.java`).
 This class will be our main point of interest.
 5. Subclasses of `UserDAOTest`, that merely configure the database driver to use.
-There are three such classes `DerbyTest`, `H2Test`, `HSQLDBTest` in `src/test/java/org/jdbdt/tutorial`. As their name indicates, they make use of JDBC drivers for [Apache Derby](http://db.apache.org/derby), [H2](http://h2database.com), and [HSQLDB](http://hsqldb.org).
+There are three such classes `DerbyTest`, `H2Test`, `HSQLDBTest` in `src/test/java/org/jdbdt/tutorial`. As their name indicates, they make use of JDBC drivers for [Apache Derby](http://db.apache.org/derby), [H2](http://h2database.com), and [HSQLDB](http://hsqldb.org). These test classes are grouped in the `AllTests` JUnit test suite class in the same directory.
+
+### Running the tests
+<a name="TheCode_RunningTheTests"></a>
+
+Run `mvn test` from the command line to execute the `AllTests` suite. 
+Otherwise, import the project using a Maven-compatible IDE. In particular, 
+[Eclipse](http://eclipse.org) users will find that a `.project` file is already part of the repository ([M2Eclipse plugin required](http://www.eclipse.org/m2e/)).
 
 ## The test subject
 <a name="TheTestSubject"></a>
 
 The SUT of the tutorial is a `UserDAO` class. Objects of this kind 
 works as a data-access object for a database table called `USERS`,
-whose Java representation is defined by the POJO `User` class. 
-We describe these items below.
+whose Java representation is given by the POJO `User` class. 
+These items are described below.
 
 ### The `USERS` table 
 <a name="TheTestSubject_Table"></a>
@@ -86,7 +94,13 @@ for user insertion, update, removal and retrieval:
 * `getAllUsers()`: get a list of all users;
 * `getUsers(r)`: get a list of all users with role `r`;
 
-## Test class
+## Test code
 
-TODO
+### Database setup and teardown
+
+### Test setup and teardown using save-points
+
+### Tests and assertions
+
+ 
 
