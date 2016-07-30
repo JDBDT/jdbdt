@@ -37,7 +37,7 @@ When using JDBDT, this may affect tests that validate invalid uses of a database
 	  }
 	}
 
-The `assertXXX` method (or any other database operation for that matter) may fail with the following message
+The `assertXXX` method above (or any other code that issues a database statement)  that will fail with the following message
 	
 	org.postgresql.util.PSQLException: 
 	   ERROR: current transaction is aborted, commands ignored until 
