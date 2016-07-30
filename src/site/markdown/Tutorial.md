@@ -42,9 +42,8 @@ There are three such classes `DerbyTest`, `H2Test`, `HSQLDBTest` in `src/test/ja
 ### Running the tests
 <a name="TheCode_RunningTheTests"></a>
 
-Run `mvn test` from the command line to execute the `AllTests` suite. 
-Otherwise, import the project using a Maven-compatible IDE. In particular, 
-[Eclipse](http://eclipse.org) users will find that a `.project` file is already part of the repository ([M2Eclipse plugin required](http://www.eclipse.org/m2e/)).
+Run `mvn test` from the command line in the root folder to execute the `AllTests` suite.  Otherwise, import the project using a Maven-compatible IDE.  
+[Eclipse](http://eclipse.org) users will find that a `.project` file is already in the root folder ([M2Eclipse plugin required](http://www.eclipse.org/m2e/)).
 
 ## The test subject
 <a name="TheTestSubject"></a>
@@ -57,9 +56,7 @@ These items are described below.
 ### The `USERS` table 
 <a name="TheTestSubject_Table"></a>
 
-The `USERS` table represents user data in the form of a numeric id, a login, a name,
-a password, a role, and a creation date. The code for table creation below should be 
-self-explanatory.  A sequence or identity column setting could be associated to the `ID` column, but we keep the example as simple as possible and ensure the model runs for different database engines. Likewise, for `ROLE`, a reference table or an `ENUM` type (as supported by some engines) could be used alternatively.
+The `USERS` table represents user data in the form of a numeric id (primary key), a unique login, a name, a password, a role, and a creation date. The code for table creation below should be self-explanatory.  A sequence or identity column setting could be associated to the `ID` column, but we keep the example as simple as possible to ensure portability for different database engines. Likewise, for `ROLE`, a reference table or an `ENUM` type (as supported by some engines) could be used alternatively.
 
 	CREATE TABLE USERS 
 	(
