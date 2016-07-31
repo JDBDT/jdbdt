@@ -14,8 +14,8 @@ features of JDBDT.  It assumes that you are reasonably familiar with [Maven](htt
 	*	[The User class](Tutorial.html#TheTestSubject.UserClass)
 	*	[The UserDAO class](Tutorial.html#TheTestSubject.UserDAOClass)
 * 	[Test code](Tutorial.html#TheTestCode)
-	*	[Dababase setup](Tutorial.html#TheTestCode.DBSetup")
-	*	[Dababase teardown](Tutorial.html#TheTestCode.DBTeardown")
+	*	[Dababase setup](Tutorial.html#TheTestCode.DBSetup)
+	*	[Dababase teardown](Tutorial.html#TheTestCode.DBTeardown)
 	
 ## Tutorial code
 <a name="#TheCode"></a>
