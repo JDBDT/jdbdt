@@ -68,11 +68,11 @@ The `USERS` table represents user data in the form of a numeric id (primary key)
 	(
 		ID INTEGER PRIMARY KEY NOT NULL ,
 		LOGIN VARCHAR(16) UNIQUE NOT NULL,
-		NAME VARCHAR(32) NOT NULL,
+		NAME VARCHAR(32),
 		PASSWORD VARCHAR(32) NOT NULL,
 		ROLE VARCHAR(7) DEFAULT 'REGULAR' NOT NULL
 		  CHECK (ROLE IN ('ADMIN', 'REGULAR', 'GUEST')),
-		CREATED DATE
+		CREATED DATE NOT NULL
 	)
 	
 ### The `User` class
@@ -171,16 +171,15 @@ that proceeds in the following steps:
                        
 - ... plus, finally, the [data set](DataSets.html) for the initial contents of the database. The strategy in this case is to use a [data set builder](DataSets.html#Creation.Builder). 
 We populate the database with 1 `ADMIN` user, 3 `REGULAR` users, and 2 `GUEST`
-users. The data set builder facilities allow for a succinct definition of the data.
-
+users. The data set builder facilities allow for a succinct definition of the data, which is as follows:
 
     // Define data set for populating the database
     theInitialData
       =  builder(theTable)
         .sequence("ID", 0)
-        .sequence("PASSWORD", i -> "pass" + i)
         .value("LOGIN", "root")
-        .value("NAME", "Root user")
+        .sequence("PASSWORD", i -> "pass" + i)
+        .nullValue("NAME")
         .value("CREATED", FIXED_DATE)
         .value("ROLE", ADMIN)
         .generate(1)
@@ -188,11 +187,158 @@ users. The data set builder facilities allow for a succinct definition of the da
         .sequence("NAME",  "Alice", "Bob", "Charles")
         .value("ROLE", REGULAR)
         .generate(3)
-        .sequence("LOGIN", i -> "guest" + i)
-        .sequence("NAME",  i -> "Guest User " + i)
+        .sequence("LOGIN", i -> "guest" + i, 1)
+        .sequence("NAME",  i -> "Guest User " + i, 1)
         .value("ROLE", GUEST)
         .generate(2)
         .data();
+      // debug(theInitialData, System.err);
+
+Uncomment the last statement above, a call to `debug`, if you wish to see some [debug output](Logs.html) sent to `System.err` describing the data set. The following table summarizes the created entries (note that `FIXED_DATE` equals `2016-01-01`):
+
+<table border="1">
+	<tr>
+		<th align="left">
+			<code>ID</code>
+		</th>
+		<th align="left">
+		  	<code>LOGIN</code>
+		</th>
+	    <th align="left">
+		  	<code>NAME</code>
+		</th>
+		<th align="left">
+		  	<code>PASSWORD</code>
+		</th>
+		<th align="left">
+		  	<code>ROLE</code>
+		</th>
+		<th align="left">
+		  	<code>CREATED</code>
+		</th>
+	</tr>
+	<tr>
+		<td align="left">
+			<code>0</code>
+		</td>
+		<td align="left">
+		  	<code>root</code>
+		</td>
+	    <td align="left">
+		  	<code>NULL</code>
+		</td>
+		<td align="left">
+		  	<code>pass0</code>
+		</td>
+		<td align="left">
+		  	<code>ADMIN</code>
+		</td>
+		<td align="left">
+		  	<code>2016-01-01</code>
+		</td>
+	</tr>
+	<tr>
+		<td align="left">
+			<code>1</code>
+		</td>
+		<td align="left">
+		  	<code>harry</code>
+		</td>
+	    <td align="left">
+		  	<code>Harry</code>
+		</td>
+		<td align="left">
+		  	<code>pass1</code>
+		</td>
+		<td align="left">
+		  	<code>REGULAR</code>
+		</td>
+		<td align="left">
+		  	<code>2016-01-01</code>
+		</td>
+	</tr>
+	<tr>
+		<td align="left">
+			<code>2</code>
+		</td>
+		<td align="left">
+		  	<code>mark</code>
+		</td>
+	    <td align="left">
+		  	<code>Mark</code>
+		</td>
+		<td align="left">
+		  	<code>pass2</code>
+		</td>
+		<td align="left">
+		  	<code>REGULAR</code>
+		</td>
+		<td align="left">
+		  	<code>2016-01-01</code>
+		</td>
+	</tr>
+	<tr>
+		<td align="left">
+			<code>3</code>
+		</td>
+		<td align="left">
+		  	<code>john</code>
+		</td>
+	    <td align="left">
+		  	<code>John</code>
+		</td>
+		<td align="left">
+		  	<code>pass3</code>
+		</td>
+		<td align="left">
+		  	<code>REGULAR</code>
+		</td>
+		<td align="left">
+		  	<code>2016-01-01</code>
+		</td>
+	</tr>
+	<tr>
+		<td align="left">
+			<code>4</code>
+		</td>
+		<td align="left">
+		  	<code>guest1</code>
+		</td>
+	    <td align="left">
+		  	<code>Guest User 1</code>
+		</td>
+		<td align="left">
+		  	<code>pass4</code>
+		</td>
+		<td align="left">
+		  	<code>GUEST</code>
+		</td>
+		<td align="left">
+		  	<code>2016-01-01</code>
+		</td>
+	</tr>
+	<tr>
+		<td align="left">
+			<code>5</code>
+		</td>
+		<td align="left">
+		  	<code>guest2</code>
+		</td>
+	    <td align="left">
+		  	<code>Guest User 2</code>
+		</td>
+		<td align="left">
+		  	<code>pass5</code>
+		</td>
+		<td align="left">
+		  	<code>GUEST</code>
+		</td>
+		<td align="left">
+		  	<code>2016-01-01</code>
+		</td>
+	</tr>
+</table>
+
 
 - The data set of the previous set is used to [populate](DBSetup.html#Insert) the database table.
   
