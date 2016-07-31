@@ -5,8 +5,6 @@ testing database applications, helping you write tests
 that include database setup and verification.
 The main features are as follows:
 
-* The entire functionality is exposed by a "minimalistic" 
-[API facade](Facade.html).
 * [Data sets](DataSets.html) are defined programmatically, and can be used
 for database [setup](DBSetup.html) or [verification](DBAssertions.html). Thus data sets 
 are an integral part of test specifications, 
@@ -17,6 +15,8 @@ assertions for database state or data set comparison.
 * [Setup](DBSetup.html) methods can be used to manage the contents of database
 tables, including insertions, clean-up operations, and 
 save-points.
+* The entire functionality is exposed by a "minimalistic" 
+[API facade](Facade.html).
 
 
 ## Installation 
