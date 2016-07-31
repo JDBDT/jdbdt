@@ -63,10 +63,9 @@ checks if the database delta is `(oldData,newData)`, as follows:
 1. It issues a new database query for `s`.
 2. It computes the actual delta between the query's result and the reference snapshot.
 3. It verifies if the expected and actual deltas match. If they do not match, `DBAssertionError`
-is thrown, and details on mismatched data are logged (unless `DB.Option.LogAssertionErrors` is disabled). 
+is thrown. Details on mismatched data are additionally logged, unless the `DB.Option.LogAssertionErrors` [option is disabled](Db.html#Logging). 
 
-A number of other assertion methods are defined for convenience, all of which internally reduce 
-to `assertDelta`, as follows:
+A number of other assertion methods are defined for convenience, all of which internally reduce to `assertDelta`, as follows:
 
 <table border="1">
 	<tr>
@@ -106,7 +105,12 @@ to `assertDelta`, as follows:
 	DB db = ... ;
 	Table t = table(db, "USER")
 	          .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
-	...        
+	...   
+    // Assert that no changes took place.
+	... define snapshot with populate or takeSnapshot ...
+	letTheSUT_doNoChangesToDB();
+	assertUnchanged(t);   
+	  
 	// Assert an insertion
 	... define snapshot with populate or takeSnapshot ...
 	letTheSUT_insertOneUser( ... ); 
@@ -124,11 +128,6 @@ to `assertDelta`, as follows:
 	letTheSUT_updatePassword(999, "dontDoeIt")
 	assertDelta(before, after);
 	
-	// Assert that no changes took place.
-	... define snapshot with populate or takeSnapshot ...
-	letTheSUT_doNoChangesToDB();
-	assertUnchanged(t);
-	
 	
 ## State assertions
 
@@ -138,13 +137,14 @@ An `assertState([msg,] data)` call verifies that the data stored in
 the database for `data.getSource()` is (exactly) `data` as follows:
 
 1. It issues a new database query for `data.getSource()`.
-2. It verifies if the obtained data matches the expected `data`. If they do not match, `DBAssertionError`
-is thrown, and details on mismatched data are logged (unless `DB.Option.LogAssertionErrors` is disabled). 
+2. It verifies if the obtained data matches the expected `data`. 
+If they do not match, as for delta assertions, `DBAssertionError`.
+is thrown and details on mismatched data are logged.
 
 Note that no reference snapshot needs to be set for a state assertion, unlike &delta;-assertions.
 
 An `assertEmpty([msg,], source)` call is equivalent to `assertState([msg,], empty(source))`, i.e.,
-it verifies that the given data source has no rows.
+it verifies that the given data source has no defined rows.
 
 *Illustration*
 
