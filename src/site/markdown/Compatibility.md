@@ -37,13 +37,13 @@ When using JDBDT, this may affect tests that validate invalid uses of a database
 	  }
 	}
 
-The `assertXXX` method above (or any other code that issues a database statement)  that will fail with the following message
+The `assertXXX` JDBDT assertion above (or any other code that issues a database statement for that matter) will fail with the following message
 	
 	org.postgresql.util.PSQLException: 
 	   ERROR: current transaction is aborted, commands ignored until 
 	          end of transaction block 
 
-The workaround is to issue a rollback statement (before `assertXXX` in the snippet above). This may be less than perfect if you're using [JDBDT save-points](DBSetup.html#SaveAndRestore) simultaneously.
+A possible workaround is to issue a rollback statement before any further operations, i.e., before `assertXXX` in the example snippet above.
 
 ### sqlite
 <a name="KnownIssues_sqlite"></a>
