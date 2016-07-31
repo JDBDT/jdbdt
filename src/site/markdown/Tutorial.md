@@ -16,6 +16,7 @@ features of JDBDT.  It assumes that you are reasonably familiar with [Maven](htt
 * 	[Test code](Tutorial.html#TheTestCode)
 	*	[Dababase setup](Tutorial.html#TheTestCode.DBSetup)
 	*	[Dababase teardown](Tutorial.html#TheTestCode.DBTeardown)
+	*	[Per-test setup and teardown](Tutorial.html#TheTestCode.PerTestSetupAndTeardown)
 	
 ## Tutorial code
 <a name="#TheCode"></a>
@@ -222,9 +223,35 @@ resources.
 The `truncate(theTable)` statement [truncates](DBSetup.html#Clean) the `USERS` table.
 Then `teardown(theDB, true)` frees up any internal resources used by the [database handle](DB.html) and closes the database connection.
 
-### Test setup and teardown using save-points
-<a name="TestCode.TestSetup"></a>
+### Per-test setup and teardown
+<a name="TheTestCode.PerTestSetupAndTeardown"></a>
 
+In `UserDAOTest` the `saveState` and `restoreState` methods are executed respectively before and
+after each test; observe the `@Before` and `@After` JUnit annotations in each method below.
+Their purpose is to make sure each test starts with the same initial database setup
+([described earlier](Tutorial.html#TheTestCode.DBSetup)), 
+making use of [JDBDT save-points](DBSetup.html#SaveAndRestore).
+
+    @Before
+    public void saveState() {
+      // Set save point
+      save(theDB);
+    }
+  
+    @After
+    public void restoreState() {
+      // Restore state to save point
+      restore(theDB);
+    }
+
+The `save(theDB)` method creates a database save-point, i.e., it begins
+a database transaction. In symmetry, `restore(theDB)` rolls back any database
+changes made by the current transaction to the JDBDT save point. 
+
+This organization relies on disabling auto-commit for the database, 
+as [described](Tutorial.html#TheTestCode.DBSetup) for `globalSetup`. 
+Note also that, for portability reasons, only one save-point is maintained per database handle and 
+that there must be exactly one call to `restore` per each call to `save`.
 
 ### Tests and assertions
 
