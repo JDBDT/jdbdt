@@ -49,7 +49,7 @@ In the command line, go to the root folder of the project, and type `mvn test`.
 This will execute the `AllTests` suite.  
 
 Otherwise, import the project using a Maven-compatible IDE.  
-[Eclipse](http://eclipse.org) users will find that a `.project` file is already in the root folder ([M2Eclipse plugin required](http://www.eclipse.org/m2e/)).
+[Eclipse](http://eclipse.org) users will find that a `.project` file is already in the root folder (will work with [m2e plugin](http://www.eclipse.org/m2e/)).
 
 ## The test subject
 <a name="TheTestSubject"></a>
