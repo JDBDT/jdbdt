@@ -143,58 +143,58 @@ that proceeds in the following steps:
 
 - We first ensure that the JDBC driver class is loaded.
 
-    // Load JDBC driver class
-    Class.forName(jdbcDriverClass);
+		// Load JDBC driver class
+		Class.forName(jdbcDriverClass);
     
 - The JDBDT [database handle](DB.html) is then created.
    
-    // Create database handle
-    theDB = database(databaseURL);
+		// Create database handle
+		theDB = database(databaseURL);
  
 - So is the `UserDAO` instance, our SUT, along with the `USERS` table
 (JDBDT provides no facilities to create the table itself) ...
    
-    // Create DAO and in turn let it create USERS table 
-    theDAO = new UserDAO(theDB.getConnection());
-    theDAO.createTable();
+		// Create DAO and in turn let it create USERS table 
+		theDAO = new UserDAO(theDB.getConnection());
+		theDAO.createTable();
 
 - ... and a JDBDT `Table` [data source](DataSources.html) for the `USERS` table. 
    
-    // Create table data source.
-    theTable = table(theDB, "USERS")
-              .columns("ID",
-                       "LOGIN", 
-                       "NAME", 
-                       "PASSWORD",
-                       "ROLE",
-                       "CREATED" );
+    	// Create table data source.
+    	theTable = table(theDB, "USERS")
+                  .columns("ID",
+                           "LOGIN", 
+                           "NAME", 
+                           "PASSWORD",
+                           "ROLE",
+                           "CREATED" );
                        
 - ... plus, finally, the [data set](DataSets.html) for the initial contents of the database. The strategy in this case is to use a [data set builder](DataSets.html#Creation.Builder). 
 We populate the database with 1 `ADMIN` user, 3 `REGULAR` users, and 2 `GUEST`
 users. The data set builder facilities allow for a succinct definition of the data, which is as follows:
 
-    // Define data set for populating the database
-    theInitialData
-      =  builder(theTable)
-        .sequence("ID", 0)
-        .value("LOGIN", "root")
-        .sequence("PASSWORD", i -> "pass" + i)
-        .nullValue("NAME")
-        .value("CREATED", FIXED_DATE)
-        .value("ROLE", ADMIN)
-        .generate(1)
-        .sequence("LOGIN", "alice", "bob", "charles")
-        .sequence("NAME",  "Alice", "Bob", "Charles")
-        .value("ROLE", REGULAR)
-        .generate(3)
-        .sequence("LOGIN", i -> "guest" + i, 1)
-        .sequence("NAME",  i -> "Guest User " + i, 1)
-        .value("ROLE", GUEST)
-        .generate(2)
-        .data();
-      // debug(theInitialData, System.err);
+		// Define data set for populating the database
+		theInitialData
+		  =  builder(theTable)
+		    .sequence("ID", 0)
+            .value("LOGIN", "root")
+            .sequence("PASSWORD", i -> "pass" + i)
+            .nullValue("NAME")
+            .value("CREATED", FIXED_DATE)
+            .value("ROLE", ADMIN)
+            .generate(1)
+            .sequence("LOGIN", "alice", "bob", "charles")
+            .sequence("NAME",  "Alice", "Bob", "Charles")
+            .value("ROLE", REGULAR)
+            .generate(3)
+            .sequence("LOGIN", i -> "guest" + i, 1)
+            .sequence("NAME",  i -> "Guest User " + i, 1)
+            .value("ROLE", GUEST)
+            .generate(2)
+            .data();
+		// debug(theInitialData, System.err);
 
-Uncomment the last statement above, a call to `debug`, if you wish to see some [debug output](Logs.html) sent to `System.err` describing the data set. The following table summarizes the created entries (note that `FIXED_DATE` equals `2016-01-01`):
+Uncomment the last statement above, the call to `debug`, if you wish to see some [debug output](Logs.html) sent to `System.err` describing the data set. The following table summarizes the created entries (note that `FIXED_DATE` equals `2016-01-01`):
 
 <table border="1">
 	<tr>
@@ -342,15 +342,14 @@ Uncomment the last statement above, a call to `debug`, if you wish to see some [
 
 - The data set of the previous set is used to [populate](DBSetup.html#Insert) the database table.
   
-    // Populate database using the built data set
-    populate(theInitialData);
+		// Populate database using the built data set
+    	populate(theInitialData);
 
 - The final step is to disable auto-commit for the JDBC connection,
-since we will make use of [JDBDT save-points](DBSetup.html#SaveAndRestore), 
-discussed below. 
+a pre-requisite for using JDBDT save-points, that are discussed [later](Tutorial.html#TheTestCode.PerTestSetupAndTeardown). 
 
-    // Set auto-commit off (to allow for save-points)
-    theDB.getConnection().setAutoCommit(false);
+		// Set auto-commit off (to allow for save-points)
+    	theDB.getConnection().setAutoCommit(false);
 
 ### Database teardown
 <a name="TheTestCode.DBTeardown"></a>
@@ -390,11 +389,10 @@ making use of [JDBDT save-points](DBSetup.html#SaveAndRestore).
       restore(theDB);
     }
 
-The `save(theDB)` method creates a database save-point, i.e., it begins
-a database transaction. In symmetry, `restore(theDB)` rolls back any database
+The `save(theDB)` call creates a database save-point, beginning
+a new database transaction. In symmetry, the `restore(theDB)` call rolls back any database
 changes made by the current transaction to the JDBDT save point. 
-
-This organization relies on disabling auto-commit for the database, 
+This setup relies on disabling auto-commit for the database, 
 as [described](Tutorial.html#TheTestCode.DBSetup) for `globalSetup`. 
 Note also that, for portability reasons, only one save-point is maintained per database handle and 
 that there must be exactly one call to `restore` per each call to `save`.
