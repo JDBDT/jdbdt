@@ -13,10 +13,15 @@ features of JDBDT.  It assumes that you are reasonably familiar with [Maven](htt
 	*	[The USERS table](Tutorial.html#TheTestSubject.Table)
 	*	[The User class](Tutorial.html#TheTestSubject.UserClass)
 	*	[The UserDAO class](Tutorial.html#TheTestSubject.UserDAOClass)
-* 	[Test code](Tutorial.html#TheTestCode)
-	*	[Dababase setup](Tutorial.html#TheTestCode.DBSetup)
-	*	[Dababase teardown](Tutorial.html#TheTestCode.DBTeardown)
+* 	[Database setup using JDBDT](Tutorial.html#TheTestCode)
+	*	[Initial database setup](Tutorial.html#TheTestCode.DBSetup)
+	*	[Final teardown](Tutorial.html#TheTestCode.DBTeardown)
 	*	[Per-test setup and teardown](Tutorial.html#TheTestCode.PerTestSetupAndTeardown)
+*	[Database validation using JDBDT assertions](Tutorial.html#DBValidation)
+	* 	[Delta assertions](Tutorial.html#DBValidation.DeltaAssertions)
+	* 	[State assertions](Tutorial.html#DBValidation.StateAssertions)
+	* 	[Plain data set assertions](Tutorial.html#DBValidation.DataSetAssertions)
+
 	
 ## Tutorial code
 <a name="#TheCode"></a>
@@ -111,7 +116,7 @@ contents of the database. You may notice the following JDBDT imports:
 
 The static import (the very first one) relates to methods in the [JDBDT facade](Facade.html) that exposes the core JDBDT API.
 
-### Database setup 
+### Database setup
 <a name="TheTestCode.DBSetup"></a>
 
 To setup the database connection and define the initial contents of the database,
@@ -400,15 +405,15 @@ as [described before](Tutorial.html#TheTestCode.DBSetup),
 and also that `UserDAO` does not issue a database commit 
 (that would make any changes permanent and terminate the transaction started with `save(theDB)`). 
 
-### Tests and assertions
+## Database validation using JDBDT assertions
+<a name="DBValidation"></a>
 
 The tests in `UserDAOTest`, marked with the JUnit `@Test` annotation, validate the different methods
-in `UserDAO`, using [JDBDT assertion methods](DBAssertions.html) to validate database contents, and also,
-in some cases, results returned by the methods. 
+in `UserDAO`, using [JDBDT assertions](DBAssertions.html).
+These take form as [delta assertions](DBAssertions.html#DeltaAssertions), [state assertions](DBAssertions.html#StateAssertions), or [plain data set assertions](DBAssertions.html#DataSetAssertions).
 
-#### Use of typed data sets
-
-Before illustrating specific test methods, we first present a simple auxiliary method in `UserDAOTest` called `userSet`.
+Before illustrating these, we first make note of an auxiliary method in `UserDAOTest` called `toDataSet`, that is used throughout the rest of the code. It provides a shorthand to create  [a (typed) data set](DataSets.html#Creation.Typed) from a single `User` instance. 
+The conversion from `User` instances to row format is defined by the `CONVERSION` function shown.
 
     private static final Conversion<User> CONVERSION = 
       u -> new Object[] { 
@@ -420,51 +425,64 @@ Before illustrating specific test methods, we first present a simple auxiliary m
         u.getCreated()
       };
       
-    static DataSet userSet(User... users) {
-      return data(theTable, CONVERSION).rows(users);
+    static DataSet toDataSet(User u) {
+      return data(theTable, CONVERSION).row(u);
     }
-
-The method is used throughout the rest of the code, providing a shorthand to create  [typed data set](DataSets.html#Creation.Typed) from `User` instances. The data set is defined by converting `User` objects to "row format", as specified by the `CONVERSION` function. 
  
-#### Database assertions
+### Delta assertions
+<a name="DBValidation.DeltaAssertions"></a>
 
-We now illustrate actual test methods, and their use of [JDBDT database assertions](DBAssertions.html).
-These take form as delta or state assertions.
-
-As an illustration of delta assertions, consider `testNonExistingUserInsertion`:
+As an illustration of a [delta assertion](DBAssertions.html#DeltaAssertions), consider `testNonExistingUserInsertion`:
 
     @Test
     public void testNonExistingUserInsertion() throws SQLException {
       User u = nonExistingUser();
       theDAO.insertUser(u);
-      assertInserted("DB change", userSet(u));
+      assertInserted("DB change", toDataSet(u));
     }
     
 The code tests whether a new user is correctly inserted in the database via `UserDAO.insertUser`. 
-It proceeds by first calling `nonExistingUser`, an auxiliary method to creates a non-existing `User` instance. Then it calls `theDAO.insertUser(u)` to insert the user. 
-To validate the database change `assertInserted`, a [delta assertion](DBAssertions.html#DeltaAssertion) method, is used. The assertion specifies that the expected state should differ only by the addition of the new user, expressed by data set `userSet(u)` (explained below). This delta is matched against the initial [snapshot](DBAssertions.html#Snapshots) defined in the [initial setup](Tutorial.html#TheTestCode.DBSetup) of `globalSetup`, more precisely the `populate(theInitialData)` step in that method. 
+It proceeds by first calling `nonExistingUser()`, an auxiliary method to creates a `User` instance that does not correspond to any entry in the `USERS` table. 
+Then it calls `theDAO.insertUser(u)` to insert the user. 
+To validate the database change `assertInserted`, a [delta assertion](DBAssertions.html#DeltaAssertion) method, is used. The assertion specifies that the expected state should differ only by the addition of the new user, i.e., `toDataSet(u)`. A fresh database query is issued for the `USERS` table, and the delta is verified against the [database snapshot](DBAssertions.html#Snapshots) defined in the [initial setup](Tutorial.html#TheTestCode.DBSetup) of `globalSetup`, more precisely the `populate(theInitialData)` step in that method. 
 
-Now consider  `testNonExistingUserInsertionVariant`, an alternative test method with the same purpose
-as before, but making use of [state assertions](DBAssertions.html#StateAssertions),
+### State assertions
+<a name="DBValidation.StateAssertions"></a>
+
+Now consider `testNonExistingUserInsertionVariant`, an alternative test method with the same purpose as `testNonExistingUserInsertion`, but that uses a [state assertion](DBAssertions.html#StateAssertions) instead of a delta assertion:
 	
     @Test
     public void testNonExistingUserInsertionVariant() throws SQLException {
-    User u = nonExistingUser();
-    theDAO.insertUser(u);
-    DataSet expected = DataSet.join(theInitialData, userSet(u));
-    assertState("DB state", expected);
+      User u = nonExistingUser();
+      theDAO.insertUser(u);
+      DataSet expected = DataSet.join(theInitialData, toDataSet(u));
+      assertState("DB state", expected);
   }
 
-Rather than taking the database delta, `assertState` takes the data set that is expected
-to match the entire database state.
+The assertion method is `assertState`, that takes the data set that is expected
+to match the current database state. The expected data set is formed by
+`initialData`, the data set defined in `globalSetup`, joined with `toDataSet(u)`.
 
+### Plain data set assertions
+<a name="DBValidation.DataSetAssertions"></a>
 
+[Plain data set assertions](DBAssertions.html#DataSetAssertions) match the contents of two data set instances, via the `assertEquals` method
+(this should not be confused with the JUnit assertion method variants with the same name).  
+For instance, the method is used in `testGetAllUsers`:
 
+    @Test
+    public void testGetAllUsers() throws SQLException {
+      List<User> list = theDAO.getAllUsers();
+      DataSet expected = theInitialData;
+      DataSet actual = data(theTable, CONVERSION).rows(list);
+      assertEquals("User list", expected, actual);
+      assertUnchanged("No DB changes", theTable); 
+    }
+    
+*Note*: in addition to verifying the result of `getAllUsers` through `assertEquals`, the test code above also validates that `getAllUsers` caused no changes
+to the database table  through `assertUnchanged` (a delta assertion method). 
+This provides an extra guarantee on the functionality of `getAllUsers`. 
 
-
-  
-
-are used. 
 
 
 
