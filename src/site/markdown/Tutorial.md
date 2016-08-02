@@ -392,12 +392,79 @@ making use of [JDBDT save-points](DBSetup.html#SaveAndRestore).
 The `save(theDB)` call creates a database save-point, beginning
 a new database transaction. In symmetry, the `restore(theDB)` call rolls back any database
 changes made by the current transaction to the JDBDT save point. 
-This setup relies on disabling auto-commit for the database, 
-as [described](Tutorial.html#TheTestCode.DBSetup) for `globalSetup`. 
 Note also that, for portability reasons, only one save-point is maintained per database handle and 
 that there must be exactly one call to `restore` per each call to `save`.
 
+This setup relies on disabling auto-commit for the database in `globalSetup` 
+as [described before](Tutorial.html#TheTestCode.DBSetup),
+and also that `UserDAO` does not issue a database commit 
+(that would make any changes permanent and terminate the transaction started with `save(theDB)`). 
+
 ### Tests and assertions
 
+The tests in `UserDAOTest`, marked with the JUnit `@Test` annotation, validate the different methods
+in `UserDAO`, using [JDBDT assertion methods](DBAssertions.html) to validate database contents, and also,
+in some cases, results returned by the methods. 
+
+#### Use of typed data sets
+
+Before illustrating specific test methods, we first present a simple auxiliary method in `UserDAOTest` called `userSet`.
+
+    private static final Conversion<User> CONVERSION = 
+      u -> new Object[] { 
+        u.getId(), 
+        u.getLogin(), 
+        u.getName(), 
+        u.getPassword(),
+        u.getRole().toString(),
+        u.getCreated()
+      };
+      
+    static DataSet userSet(User... users) {
+      return data(theTable, CONVERSION).rows(users);
+    }
+
+The method is used throughout the rest of the code, providing a shorthand to create  [typed data set](DataSets.html#Creation.Typed) from `User` instances. The data set is defined by converting `User` objects to "row format", as specified by the `CONVERSION` function. 
  
+#### Database assertions
+
+We now illustrate actual test methods, and their use of [JDBDT database assertions](DBAssertions.html).
+These take form as delta or state assertions.
+
+As an illustration of delta assertions, consider `testNonExistingUserInsertion`:
+
+    @Test
+    public void testNonExistingUserInsertion() throws SQLException {
+      User u = nonExistingUser();
+      theDAO.insertUser(u);
+      assertInserted("DB change", userSet(u));
+    }
+    
+The code tests whether a new user is correctly inserted in the database via `UserDAO.insertUser`. 
+It proceeds by first calling `nonExistingUser`, an auxiliary method to creates a non-existing `User` instance. Then it calls `theDAO.insertUser(u)` to insert the user. 
+To validate the database change `assertInserted`, a [delta assertion](DBAssertions.html#DeltaAssertion) method, is used. The assertion specifies that the expected state should differ only by the addition of the new user, expressed by data set `userSet(u)` (explained below). This delta is matched against the initial [snapshot](DBAssertions.html#Snapshots) defined in the [initial setup](Tutorial.html#TheTestCode.DBSetup) of `globalSetup`, more precisely the `populate(theInitialData)` step in that method. 
+
+Now consider  `testNonExistingUserInsertionVariant`, an alternative test method with the same purpose
+as before, but making use of [state assertions](DBAssertions.html#StateAssertions),
+	
+    @Test
+    public void testNonExistingUserInsertionVariant() throws SQLException {
+    User u = nonExistingUser();
+    theDAO.insertUser(u);
+    DataSet expected = DataSet.join(theInitialData, userSet(u));
+    assertState("DB state", expected);
+  }
+
+Rather than taking the database delta, `assertState` takes the data set that is expected
+to match the entire database state.
+
+
+
+
+
+  
+
+are used. 
+
+
 
