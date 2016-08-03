@@ -1,18 +1,21 @@
 # Tutorial
 
 This tutorial helps you understand how to use the essential
-features of JDBDT.  It assumes that you are reasonably familiar with [Maven](http://maven.org) and [JUnit](http://junit.org), since that the tutorial code is organized as a Maven project (you can download), and that JUnit tests are used as illustration.
+features of JDBDT.  The companion code is organized as a [Maven](http://maven.org) project,
+and tests are written using [JUnit](http://junit.org). Some familiarity with Maven and JUnit 
+is assumed. 
 
 **Contents**
 
-*	[Tutorial code](Tutorial.html#TheCode)
-	*	[Getting the code](Tutorial.html#TheCode.GetIt)
+*	[Tutorial project](Tutorial.html#TheCode)
+	*	[Getting the project](Tutorial.html#TheCode.GetIt)
 	*	[Maven project overview](Tutorial.html#TheCode.MavenProject)
 	*	[Running the tests](Tutorial.html#TheCode.RunningTheTests)
 	*	[Test subject](Tutorial.html#TheCode.TheTestSubject)
 		*	[The USERS table](Tutorial.html#TheCode.TheTestSubject.Table)
 		*	[The User class](Tutorial.html#TheCode.TheTestSubject.UserClass)
 		*	[The UserDAO class](Tutorial.html#TheCode.TheTestSubject.UserDAOClass)
+
 *	[The test code / use of JDBDT ](Tutorial.html#TheTestCode)
 	*	[JDBDT import statements](Tutorial.html#TheTestCode.Imports)
 	*	[Database setup and tear-down](Tutorial.html#TheTestCode.DBSetup)
@@ -25,12 +28,12 @@ features of JDBDT.  It assumes that you are reasonably familiar with [Maven](htt
 		*	[Plain data set assertions](Tutorial.html#TheTestCode.DBValidation.DataSetAssertions)
 
 	
-## Tutorial code <a name="TheCode"></a>
+## Tutorial project <a name="TheCode"></a>
 
 
-### Getting the code <a name="TheCode.GetIt"></a>
+### Getting the project from GitHub <a name="TheCode.GetIt"></a>
 
-You may clone the tutorial code from [the github repository](http://github.com/edrdo/jdbdt-tutorial):
+You may clone the tutorial project from [its github repository](http://github.com/edrdo/jdbdt-tutorial):
 	
 	git clone git@github.com:edrdo/jdbdt-tutorial.git
 
