@@ -5,9 +5,10 @@ features of JDBDT.  The companion code is organized as a [Maven](http://maven.or
 and tests are written using [JUnit](http://junit.org). Some familiarity with Maven and JUnit 
 is assumed. 
 
+<!-- 
 **Contents**
 
-*	[Tutorial project](Tutorial.html#TheCode)
+*	[The tutorial project](Tutorial.html#TheCode)
 	*	[Getting the project](Tutorial.html#TheCode.GetIt)
 	*	[Maven project overview](Tutorial.html#TheCode.MavenProject)
 	*	[Running the tests](Tutorial.html#TheCode.RunningTheTests)
@@ -26,7 +27,7 @@ is assumed.
 		*	[Delta assertions](Tutorial.html#TheTestCode.DBValidation.DeltaAssertions)
 		*	[State assertions](Tutorial.html#TheTestCode.DBValidation.StateAssertions)
 		*	[Plain data set assertions](Tutorial.html#TheTestCode.DBValidation.DataSetAssertions)
-
+-->
 	
 ## Tutorial project <a name="TheCode"></a>
 
@@ -39,7 +40,7 @@ You may clone the tutorial project from [its github repository](http://github.co
 
 ### Maven project overview <a name="TheCode.MavenProject"></a>
 
-The code is organized as a Maven project that comprises the following artifacts:
+The Maven project for the tutorial comprises the following artifacts:
 
 - An SQL table creation script for a table called `USERS`
 (`src/main/resources/tableCreation.sql`).	
