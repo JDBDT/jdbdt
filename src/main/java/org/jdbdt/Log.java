@@ -29,7 +29,7 @@ import org.w3c.dom.Element;
  * @since 0.1
  *
  */
-final class Log {
+final class Log implements AutoCloseable {
   /**
    * Output stream.
    */
@@ -45,12 +45,13 @@ final class Log {
 
   /**
    * Construct a log with an associated output file.
-   * @param ouputFile Output file.
+   * @param outputFile Output file.
    * @throws FileNotFoundException If the file cannot be opened/created. 
    */
-  Log(File ouputFile) throws FileNotFoundException {
-    this(new PrintStream(new FileOutputStream(ouputFile)), false);
+  Log(File outputFile) throws FileNotFoundException  {
+    this(new PrintStream(new FileOutputStream(outputFile)), false);
   }
+  
   /**
    * Construct a log with an associated output stream.
    * @param out Output stream.
@@ -101,11 +102,13 @@ final class Log {
    * </p>
    * 
    */
-  void close() {
+  @Override
+  public void close() {
     if (!ignoreClose) {
       out.close();
     }
   }
+  
   /**
    * Write a data set to the log.
    * @param callInfo Call info.
@@ -385,9 +388,5 @@ final class Log {
       throw new InternalAPIError(e);
     }
   }
-
-
-
-
   
 }

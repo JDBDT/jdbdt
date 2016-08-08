@@ -1,5 +1,7 @@
 package org.jdbdt;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -556,20 +558,52 @@ public final class JDBDT {
   }
 
   /**
-   * Print debug info listing the rows in a data set.
+   * Dump the contents of a data set.
    * @param data Data set.
    * @param out Output stream.
    */
-  public static void debug(DataSet data, PrintStream out) {
-    new Log(out).write(CallInfo.create(), data);
+  public static void dump(DataSet data, PrintStream out) {
+    try (Log log = new Log(out);) {
+      log.write(CallInfo.create(), data);
+    }
   }
   
   /**
-   * Print debug info listing the database contents for a data source.
+   * Dump the contents of a data set (output file variant).
+   * @param data Data set.
+   * @param outputFile Output file.
+   */
+  public static void dump(DataSet data, File outputFile) {
+    try (Log log = new Log(outputFile);) {
+      log.write(CallInfo.create(), data);
+    } catch (FileNotFoundException e) {
+      throw new InvalidOperationException("File not found", e);
+    }
+  }
+  
+  /**
+   * Dump the database contents for a data source.
    * @param source Data source.
    * @param out Output stream.
    */
-  public static void debug(DataSource source, PrintStream out) {
-    new Log(out).write(CallInfo.create(), executeQuery(source));
+  public static void dump(DataSource source, PrintStream out) {
+    try (Log log = new Log(out);) {
+      log.write(CallInfo.create(), executeQuery(source));
+    }
   }
+  
+  /**
+   * Dump the database contents for a data source (file variant).
+   * @param source Data source.
+   * @param outputFile Output file.
+   */
+  public static void dump(DataSource source, File outputFile) {
+    try (Log log = new Log(outputFile);) {
+      log.write(CallInfo.create(), executeQuery(source));
+    } 
+    catch (FileNotFoundException e) {
+      throw new InvalidOperationException("File not found", e);
+    }
+  }
+  
 }

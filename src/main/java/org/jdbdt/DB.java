@@ -277,8 +277,6 @@ public final class DB {
     }
   }
   
- 
-
   /**
    * Log query result.
    * @param callInfo Call info.

@@ -67,7 +67,7 @@ may be convenient to refer to the API methods concisely.
 		<td align="left">
 			<code>builder</code><br/> 
 			<code>data</code><br/>
-			<code>debug</code><br/>
+			<code>dump</code><br/>
 			<code>empty</code><br/>
 		</td>
 		<td align="left">

@@ -1,7 +1,7 @@
 
-# Log / debug format
+# Log / dump format
 
-An XML format is used for [JDBDT log files](DB.html#Logging) and for the output of calls to `JDBDT.debug`. The following fragment illustrates the log output for a debug call.
+An XML format is used for [JDBDT log files](DB.html#Logging) and for the output of calls to `JDBDT.dump`. The following fragment illustrates the log output for a `dump` call.
 
 	<jdbdt-log-message time="..." version="...">
 	  <context>
@@ -13,7 +13,7 @@ An XML format is used for [JDBDT log files](DB.html#Logging) and for the output 
         </caller>
         <api-method>
           <class>org.jdbdt.JDBDT</class>
-          <method>debug</method>
+          <method>dump</method>
           <file>JDBDT.java</file>
           <line>541</line>
         </api-method>

@@ -137,10 +137,10 @@ Object creation - for a [data source](DataSources.html) `s`:
 - `builder(s)` creates a data set builder with an underlying fresh data set.
 - `empty(s)` returns an empty & read-only data set that is unique for `s`. 
 
-Debug:
+Debugging:
 
-- `debug(s, out)` prints debug output to `out`, listing the current database rows of data source `s`.
-- `debug(data, out)` prints debug output to `out`, listing the contents of data set `data`. 
+- `dump(s, out)` dump database contents of data source `s` to stream/file `out`. listing the current database rows of data source `s`.
+- `dump(data, out)` dump the contents of data set `data` to stream/file `out`.
 
 ### `DataSet`, `TypedDataSet`
 

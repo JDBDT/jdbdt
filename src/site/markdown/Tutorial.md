@@ -201,9 +201,10 @@ users. The data set builder facilities allow for a succinct definition of the da
             .value("ROLE", GUEST)
             .generate(2)
             .data();
-		// debug(theInitialData, System.err);
+		// dump(theInitialData, System.err);
 
-Uncomment the last statement above, the call to `debug`, if you wish to see some [debug output](Logs.html) sent to `System.err` describing the data set. The following table summarizes the created entries (note that `FIXED_DATE` equals `2016-01-01`):
+Uncomment the last statement above, the call to `dump`, if you wish to see some [debug output](Logs.html) sent to `System.err` listing the data set. 
+The following table summarizes the created entries (note that `FIXED_DATE` equals `2016-01-01`):
 
 <table border="1">
 	<tr>
