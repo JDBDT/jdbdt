@@ -85,7 +85,7 @@ public final class JDBDT {
   }
   
   /**
-   * Tear down a database handle.
+   * Tear-down a database handle.
    * 
    * <p>Calling this method releases any associated resources
    * to the given database handle.  The database handle should
