@@ -89,7 +89,7 @@ final class Log implements AutoCloseable {
       XML_TRANSFORMER.transform(ds, sr);
       out.flush();
     } 
-    catch (Throwable e) {
+    catch (Exception e) {
       throw new InternalAPIError(e);
     } 
   }

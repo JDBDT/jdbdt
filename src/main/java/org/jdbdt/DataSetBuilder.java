@@ -229,7 +229,7 @@ public final class DataSetBuilder {
   }
 
   /** NULL value filler */
-  private static final ColumnFiller<?> NULL_FILLER = new ConstantFiller<Object>(null);
+  private static final ColumnFiller<?> NULL_FILLER = new ConstantFiller<>(null);
 
   /**
    * Set the NULL value filler for a column.
@@ -940,7 +940,7 @@ public final class DataSetBuilder {
     if (list == null) {
       throw new InvalidOperationException("Null list argument.");
     }
-    if (list.size() == 0) {
+    if (list.isEmpty()) {
       throw new InvalidOperationException("Empty list argument.");
     }
   }
