@@ -23,6 +23,7 @@ package org.jdbdt;
  * 
  * @since 0.1
  */
+@FunctionalInterface
 public interface Conversion<T> {
   /**
    * Convert object to row format. 

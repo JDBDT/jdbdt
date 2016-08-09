@@ -14,6 +14,7 @@ package org.jdbdt;
  * @param <T> Type of columns set by the filler.
  * @since 0.1
  */
+@FunctionalInterface
 public interface ColumnFiller<T> {
   /**
    * Get next value.
