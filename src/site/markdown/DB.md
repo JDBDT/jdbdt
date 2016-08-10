@@ -94,7 +94,7 @@ the `REUSE_STATEMENTS` option should be disabled as follows:
 	db.disable(Option.REUSE_STATEMENTS)
 
 **Known issue**: statement reuse should be disabled for 
-[xerial's JDBC driver for sqlite](Compatibility.html#KnownIssues)
+[xerial's JDBC driver for sqlite](Compatibility.html#KnownIssues).
 No problems were detected for [all other JDBC drivers tested in the JDBDT build](Compatibility.html#Drivers).
 
 ## Summary of methods
@@ -106,7 +106,7 @@ No problems were detected for [all other JDBC drivers tested in the JDBDT build]
 - `database(url)` creates a handle for the given database URL.
 - `database(url, user, pass)` creates a handle for the given database URL, user name, and
 password.
-- `teardown(db, closeConn)` frees up internal resources used by `db` (if `db` is no longer required), and closes the underlying database connection if `closeConn == true`.
+- `teardown(db, closeConn)` frees up internal resources used by `db`, and also closes the underlying database connection if `closeConn == true`.
 
 ### `DB`
 
