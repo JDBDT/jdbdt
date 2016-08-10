@@ -114,8 +114,8 @@ may be convenient to refer to the API methods concisely.
 		<td align="left">
 			<code>assertDeleted</code><br/> 
 			<code>assertDelta</code><br/>
-			<code>assertEquals</code><br/> 
 			<code>assertEmpty</code><br/> 
+			<code>assertEquals</code><br/> 
 			<code>assertInserted</code><br/> 
 			<code>assertState</code><br/>
 			<code>assertUnchanged</code><br/> 
