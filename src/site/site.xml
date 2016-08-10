@@ -31,8 +31,8 @@
       <item name="Data sources" href="DataSources.html"/>
       <item name="Data sets" href="DataSets.html"/>
       <item name="Database setup" href="DBSetup.html"/>
-      <item name="Database assertions" href="DBAssertions.html"/>
-      <item name="Log/debug format" href="Logs.html"/>
+      <item name="Assertions" href="DBAssertions.html"/>
+      <item name="Logging format" href="Logs.html"/>
     </menu>
     <!-- <menu ref="reports"/> -->
   </body>
