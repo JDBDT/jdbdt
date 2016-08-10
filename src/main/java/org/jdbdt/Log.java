@@ -245,7 +245,7 @@ final class Log implements AutoCloseable {
     final Element rootNode = root(callInfo); 
     final DataSource ds = assertion.getSource();
     write(rootNode, ds);
-    final Element saNode = createNode(rootNode, DATA_SET_ASSERTION_TAG);
+    final Element saNode = createNode(rootNode, ASSERTION_TAG);
     final List<MetaData.ColumnInfo> mdCols = ds.getMetaData().columns();
     write(saNode, 
           EXPECTED_TAG, 
@@ -321,7 +321,7 @@ final class Log implements AutoCloseable {
   @SuppressWarnings("javadoc")
   private static final String DELTA_ASSERTION_TAG = "delta-assertion";
   @SuppressWarnings("javadoc")
-  private static final String DATA_SET_ASSERTION_TAG = "data-set-assertion";
+  private static final String ASSERTION_TAG = "assertion";
   @SuppressWarnings("javadoc")
   private static final String ERRORS_TAG = "errors";
   @SuppressWarnings("javadoc")
