@@ -264,7 +264,7 @@ public final class DB {
     logSetup(callInfo);
     if (pool != null) {
       for (PreparedStatement stmt : pool.values()) {
-        ignoreSQLException( () -> stmt.close());
+        ignoreSQLException(stmt::close);
       }
       pool.clear();
       pool = null;
@@ -273,7 +273,7 @@ public final class DB {
     log.close();
     log = null;
     if (closeConn) {
-      ignoreSQLException( () -> connection.close());
+      ignoreSQLException(connection::close);
     }
   }
   
@@ -358,6 +358,7 @@ public final class DB {
   }
   
   @SuppressWarnings("javadoc")
+  @FunctionalInterface
   private interface SQLOperationThatMayFail {
     void run() throws SQLException;
   }
@@ -368,8 +369,7 @@ public final class DB {
       op.run();
     }
     catch (SQLException e) { 
-      // e.printStackTrace();
-      // do nothing
+      // Do nothing.
     }
   }
   

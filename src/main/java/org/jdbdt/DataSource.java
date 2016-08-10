@@ -200,7 +200,7 @@ public abstract class DataSource {
    */
   final DataSet executeQuery(CallInfo callInfo, boolean takeSnapshot) {
     DataSet data = new DataSet(this);
-    executeQuery(getQueryStatement(), getMetaData(), getQueryArguments(), r -> data.addRow(r));
+    executeQuery(getQueryStatement(), getMetaData(), getQueryArguments(), data::addRow);
     if (takeSnapshot) {
       setSnapshot(data);
       getDB().logSnapshot(callInfo, data);
