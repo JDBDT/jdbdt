@@ -34,10 +34,12 @@ final class Log implements AutoCloseable {
    * Output stream.
    */
   private final PrintStream out;
+  
   /**
    * Closing behavior flag.
    */
   private final boolean ignoreClose;
+  
   /**
    * XML document instance.
    */
@@ -116,8 +118,8 @@ final class Log implements AutoCloseable {
    */
   void write(CallInfo callInfo, DataSet data) {
     Element rootNode = root(callInfo);
+    write(rootNode, data.getSource());
     Element dsNode = createNode(rootNode, DATA_SET_TAG);
-    write(dsNode, data.getSource());
     write(dsNode, ROWS_TAG, data.getSource().getMetaData().columns(), data.getRows().iterator());
     flush(rootNode);
   }
@@ -187,9 +189,9 @@ final class Log implements AutoCloseable {
    */
   void write(CallInfo callInfo, DeltaAssertion assertion) {
     final Element rootNode = root(callInfo);
-    final Element daNode = createNode(rootNode, DELTA_ASSERTION_TAG);
     final DataSource ds = assertion.getSource();
-    write(daNode, ds);
+    write(rootNode, ds);
+    final Element daNode = createNode(rootNode, DELTA_ASSERTION_TAG);
     final List<MetaData.ColumnInfo> mdCols = ds.getMetaData().columns();
     final Element expectedNode = createNode(daNode, EXPECTED_TAG);    
     write(expectedNode, 
@@ -241,9 +243,9 @@ final class Log implements AutoCloseable {
    */
   void write(CallInfo callInfo, DataSetAssertion assertion) {
     final Element rootNode = root(callInfo); 
-    final Element saNode = createNode(rootNode, DATA_SET_ASSERTION_TAG);
     final DataSource ds = assertion.getSource();
-    write(saNode, ds);
+    write(rootNode, ds);
+    final Element saNode = createNode(rootNode, DATA_SET_ASSERTION_TAG);
     final List<MetaData.ColumnInfo> mdCols = ds.getMetaData().columns();
     write(saNode, 
           EXPECTED_TAG, 
