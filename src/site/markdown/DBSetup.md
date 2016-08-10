@@ -13,14 +13,13 @@ Database data may be cleaned up using one of the following methods:
 
 1. `deleteAll(t)` clears  the entire contents of table `t` using a DELETE statement without an associated
 WHERE clause.
-2. `deleteAllWhere(table, where, [,args])` clears the contents of `t` using a DELETE
+2. `deleteAllWhere(t, where, [,args])` clears the contents of `t` using a DELETE
 statement with a WHERE clause `where` and optional WHERE clause arguments `args`.
 3. `truncate(t)` clears `t` using a TRUNCATE TABLE statement.
 
-Note that `truncate` may  be faster than `deleteAll`, but the associated TRUNCATE TABLE statement 
+Note that `truncate` may be faster than `deleteAll`, but the associated TRUNCATE TABLE statement 
 may not respect integrity constraints and has variable semantics 
-for different database engines; check some details [here](https://en.wikipedia.org/wiki/Truncate_(SQL). 
-Also, the TRUNCATE TABLE statement is [not supported](Compatibility.html#KnownIssues) at all by some database engines.
+for different database engines (e.g., <a href="https://en.wikipedia.org/wiki/Truncate_(SQL)">see here</a>). Some engines do not support table truncation altogether (for instance SQLite).
 
 *Illustration*
 
@@ -45,7 +44,7 @@ Also, the TRUNCATE TABLE statement is [not supported](Compatibility.html#KnownIs
 ## Inserting data
 <a name="Insert"></a>
 
-Database data may be inserted using one the following methods:
+Database data may be inserted using one of the following methods:
 
 1. `insert(data)` inserts `data` into the table given by `data.getSource()`.
 2. `populate(data)` inserts `data` like `insert`, but clears the table first using a DELETE statement,
@@ -53,7 +52,7 @@ and also records `data` as the [snapshot for subsequent delta assertions](DBAsse
 
 Thus, `insert` should be used for incremental additions to a table, whereas
 `populate` should be used to reset the contents of a table contents entirely. 
-The use of `populate` is adequate in particular if [delta assertions](DBAssert.html) 
+The use of `populate` is more adequate in particular if [delta assertions](DBAssert.html) 
 are performed over the table subsequently.
 
 *Illustration*
@@ -65,25 +64,20 @@ are performed over the table subsequently.
     import java.sql.Date;
     ...
 	DB db = ...;
-	Table t = table(db, "USER")
-	         .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");	
+	Table t = ...	
     
-    // Create a data set with 500 rows.
+    // Create a data set for t.
     DataSet data = 
        builder(t)
-      .sequence("ID", 0) // 0, 1, ... 
-      .sequence("LOGIN", i -> "user_" + i) // "user_0", ...
-      .sequence("NAME", i -> "Yet Another User" + i) 
-      .sequence("PASSWORD", i -> "password_" + i) 
-      .random("CREATED", Date.valueOf("2016-01-01"), Date.valueOf("2016-12-31"))
-      .generate(500);
+      . ...
+      .data();
     ...
     
     // 1. Reset contents of USER to data.
     populate(data); 
     ...
     
-    // 2. Insert data in USER table (does not clear previous contents).
+    // 2. OR insert data in USER table (does not clear previous contents).
     insert(data);
 
 ## Save and restore
@@ -94,15 +88,18 @@ Database state may be saved and restored as follows per [database handle](DB.htm
 1. A call to `save(db)` sets a database save-point. Internally, the 
 save-point is set `java.sql.Connection.setSavepoint()` 
 for the underlying database connection, which must have auto-commit
-disabled. Nested save points are not supported for simplicity,
-i.e., only one save-point is maintained per database handle.
+disabled. 
 2. A call to `restore(db)` restores (rolls back) the database state to the 
 JDBDT save-point defined using the last call to `save(db)`,
 as long as there were no intervening database commits.
 
+Note that that an unique one save-point is maintained per database handle,
+and that there should be exactly one `restore` call per each `save` call. 
+These constraints try to ensure portable behavior across database engines.
+
 In relation to `save` and `restore`, `commit(db)` is a shorthand for
 `db.getConnection().commit()`. Such a call commits all database changes
-and discards the JDBDT save-point (or any other save-point set otherwise).
+and discards the JDBDT save-point (or any other save-point set for the database otherwise).
 
 *Illustration*
 
@@ -121,7 +118,7 @@ and discards the JDBDT save-point (or any other save-point set otherwise).
     
     // Exercise the SUT, then execute some assertions  
     letTheSUTWork();
-    assert...();
+    assertXXX();
     
     // Restore database state
     restore(db);
@@ -129,16 +126,15 @@ and discards the JDBDT save-point (or any other save-point set otherwise).
     
 ## Database setup patterns
 
-A number of database test patterns can be implemented using JDBDT. 
-For instance, in the illustration below (assuming [JUnit](http://junit.org)-based tests) 
-provides a skeleton for the implementation of two patterns described in [xunitpatterns.com](http://xunitpatterns.com):
+A number of database test patterns can be implemented using JDBDT, as exemplified in the [JDBDT tutorial](Tutorial.html). The code skeleton below (assuming [JUnit](http://junit.org)-based tests) 
+illustrates the implementation of two patterns described in [xunitpatterns.com](http://xunitpatterns.com):
 
 1. [Transaction Rollback Teardown](http://xunitpatterns.com/Transaction%20Rollback%20Teardown.html):
 changes to the database are rolled back at the end of each test, back to an initial configuration. In the illustration below, the reference database state is set once in `oneTimeSetup` (annotated with `@BeforeClass`). This state is respectively saved and restored, before and after each test executes,
 in `setSavePoint` (annotated with `@Before`) and `restoreSavePoint` (annotated with `@After`), .
 2. [Table Truncation Teardown](http://xunitpatterns.com/Table%20Truncation%20Teardown.html):
 clean up each table on tear-down after conducting tests, as shown for `oneTimeTeardown` (annotated
-with `@AfterClass`) in the illustration below.
+with `@AfterClass`).
 
 *Illustration* 
 
@@ -163,9 +159,7 @@ with `@AfterClass`) in the illustration below.
 	  public static void oneTimeSetup() {
 	    ...
 	    // Setup database handle
-	    Connection c = ...;
-	    c.setAutoCommit(false);
-	    myDB = database(c);
+	    myDB = database( ... );
 	    
 	    // Define tables and corresponding initial data
 	    myTable1 = table("...").columns(...);
@@ -175,6 +169,9 @@ with `@AfterClass`) in the illustration below.
 	    // etc for myTable2 ...
 	    myTable2 = table("...").columns(...);
 	    ...
+	    
+	    // Ensure that auto-commit is off
+	    myDB.getConnection().setAutoCommit(false);
 	  }
 	  
 	  @AferClass
@@ -183,7 +180,7 @@ with `@AfterClass`) in the illustration below.
 	    truncate(myTable1);
 	    truncate(myTable2);
 	    ...
-	    teardown(myDB); // free resources 
+	    teardown(myDB, true); // free resources and close DB connection 
 	  }
 	  
 	  @Before
