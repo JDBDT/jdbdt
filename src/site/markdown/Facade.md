@@ -2,7 +2,7 @@
 # The JDBDT facade
 
 
-The `org.jdbdt.JDBDT` class is the facade for the JDBDT API, 
+The `org.jdbdt.JDBDT` class  is the facade for the JDBDT API, 
 providing the core interface methods for database setup, verification,
 and API object creation. 
 
@@ -16,6 +16,7 @@ may be convenient to refer to the API methods concisely.
 
 ## Overview of functionality
 
+[(browse Javadoc instead)](apidocs/org/jdbdt/JDBDT.html)
 <table border="1">
   	<tr>
 		<th align="left">Functionality</th>
