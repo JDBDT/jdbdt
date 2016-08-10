@@ -139,7 +139,7 @@ Object creation - for a [data source](DataSources.html) `s`:
 
 Debugging:
 
-- `dump(s, out)` dump database contents of data source `s` to stream/file `out`. listing the current database rows of data source `s`.
+- `dump(s, out)` dump database contents of data source `s` to stream/file `out`. 
 - `dump(data, out)` dump the contents of data set `data` to stream/file `out`.
 
 ### `DataSet`, `TypedDataSet`
