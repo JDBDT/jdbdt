@@ -33,7 +33,7 @@ typically followed by a chained sequence of calls.
 		.row(0,   "root",  "Root User",  "god",       null)
 	    .row(101, "john",  "John Doe",   "justDoeIt", Date.valueOf("2014-07-12"))
 	    .row(102, "harry", "Harry H",    "meta",      Date.valueOf("2016-01-01"))
-	    .row(103, "guest", "Guest User",  "welcome",  Date.valueOf("2016-01-02"));
+	    .row(103, "guest", "Guest User", "welcome",   Date.valueOf("2016-01-02"));
 
 ### Typed data sets
 <a name="Creation.Typed"></a>
@@ -158,7 +158,7 @@ Mutators:
 - `add(other)` adds all rows from `other` to the data set.
 - `setReadOnly()` sets the data set as read-only.
 
-Utility methods (all `static`) 
+Utility methods (all `static`):
 
 - `copyOf(data)` returns a new data set that has the same rows as `data`.
 - `join(data1, data2, ...,)` returns a new data set that contains all the rows in `data1`, `data2`, ...
