@@ -18,6 +18,7 @@ save-points.
 * The entire functionality is exposed by a "minimalistic" 
 [API facade](Facade.html).
 
+To get started, you may want to check the [tutorial in this site](Tutorial.html).
 
 ## Installation 
 
@@ -26,7 +27,7 @@ with earlier Java versions.
 
 JDBDT is available from Maven Central.
 If you use Maven (3.2 or later), then add the following dependency to your POM file
-to install the latest stable release.
+to install the latest stable release:
 
 	<dependency>
 		<groupId>org.jdbdt</groupId>
