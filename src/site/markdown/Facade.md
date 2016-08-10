@@ -71,7 +71,8 @@ may be convenient to refer to the API methods concisely.
 			<code>empty</code><br/>
 		</td>
 		<td align="left">
-		    <code>Conversion</code>
+		    <code>Conversion</code><br/>
+		    <code>ColumnFiller</code><br/>
 			<code>DataSet</code><br/>
 			<code>DataSetBuilder</code><br/>
 			<code>TypedDataSet</code><br/>
