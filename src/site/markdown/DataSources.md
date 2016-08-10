@@ -50,17 +50,17 @@ The `query` facade method may be used to define a query using raw SQL.
 `QueryBuilder` objects can be used to define queries programmatically.
 The `select` facade method creates a query builder that can be parameterized
 using a chained sequence of calls. A final call to `QueryBuilder.build` in 
-such a sequence creates a `Query` object. The parameterization methods are:
+such a sequence creates a `Query` object. The parameterization methods are the following:
 
-* `from` to set the `FROM` clause;
-* `where` to set the `WHERE` clause; 
-* `distinct` to set the `DISTINCT` modifier for the query;
-* `orderBy` to set up an `ORDER BY` clause;
-* `groupBy` to set up a `GROUP BY` clause;
-* `having` to set up a `HAVING` clause.
+* `from`: defines the `FROM` clause;
+* `where`: defines a `WHERE` clause; 
+* `distinct`: defines a `DISTINCT` modifier for the query;
+* `orderBy`: defines an `ORDER BY` clause;
+* `groupBy`: defines  a `GROUP BY` clause;
+* `having`: defines a `HAVING` clause.
 
 Note to `orderBy`: [database assertions](DBAssertions.html) are insensitive 
-to the order of query results, but `orderBy` may make it easier to inspect
+to the order of query results, but the use of `orderBy` may make it easier to inspect
 [logs](Logs.html) in some cases.
 
 *Illustration*
@@ -120,8 +120,7 @@ to the order of query results, but `orderBy` may make it easier to inspect
 
 ### `QueryBuilder`
 
-* `from`, `where`, `distinct`, `groupBy`, `orderBy`, `having` are used to 
-parameterize the query (see [above](DataSources.html#QueryBuilder)).
-* `build(args)` builds the final `Query` with optional arguments `args`.
+* `from`, `where`, `distinct`, `groupBy`, `orderBy`, `having`: query parameterization methods (see [above](DataSources.html#QueryBuilder)).
+* `build([args])` builds the final `Query` with optional arguments `args`.
 
 
