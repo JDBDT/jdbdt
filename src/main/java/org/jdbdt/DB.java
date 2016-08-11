@@ -1,7 +1,6 @@
 package org.jdbdt;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -87,7 +86,7 @@ public final class DB {
    */
   DB(Connection connection) {
     this.connection = connection;
-    log = new Log(System.err);
+    log = Log.create(System.err);
     enable(Option.REUSE_STATEMENTS);
     enable(Option.LOG_ASSERTION_ERRORS);
   }
@@ -153,7 +152,7 @@ public final class DB {
    * @param out Output stream.
    */
   public void setLog(PrintStream out) {
-    this.log = new Log(out);
+    this.log = Log.create(out);
   }
 
   /**
@@ -161,10 +160,9 @@ public final class DB {
    * The log set at creation time
    * writes to <code>System.err</code>.
    * @param outputFile Logging instance.
-   * @throws IOException If the file cannot be opened.
    */
-  public void setLog(File outputFile) throws IOException {
-    this.log = new Log(outputFile);
+  public void setLog(File outputFile) {
+    this.log = Log.create(outputFile);
   }
   
   /**

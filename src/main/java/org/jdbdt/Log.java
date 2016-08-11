@@ -30,6 +30,30 @@ import org.w3c.dom.Element;
  *
  */
 final class Log implements AutoCloseable {
+  
+  /**
+   * Creator method (stream variant).
+   * @param out Output stream.
+   * @return A new log instance.
+   */
+  static Log create(PrintStream out) {
+    return new Log(out, true);
+  }
+  
+  /**
+   * Creator method (file variant).
+   * @param outputFile Output file.
+   * @return A new log instance.
+   */
+  static Log create(File outputFile) {
+    try {
+      return new Log(new PrintStream(outputFile), false);
+    } 
+    catch (FileNotFoundException e) {
+      throw new InvalidOperationException("File does not exist.", e);
+    }
+  }
+  
   /**
    * Output stream.
    */
@@ -45,23 +69,6 @@ final class Log implements AutoCloseable {
    */
   private final Document xmlDoc;
 
-  /**
-   * Construct a log with an associated output file.
-   * @param outputFile Output file.
-   * @throws FileNotFoundException If the file cannot be opened/created. 
-   */
-  Log(File outputFile) throws FileNotFoundException  {
-    this(new PrintStream(new FileOutputStream(outputFile)), false);
-  }
-  
-  /**
-   * Construct a log with an associated output stream.
-   * @param out Output stream.
-   */
-  Log(PrintStream out) {
-    this(out, true);
-  }
-  
   /**
    * General constructor.
    * @param out Output stream.

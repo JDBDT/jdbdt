@@ -1,7 +1,6 @@
 package org.jdbdt;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -563,7 +562,7 @@ public final class JDBDT {
    * @param out Output stream.
    */
   public static void dump(DataSet data, PrintStream out) {
-    try (Log log = new Log(out);) {
+    try (Log log = Log.create(out);) {
       log.write(CallInfo.create(), data);
     }
   }
@@ -574,11 +573,9 @@ public final class JDBDT {
    * @param outputFile Output file.
    */
   public static void dump(DataSet data, File outputFile) {
-    try (Log log = new Log(outputFile);) {
+    try (Log log = Log.create(outputFile);) {
       log.write(CallInfo.create(), data);
-    } catch (FileNotFoundException e) {
-      throw new InvalidOperationException("File not found", e);
-    }
+    } 
   }
   
   /**
@@ -587,7 +584,7 @@ public final class JDBDT {
    * @param out Output stream.
    */
   public static void dump(DataSource source, PrintStream out) {
-    try (Log log = new Log(out);) {
+    try (Log log = Log.create(out);) {
       log.write(CallInfo.create(), executeQuery(source));
     }
   }
@@ -598,12 +595,9 @@ public final class JDBDT {
    * @param outputFile Output file.
    */
   public static void dump(DataSource source, File outputFile) {
-    try (Log log = new Log(outputFile);) {
+    try (Log log = Log.create(outputFile);) {
       log.write(CallInfo.create(), executeQuery(source));
     } 
-    catch (FileNotFoundException e) {
-      throw new InvalidOperationException("File not found", e);
-    }
   }
   
 }
