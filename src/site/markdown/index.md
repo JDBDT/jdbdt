@@ -32,7 +32,7 @@ to install the latest stable release:
 	<dependency>
 		<groupId>org.jdbdt</groupId>
         <artifactId>jdbdt</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <version>0.1.0-rc2-SNAPSHOT</version>
     </dependency>
 
 To compile and install the latest snapshot from scratch, use
