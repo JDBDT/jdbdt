@@ -6,7 +6,7 @@
 	<url>http://jdbdt.org/</url>
 	<groupId>org.jdbdt</groupId>
 	<artifactId>jdbdt</artifactId>
-	<version>0.1.0-rc1</version>
+	<version>0.1.0-rc2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<organization>
 		<name>JDBDT</name>
@@ -23,7 +23,7 @@
 		<url>https://github.com/edrdo/jdbdt</url>
 		<connection>scm:git:git@github.com:edrdo/jdbdt.git</connection>
 		<developerConnection>scm:git:git@github.com:edrdo/jdbdt.git</developerConnection>
-		<tag>jdbdt-0.1.0-rc1</tag>
+		<tag>HEAD</tag>
 	</scm>
 	<issueManagement>
 		<system>github</system>
