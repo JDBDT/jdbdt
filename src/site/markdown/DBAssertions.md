@@ -8,8 +8,7 @@ incremental changes (a **database delta**).
 2. More traditional **state assertions** verify that the database contents match a given data set. 
 3. Finally, **data set assertions** let you verify if two data sets are equivalent.
 
-## Delta assertions
-<a name="DeltaAssertions"></a>
+## Delta assertions <a name="DeltaAssertions"></a>
 
 &delta;-assertions state the expected incremental changes made to the database,
 i.e., an expected database delta. The figure below illustrates the mechanism. 
@@ -130,8 +129,7 @@ A number of other assertion methods are defined for convenience, all of which in
 	assertDelta(before, after);
 	
 	
-## State assertions
-<a name="StateAssertions"></a>
+## State assertions <a name="StateAssertions"></a>
 
 A state assertion checks that the database contents in full, and
 is executed by calling `assertState`. 
@@ -168,8 +166,7 @@ it verifies that the given data source has no defined rows.
 	letTheSUT_insertOneUser( ... ); 
 	assertState(expected);
 	
-## Data set assertions
-<a name="DataSetAssertions"></a>	
+## Data set assertions <a name="DataSetAssertions"></a>	
 
 A data set assertion verifies that two given data sets are equivalent.
 This can be done using the `assertEquals` method.
