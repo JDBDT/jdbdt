@@ -5,29 +5,7 @@ features of JDBDT.  The companion code is organized as a [Maven](http://maven.or
 and tests are written using [JUnit](http://junit.org). Some familiarity with Maven and JUnit 
 is assumed. 
 
-<!-- 
-**Contents**
 
-*	[The tutorial project](Tutorial.html#TheCode)
-	*	[Getting the project](Tutorial.html#TheCode.GetIt)
-	*	[Maven project overview](Tutorial.html#TheCode.MavenProject)
-	*	[Running the tests](Tutorial.html#TheCode.RunningTheTests)
-	*	[Test subject](Tutorial.html#TheCode.TheTestSubject)
-		*	[The USERS table](Tutorial.html#TheCode.TheTestSubject.Table)
-		*	[The User class](Tutorial.html#TheCode.TheTestSubject.UserClass)
-		*	[The UserDAO class](Tutorial.html#TheCode.TheTestSubject.UserDAOClass)
-
-*	[The test code / use of JDBDT ](Tutorial.html#TheTestCode)
-	*	[JDBDT import statements](Tutorial.html#TheTestCode.Imports)
-	*	[Database setup and tear-down](Tutorial.html#TheTestCode.DBSetup)
-		*	[Initial setup](Tutorial.html#TheTestCode.SetupAndTeardown.Initial)
-		*	[Final tear-down](Tutorial.html#TheTestCode.SetupAndTeardown.Final)
-		*	[Per-test setup and tear-down](Tutorial.html#TheTestCode.SetupAndTeardown.PerTest)
-	*	[Tests and  assertions](Tutorial.html#TheTestCode.DBValidation)
-		*	[Delta assertions](Tutorial.html#TheTestCode.DBValidation.DeltaAssertions)
-		*	[State assertions](Tutorial.html#TheTestCode.DBValidation.StateAssertions)
-		*	[Plain data set assertions](Tutorial.html#TheTestCode.DBValidation.DataSetAssertions)
--->
 	
 ## Tutorial project <a name="TheCode"></a>
 
@@ -487,6 +465,56 @@ the test code above also validates that `getAllUsers` did not change
 the `USERS` table through the call to `assertUnchanged` (a delta assertion method). 
 This assertion provides an extra guarantee on the functionality of `getAllUsers`. 
 
+#### Inspecting assertion errors
+
+When an assertion fails, `DBAssertionError` is thrown by JDBDT. 
+Additionally, error information may be [logged](DB.html#Logging) to a file or output stream in [an XML format](Logs.html). By default, assertion errors will be logged to `System.err`. Consider for instance `testExistingUserDelete` in `UserDAOTest`: 
+
+    @Test
+    public void testExistingUserDelete() throws SQLException {
+      User u = anExistingUser(); // -> change to nonExistingUser()
+      boolean deleted = theDAO.deleteUser(u);
+      assertDeleted("DB change", toDataSet(u));
+      assertTrue("return value", deleted);
+    }
+
+If you change `anExistingUser()` above to `nonExistingUser()`, 
+then `assertDeleted`, two lines below, will throw `DBAssertionError`.
+The user instance returned by `nonExistingUser()` does not exist in the database,
+hence `theDAO.deleteUser(u)` will fail to delete the equivalent entry
+in the `USERS` table and return `false`. 
+
+In conjunction with `DBAssertionError`, the log message below will appear in `System.err`, where `99` / `john99` refers to the non-existing user. 
+The assertion error is explained
+by the `jdbdt-log-message/delta-assertion/errors/old-data` section, indicating that 
+the (non-existing) user entry was expected to be deleted but was actually not. 
+For more details on the logging format, refer to [this page](Logs.html).
+
+    <jdbdt-log-message ...>
+      ...
+      <delta-assertion>
+        ...
+        <errors>
+          <old-data>
+            <expected count="1">
+              <row>
+                <column java-type="java.lang.Integer" label="ID">99</column>
+                <column java-type="java.lang.String" label="LOGIN">john99</column>
+                <column java-type="java.lang.String" label="NAME">John Doe 99</column>
+                <column java-type="java.lang.String" label="PASSWORD">doeit 99</column>
+                <column java-type="java.lang.String" label="ROLE">REGULAR</column>
+                <column java-type="java.sql.Date" label="CREATED">2016-01-01</column>
+              </row>
+            </expected>
+            <actual count="0"/>
+          </old-data>
+          <new-data>
+            <expected count="0"/>
+            <actual count="0"/>
+          </new-data>
+        </errors>
+      </delta-assertion>
+    </jdbdt-log-message>
 
 
 
