@@ -1,7 +1,7 @@
 # Before Maven central release
+* MySQL/PostgreSQL version update issue (check others too)
 * Use Maven release plugin to generate rc1 
-* Tutorial: alternate setup, section on assertion errors
-* Documentation for log format
+* Tutorial: alternate setup
 
 # Other
 
