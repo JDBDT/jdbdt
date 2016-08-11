@@ -1,1 +1,1 @@
-mvn -Prelease package site deploy
+mvn -Prelease package site 
