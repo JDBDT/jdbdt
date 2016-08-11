@@ -2,7 +2,6 @@ package org.jdbdt;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.sql.Timestamp;
 import java.util.Iterator;
@@ -70,7 +69,7 @@ final class Log implements AutoCloseable {
   private final Document xmlDoc;
 
   /**
-   * General constructor.
+   * Constructor.
    * @param out Output stream.
    * @param ignoreClose If true, calls to {@link #close()} on the
    * created log will not close the output stream.
