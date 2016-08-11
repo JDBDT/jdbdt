@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<name>JDBDT</name>
-	<description>JDBDT (Java Database Delta Testing) is a Java library for Java database application testing.</description>
+	<description>JDBDT (Java Database Delta Testing) is a library for testing Java database applications.</description>
 	<inceptionYear>2016</inceptionYear>
 	<url>http://jdbdt.org/</url>
 	<groupId>org.jdbdt</groupId>
@@ -316,6 +316,15 @@
 					</dependency>
 				</dependencies>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+				<configuration>
+					<releaseProfiles>release</releaseProfiles>
+					<preparationGoals>generate-sources</preparationGoals>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<profiles>
@@ -361,11 +370,7 @@
 							</execution>
 						</executions>
 					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-release-plugin</artifactId>
-						<version>2.5.3</version>
-					</plugin>
+
 				</plugins>
 			</build>
 		</profile>
