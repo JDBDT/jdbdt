@@ -98,7 +98,8 @@ that is either expected for the database state or
 for comparison with a given data set.
 *  `assertion/errors` if the assertion failed, where 
 `assertion/errors/expected` and `assertion/errors/actual` identify 
-the mismatch between the expected and actual data sets.  
+the mismatch between the expected and actual data sets (matched rows
+are not listed).  
 
 *Illustration*
 
@@ -150,16 +151,20 @@ The `steve` and `bill` "users" were matched.
     
 ## Delta assertions <a name="DeltaAssertions"></a>
 
-A `delta-assertion` node refers to a [database delta assertion](DBAssertions.html#DeltaAssertions). For a delta assertion
-where **&delta; = (O, N)**
+A `delta-assertion` node refers to a [database delta assertion](DBAssertions.html#DeltaAssertions). For an  assertion
+where the expected delta is **&delta; = (O, N)** and the actual delta
+is **&delta;' = (O', N')**:
 
 * `assertion/expected/old-data` list the entire **O** data set;
 * `assertion/expected/new-data` list the entire **N** data set;
-* `errors/old-data` list the differences between expected "old" data 
-(`errors/old-data/expected`) and actual "old" data (`errors/old-data/actual`);
-* `errors/new-data` list the differences between expected "new" data 
-(`errors/new-data/expected`) and actual "new" data (`errors/new-data/actual`);
+* `errors/old-data` list the mismatch between **O** 
+(`errors/old-data/expected`) and **O'** (`errors/old-data/actual`);
+* `errors/new-data` list the mismatch between **N**
+(`errors/new-data/expected`) and **N'** (`errors/new-data/actual`);
 
+Note that, as for state assertions, 
+`errors` lists only rows that caused the assertion to fail, i.e.,
+matched rows are not listed.
 
 *Illustration*
 
