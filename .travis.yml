@@ -1,4 +1,4 @@
 language: java
-script: mvn -Prelease package site
+script: mvn -Prelease package site deploy
 jdk:
   - oraclejdk8
