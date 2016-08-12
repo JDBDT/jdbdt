@@ -482,7 +482,7 @@ If you change `anExistingUser()` above to `nonExistingUser()`,
 then `assertDeleted`, two lines below, will throw `DBAssertionError`.
 The user instance returned by `nonExistingUser()` does not exist in the database,
 hence `theDAO.deleteUser(u)` will fail to delete the equivalent entry
-in the `USERS` table and return `false`. 
+in the `USERS` table.
 
 In conjunction with `DBAssertionError`, the log message below will appear in `System.err`, where `99` / `john99` refers to the non-existing user. 
 The assertion error is explained
