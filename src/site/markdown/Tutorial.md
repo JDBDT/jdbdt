@@ -334,7 +334,7 @@ The following table summarizes the created entries (note that `FIXED_DATE` equal
     	populate(theInitialData);
 
 - The final step is to disable auto-commit for the JDBC connection,
-a pre-requisite for using JDBDT save-points, that are discussed [later](Tutorial.html#TheTestCode.PerTestSetupAndTeardown). 
+a pre-requisite for using JDBDT save-points, that are discussed [later](Tutorial.html#TheTestCode.PerTestSetupAndTeardown) in this tutorial. 
 
 		// Set auto-commit off (to allow for save-points)
     	theDB.getConnection().setAutoCommit(false);
@@ -363,7 +363,7 @@ Then `teardown(theDB, true)` frees up any internal resources used by the [databa
 In `UserDAOTest` the `saveState` and `restoreState` methods are executed respectively before and
 after each test; observe the `@Before` and `@After` JUnit annotations in each method below.
 Their purpose is to make sure each test starts with the same initial database setup
-([described earlier](Tutorial.html#TheTestCode.DBSetup)), 
+([described earlier](Tutorial.html#TheTestCode.SetupAndTeardown.Initial)), 
 making use of [JDBDT save-points](DBSetup.html#SaveAndRestore).
 
     @Before
