@@ -25,9 +25,10 @@ To get started, you may want to check the [tutorial in this site](Tutorial.html)
 **Pre-requisite:** JDBDT requires Java 8, it will not work 
 with earlier Java versions. 
 
-JDBDT is available from Maven Central.
-If you use Maven (3.2 or later), then add the following dependency to your POM file
-to install the latest stable release:
+JDBDT is available from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cjdbdt).
+For the latest stable release of JDBDT, Maven users should add the following
+dependency to a POM file:
+
 
 	<dependency>
 		<groupId>org.jdbdt</groupId>
