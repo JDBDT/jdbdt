@@ -328,7 +328,7 @@ The following table summarizes the created entries (note that `FIXED_DATE` equal
 </table>
 
 
-- The data set of the previous set is used to [populate](DBSetup.html#Insert) the database table.
+- The data set of the previous step, `theInitialData` is used to [populate](DBSetup.html#Insert) the database table.
   
 		// Populate database using the built data set
     	populate(theInitialData);
