@@ -168,7 +168,7 @@ matched rows are not listed.
 
 *Illustration*
 
-The fragment above illustrates a failed delta assertion, where no database
+The fragment below illustrates a failed delta assertion, where no database
 changes were expected. Both `expected/old-data` and  `expected/new-data` are empty,
 i.e., **O = N = &empty;**, as in a call to `assertUnchanged`. 
 The error at stake, identified in `errors/old-data/actual`,
