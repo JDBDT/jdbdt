@@ -53,7 +53,7 @@ The following logging options are defined in `DB.Option`
 * `LOG_ASSERTIONS`: log all assertions (passed or failed);
 * `LOG_QUERIES`: log the result of database queries;
 * `LOG_SETUP`: log database setup operations (data set insertions and SQL setup commands);
-* `LOG_SNAPSHOTS`: log database snapshots;
+* `LOG_SNAPSHOTS`: log database snapshots.
 
 At creation time, only the `DB.Option.LogAssertionErrors` option is enabled by default, 
 and the log output is redirected to `System.err`. 
