@@ -1,45 +1,14 @@
 # Database setup
 
 The contents of a database may be defined using setup methods 
-in the `JDBDT` facade. The functionality at stake comprises [cleaning up data from tables](DBSetup.html#Clean), [inserting data / populating tables](DBSetup.html#Insert), 
+in the `JDBDT` facade. The functionality at stake comprises
+[inserting data / populating tables](DBSetup.html#Insert), 
+[cleaning up data from tables](DBSetup.html#Clean), 
 and [setting and restoring a save-point](DBSetup.html#SaveAndRestore).
 A number of [database setup patterns](DBSetup.html#Patterns) can be
 implemented using these operations.
 
-## Cleaning data
-<a name="Clean"></a>
 
-Database data may be cleaned up using one of the following methods:
-
-1. `deleteAll(t)` clears  the entire contents of table `t` using a DELETE statement without an associated
-WHERE clause.
-2. `deleteAllWhere(t, where, [,args])` clears the contents of `t` using a DELETE
-statement with a WHERE clause `where` and optional WHERE clause arguments `args`.
-3. `truncate(t)` clears `t` using a TRUNCATE TABLE statement.
-
-Note that `truncate` may be faster than `deleteAll`, but the associated TRUNCATE TABLE statement 
-may not respect integrity constraints and has variable semantics 
-for different database engines (e.g., <a href="https://en.wikipedia.org/wiki/Truncate_(SQL)">see here</a>). Some engines do not support table truncation altogether (for instance SQLite).
-
-*Illustration*
-
-    import static org.jdbdt.JDBDT.*;
-    import org.jdbdt.DB;
-    import org.jdbdt.Table;
-    ...
-    DB db = ...;
-    Table t = table(db, "USER")
-	         .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
-	...
-	// 1. Clear table using a DELETE statement.
-	deleteAll(t);
-	
-	// 2. Delete all users whose login matches a certain filter
-	String loginFilter = ...;
-	deleteAll(t, "LOGIN LIKE ?", loginFilter);
-	
-	// 3. Clear table using TRUNCATE.
-	truncate(t);
 	  
 ## Inserting data
 <a name="Insert"></a>
@@ -80,6 +49,41 @@ are performed over the table subsequently.
     // 2. OR insert data in USER table (does not clear previous contents).
     insert(data);
 
+## Cleaning data
+<a name="Clean"></a>
+
+Database data may be cleaned up using one of the following methods:
+
+1. `deleteAll(t)` clears  the entire contents of table `t` using a DELETE statement without an associated
+WHERE clause.
+2. `deleteAllWhere(t, where, [,args])` clears the contents of `t` using a DELETE
+statement with a WHERE clause `where` and optional WHERE clause arguments `args`.
+3. `truncate(t)` clears `t` using a TRUNCATE TABLE statement.
+
+Note that `truncate` may be faster than `deleteAll`, but the associated TRUNCATE TABLE statement 
+may not respect integrity constraints and has variable semantics 
+for different database engines (e.g., <a href="https://en.wikipedia.org/wiki/Truncate_(SQL)">see here</a>). Some engines do not support table truncation altogether (for instance SQLite).
+
+*Illustration*
+
+    import static org.jdbdt.JDBDT.*;
+    import org.jdbdt.DB;
+    import org.jdbdt.Table;
+    ...
+    DB db = ...;
+    Table t = table(db, "USER")
+	         .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
+	...
+	// 1. Clear table using a DELETE statement.
+	deleteAll(t);
+	
+	// 2. Delete all users whose login matches a certain filter
+	String loginFilter = ...;
+	deleteAll(t, "LOGIN LIKE ?", loginFilter);
+	
+	// 3. Clear table using TRUNCATE.
+	truncate(t);
+
 ## Save and restore
 <a name="SaveAndRestore"></a>
 
@@ -108,10 +112,9 @@ and discards the JDBDT save-point (or any other save-point set for the database 
     import org.jdbdt.DB;
     ...
     // Database handle ...
-    // The associated connection should have auto-commit disabled.
-    Connection conn = ...;
-    conn.setAutoCommit(false);
-    DB db = database(conn);
+    DB db = database(...);
+    // Disable auto-commit
+    db.getConnection().setAutoCommit(false);
     
     // Set save-point
     save(db);
@@ -131,7 +134,7 @@ illustrates the implementation of two patterns described in [xunitpatterns.com](
 
 1. [Transaction Rollback Teardown](http://xunitpatterns.com/Transaction%20Rollback%20Teardown.html):
 changes to the database are rolled back at the end of each test, back to an initial configuration. In the illustration below, the reference database state is set once in `oneTimeSetup` (annotated with `@BeforeClass`). This state is respectively saved and restored, before and after each test executes,
-in `setSavePoint` (annotated with `@Before`) and `restoreSavePoint` (annotated with `@After`), .
+in `setSavePoint` (annotated with `@Before`) and `restoreSavePoint` (annotated with `@After`).
 2. [Table Truncation Teardown](http://xunitpatterns.com/Table%20Truncation%20Teardown.html):
 clean up each table on tear-down after conducting tests, as shown for `oneTimeTeardown` (annotated
 with `@AfterClass`).
