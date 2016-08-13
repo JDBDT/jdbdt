@@ -133,7 +133,7 @@ Any attempt to modify it subsequently will cause an `InvalidOperationException`.
 Object creation - for a [data source](DataSources.html) `s`:
 
 - `data(s)` creates a new data set.
-- `data(s,c)` creates a new typed data set with conversion function `c`.
+- `data(s, c)` creates a new typed data set with conversion function `c`.
 - `builder(s)` creates a data set builder with an underlying fresh data set.
 - `empty(s)` returns an empty & read-only data set that is unique for `s`. 
 
@@ -163,9 +163,9 @@ Utility methods (all `static`):
 - `copyOf(data)` returns a new data set that has the same rows as `data`.
 - `join(data1, data2, ...,)` returns a new data set that contains all the rows in `data1`, `data2`, ...
 - `subset(data, index, n)` returns a new data set containing `n` rows of `data` starting from the `index`-th row.
-- `singleton(data,i)` returns a new data set containing only the `index`-th row in `data`.
+- `singleton(data, i)` returns a new data set containing only the `index`-th row in `data`.
 - `head(data, n)` returns a new data set containing the first `n` rows of `data`.
-- `tail(data,n)` returns a new data set containing the last `n` rows of `data`.
+- `tail(data, n)` returns a new data set containing the last `n` rows of `data`.
 
 ### `DataSetBuilder`
 
