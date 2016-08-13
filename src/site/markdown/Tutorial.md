@@ -61,12 +61,12 @@ The `USERS` table represents user data in the form of a numeric id (primary key)
 	
 #### The `User` class <a name="TheCode.TheTestSubject.UserClass"></a>
 
-The `User` class is a POJO class with getter and setter methods for each of the user attributes (e.g., `getId()`, `setId`). Additionally, it overrides a number of `java.lang.Object` methods for convenience of use in test code (e.g., `equals`). 
+The `User` class is a POJO class with getter and setter methods for each of the user attributes (e.g.,`getId` and `setId`). Additionally, it overrides a number of `java.lang.Object` methods for convenience of use in test code (e.g., `equals`). 
 
 #### The `UserDAO` class <a name="TheCode.TheTestSubject.UserDAOClass"></a>
 
 The `UserDAO` class defines methods for interfacing with the `USERS` table 
-using `User` objects. The methods are correspondence to database operations
+using `User` objects. The methods are in correspondence to database operations
 for user insertion, update, removal and retrieval.
 
 * `insertUser(u)`: inserts a new user.
@@ -76,7 +76,7 @@ for user insertion, update, removal and retrieval.
 * `getUser(id)`: get user data by id.
 * `getUser(login)`: get user data by login.
 * `getAllUsers()`: get a list of all users.
-* `getUsers(r)`: get a list of all users with role `r`.
+* `getUsers(r)`: get a list of all users with a given role.
 
 ## Test code / use of JDBDT <a name="TheTestCode"></a>
 
@@ -84,7 +84,7 @@ for user insertion, update, removal and retrieval.
 ### JDBDT import statements <a name="TheTestCode.Imports"></a>
 
 The test code of `UserDAOTest` makes use of JDBDT to setup and validate the
-contents of the database. First of all, you should notice the following JDBDT imports:
+contents of the database. You should notice the following JDBDT imports:
 
 	import static org.jdbdt.JDBDT.*; 
 
@@ -103,9 +103,7 @@ The static import (the very first one) relates to methods in the [JDBDT facade](
 
 To setup the database connection and define the initial contents of the database,
 each subclass of `UserDAOTest` defines a `globalSetup`
-method that is executed once before all tests, since it is marked with the `@BeforeClass` JUnit annotation. 
-
-Each of these methods merely calls `UserDAO.globalSetup(dbDriverClass,dbURL)`, parameterizing the JDBC driver class to load and the database URL to use for the actual setup. For instance, `DerbyTest` contains:
+method that is executed once before all tests, since it is marked with the `@BeforeClass` JUnit annotation. Each of these methods merely calls `UserDAO.globalSetup(dbDriverClass,dbURL)`, parameterizing the JDBC driver class to load and the database URL to use for the actual setup. For instance, `DerbyTest` contains:
 
 	private static final String 
     	JDBC_DRIVER_CLASS = "org.apache.derby.jdbc.EmbeddedDriver";
@@ -117,9 +115,9 @@ Each of these methods merely calls `UserDAO.globalSetup(dbDriverClass,dbURL)`, p
       globalSetup(JDBC_DRIVER_CLASS, DATABASE_URL);
     }
  
-This organization is merely a convenient one for the purpose of 
+This layout is merely a convenient one for the purpose of 
 testing multiple JDBC drivers in the tutorial code.
-In `UserDAO` we have
+In `UserDAO` we have:
     
     protected static
     void globalSetup(String jdbcDriverClass, String databaseURL) ... { 
@@ -158,7 +156,7 @@ that proceeds in the following steps:
                        
 - ... plus, finally, the [data set](DataSets.html) for the initial contents of the database. The strategy in this case is to use a [data set builder](DataSets.html#Creation.Builder). 
 We populate the database with 1 `ADMIN` user, 3 `REGULAR` users, and 2 `GUEST`
-users. The data set builder facilities allow for a succinct definition of the data, which is as follows:
+users. The data set builder methods allow a succinct definition of the data, as follows:
 
 		// Define data set for populating the database
 		theInitialData
@@ -328,13 +326,13 @@ The following table summarizes the created entries (note that `FIXED_DATE` equal
 </table>
 
 
-- The data set of the previous step, `theInitialData` is used to [populate](DBSetup.html#Insert) the database table.
+- The data set of the previous step, `theInitialData`, is used to [populate](DBSetup.html#Insert) the database table.
   
 		// Populate database using the built data set
     	populate(theInitialData);
 
-- The final step is to disable auto-commit for the JDBC connection,
-a pre-requisite for using JDBDT save-points, that are discussed [later](Tutorial.html#TheTestCode.PerTestSetupAndTeardown) in this tutorial. 
+- The final step disables auto-commit for the JDBC connection,
+a prerequisite for using JDBDT save-points, that are discussed [later](Tutorial.html#TheTestCode.PerTestSetupAndTeardown) in this tutorial. 
 
 		// Set auto-commit off (to allow for save-points)
     	theDB.getConnection().setAutoCommit(false);
@@ -342,8 +340,7 @@ a pre-requisite for using JDBDT save-points, that are discussed [later](Tutorial
 
 #### Final tear-down <a name="TheTestCode.SetupAndTeardown.Final"></a>
 
-After all tests execute, the `globalTeardown` method is executed, 
-since it is marked with the JUnit `@AfterClass` annotation. 
+The `globalTeardown` method of `UserDAOTest`, annotated with JUnit's `@AfterClass` annotation, is executed after all tests are done.  
 Its purpose is to leave the test database in a clean state and freeing up
 resources.
 
@@ -360,7 +357,7 @@ Then `teardown(theDB, true)` frees up any internal resources used by the [databa
 #### Per-test setup and tear-down <a name="TheTestCode.SetupAndTeardown.PerTest"></a>
 
 
-In `UserDAOTest` the `saveState` and `restoreState` methods are executed respectively before and
+In `UserDAOTest`, the `saveState` and `restoreState` methods are executed respectively before and
 after each test; observe the `@Before` and `@After` JUnit annotations in each method below.
 Their purpose is to make sure each test starts with the same initial database setup
 ([described earlier](Tutorial.html#TheTestCode.SetupAndTeardown.Initial)), 
@@ -380,7 +377,7 @@ making use of [JDBDT save-points](DBSetup.html#SaveAndRestore).
 
 The `save(theDB)` call creates a database save-point, beginning
 a new database transaction. In symmetry, the `restore(theDB)` call rolls back any database
-changes made by the current transaction to the JDBDT save point. 
+changes made by the current transaction to the JDBDT save-point. 
 Note also that, for portability reasons, only one save-point is maintained per database handle and 
 that there must be exactly one call to `restore` per each call to `save`.
 
