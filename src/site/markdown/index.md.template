@@ -47,5 +47,5 @@ the following commands:
 
 * [JDBDT users group](https://groups.google.com/forum/#!forum/jdbdt-users): for help on using JDBDT, ask a question here. 
 
-* [Github issue tracker](https://github.com/edrdo/jdbdt/issues): for bug reports and feature requests.
+* [GitHub issue tracker](https://github.com/edrdo/jdbdt/issues): for bug reports and feature requests.
  
