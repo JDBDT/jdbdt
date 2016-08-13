@@ -49,17 +49,17 @@ The available options relate to logging and a few other features discussed below
 For debugging purposes or report generation, trace output may be written to a [log file](Logs.html).
 The following logging options are defined in `DB.Option`
 
-* `LOG_ASSERTION_ERRORS`: log failed assertions
-* `LOG_ASSERTIONS`: log all assertions (passed or failed)
+* `LOG_ASSERTION_ERRORS`: log failed assertions;
+* `LOG_ASSERTIONS`: log all assertions (passed or failed);
 * `LOG_QUERIES`: log the result of database queries;
 * `LOG_SETUP`: log database setup operations (data set insertions and SQL setup commands);
 * `LOG_SNAPSHOTS`: log database snapshots;
 
-At creation time, the `DB.Option.LogAssertionErrors` option is enabled by default, 
-and log output is set to `System.err`. 
+At creation time, only the `DB.Option.LogAssertionErrors` option is enabled by default, 
+and the log output is redirected to `System.err`. 
 Subsequently, logging options may be enabled/disabled using `enable` / `disable` 
 and the output log may be changed using `setLog`.
-The `enableFullLogging()` convenience method enables all logging options at once.
+A call to `enableFullLogging()` enables all logging options at once.
 
 *Illustration*
 
@@ -72,7 +72,7 @@ The `enableFullLogging()` convenience method enables all logging options at once
 	// Write log output to a file
 	db.setLog(new File("MyLog.jdbdt.xml"));
 	
-	// Enable full logging
+	// Enable all logging options
 	db.enableFullLogging();
 	
 ### Statement reuse
