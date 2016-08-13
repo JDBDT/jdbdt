@@ -8,20 +8,17 @@ testing database applications, helping you write tests
 that include database setup and verification.
 The main features are as follows:
 
-* [Data sets](DataSets.html) are defined programmatically, and can be used
-for database [setup](DBSetup.html) or [verification](DBAssertions.html). Thus data sets 
-are an integral part of test specifications, 
-without no need to maintain external "data set files".
+* [Data sets](DataSets.html) are defined programmatically,
+without need to maintain external "data files", and can be used
+for database [setup](DBSetup.html) or [verification](DBAssertions.html). 
 * [&delta;-assertions](DBAssertions.html) can be used to verify 
 database changes incrementally, in addition to standard
 assertions for database state or data set comparison.
-* [Setup](DBSetup.html) methods can be used to manage the contents of database
-tables, including insertions, clean-up operations, and 
-save-points.
+* [Setup](DBSetup.html) methods can be used to define database contents. 
 * The entire functionality is exposed by a "minimalistic" 
 [API facade](Facade.html).
 
-To get started, you may want to check the [tutorial in this site](Tutorial.html).
+To get started, you may want to check the [tutorial](Tutorial.html).
 
 ## Installation 
 
