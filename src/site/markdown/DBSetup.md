@@ -214,17 +214,17 @@ with `@AfterClass`).
 
 ### `JDBDT`
 
+Insertion:
+
+- `insert(data)` inserts `data` into a table (the table is `data.getSource()`).
+- `populate(data)` sets `data` as the contents of a table (the table is `data.getSource()`).
+
 Clean-up:
 
 - `delete(t)` clear table `t` with a DELETE statement.
 - `deleteAll(t,w,a)` deletes data from table `t` subject to WHERE clause `w` and optional
 WHERE clause arguments.
 - `truncate(t)` clear table `t` with a TRUNCATE TABLE statement.
-
-Insertion:
-
-- `insert(data)` inserts `data` into a table (`data.getSource()`).
-- `populate(data)` sets `data` as the contents of a table (`data.getSource()`).
 
 Save and restore:
 
