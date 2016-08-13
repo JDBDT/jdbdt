@@ -8,26 +8,30 @@ testing database applications, helping you write tests
 that include database setup and verification.
 The main features are as follows:
 
-* [Data sets](DataSets.html) are defined programmatically,
-without need to maintain external "data files", and can be used
-for database [setup](DBSetup.html) or [verification](DBAssertions.html). 
-* [&delta;-assertions](DBAssertions.html) can be used to verify 
+* [&delta;-assertions](DBAssertions.html#DeltaAssertions) can be used to verify 
 database changes incrementally, in addition to standard
-assertions for database state or data set comparison.
-* [Setup](DBSetup.html) methods can be used to define database contents. 
+assertions for [database state](DBAssertions.html#StateAssertions) 
+or [data set comparison](DBAssertions.html#DataSetAssertions).
+* [Setup methods](DBSetup.html) can be used to define database contents. 
+* [Data sets](DataSets.html) are defined programmatically,
+without need to maintain external "data files". 
 * The entire functionality is exposed by a "minimalistic" 
 [API facade](Facade.html).
 
 To get started, you may want to check the [tutorial](Tutorial.html).
 
+For help, ask a question in the
+[jdbdt-users group](https://groups.google.com/forum/#!forum/jdbdt-users).
+To report an issue, use the 
+[issue tracker at GitHub](https://github.com/edrdo/jdbdt/issues).
+
 ## Installation 
 
-**Pre-requisite:** JDBDT requires Java 8, it will not work 
+**Prerequisite:** JDBDT requires Java 8, it will not work 
 with earlier Java versions. 
 
 JDBDT is available from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cjdbdt).
-For the latest stable release of JDBDT, Maven users should add the following
-dependency to a POM file:
+Maven users can add the following dependency to a POM file:
 
 
 	<dependency>
@@ -43,9 +47,3 @@ the following commands:
 	cd jdbdt
 	mvn install 
 	
-## Getting help 
-
-* [JDBDT users group](https://groups.google.com/forum/#!forum/jdbdt-users): for help on using JDBDT, ask a question here. 
-
-* [GitHub issue tracker](https://github.com/edrdo/jdbdt/issues): for bug reports and feature requests.
- 
