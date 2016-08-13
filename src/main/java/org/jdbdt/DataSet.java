@@ -17,7 +17,7 @@ public class DataSet {
   /**
    * Data source.
    */
-  final DataSource source;
+  private final DataSource source;
 
   /**
    * Rows in the data set.
