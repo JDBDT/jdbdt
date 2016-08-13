@@ -1,12 +1,11 @@
+# JDBDT 
+
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jdbdt/jdbdt/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/org.jdbdt/jdbdt)
 [![Build status](https://api.travis-ci.org/edrdo/jdbdt.png?branch=master)](https://travis-ci.org/edrdo/jdbdt)
 
-# JDBDT 
-
 JDBDT (Java DataBase Delta Testing) is an open-source Java library for 
-testing database applications, helping you write tests
-that include database setup and verification.
-The main features are as follows:
+testing database applications. The library is designed for automation 
+of database setup and validation in test code. The main features are as follows:
 
 * [&delta;-assertions](DBAssertions.html#DeltaAssertions) can be used to verify 
 database changes incrementally, in addition to standard
