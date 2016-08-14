@@ -1,7 +1,7 @@
 package org.jdbdt;
 
 /**
- * Database delta.
+ * Utility class with methods for assertion execution.
  * 
  * @since 0.1
  * 
@@ -112,5 +112,4 @@ final class DBAssert {
   private DBAssert() {
     
   }
-
 }

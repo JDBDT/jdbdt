@@ -4,9 +4,9 @@ package org.jdbdt;
  * Database column filler.
  *
  * <p>
- * If convenient, custom column fillers can be set for data set builders
+ * When convenient, custom column fillers can be set for data set builders
  * using {@link DataSetBuilder#set(String, ColumnFiller)}.
- * The {@link DataSetBuilder} class already provides a number of
+ * The {@link DataSetBuilder} class already provides various
  * convenience methods that abstract the creation
  * of commonly used column fillers.
  * </p>

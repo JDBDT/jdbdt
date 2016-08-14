@@ -3,7 +3,7 @@ package org.jdbdt;
 import java.util.Iterator;
 
 /**
- * Data set assertion data.
+ * Data set assertion.
  * 
  * @since 0.1
  */

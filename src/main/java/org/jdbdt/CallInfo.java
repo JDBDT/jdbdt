@@ -1,7 +1,7 @@
 package org.jdbdt;
 
 /**
- * POJO to store JDBDT call info, used in logs.
+ * POJO to store call info, used in logs.
  * 
  * @since 0.1
  *
@@ -65,8 +65,9 @@ final class CallInfo {
           getLineNumber());
     }
   }
+  
   /**
-   * Get call-info object. 
+   * Create call-info object. 
    * @return A new call info message with an empty message.
    */
   public static CallInfo create() {
@@ -74,7 +75,7 @@ final class CallInfo {
   }
   
   /**
-   * Get call-info object with an associated message. 
+   * Create call-info object with an associated message. 
    * @param message Message to set.
    * @return A new call info message with an empty message.
    */

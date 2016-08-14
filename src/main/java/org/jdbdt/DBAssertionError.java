@@ -1,7 +1,7 @@
 package org.jdbdt;
 
 /**
- * Error thrown due to a failed database assertion.
+ * Error thrown due to a failed assertion.
  * 
  * @since 0.1
  */
