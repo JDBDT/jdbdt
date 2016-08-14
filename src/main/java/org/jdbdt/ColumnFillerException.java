@@ -7,7 +7,7 @@ package org.jdbdt;
  * @see ColumnFiller
  * @see DataSetBuilder
  *  
- * @since 0.1
+ * @since 0.2
  */
 public final class ColumnFillerException extends RuntimeException {
   
