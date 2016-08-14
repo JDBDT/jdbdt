@@ -5,7 +5,7 @@ package org.jdbdt;
  * evaluating a column filler.
  *  
  * @see ColumnFiller
- * @see DataSetBuilder
+ * @see DataSetBuilder#generate(int)
  *  
  * @since 0.2
  */
