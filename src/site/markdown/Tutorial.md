@@ -1,7 +1,7 @@
 # Tutorial
 
 This tutorial helps you understand how to use the essential
-features of JDBDT.  The companion code is organized as a [Maven](http://maven.org) project,
+features of JDBDT.  The companion code is organized as a [Maven](http://maven.apache.org) project,
 and tests are written using [JUnit](http://junit.org). Some familiarity with Maven and JUnit 
 is assumed. 
 
