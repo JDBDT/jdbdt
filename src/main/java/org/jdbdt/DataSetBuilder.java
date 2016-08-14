@@ -120,10 +120,13 @@ public final class DataSetBuilder {
    * 
    * @param count Number of rows (a positive integer)
    * @return The data set instance (for chained calls).
+   * @throws ColumnFillerException if there is an error evaluating 
+   *     a column filler.
    * @throws InvalidOperationException for an invalid row count, or if
    *     there are columns with no associated fillers.
    */
-  public DataSetBuilder generate(int count) throws InvalidOperationException {
+  public DataSetBuilder generate(int count)
+  throws ColumnFillerException, InvalidOperationException {
     ensureValid(count, count > 0);
     if (fillerCount < fillers.length) {
       DataSource source = data.getSource();
