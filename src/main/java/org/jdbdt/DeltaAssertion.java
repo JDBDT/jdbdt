@@ -3,7 +3,7 @@ package org.jdbdt;
 import java.util.Iterator;
 
 /**
- * Representation of a delta assertion.
+ * Delta assertion data.
  * 
  * @since 0.1
  */
