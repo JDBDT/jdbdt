@@ -4,8 +4,9 @@
 # JDBDT 
 
 JDBDT (Java Database Delta Testing) is a library for 
-Java database application testing. Visit [http://jdbdt.org](http://jdbdt.org)
-for more information.
+Java database application testing. 
+
+Visit [http://jdbdt.org](http://jdbdt.org) for more information.
 
 # License
 
