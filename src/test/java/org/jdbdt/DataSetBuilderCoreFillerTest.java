@@ -125,6 +125,13 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
     theSUT.generate(count);
     assertTrue(expected.sameDataAs(theSUT.data()));
   }
+  
+  @Test(expected=ColumnFillerException.class)
+  public void testColumnFillerException() {
+    theSUT.set("login", () -> { throw new RuntimeException(); });
+    theSUT.generate(1);
+  }
+ 
   @Test
   public void testNullValue() {
     int count = 10;

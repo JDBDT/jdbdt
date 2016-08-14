@@ -139,7 +139,12 @@ public final class DataSetBuilder {
     for (int r=0; r < count; r++) {
       final Object[] colData = new Object[colNames.length];
       for (int c = 0; c < colNames.length; c++) {
-        colData[c] = fillers[c].next();
+        try {
+          colData[c] = fillers[c].next();
+        }
+        catch (Exception e) {
+          throw new ColumnFillerException("Error evaluating filler for '" + colNames[c] + "'", e);
+        }
       }
       data.addRow(new Row(colData));
     }
