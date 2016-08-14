@@ -3,11 +3,13 @@ package org.jdbdt;
 import java.sql.SQLException;
 
 /**
- * Exception thrown due to database errors.
+ * Exception thrown due to a database error.
  * 
  * <p>
- * An exception of this type wraps a {@link SQLException}
- * (a checked exception type).
+ * An exception of this type wraps an instance of 
+ * {@link SQLException} (a checked exception type)
+ * that occurred while executing a database operation
+ * issued by JDBDT. 
  * </p>
  * 
  * @since 0.1

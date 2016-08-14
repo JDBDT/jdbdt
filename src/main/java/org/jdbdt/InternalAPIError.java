@@ -30,8 +30,6 @@ final class InternalAPIError extends Error {
     super(message);
   }
 
-
-
   /**
    * Serial version UID.
    */
