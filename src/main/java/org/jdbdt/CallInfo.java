@@ -113,7 +113,6 @@ final class CallInfo {
    * @param msg Call info context message.
    */
   private CallInfo(String msg) {
-    /* This is inefficient but it it called non-intensively. */
     StackTraceElement[] info = Thread.currentThread().getStackTrace();
     callerMethodInfo = new MethodInfo(info[CALLER_METH_STO]);
     apiMethodInfo = new MethodInfo(info[API_METH_STO]);
