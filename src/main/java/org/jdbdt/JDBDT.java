@@ -7,12 +7,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * JDBDT main API facade.
+ * JDBDT facade.
  * 
  * <p>
- * This utility class defines the front-end API database 
- * verification, setup, tear-down, as well as JDBDT
- * object creation.
+ * This utility class defines the front-end API for database 
+ * assertions, setup operations, and creation of associated
+ * object instances.
  * </p>
  *  
  * @since 0.1
@@ -31,7 +31,7 @@ public final class JDBDT {
   public static String version() { 
     return VersionInfo.ID;
   }
-  
+
   /**
    * Create a new database handle.
    * 
