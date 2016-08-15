@@ -35,7 +35,7 @@ final class Row {
    * Get data for this row.
    * @return The data representing the columns of this row.
    */
-  public Object[] data() {
+  Object[] data() {
     return data;
   }
   
@@ -43,7 +43,7 @@ final class Row {
    * Get row length.
    * @return the number of columns in the database row.
    */
-  public int length() {
+  int length() {
     return data.length;
   }
   
