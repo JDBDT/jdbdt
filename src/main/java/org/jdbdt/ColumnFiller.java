@@ -6,7 +6,7 @@ package org.jdbdt;
  * <p>
  * When convenient, custom column fillers can be set for data set builders
  * using {@link DataSetBuilder#set(String, ColumnFiller)}.
- * The {@link DataSetBuilder} class already provides various
+ * Note that the {@link DataSetBuilder} class already provides various
  * convenience methods that abstract the creation
  * of commonly used column fillers.
  * </p>
