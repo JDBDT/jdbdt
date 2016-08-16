@@ -164,8 +164,8 @@ Utility methods (all `static`):
 - `join(data1, data2, ...,)` returns a new data set that contains all the rows in `data1`, `data2`, ...
 - `subset(data, index, n)` returns a new data set containing `n` rows of `data` starting from the `index`-th row.
 - `singleton(data, i)` returns a new data set containing only the `index`-th row in `data`.
-- `head(data, n)` returns a new data set containing the first `n` rows of `data`.
-- `tail(data, n)` returns a new data set containing the last `n` rows of `data`.
+- `first(data, n)` returns a new data set containing the first `n` rows of `data`.
+- `last(data, n)` returns a new data set containing the last `n` rows of `data`.
 
 ### `DataSetBuilder`
 

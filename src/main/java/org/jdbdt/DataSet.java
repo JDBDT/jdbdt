@@ -234,7 +234,7 @@ public class DataSet {
    * @return A new data set containing the first 
    * <code>n</code> rows in the source data set.
    */
-  public static DataSet head(DataSet data, int n) {
+  public static DataSet first(DataSet data, int n) {
     return subset(data, 0, n);
   }
   
@@ -245,7 +245,7 @@ public class DataSet {
    * @return A new data set containing the last 
    *        <code>n</code> rows in the source data set.
    */
-  public static DataSet tail(DataSet data, int n) {
+  public static DataSet last(DataSet data, int n) {
     return subset(data, data.size() - n, n);
   }
   

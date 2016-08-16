@@ -273,28 +273,28 @@ public class DataSetTest extends DBTestCase {
   public void testHead1() {
     final int size = 10, n = 1;
     testSubsetMethod(size, 0, n, 
-        () -> DataSet.head(theSUT, n));
+        () -> DataSet.first(theSUT, n));
   }
   
   @Test
   public void testHead2() {
     final int size = 10, n = 9;
     testSubsetMethod(size, 0, n, 
-        () -> DataSet.head(theSUT, n));
+        () -> DataSet.first(theSUT, n));
   }
   
   @Test
   public void testTail1() {
     final int size = 10, n = 1;
     testSubsetMethod(size, size - n, n, 
-        () -> DataSet.tail(theSUT, n));
+        () -> DataSet.last(theSUT, n));
   }
   
   @Test
   public void testTail2() {
     final int size = 10, n = 9;
     testSubsetMethod(size, size - n, n, 
-        () -> DataSet.tail(theSUT, n));
+        () -> DataSet.last(theSUT, n));
   }
   
   @Test

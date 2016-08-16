@@ -146,7 +146,7 @@ public class IntegrationTest extends DBTestCase {
     User u2 = u1.clone();
     u2.setPassword("new password");
     getDAO().doUpdate(u2);
-    assertState(DataSet.tail(initialData, initialData.size()-1)
+    assertState(DataSet.last(initialData, initialData.size()-1)
                        .add(data(table, getConversion()).row(u2)));  
   }
 
@@ -182,7 +182,7 @@ public class IntegrationTest extends DBTestCase {
   @Test
   public void testUserRemoval2() throws SQLException {
     getDAO().doDelete("user1");
-    assertState(DataSet.tail(initialData, initialData.size() - 1));
+    assertState(DataSet.last(initialData, initialData.size() - 1));
   }
   
   @Test
@@ -199,7 +199,7 @@ public class IntegrationTest extends DBTestCase {
   @Test
   public void testUserRemoval4() throws SQLException {
     getDAO().doDelete("user1", "user2", "user3");
-    assertState(DataSet.tail(initialData, initialData.size() - 3 ));
+    assertState(DataSet.last(initialData, initialData.size() - 3 ));
   }
   
   @Test
