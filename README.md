@@ -32,6 +32,18 @@ Commands:
         cd jdbdt
         mvn install
 
+# Change Log
 
+## 0.2 (next release)
+
+API revisions:
+ * `DataSet`: `head` and `tail` methods respectively renamed to `first` and `last`.
+ * `ColumnFillerException` introduced to signal errors during column filler execution.
+
+Documentation improvements (site pages and Javadoc).
+
+## 0.1
+
+Initial release.
 
 
