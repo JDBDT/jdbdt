@@ -34,7 +34,11 @@ Commands:
 
 # Change Log
 
-## 0.2 (next release)
+## 0.3 (next release)
+
+No changes yet.
+
+## 0.2 
 
 * `DataSet`: `head` and `tail` methods respectively renamed to `first` and `last`.
 * `ColumnFillerException` introduced to signal errors during column filler execution.
