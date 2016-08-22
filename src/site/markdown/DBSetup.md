@@ -17,11 +17,11 @@ Database data may be inserted using one of the following methods:
 
 1. `insert(data)` inserts `data` into the table given by `data.getSource()`.
 2. `populate(data)` inserts `data` like `insert`, but clears the table first using a DELETE statement,
-and also records `data` as the [snapshot for subsequent delta assertions](DBAssert.html#Snapshots).
+and also records `data` as the [snapshot for subsequent delta assertions](DBAssertions.html#Snapshots).
 
 Thus, `insert` should be used for incremental additions to a table, whereas
 `populate` should be used to reset the contents of a table contents entirely. 
-The use of `populate` is more adequate in particular if [delta assertions](DBAssert.html) 
+The use of `populate` is more adequate in particular if [delta assertions](DBAssertions.html) 
 are performed over the table subsequently.
 
 *Illustration*

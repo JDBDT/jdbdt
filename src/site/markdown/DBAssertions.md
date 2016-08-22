@@ -63,7 +63,7 @@ checks if the database delta is `(oldData,newData)`, as follows:
 1. It issues a new database query for `s`.
 2. It computes the actual delta between the query's result and the reference snapshot.
 3. It verifies if the expected and actual deltas match. If they do not match, `DBAssertionError`
-is thrown. Details on mismatched data are additionally logged, unless the `DB.Option.LogAssertionErrors` [option is disabled](Db.html#Logging). 
+is thrown. Details on mismatched data are additionally logged, unless the `DB.Option.LogAssertionErrors` [option is disabled](DB.html#Logging). 
 
 A number of other assertion methods are defined for convenience, all of which internally reduce to `assertDelta`, as follows:
 
