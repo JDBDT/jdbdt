@@ -9,8 +9,8 @@
 
 Tables are represented by `Table`, a subclass of `DataSource`, and created
 using the `table` facade method in association to a [database handle](DB.html). 
-The `columns` method may be used to specify the table columns of interest; all
-columns will be considered by default otherwise.
+The `columns` method may be used to specify the table columns of interest, otherwise all
+columns in the table will be considered by default.
 
 *Illustration*
 
