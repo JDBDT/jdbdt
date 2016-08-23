@@ -15,7 +15,7 @@ implemented using these operations.
 
 Database data may be inserted using one of the following methods:
 
-1. `insert(data)` inserts `data` into the table given by `data.getSource()`.
+1. `insert(data)` inserts `data` (a [data set](DataSets.html)) into the [table](DataSources.html) given by `data.getSource()`.
 2. `populate(data)` inserts `data` like `insert`, but clears the table first using a DELETE statement,
 and also records `data` as the [snapshot for subsequent delta assertions](DBAssertions.html#Snapshots).
 
