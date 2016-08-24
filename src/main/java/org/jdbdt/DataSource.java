@@ -157,23 +157,24 @@ public abstract class DataSource {
    * Ensure query is compiled.
    */
   private void ensureCompiled() {
-    if (queryStmt == null) {
-      try {
-        PreparedStatement stmt = db.compile(getSQLForQuery());
-        MetaData md = new MetaData(stmt);
-        if (getColumns() == null) {
-          String[] cols = new String[md.getColumnCount()];
-          for (int i = 0; i < cols.length; i++) {
-            cols[i] = md.getLabel(i);
-          }
-          setColumns(cols);
+    if (queryStmt != null) {
+      return;
+    }
+    try {
+      PreparedStatement stmt = db.compile(getSQLForQuery());
+      MetaData md = new MetaData(stmt);
+      if (getColumns() == null) {
+        String[] cols = new String[md.getColumnCount()];
+        for (int i = 0; i < cols.length; i++) {
+          cols[i] = md.getLabel(i);
         }
-        queryStmt = stmt;
-        metaData = md;
+        setColumns(cols);
       }
-      catch (SQLException e) {
-        throw new DBExecutionException(e);
-      }
+      queryStmt = stmt;
+      metaData = md;
+    }
+    catch (SQLException e) {
+      throw new DBExecutionException(e);
     }
   }
   /**
@@ -241,17 +242,16 @@ public abstract class DataSource {
    * @param c Row consumer.
    */
   static void executeQuery(PreparedStatement queryStmt, 
-                           MetaData md, 
-                           Object[] queryArgs, 
-                           Consumer<Row> c) {
+      MetaData md, 
+      Object[] queryArgs, 
+      Consumer<Row> c) {
     try { 
       if (queryArgs != null && queryArgs.length > 0) {
         for (int i=0; i < queryArgs.length; i++) {
           queryStmt.setObject(i + 1, queryArgs[i]);
         }
       }
-      ResultSet rs = queryStmt.executeQuery();
-      try {
+      try(ResultSet rs = queryStmt.executeQuery()) {
         int colCount = md.getColumnCount();
         while (rs.next()) {
           Object[] data = new Object[colCount];
@@ -260,9 +260,6 @@ public abstract class DataSource {
           }
           c.accept(new Row(data));
         }
-      }
-      finally {
-        rs.close();
       }
     } 
     catch(SQLException e) {
