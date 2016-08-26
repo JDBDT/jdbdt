@@ -34,7 +34,7 @@ public final class DB {
      */
     LOG_ASSERTIONS,
     /**
-     * Log failed assertion errors (enabled by default).
+     * Log failed assertions (enabled by default).
      */
     LOG_ASSERTION_ERRORS,
     /**
