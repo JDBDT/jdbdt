@@ -264,9 +264,9 @@ public class DataSet {
   /**
    * Create data set that results from joining
    * several data sets.
-   * @param dataSets Source Data sets.
-   * @return A new data set containing the last 
-   *        <code>n</code> rows in the source data set.
+   * @param dataSets Data sets to join.
+   * @return A new data set containing the rows 
+   *   from all given data sets. 
    */
   public static DataSet join(DataSet... dataSets) {
     if (dataSets == null || dataSets.length == 0) {
