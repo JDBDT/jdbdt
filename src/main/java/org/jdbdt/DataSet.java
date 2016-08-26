@@ -114,7 +114,7 @@ public class DataSet {
 
   /**
    * Get internal list of rows (package access only)
-   * @return Internal ist of rows in the data set.
+   * @return Internal list of rows in the data set.
    */
   final List<Row> getRows() {
     return rows;
@@ -202,8 +202,14 @@ public class DataSet {
    * @param n Number of rows.
    * @return A new data set containing 
    *        the rows in the specified range.
+   * @throws InvalidOperationException if the given data
+   * set is null or if the specified column range is invalid.
    */
-  public static DataSet subset(DataSet data, int startIndex, int n) {
+  public static DataSet subset(DataSet data, int startIndex, int n) 
+  throws InvalidOperationException {
+    if (data == null) {
+      throw new InvalidOperationException("Null data set");
+    }
     if (startIndex < 0 || n < 0 || startIndex + n > data.size()) {
       throw new InvalidOperationException("Invalid range.");
     }
@@ -222,8 +228,11 @@ public class DataSet {
    * @param index Row index (from 0 to <code>data.size()-1</code>).
    * @return A new data set containing the <code>index</code>-th 
    * row of the source data set.
+   * @throws InvalidOperationException if the given data
+   * set is null or if the specified column index is invalid.
    */
-  public static DataSet singleton(DataSet data, int index) {
+  public static DataSet singleton(DataSet data, int index)
+  throws InvalidOperationException {
     return subset(data, index, 1);
   }
   
@@ -233,8 +242,11 @@ public class DataSet {
    * @param n Number of rows.
    * @return A new data set containing the first 
    * <code>n</code> rows in the source data set.
+   * @throws InvalidOperationException if the given data
+   * set is null or if the value of <code>n</code> is invalid.
    */
-  public static DataSet first(DataSet data, int n) {
+  public static DataSet first(DataSet data, int n) 
+  throws InvalidOperationException {
     return subset(data, 0, n);
   }
   
@@ -244,8 +256,11 @@ public class DataSet {
    * @param n Number of rows.
    * @return A new data set containing the last 
    *        <code>n</code> rows in the source data set.
+   * @throws InvalidOperationException if the given data
+   * set is null or if the value of <code>n</code> is invalid.
    */
-  public static DataSet last(DataSet data, int n) {
+  public static DataSet last(DataSet data, int n)
+  throws InvalidOperationException {
     return subset(data, data.size() - n, n);
   }
   
@@ -254,8 +269,13 @@ public class DataSet {
    * @param data Source data set.
    * @return A new data set containing all
    *        rows in the source data set.
+   * @throws InvalidOperationException if given data set is null.
    */
-  public static DataSet copyOf(DataSet data) {
+  public static DataSet copyOf(DataSet data) 
+  throws InvalidOperationException {
+    if (data == null) {
+      throw new InvalidOperationException("Null data set");
+    }
     DataSet r = new DataSet(data.getSource());
     r.getRows().addAll(data.getRows());
     return r;
@@ -267,8 +287,11 @@ public class DataSet {
    * @param dataSets Data sets to join.
    * @return A new data set containing the rows 
    *   from all given data sets. 
+   * @throws InvalidOperationException if <code>dataSets</code>
+   * is null or empty or if the data source is not the
+   * same for all data sets.
    */
-  public static DataSet join(DataSet... dataSets) {
+  public static DataSet join(DataSet... dataSets) throws InvalidOperationException {
     if (dataSets == null || dataSets.length == 0) {
       throw new InvalidOperationException("No source data sets given for joining.");
     }
