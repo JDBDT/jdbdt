@@ -54,7 +54,7 @@ final class Row {
   @Override
   public boolean equals(Object o) {
     return  o == this 
-        || (o instanceof Row && Arrays.equals(data, ((Row) o).data));
+        || (o instanceof Row && Arrays.deepEquals(data, ((Row) o).data));
   }
   
   /**
@@ -70,7 +70,7 @@ final class Row {
   public int hashCode() {
     int h = hash;
     if (h == 0) {
-      hash = h = Arrays.hashCode(data);
+      hash = h = Arrays.deepHashCode(data);
     }
     return h;
   }
@@ -81,7 +81,7 @@ final class Row {
    */
   @Override
   public String toString() {
-    return Arrays.toString(data);
+    return Arrays.deepToString(data);
   }
 
 }
