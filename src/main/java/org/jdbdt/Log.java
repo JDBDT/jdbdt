@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -281,9 +282,18 @@ final class Log implements AutoCloseable {
       for (int i=0; i < data.length; i++) {
         Element colNode = createNode(rowElem, COLUMN_TAG);
         colNode.setAttribute(LABEL_TAG, columns.get(i).label());
-        if (data[i] != null) {
-          colNode.setAttribute(JAVA_TYPE_TAG, data[i].getClass().getName());
-          colNode.setTextContent(data[i].toString());
+        Object cValue = data[i];
+        if (cValue != null) {
+          String typeAttr, valueContent;
+          if (cValue.getClass().isArray()) {
+            typeAttr = cValue.getClass().getTypeName();
+            valueContent = Arrays.deepToString((Object[]) cValue);
+          } else {
+            typeAttr = cValue.getClass().getName();
+            valueContent = cValue.toString();
+          }
+          colNode.setAttribute(JAVA_TYPE_TAG, typeAttr);
+          colNode.setTextContent(valueContent);
         } else {
           colNode.setTextContent(NULL_VALUE);
         }
