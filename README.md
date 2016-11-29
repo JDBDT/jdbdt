@@ -36,7 +36,8 @@ Commands:
 
 ## 0.3 (next release)
 
-No changes yet.
+* Bug fixes & improvements when handling array data (e.g. BINARY) from/to database.
+* Slight documentation improvements.
 
 ## 0.2 
 
