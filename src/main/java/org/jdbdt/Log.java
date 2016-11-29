@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -285,9 +287,10 @@ final class Log implements AutoCloseable {
         Object cValue = data[i];
         if (cValue != null) {
           String typeAttr, valueContent;
-          if (cValue.getClass().isArray()) {
+          Class<?> cClass = cValue.getClass();
+          if (cClass.isArray()) {
             typeAttr = cValue.getClass().getTypeName();
-            valueContent = Arrays.deepToString((Object[]) cValue);
+            valueContent = arrayAsString(cValue, cClass.getComponentType());
           } else {
             typeAttr = cValue.getClass().getName();
             valueContent = cValue.toString();
@@ -316,6 +319,13 @@ final class Log implements AutoCloseable {
   private void simpleNode(Element parent, String tag, String value) {
     Element child = createNode(parent, tag);
     child.setTextContent(value);
+  }
+  
+  @SuppressWarnings("javadoc")
+  private String arrayAsString(Object array, Class<?> elemClass) {
+    return elemClass.isPrimitive() ?
+        ARRAY_STRING_FORMATTERS.get(elemClass).apply(array)
+      : Arrays.deepToString((Object[]) array);
   }
   
   /**
@@ -390,8 +400,13 @@ final class Log implements AutoCloseable {
   private static final String CTX_MESSAGE_TAG = "message";
   @SuppressWarnings("javadoc")
   private static final String CTX_METHOD_TAG = "method";
+  
+  @SuppressWarnings("javadoc")
+  private static final IdentityHashMap<Class<?>, Function<Object, String> > ARRAY_STRING_FORMATTERS;
+  
   static {
     try {
+      // XML handles
       XML_DOC_FACTORY = DocumentBuilderFactory.newInstance().newDocumentBuilder();
       XML_TRANSFORMER = TransformerFactory.newInstance().newTransformer();
       XML_TRANSFORMER.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -401,6 +416,16 @@ final class Log implements AutoCloseable {
       XML_TRANSFORMER.setOutputProperty(OutputKeys.STANDALONE, "no");
       XML_TRANSFORMER.setOutputProperty(OutputKeys.VERSION, "1.0");
       XML_TRANSFORMER.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+      // "Array string formatters"
+      ARRAY_STRING_FORMATTERS = new IdentityHashMap<>();
+      ARRAY_STRING_FORMATTERS.put(Boolean.TYPE, o -> Arrays.toString((boolean[]) o));
+      ARRAY_STRING_FORMATTERS.put(Byte.TYPE, o -> Arrays.toString((byte[]) o));
+      ARRAY_STRING_FORMATTERS.put(Character.TYPE, o -> Arrays.toString((char[]) o));
+      ARRAY_STRING_FORMATTERS.put(Double.TYPE, o -> Arrays.toString((double[]) o));
+      ARRAY_STRING_FORMATTERS.put(Float.TYPE, o -> Arrays.toString((float[]) o));
+      ARRAY_STRING_FORMATTERS.put(Integer.TYPE, o -> Arrays.toString((int[]) o));
+      ARRAY_STRING_FORMATTERS.put(Long.TYPE, o -> Arrays.toString((long[]) o));
+      ARRAY_STRING_FORMATTERS.put(Short.TYPE, o -> Arrays.toString((short[]) o));
     } catch (ParserConfigurationException | TransformerConfigurationException
         | TransformerFactoryConfigurationError e) {
       throw new InternalAPIError(e);
