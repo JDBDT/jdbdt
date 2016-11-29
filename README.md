@@ -34,10 +34,14 @@ Commands:
 
 # Change Log
 
-## 0.3 (next release)
+## 0.4-SNAPSHOT (current snapshot / next release)
+
+* Nothing yet.
+
+## 0.3 
 
 * Bug fixes & improvements when handling array data (e.g. BINARY) from/to database.
-* Slight documentation improvements.
+* A few documentation improvements.
 
 ## 0.2 
 
