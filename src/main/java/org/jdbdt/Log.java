@@ -419,7 +419,7 @@ final class Log implements AutoCloseable {
       // "Array string formatters"
       ARRAY_STRING_FORMATTERS = new IdentityHashMap<>();
       ARRAY_STRING_FORMATTERS.put(Boolean.TYPE, o -> Arrays.toString((boolean[]) o));
-      ARRAY_STRING_FORMATTERS.put(Byte.TYPE, o -> Arrays.toString((byte[]) o));
+      ARRAY_STRING_FORMATTERS.put(Byte.TYPE, o -> Misc.toHexString((byte[]) o));
       ARRAY_STRING_FORMATTERS.put(Character.TYPE, o -> Arrays.toString((char[]) o));
       ARRAY_STRING_FORMATTERS.put(Double.TYPE, o -> Arrays.toString((double[]) o));
       ARRAY_STRING_FORMATTERS.put(Float.TYPE, o -> Arrays.toString((float[]) o));
