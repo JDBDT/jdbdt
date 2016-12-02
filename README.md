@@ -6,12 +6,14 @@
 JDBDT (Java Database Delta Testing) is a library for 
 Java database application testing. 
 
-Visit [http://jdbdt.org](http://jdbdt.org) for more information.
+Visit [http://jdbdt.org](http://jdbdt.org) for reference.
 
 # License
 
 JDBDT is open-source software under the terms of the 
 [Eclipse Public License v 1.0](http://www.eclipse.org/legal/epl-v10.html).
+
+Copyright [Eduardo R. B. Marques](http://www.dcc.fc.up.pt/~edrdo), 2016
 
 # Download / installation
 
@@ -19,12 +21,16 @@ JDBDT is available at [Maven Central](http://search.maven.org/#search%7Cga%7C1%7
 
 Individual release artifacts are also available at [GitHub](https://github.com/edrdo/jdbdt/releases).
 
+# Dependencies
+
+JDBDT requires Java 8 SE but has no other external depencies.
+
 # Compilation 
 
 Requirements:
 
 * Maven 3.2 or higher
-* Java 8 or higher
+* Java 8 compiler or higher
 
 Commands: 
 
