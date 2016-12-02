@@ -23,7 +23,7 @@ Individual release artifacts are also available at [GitHub](https://github.com/e
 
 # Dependencies
 
-JDBDT requires Java 8 SE but has no other external depencies.
+JDBDT is self-contained: it uses the Java 8 SE API only.
 
 # Compilation 
 
