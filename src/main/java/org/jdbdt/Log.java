@@ -3,6 +3,7 @@ package org.jdbdt;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.lang.reflect.Array;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.IdentityHashMap;
@@ -288,7 +289,9 @@ final class Log implements AutoCloseable {
         if (cValue != null) {
           String typeAttr, valueContent;
           Class<?> cClass = cValue.getClass();
+          int length = -1;
           if (cClass.isArray()) {
+            length = Array.getLength(cValue);
             typeAttr = cValue.getClass().getTypeName();
             valueContent = arrayAsString(cValue, cClass.getComponentType());
           } else {
@@ -296,6 +299,9 @@ final class Log implements AutoCloseable {
             valueContent = cValue.toString();
           }
           colNode.setAttribute(JAVA_TYPE_TAG, typeAttr);
+          if (length >= 0) {
+            colNode.setAttribute(LENGTH_TAG, String.valueOf(length));
+          }
           colNode.setTextContent(valueContent);
         } else {
           colNode.setTextContent(NULL_VALUE);
@@ -378,6 +384,8 @@ final class Log implements AutoCloseable {
   private static final String SQL_TYPE_TAG = "sql-type";
   @SuppressWarnings("javadoc")
   private static final String JAVA_TYPE_TAG = "java-type";
+  @SuppressWarnings("javadoc")
+  private static final String LENGTH_TAG = "length";
   @SuppressWarnings("javadoc")
   private static final String INDEX_TAG = "index";
   @SuppressWarnings("javadoc")
