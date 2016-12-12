@@ -41,49 +41,43 @@ final class Misc {
 
   /**
    * Convert a "hexa"-string to a byte array.
-   * @param hexStr Input string.
+   * @param str Input string.
    * @return Corresponding array of bytes.
    */
-  static byte[] fromHexString(String hexStr) {
-    if (hexStr.length() % 2 != 0) {
+  static byte[] fromHexString(String str) {
+    if (str.length() % 2 != 0) {
       throw new InvalidOperationException("Hex-string has odd length!");
     }
-    byte[] data = new byte[hexStr.length() / 2];
+    byte[] data = new byte[str.length() / 2];
     int spos = 0;
     for (int pos = 0; pos < data.length; pos++) {
-      char c1 = hexStr.charAt(spos++);
-      char c2 = hexStr.charAt(spos++);
-      data[pos] = (byte) ((hexDigit(c1) << 4) | hexDigit(c2));
+      int d1 = Character.digit(str.charAt(spos++), 16);
+      int d2 = Character.digit(str.charAt(spos++), 16);
+      if (d1 < 0 || d2 < 0) {
+        throw new InvalidOperationException("Mal-formed hex-string!");
+      }
+      data[pos] = (byte) ((d1 << 4) | d2);
     }
     return data;
   }
 
-  @SuppressWarnings("javadoc")
-  private static int hexDigit(char c) {
-    int d = Character.isDigit(c) ? c - '0' : 10 + Character.toLowerCase(c) - 'a';
-    if (d < 0 || d > 15) {
-      throw new InvalidOperationException("Invalid character: '" + c + "'");
-    }
-    return d;
-  }
-
   /** Thread-local handle for checksum handle. */
-  private static final ThreadLocal<MessageDigest> CHECKSUM_TL = new ThreadLocal<>();
+  private static final ThreadLocal<MessageDigest> SHA1_DIGEST_TL = new ThreadLocal<>();
 
-  /** Checksum (digest algorithm to use) */
-  private static final String CHECKSUM_ALGORITHM = "MD5";
+  /** SHA-1 digest constant. */
+  private static final String SHA1_DIGEST = "SHA-1";
 
   /**
-   * Compute digest checksum for a given input stream.
+   * Compute SHA-1 hash value for a given input stream.
    * @param in Input stream
-   * @return Digest checksum as an array of bytes.
+   * @return SHA-1 hash value (array of 20 bytes).
    */
-  static byte[] checksum(InputStream in) {
+  static byte[] sha1(InputStream in) {
     try {
-      MessageDigest md = CHECKSUM_TL.get();
+      MessageDigest md = SHA1_DIGEST_TL.get();
       if (md == null) {
-        md = MessageDigest.getInstance(CHECKSUM_ALGORITHM);        
-        CHECKSUM_TL.set(md);
+        md = MessageDigest.getInstance(SHA1_DIGEST);        
+        SHA1_DIGEST_TL.set(md);
       }
       md.reset();
       byte[] buffer = new byte[4096];
@@ -99,26 +93,26 @@ final class Misc {
   }
 
   /**
-   * Get digest checksum for a BLOB.
+   * Get SHA-1 hash for a BLOB.
    * @param blob The BLOB.
-   * @return  Digest checksum as an array of bytes.
+   * @return SHA-1 hash value (array of 20 bytes).
    */
-  static byte[] checksum(Blob blob) {
+  static byte[] sha1(Blob blob) {
     try {
-      return checksum(blob.getBinaryStream());
+      return sha1(blob.getBinaryStream());
     } catch (SQLException e) {
       throw new DBExecutionException(e);
     }
   }
 
   /**
-   * Get digest checksum for a CLOB value.
+   * Get SHA-1 hash for a BLOB.
    * @param clob The CLOB value.
-   * @return  Digest checksum as an array of bytes.
+   * @return SHA-1 hash value (array of 20 bytes).
    */
-  static byte[] checksum(Clob clob) {
+  static byte[] sha1(Clob clob) {
     try {
-      return checksum(clob.getAsciiStream());
+      return sha1(clob.getAsciiStream());
     } catch (SQLException e) {
       throw new DBExecutionException(e);
     }

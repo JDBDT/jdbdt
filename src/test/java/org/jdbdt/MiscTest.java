@@ -2,6 +2,7 @@ package org.jdbdt;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayInputStream;
 import java.nio.ByteBuffer;
 
 import org.junit.FixMethodOrder;
@@ -58,8 +59,16 @@ public class MiscTest {
   public void testFromHexString5() {
     Misc.fromHexString("a1fg");
   }
+  
   @Test(expected=InvalidOperationException.class)
   public void testFromHexString6() {
     Misc.fromHexString("a1f/");
+  }
+  
+  @Test
+  public void testSHA1EmptyInput() {
+    byte[] expected = Misc.fromHexString("da39a3ee5e6b4b0d3255bfef95601890afd80709");
+    byte[] actual = Misc.sha1(new ByteArrayInputStream(new byte[0]));
+    assertArrayEquals(expected, actual);
   }
 }
