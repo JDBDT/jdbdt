@@ -82,7 +82,7 @@ final class Misc {
       md.reset();
       byte[] buffer = new byte[4096];
       int n;
-      while ( (n = in.read(buffer, 0, buffer.length)) > 0) {
+      while ( (n = in.read(buffer)) > 0) {
         md.update(buffer, 0, n);
       }
       return md.digest();
