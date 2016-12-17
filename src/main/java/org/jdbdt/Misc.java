@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.SQLException;
+
 
 /**
  * Utility class grouping miscellaneous functionality.
@@ -91,31 +89,4 @@ final class Misc {
       throw new InternalAPIError(e);
     }
   }
-
-  /**
-   * Get SHA-1 hash for a BLOB.
-   * @param blob The BLOB.
-   * @return SHA-1 hash value (array of 20 bytes).
-   */
-  static byte[] sha1(Blob blob) {
-    try {
-      return sha1(blob.getBinaryStream());
-    } catch (SQLException e) {
-      throw new DBExecutionException(e);
-    }
-  }
-
-  /**
-   * Get SHA-1 hash for a BLOB.
-   * @param clob The CLOB value.
-   * @return SHA-1 hash value (array of 20 bytes).
-   */
-  static byte[] sha1(Clob clob) {
-    try {
-      return sha1(clob.getAsciiStream());
-    } catch (SQLException e) {
-      throw new DBExecutionException(e);
-    }
-  }
-
 }
