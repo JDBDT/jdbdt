@@ -2,8 +2,13 @@ package org.jdbdt;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Array;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.IdentityHashMap;
@@ -287,29 +292,72 @@ final class Log implements AutoCloseable {
         colNode.setAttribute(LABEL_TAG, columns.get(i).label());
         Object cValue = data[i];
         if (cValue != null) {
-          String typeAttr, valueContent;
-          Class<?> cClass = cValue.getClass();
-          int length = -1;
-          if (cClass.isArray()) {
-            length = Array.getLength(cValue);
-            typeAttr = cValue.getClass().getTypeName();
-            valueContent = arrayAsString(cValue, cClass.getComponentType());
-          } else {
-            typeAttr = cValue.getClass().getName();
-            valueContent = cValue.toString();
-          }
-          colNode.setAttribute(JAVA_TYPE_TAG, typeAttr);
-          if (length >= 0) {
-            colNode.setAttribute(LENGTH_TAG, String.valueOf(length));
-          }
-          colNode.setTextContent(valueContent);
+          handleColumnContent(colNode, cValue);
+          
         } else {
+          colNode.setAttribute(NULL_ATTR, "yes");
           colNode.setTextContent(NULL_VALUE);
         }
       }
       size++;
     }
     topNode.setAttribute(COUNT_TAG,  String.valueOf(size));
+  }
+  @SuppressWarnings("javadoc")
+  private void handleColumnContent(Element node, Object value) {
+    Class<?> theClass = value.getClass();
+    String typeAttr = theClass.getName();
+    String valueContent = "";
+    long length = -1;
+    byte[] sha1 = null;
+    
+    if (theClass.isArray()) {
+      length = Array.getLength(value);
+      typeAttr = value.getClass().getTypeName();
+      valueContent = arrayAsString(value, theClass.getComponentType());
+    } 
+    else if (value instanceof Blob) {
+      Blob blobData = (Blob) value;
+      try {
+        length = blobData.length();
+        InputStream is = blobData.getBinaryStream();
+        sha1 = Misc.sha1(is);
+        is.close(); 
+      } 
+      catch (SQLException|IOException e) {
+        throw new InternalAPIError(e);
+      }
+    }
+    else if (value instanceof Clob) {
+      Clob clobData = (Clob) value;
+      try {
+        length = clobData.length();
+        InputStream is = clobData.getAsciiStream();
+        sha1 = Misc.sha1(is);
+        is.close(); 
+      } 
+      catch (SQLException|IOException e) {
+        throw new InternalAPIError(e);
+      }
+    }
+    else {
+      valueContent = value.toString();
+      if (theClass == String.class) {
+        length = ((String) value).length();
+      }
+    }
+    
+    node.setAttribute(JAVA_TYPE_TAG, typeAttr);
+    
+    if (length >= 0) {
+      node.setAttribute(LENGTH_TAG, String.valueOf(length));
+    }
+    if (sha1 == null) {
+      node.setTextContent(valueContent);
+    }
+    else {
+      node.setAttribute(SHA1_TAG, Misc.toHexString(sha1));
+    }
   }
   
   @SuppressWarnings("javadoc")
@@ -387,9 +435,13 @@ final class Log implements AutoCloseable {
   @SuppressWarnings("javadoc")
   private static final String LENGTH_TAG = "length";
   @SuppressWarnings("javadoc")
+  private static final String SHA1_TAG = "sha1-hash"; 
+  @SuppressWarnings("javadoc")
   private static final String INDEX_TAG = "index";
   @SuppressWarnings("javadoc")
   private static final String COUNT_TAG = "count";
+  @SuppressWarnings("javadoc")
+  private static final String NULL_ATTR = "null";
   @SuppressWarnings("javadoc")
   private static final String NULL_VALUE = "NULL";
   @SuppressWarnings("javadoc")
