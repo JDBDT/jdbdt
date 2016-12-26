@@ -9,6 +9,7 @@ import java.lang.reflect.Array;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.SQLException;
+import java.sql.SQLXML;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.IdentityHashMap;
@@ -340,6 +341,18 @@ final class Log implements AutoCloseable {
         throw new InternalAPIError(e);
       }
     }
+    else if (value instanceof SQLXML) {
+      SQLXML xmlData = (SQLXML) value;
+      try {
+        InputStream is = xmlData.getBinaryStream();
+        length = is.available();
+        sha1 = Misc.sha1(is);
+        is.close(); 
+      }
+      catch (SQLException|IOException e) {
+        throw new InternalAPIError(e);
+      }
+    }
     else {
       valueContent = value.toString();
       if (theClass == String.class) {
@@ -352,6 +365,7 @@ final class Log implements AutoCloseable {
     if (length >= 0) {
       node.setAttribute(LENGTH_TAG, String.valueOf(length));
     }
+    
     if (sha1 == null) {
       node.setTextContent(valueContent);
     }
