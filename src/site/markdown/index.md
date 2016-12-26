@@ -36,7 +36,7 @@ Maven users can add the following dependency to a POM file:
 	<dependency>
 		<groupId>org.jdbdt</groupId>
         <artifactId>jdbdt</artifactId>
-        <version>0.4-SNAPSHOT</version>
+        <version>0.5-SNAPSHOT</version>
     </dependency>
 
 To compile and install the latest snapshot from scratch, use

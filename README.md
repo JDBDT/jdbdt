@@ -40,7 +40,10 @@ Commands:
 
 # Change Log
 
-## 0.4-SNAPSHOT (current snapshot / next release)
+## 0.5-SNAPSHOT (current snapshot / next release)
+* Nothing yet
+
+## 0.4
 
 * Logging improvements.
 
