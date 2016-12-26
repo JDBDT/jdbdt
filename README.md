@@ -42,7 +42,7 @@ Commands:
 
 ## 0.4-SNAPSHOT (current snapshot / next release)
 
-* Nothing yet.
+* Logging improvements.
 
 ## 0.3 
 
