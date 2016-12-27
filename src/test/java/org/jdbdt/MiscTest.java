@@ -15,8 +15,8 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MiscTest {
 
-  static final byte[] ZBA = { };
-  static final String ZSTR = "";
+  private static final byte[] ZBA = { };
+  private static final String ZSTR = "";
   
   @Test
   public void testToHexString1() {
