@@ -67,11 +67,20 @@ public class MiscTest {
     Misc.fromHexString("a1f/");
   }
   
+  private static void testSHA1(String inputAsString, String expectedSHA1AsString) {
+    byte[] expected = Misc.fromHexString(expectedSHA1AsString);
+    byte[] actual =  Misc.sha1(new ByteArrayInputStream(inputAsString.getBytes()));
+    assertArrayEquals(expected, actual);
+  }
+  
   @Test
   public void testSHA1EmptyInput() {
-    byte[] expected = Misc.fromHexString("da39a3ee5e6b4b0d3255bfef95601890afd80709");
-    byte[] actual = Misc.sha1(new ByteArrayInputStream(new byte[0]));
-    assertArrayEquals(expected, actual);
+    testSHA1("", "da39a3ee5e6b4b0d3255bfef95601890afd80709");
+  }
+  
+  @Test
+  public void testSHA1NonEmptyInput() {
+    testSHA1("JDBDT: Java Database Delta Testing\n", "cff338d07e764c00e05c9d92abf35898f452301e");
   }
   
   @Test (expected=InternalAPIError.class)
