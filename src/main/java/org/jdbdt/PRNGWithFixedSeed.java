@@ -16,6 +16,11 @@ import java.util.Random;
 final class PRNGWithFixedSeed extends Random {
   
   /**
+   * Flag indicating if seed was set.
+   */
+  private boolean seedIsSet;
+  
+  /**
    * Constructor.
    * @param seed Initial seed.
    */
@@ -31,7 +36,12 @@ final class PRNGWithFixedSeed extends Random {
    */
   @Override
   public void setSeed(long seed) throws InvalidOperationException {
-    throw new InvalidOperationException("You cannot reset the PRNG seed.");
+    if (seedIsSet == false) {
+      super.setSeed(seed); // called from the constructor of java.util.Random
+      seedIsSet = true;
+    } else {
+      throw new InvalidOperationException("You cannot reset the PRNG seed.");
+    }
   }
   
   /**
