@@ -65,7 +65,7 @@ public final class DataSetBuilder {
   /** 
    * Random number generator.
    */
-  private final Random rng = new Random(RNG_SEED);
+  private final Random rng = new PRNGWithFixedSeed(RNG_SEED);
 
   /**
    * Map of database column names to column indexes
