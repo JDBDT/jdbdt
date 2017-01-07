@@ -57,7 +57,8 @@ final class DBSetup {
   private static void insert(CallInfo callInfo, Table table, DataSet data)
   throws DBExecutionException {
     try {
-      table.getDB().logInsertion(callInfo, data);
+      DB db = table.getDB();
+      db.logInsertion(callInfo, data);
       StringBuilder sql = new StringBuilder("INSERT INTO ");
       String[] columnNames = table.getColumns();
       sql.append(table.getName())
@@ -71,7 +72,7 @@ final class DBSetup {
         sql.append(",?");
       }
       sql.append(')');
-      PreparedStatement  insertStmt = table.getDB().compile(sql.toString());
+      PreparedStatement  insertStmt = db.compile(sql.toString());
       for (Row r : data.getRows()) {
         final int n = r.length();
         final Object[] cols = r.data();
@@ -93,15 +94,15 @@ final class DBSetup {
   /**
    * Delete all data from table.
    * @param callInfo Call info.
-   * @param t Table.
+   * @param table Table.
    * @return Number of deleted rows.
    * @throws DBExecutionException If a database error occurs.
    */
-  static int deleteAll(CallInfo callInfo, Table t) 
+  static int deleteAll(CallInfo callInfo, Table table) 
   throws DBExecutionException {
     try {
-      String sql = "DELETE FROM " + t.getName();
-      DB db = t.getDB();
+      String sql = "DELETE FROM " + table.getName();
+      DB db = table.getDB();
       db.logSetup(callInfo, sql);
       return db.compile(sql).executeUpdate();
     } 
@@ -122,7 +123,7 @@ final class DBSetup {
       String sql = "TRUNCATE TABLE " + t.getName();
       DB db = t.getDB();
       db.logSetup(callInfo, sql);
-      t.getDB().compile(sql).execute();
+      db.compile(sql).execute();
     }
     catch (SQLException e) {
       throw new DBExecutionException(e);
