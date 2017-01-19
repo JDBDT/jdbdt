@@ -41,10 +41,10 @@ final class DBSetup {
       throw new InvalidOperationException("Data set is not defined for a table.");
     }
 
-    Table t = (Table) source;
-    deleteAll(callInfo, t);
-    insert(callInfo, t, data);
-    t.setSnapshot(data);
+    Table table = (Table) source;
+    deleteAll(callInfo, table);
+    insert(callInfo, table, data);
+    table.setSnapshot(data);
   }
 
   /**
@@ -114,14 +114,14 @@ final class DBSetup {
   /**
    * Truncate table.
    * @param callInfo Call info.
-   * @param t Table.
+   * @param table Table.
    * @throws DBExecutionException If a database error occurs.
    */
-  static void truncate(CallInfo callInfo, Table t) 
+  static void truncate(CallInfo callInfo, Table table) 
   throws DBExecutionException {
     try {
-      String sql = "TRUNCATE TABLE " + t.getName();
-      DB db = t.getDB();
+      String sql = "TRUNCATE TABLE " + table.getName();
+      DB db = table.getDB();
       db.logSetup(callInfo, sql);
       db.compile(sql).execute();
     }
