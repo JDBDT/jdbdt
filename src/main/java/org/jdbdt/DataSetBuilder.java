@@ -65,7 +65,7 @@ public final class DataSetBuilder {
   /** 
    * Random number generator.
    */
-  private final Random rng = new PRNGWithFixedSeed(RNG_SEED);
+  private final Random rng;
 
   /**
    * Map of database column names to column indexes
@@ -95,6 +95,7 @@ public final class DataSetBuilder {
     for (int idx=0; idx < columnNames.length; idx++) {
       columnIdx.put(columnNames[idx].toLowerCase(), idx);
     }
+    rng = new PRNGWithFixedSeed(Arrays.hashCode(columnNames));
   }
 
   /**

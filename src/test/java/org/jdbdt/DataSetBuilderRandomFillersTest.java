@@ -61,7 +61,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
   
   @Before 
   public void setUp() {
-    rng = new Random(DataSetBuilder.RNG_SEED);
+    rng = new Random(Arrays.hashCode(table.getColumns()));
     theSUT = builder(table);
     for (Map.Entry<String, Object> e : BASE_DATA.entrySet()) {
       theSUT.value(e.getKey(), e.getValue());
