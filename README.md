@@ -40,7 +40,11 @@ Commands:
 
 # Change Log
 
-## 0.5-SNAPSHOT (current snapshot / next release)
+## 0.6-SNAPSHOT (current snapshot / next release)
+
+Nothing yet
+
+## 0.5
 
 * DataSetBuilder: inhibit re-seeding of PRNG, and compute PRNG seed from
 data source columns.
