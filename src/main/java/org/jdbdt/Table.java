@@ -51,7 +51,7 @@ public final class Table extends DataSource {
    * Set dirty status.
    * 
    * <p>
-   * This method is used by {@link JDBDT#populateLazily}
+   * This method is used by {@link JDBDT#populateIfChanged}
    * and {@link JDBDT#assertUnchanged(DataSource)}.
    * </p>
    * 
@@ -63,6 +63,12 @@ public final class Table extends DataSource {
   
   /**
    * Get dirty status.
+   * 
+   * <p>
+   * This method is used by {@link JDBDT#populateIfChanged}
+   * to check if the table has a dirty status.
+   * </p>.
+   * 
    * @return The dirty status.
    */
   boolean getDirtyStatus() {
