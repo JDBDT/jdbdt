@@ -40,13 +40,43 @@ final class DBSetup {
     if ( ! (source instanceof Table)) {
       throw new InvalidOperationException("Data set is not defined for a table.");
     }
-
+    
     Table table = (Table) source;
+    doPopulate(callInfo, table, data);
+
+  }
+  
+  /**
+   * Populate database table with a data set, if associated table
+   * has changed.
+   * 
+   * @param callInfo Call Info.
+   * @param data Data Set.
+   * @throws DBExecutionException If a database error occurs.
+   */
+  static void populateIfChanged(CallInfo callInfo, DataSet data) 
+  throws DBExecutionException {
+    DataSource source = data.getSource();
+    if ( ! (source instanceof Table)) {
+      throw new InvalidOperationException("Data set is not defined for a table.");
+    }
+    Table table = (Table) source;
+    if ( table.getDirtyStatus() ) {
+      doPopulate(callInfo, table, data);
+    }
+  }
+
+  /**
+   * Auxiliary method to populate a table.
+   * @param callInfo Call info.
+   * @param table Table.
+   * @param data Data set.
+   */
+  private static void doPopulate(CallInfo callInfo, Table table, DataSet data) {
     deleteAll(callInfo, table);
     insert(callInfo, table, data);
     table.setSnapshot(data);
   }
-
   /**
    * Utility method to perform actual data insertion.
    * @param callInfo Call Info.

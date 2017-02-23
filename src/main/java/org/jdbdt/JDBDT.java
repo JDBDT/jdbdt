@@ -293,6 +293,9 @@ public final class JDBDT {
   public static void assertUnchanged(DataSource source) throws DBAssertionError {
     DataSet emptyDataSet = empty(source);
     DBAssert.deltaAssertion(CallInfo.create(), emptyDataSet, emptyDataSet);
+    if (source instanceof Table) {
+      ((Table) source).setDirtyStatus(false);
+    }
   }
 
   /**
@@ -460,6 +463,17 @@ public final class JDBDT {
     DBSetup.populate(CallInfo.create(), data);
   }
 
+  /**
+   * Populate database with given data set in a lazy manner.
+   * 
+   * @param data Data set for insertion.
+   * @throws DBExecutionException If a database error occurs.
+   *  
+   */
+  public static void populateIfChanged(DataSet data) throws DBExecutionException {
+    DBSetup.populateIfChanged(CallInfo.create(), data);
+  }
+  
   /**
    * Delete all data from a table. 
    *

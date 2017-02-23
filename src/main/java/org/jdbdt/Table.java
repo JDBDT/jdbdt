@@ -13,6 +13,10 @@ public final class Table extends DataSource {
   private final String tableName;
 
   /**
+   * Dirty status flag.
+   */
+  private boolean dirty;
+  /**
    * Constructor.
    * @param db Database instance.
    * @param tableName Table name
@@ -21,6 +25,7 @@ public final class Table extends DataSource {
   Table(DB db, String tableName) {
     super(db);
     this.tableName = tableName;
+    this.dirty = true;
   }
 
   /**
@@ -42,6 +47,28 @@ public final class Table extends DataSource {
     return this;
   }
 
+  /**
+   * Set dirty status.
+   * 
+   * <p>
+   * This method is used by {@link JDBDT#populateLazily}
+   * and {@link JDBDT#assertUnchanged(DataSource)}.
+   * </p>
+   * 
+   * @param dirty Status.
+   */
+  void setDirtyStatus(boolean dirty) {
+    this.dirty = dirty;
+  }
+  
+  /**
+   * Get dirty status.
+   * @return The dirty status.
+   */
+  boolean getDirtyStatus() {
+    return dirty;
+  }
+  
   @Override
   public String getSQLForQuery() {
     StringBuilder sql = new StringBuilder("SELECT ");
@@ -58,4 +85,5 @@ public final class Table extends DataSource {
     return sql.toString();
   }
 
+  
 }
