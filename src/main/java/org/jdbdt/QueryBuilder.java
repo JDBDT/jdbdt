@@ -129,7 +129,7 @@ public final class QueryBuilder  {
    * <p>
    * A call to this method is shorthand for <code>from(t.getName())</code>.
    * @param t Table source.
-   * @return The query instance for chained calls.
+   * @return The query builder instance for chained calls.
    */
   public QueryBuilder from(Table t) {
     set(Param.FROM, t.getName());
@@ -139,7 +139,7 @@ public final class QueryBuilder  {
   /**
    * Set FROM clause.
    * @param sources Data sources.
-   * @return The query instance for chained calls.
+   * @return The query builder instance for chained calls.
    */
   @SafeVarargs
   public final QueryBuilder from(String...sources) {
@@ -150,7 +150,7 @@ public final class QueryBuilder  {
   /**
    * Set WHERE clause for query.
    * @param clause String for WHERE clause.
-   * @return The query instance for chained calls.
+   * @return The query builder instance for chained calls.
    */
   public QueryBuilder where(String clause) {
     set(Param.WHERE, clause);
@@ -159,7 +159,7 @@ public final class QueryBuilder  {
 
   /**
    * Set DISTINCT clause for query.
-   * @return The query instance for chained calls.
+   * @return The query builder instance for chained calls.
    */
   public QueryBuilder distinct() {
     set(Param.DISTINCT,"");
@@ -170,7 +170,7 @@ public final class QueryBuilder  {
   /**
    * Set GROUP BY clause for query.
    * @param fields GROUP BY fields.
-   * @return The query instance for chained calls.
+   * @return The query builder instance for chained calls.
    */
   public QueryBuilder groupBy(String... fields) {
     set(Param.GROUP_BY, fields);
@@ -190,7 +190,7 @@ public final class QueryBuilder  {
    * </p>
    * 
    * @param fields ORDER BY fields.
-   * @return The query instance for chained calls.
+   * @return The query builder instance for chained calls.
    */
   public QueryBuilder orderBy(String... fields) {
     set(Param.ORDER_BY, fields);
@@ -200,7 +200,7 @@ public final class QueryBuilder  {
   /**
    * Set HAVING clause for query.
    * @param clause String for HAVING clause.
-   * @return The query instance for chained calls.
+   * @return The query builder instance for chained calls.
    */
   public QueryBuilder having(String clause) {
     set(Param.HAVING, clause);

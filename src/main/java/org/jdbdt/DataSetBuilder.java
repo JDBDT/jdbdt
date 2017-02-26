@@ -159,7 +159,7 @@ public final class DataSetBuilder {
    * Set filler for column.
    * @param column Column name.
    * @param filler Column filler. 
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    */
   public DataSetBuilder set(String column, ColumnFiller<?> filler) {
     ensureArgNotNull(column);
@@ -244,7 +244,7 @@ public final class DataSetBuilder {
    * Set the NULL value filler for a column.
    * 
    * @param column Column name.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * @see #value(String, Object)
    */
   public DataSetBuilder nullValue(String column) {
@@ -258,7 +258,7 @@ public final class DataSetBuilder {
    * A call to this method sets the {@link #nullValue} filler
    * for all columns without an associated filler. 
    * </p>
-   * @return  The data set instance (for chained calls).
+   * @return  The builder instance (for chained calls).
    * @see #nullValue(String)
    */
   public DataSetBuilder remainingColumnsNull() {
@@ -275,7 +275,7 @@ public final class DataSetBuilder {
    * Set a constant value filler for a column.
    * @param column Column name.
    * @param constant Value of the constant .
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    */
   public DataSetBuilder value(String column, Object constant) {
     return set(column, new ConstantFiller<Object>(constant)); 
@@ -291,7 +291,7 @@ public final class DataSetBuilder {
    * @param <E> Enumeration type.
    * @param column Column name.
    * @param enumConstant Value of the constant.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    */
   public <E extends Enum<?>> DataSetBuilder value(String column, E enumConstant) {
     return value(column, enumConstant.toString()); 
@@ -314,7 +314,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param initial Initial value.
    * @param step Step function.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * @see #sequence(String, Function)
    */
   public <T> DataSetBuilder sequence(String column, T initial, Function<T,T> step) {
@@ -333,7 +333,7 @@ public final class DataSetBuilder {
    * 
    * @param column Column name.
    * @param step Step function.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * @see #sequence(String, Function, int)
    */
   public DataSetBuilder sequence(String column, Function<Integer,?> step) {
@@ -356,7 +356,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param step Step function.
    * @param initial Initial value fed to step function.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * @see #sequence(String, Object, Function)
    */
   public DataSetBuilder sequence(String column, Function<Integer,?> step, int initial) {
@@ -380,7 +380,7 @@ public final class DataSetBuilder {
    * @param <T> Type of data.
    * @param column Column name.
    * @param values Sequence of values to use.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * 
    * @see #sequence(String, List)
    * @see #sequence(String,Function)
@@ -402,7 +402,7 @@ public final class DataSetBuilder {
    * 
    * @param column Column name.
    * @param values Sequence of values to use.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * 
    * @see #sequence(String,Function)
    */
@@ -421,7 +421,7 @@ public final class DataSetBuilder {
    * 
    * @param column Column name.
    * @param initial Initial sequence value.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * @see #sequence(String, int, int)
    */
   public DataSetBuilder sequence(String column, int initial) {
@@ -440,7 +440,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param initial Initial sequence value.
    * @param step Sequence step.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * @see #sequence(String, Object, Function)
    * @see #sequence(String, int)
    */
@@ -458,7 +458,7 @@ public final class DataSetBuilder {
    * 
    * @param column Column name.
    * @param initial Initial sequence value.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * @see #sequence(String, Object, Function)
    * @see #sequence(String, long, long)
    */
@@ -478,7 +478,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param initial Initial sequence value.
    * @param step Sequence step.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * @see #sequence(String, Object, Function)
    * @see #sequence(String, long)
    */
@@ -496,7 +496,7 @@ public final class DataSetBuilder {
    * 
    * @param column Column name.
    * @param initial Initial sequence value.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * @see #sequence(String, Object, Function)
    * @see #sequence(String, BigInteger, BigInteger)
    */
@@ -517,7 +517,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param initial Initial sequence value.
    * @param step Sequence step.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * @see #sequence(String, Object, Function)
    * @see #sequence(String, BigInteger)
    */
@@ -539,7 +539,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param initial Initial sequence value.
    * @param step Sequence step.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * @see #sequence(String, Object, Function)
    * @see #sequence(String, double, double)
    */
@@ -558,7 +558,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param initial Initial sequence value.
    * @param step Sequence step.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * @see #sequence(String, Object, Function)
    * @see #sequence(String, float, float)
    */
@@ -583,7 +583,7 @@ public final class DataSetBuilder {
    * @param column Column day.
    * @param initial Initial date.
    * @param step Step in days.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * 
    * @see #sequence(String, Time, int)
    * @see #sequence(String, Timestamp, long)
@@ -606,7 +606,7 @@ public final class DataSetBuilder {
    * @param column Column day.
    * @param initial Initial date.
    * @param step Step in seconds.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * 
    * @see #sequence(String, Date, int)
    * @see #sequence(String, Timestamp, long)
@@ -629,7 +629,7 @@ public final class DataSetBuilder {
    * @param column Column day.
    * @param initial Initial date.
    * @param step Step in milliseconds.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * 
    * @see #sequence(String, Date, int)
    * @see #sequence(String, Time, int)
@@ -651,7 +651,7 @@ public final class DataSetBuilder {
    * @param <T> Type of data.
    * @param column Column name.
    * @param values  Values to use.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * 
    * @see #random(String, List)
    * @see #sequence(String, Object...)
@@ -672,7 +672,7 @@ public final class DataSetBuilder {
    * 
    * @param column Column name.
    * @param values  Values to use.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * 
    * @see #random(String, Object...)
    * @see #sequence(String, List)
@@ -693,7 +693,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param min Minimum value.
    * @param max Maximum value.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * 
    * @see #random(String, long, long)
    * @see #random(String, float, float)
@@ -716,7 +716,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param min Minimum value.
    * @param max Maximum value.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * 
    * @see #random(String, int, int)
    * @see #random(String, float, float)
@@ -738,7 +738,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param min Minimum value.
    * @param max Maximum value.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * 
    * @see #random(String, int, int)
    * @see #random(String, long, long)
@@ -761,7 +761,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param min Minimum value.
    * @param max Maximum value.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * 
    * @see #random(String, int, int)
    * @see #random(String, long, long)
@@ -784,7 +784,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param min Minimum value.
    * @param max Maximum value.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * 
    * @see #random(String, Time, Time)
    * @see #random(String, Timestamp, Timestamp)
@@ -819,7 +819,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param min Minimum value.
    * @param max Maximum value.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * 
    * @see #random(String, Timestamp, Timestamp)
    * @see #random(String, Date, Date)
@@ -853,7 +853,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param min Minimum value.
    * @param max Maximum value.
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    * 
    * @see #random(String, Time, Time)
    * @see #random(String, Date, Date)
@@ -896,7 +896,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param gen Generator function.
    *
-   * @return The data set instance (for chained calls).
+   * @return The builder instance (for chained calls).
    *
    * @see java.util.Random
    * @see #random(String, int, int)
