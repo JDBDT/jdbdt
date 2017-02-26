@@ -42,11 +42,12 @@ Commands:
 
 ## 0.6-SNAPSHOT (current snapshot / next release)
 
-Nothing yet
+* `populateIfChanged`, `changed`: new facade methods.
+* Improved handling of reusable/non-reusable statements.
 
 ## 0.5
 
-* DataSetBuilder: inhibit re-seeding of PRNG, and compute PRNG seed from
+* `DataSetBuilder: inhibit re-seeding of PRNG, and compute PRNG seed from
 data source columns.
 * Small adjustements to web site.
 * Other small adjustments.

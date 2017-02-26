@@ -10,7 +10,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
   CallInfoTest.class,
   DeltaTest.class,
-  MiscTest.class
+  MiscTest.class,
+  WrappedStatementTest.class
 })
 public class AllNonDBTests {
   

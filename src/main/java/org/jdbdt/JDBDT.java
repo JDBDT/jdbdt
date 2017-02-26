@@ -214,6 +214,7 @@ public final class JDBDT {
    * @see #assertDelta(DataSet, DataSet)
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
+   * @see #assertUnchanged(DataSource)
    */
   public static DataSet
   takeSnapshot(DataSource source)  {
@@ -293,9 +294,6 @@ public final class JDBDT {
   public static void assertUnchanged(DataSource source) throws DBAssertionError {
     DataSet emptyDataSet = empty(source);
     DBAssert.deltaAssertion(CallInfo.create(), emptyDataSet, emptyDataSet);
-    if (source instanceof Table) {
-      ((Table) source).setDirtyStatus(false);
-    }
   }
 
   /**
@@ -464,11 +462,17 @@ public final class JDBDT {
   }
 
   /**
-   * Populate database with given data set in a lazy manner.
+   * Populate database with given data set if the associated
+   * table is seen as changed.
    * 
+   * <p>A call to this method is functionally equivalent to
+   * <br>
+   * &nbsp;&nbsp;&nbsp;&nbsp;
+   * <code>if ( changed(data.getSource()) ) populate(data);</code>
+   * </p>
    * @param data Data set for insertion.
    * @throws DBExecutionException If a database error occurs.
-   *  
+   * @see #changed(DataSource...)
    */
   public static void populateIfChanged(DataSet data) throws DBExecutionException {
     DBSetup.populateIfChanged(CallInfo.create(), data);
@@ -570,6 +574,47 @@ public final class JDBDT {
     db.commit(CallInfo.create());
   }
 
+  /**
+   * Check if given data sources are seen as changed.
+   * 
+   * <p>
+   * A data source is marked as unchanged by a succesfull assertion
+   * through 
+   * {@link #assertUnchanged(DataSource)}
+   * or {@link #assertUnchanged(String,DataSource)}. 
+   * Every other setup or assertion method will mark the associated
+   * data source as changed.
+   * </p>
+   * <p>
+   * This method may be useful for conditional setup code that 
+   * is executed only if the database is changed (e.g., for efficiency reasons):
+   * <pre>
+   * DataSource ds = ...; 
+   * 
+   * if ( changed(ds) ) {
+   *   // Setup initial state again
+   *   ...
+   * }
+   * </pre>
+   * </p>
+   * 
+   * @param dataSources Data sources.
+   * @return <code>true</code> if at least one of the given data sources 
+   *         is marked as changed.
+   * @see #populateIfChanged(DataSet)
+   */
+  public static boolean changed(DataSource... dataSources) {
+    if (dataSources == null || dataSources.length == 0) {
+      throw new InvalidOperationException("No data sources specified");
+    }
+    for (DataSource ds : dataSources) {
+      if (ds.getDirtyStatus()) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
   /**
    * Dump the contents of a data set.
    * @param data Data set.

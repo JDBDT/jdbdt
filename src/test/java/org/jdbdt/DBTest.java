@@ -16,7 +16,7 @@ import org.junit.runners.MethodSorters;
 public class DBTest extends DBTestCase {
 
   private PreparedStatement compile(String sql) throws SQLException {
-    return getDB().compile(sql);
+    return getDB().compile(sql).getStatement();
   }
 
   @Test @Category(StatementReuseEnabled.class)

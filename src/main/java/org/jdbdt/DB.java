@@ -3,7 +3,6 @@ package org.jdbdt;
 import java.io.File;
 import java.io.PrintStream;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.util.EnumSet;
@@ -73,7 +72,7 @@ public final class DB {
   /**
    * Statement pool.
    */
-  private Map<String, PreparedStatement> pool;
+  private Map<String, WrappedStatement> pool;
 
   /**
    * Savepoint, if set.
@@ -171,21 +170,21 @@ public final class DB {
    * @return Prepared statement.
    * @throws SQLException If there is a error preparing the statement.
    */
-  PreparedStatement 
+  WrappedStatement 
   compile(String sql) throws SQLException {    
     if (! isEnabled(Option.REUSE_STATEMENTS)) {
-      return connection.prepareStatement(sql);
+      return new WrappedStatement(connection.prepareStatement(sql), false);
     }
     if (pool == null) {
       pool = new IdentityHashMap<>();
     } 
     String sqlI = sql.intern();
-    PreparedStatement ps = pool.get(sqlI);
-    if (ps == null) {
-      ps = connection.prepareStatement(sqlI);
-      pool.put(sqlI, ps);
+    WrappedStatement ws = pool.get(sqlI);
+    if (ws == null) {
+      ws =  new WrappedStatement(connection.prepareStatement(sql), true);
+      pool.put(sqlI, ws);
     }
-    return ps;
+    return ws;
   }
 
   /**
@@ -261,8 +260,8 @@ public final class DB {
   void teardown(CallInfo callInfo, boolean closeConn) {
     logSetup(callInfo);
     if (pool != null) {
-      for (PreparedStatement stmt : pool.values()) {
-        ignoreSQLException(stmt::close);
+      for (WrappedStatement ws : pool.values()) {
+        ignoreSQLException(ws.getStatement()::close);
       }
       pool.clear();
       pool = null;

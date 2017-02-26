@@ -20,11 +20,6 @@ public abstract class DataSource {
   private final DB db;
 
   /**
-   * Query statement.
-   */
-  private PreparedStatement queryStmt = null;
-
-  /**
    * Meta-data for query statement.
    */
   private MetaData metaData = null;
@@ -51,6 +46,11 @@ public abstract class DataSource {
   private DataSet theEmptyOne = null;
 
   /**
+   * Dirty status flag.
+   */
+  private boolean dirty;
+
+  /**
    * Constructor.
    * @param db Database instance.
    * @param queryArgs Optional arguments for database query.
@@ -58,6 +58,7 @@ public abstract class DataSource {
   DataSource(DB db, Object... queryArgs) {
     this.db = db;
     this.queryArgs = queryArgs;
+    this.dirty = true;
   }
 
   /**
@@ -93,9 +94,12 @@ public abstract class DataSource {
    * @return Column count.
    */
   public final int getColumnCount() {
-    ensureCompiled();
+    if (columns == null) {
+      getMetaData();
+    }
     return columns.length;
   }
+
   /**
    * Get column name.
    * @param index Column index between <code>0</code> and <code>getColumnCount() - 1</code>
@@ -126,42 +130,29 @@ public abstract class DataSource {
     }
     return theEmptyOne;
   }
-  /**
-   * Get query.
-   * @return The query statement for the data source.
-   */
-  final PreparedStatement getQueryStatement() {
-    ensureCompiled();
-    return queryStmt;
-  }
 
   /**
    * Get meta-data.
-   * 
    * @return Meta-data for the data source query.
    */
   final MetaData getMetaData() {
-    ensureCompiled();
+    if (metaData == null) {
+      try (WrappedStatement ws = db.compile(getSQLForQuery())) {
+        computeMetaData(ws.getStatement());
+      } 
+      catch (SQLException e) {
+        throw new DBExecutionException(e);
+      }
+    }
     return metaData;
   }
-
+  
   /**
-   * Get query arguments.
-   * @return Array of arguments if any, otherwise <code>null</code>.
+   * Get meta-data.
+   * @param stmt Statement from which to derive the meta-data.
    */
-  final Object[] getQueryArguments() {
-    return queryArgs;
-  }
-
-  /**
-   * Ensure query is compiled.
-   */
-  private void ensureCompiled() {
-    if (queryStmt != null) {
-      return;
-    }
-    try {
-      PreparedStatement stmt = db.compile(getSQLForQuery());
+  final void computeMetaData(PreparedStatement stmt) {
+    if (metaData == null) {
       MetaData md = new MetaData(stmt);
       if (getColumns() == null) {
         String[] cols = new String[md.getColumnCount()];
@@ -170,21 +161,16 @@ public abstract class DataSource {
         }
         setColumns(cols);
       }
-      queryStmt = stmt;
       metaData = md;
     }
-    catch (SQLException e) {
-      throw new DBExecutionException(e);
-    }
   }
+
   /**
-   * Validate that query has not been compiled yet.
-   * @throws InvalidOperationException if query has been already compiled.
+   * Get query arguments.
+   * @return Array of arguments if any, otherwise <code>null</code>.
    */
-  final void checkNotCompiled() throws InvalidOperationException {
-    if (queryStmt != null) {
-      throw new InvalidOperationException("Query has already been compiled.");
-    }
+  final Object[] getQueryArguments() {
+    return queryArgs;
   }
 
   /**
@@ -201,12 +187,17 @@ public abstract class DataSource {
    */
   final DataSet executeQuery(CallInfo callInfo, boolean takeSnapshot) {
     DataSet data = new DataSet(this);
-    executeQuery(getQueryStatement(), getMetaData(), getQueryArguments(), data::addRow);
-    if (takeSnapshot) {
-      setSnapshot(data);
-      getDB().logSnapshot(callInfo, data);
-    } else {
-      getDB().logQuery(callInfo, data);
+    try (WrappedStatement ws = db.compile(getSQLForQuery())) {
+      computeMetaData(ws.getStatement());
+      executeQuery(ws.getStatement(), metaData, getQueryArguments(), data::addRow);
+      if (takeSnapshot) {
+        setSnapshot(data);
+        getDB().logSnapshot(callInfo, data);
+      } else {
+        getDB().logQuery(callInfo, data);
+      }
+    } catch (SQLException e) {
+      throw new DBExecutionException(e);
     }
     return data;
   }
@@ -239,12 +230,13 @@ public abstract class DataSource {
    * @param queryStmt Query statement.
    * @param md Meta data.
    * @param queryArgs Query arguments.
-   * @param c Row consumer.
+   * @param action Row consumer.
    */
-  static void executeQuery(PreparedStatement queryStmt, 
+  static void executeQuery
+  (PreparedStatement queryStmt, 
       MetaData md, 
       Object[] queryArgs, 
-      Consumer<Row> c) {
+      Consumer<Row> action) {
     try { 
       if (queryArgs != null && queryArgs.length > 0) {
         for (int i=0; i < queryArgs.length; i++) {
@@ -258,7 +250,7 @@ public abstract class DataSource {
           for (int i = 0; i < colCount; i++) {  
             data[i] = rs.getObject(i+1);
           }
-          c.accept(new Row(data));
+          action.accept(new Row(data));
         }
       }
     } 
@@ -267,5 +259,32 @@ public abstract class DataSource {
     } 
   }
 
+  /**
+   * Set dirty status.
+   * 
+   * <p>
+   * This method is used by {@link JDBDT#populateIfChanged}
+   * and {@link JDBDT#assertUnchanged(DataSource)}.
+   * </p>
+   * 
+   * @param dirty Status.
+   */
+  final void setDirtyStatus(boolean dirty) {
+    this.dirty = dirty;
+  }
+
+  /**
+   * Get dirty status.
+   * 
+   * <p>
+   * This method is used by {@link JDBDT#populateIfChanged}
+   * to check if the table has a dirty status.
+   * </p>.
+   * 
+   * @return The dirty status.
+   */
+  final boolean getDirtyStatus() {
+    return dirty;
+  }
 
 }

@@ -35,6 +35,7 @@ final class DBAssert {
     final DeltaAssertion da = 
       new DeltaAssertion(oldData, newData, oldDataMatch, newDataMatch);
     db.log(callInfo, da);
+    source.setDirtyStatus(!da.passed() || oldData.size() > 0 || newData.size() > 0);
     if (!da.passed()) {
       throw new DBAssertionError(callInfo.getMessage());
     }
