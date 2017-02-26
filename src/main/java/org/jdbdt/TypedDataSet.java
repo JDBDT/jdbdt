@@ -31,7 +31,7 @@ public final class TypedDataSet<T> extends DataSet {
   /**
    * Add row to the data set.
    * @param rowObj Row object.
-   * @return The loader instance (for possible chaining).
+   * @return The data set instance (for possible chaining).
    */
   public TypedDataSet<T> row(T rowObj) {
     super.row(conv.convert(rowObj));
@@ -41,7 +41,7 @@ public final class TypedDataSet<T> extends DataSet {
   /**
    * Add rows to the data set.
    * @param rows Objects to map onto row values.
-   * @return The loader instance (for possible chaining).
+   * @return The data set instance (for possible chaining).
    */
   @SafeVarargs
   public final TypedDataSet<T> rows(T... rows)  {
@@ -54,7 +54,7 @@ public final class TypedDataSet<T> extends DataSet {
   /**
    * Add rows in a collection to the data set.
    * @param rows Collection of row objects.
-   * @return The loader instance (for possible chaining).
+   * @return The data set instance (for possible chaining).
    */
   public TypedDataSet<T> rows(Collection<? extends T> rows) {
     for (T rowObj : rows) {
