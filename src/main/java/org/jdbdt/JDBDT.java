@@ -587,7 +587,9 @@ public final class JDBDT {
    * </p>
    * <p>
    * This method may be useful for conditional setup code that 
-   * is executed only if the database is changed (e.g., for efficiency reasons):
+   * is executed only if the database needs to be reinitialized,
+   * as illustrated below.
+   * </p>
    * <pre>
    * DataSource ds = ...; 
    * 
@@ -596,7 +598,6 @@ public final class JDBDT {
    *   ...
    * }
    * </pre>
-   * </p>
    * 
    * @param dataSources Data sources.
    * @return <code>true</code> if at least one of the given data sources 
