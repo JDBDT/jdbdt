@@ -165,9 +165,9 @@ public final class DB {
   }
   
   /**
-   * Prepare a SQL statement.
+   * Compile a SQL statement.
    * @param sql SQL code.
-   * @return Prepared statement.
+   * @return Wrapper for prepared statement.
    * @throws SQLException If there is a error preparing the statement.
    */
   WrappedStatement 
