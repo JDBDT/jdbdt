@@ -44,6 +44,7 @@ Commands:
 
 * `populateIfChanged`, `changed`: new facade methods.
 * Improved handling of reusable/non-reusable statements.
+* Documentation adjustments.
 
 ## 0.5
 
