@@ -41,7 +41,7 @@ Maven users can add the following dependency to a POM file:
 	<dependency>
 		<groupId>org.jdbdt</groupId>
         <artifactId>jdbdt</artifactId>
-        <version>0.6-SNAPSHOT</version>
+        <version>0.7-SNAPSHOT</version>
     </dependency>
     
 **GitHub**
