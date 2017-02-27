@@ -84,10 +84,14 @@ final class DBAssert {
    */
   static void dataSetAssertion(CallInfo callInfo, DataSet expected, DataSet actual) {
     validateDataSetAssertion(expected, actual);
+    final DataSource source = expected.getSource();
     final Delta delta = new Delta(expected, actual); 
+    source.setDirtyStatus(true);
+    
     final DataSetAssertion assertion = 
       new DataSetAssertion(expected, delta);
-    expected.getSource().getDB().log(callInfo, assertion);
+    
+    source.getDB().log(callInfo, assertion);
     if (! assertion.passed()) {
       throw new DBAssertionError(callInfo.getMessage());
     }
