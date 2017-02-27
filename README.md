@@ -47,7 +47,7 @@ Commands:
 
 ## 0.5
 
-* `DataSetBuilder: inhibit re-seeding of PRNG, and compute PRNG seed from
+* `DataSetBuilder`: inhibit re-seeding of PRNG, and compute PRNG seed from
 data source columns.
 * Small adjustements to web site.
 * Other small adjustments.
