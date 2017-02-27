@@ -24,6 +24,8 @@ Thus, `insert` should be used for incremental additions to a table, whereas
 The use of `populate` is more adequate in particular if [delta assertions](DBAssertions.html) 
 are performed over the table subsequently.
 
+
+
 *Illustration*
 
     import static org.jdbdt.JDBDT.*;
@@ -48,6 +50,12 @@ are performed over the table subsequently.
     
     // 2. OR insert data in USER table (does not clear previous contents).
     insert(data);
+
+The `populateIfChanged` method is a variant of `populate` that 
+executes conditionally, i.e., if the table contents are seen as unchanged,no operation takes place. This only happens if an `assertUnchanged` [assertion](DBAssertions.html) previously succeeded,
+and no intervening subsequent JDBDT setup or assertion methods were called for the table. 
+
+More generally, you may query the changed status of data sources using the `changed` facade method, and use it to guide database setup if convenient.
 
 ## Cleaning data
 <a name="Clean"></a>
@@ -218,6 +226,7 @@ Insertion:
 
 - `insert(data)` inserts `data` into a table (the table is `data.getSource()`).
 - `populate(data)` sets `data` as the contents of a table (the table is `data.getSource()`).
+- `populateIfChanged(data)` sets `data` as the contents of a table, if the table is perceived as having changed.
 
 Clean-up:
 

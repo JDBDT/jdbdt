@@ -17,12 +17,8 @@
     <menu name="JDBDT">
       <item name="Home" href="index.html"/>
       <item name="License" href="http://www.eclipse.org/legal/epl-v10.html"/>
-      <item name="Compatibility" href="Compatibility.html"/>
-      <item name="Inception" href="Inception.html"/>
     </menu>
     <menu name="Reference">
-      <item name="Tutorial" href="Tutorial.html"/>
-      <item name="Javadoc" href="apidocs/index.html"/>
       <item name="API facade" href="Facade.html"/>
       <item name="Database handles" href="DB.html"/>
       <item name="Data sources" href="DataSources.html"/>
@@ -30,13 +26,19 @@
       <item name="Database setup" href="DBSetup.html"/>
       <item name="Assertions" href="DBAssertions.html"/>
       <item name="Logging format" href="Logs.html"/>
+      <item name="Compatibility" href="Compatibility.html"/>
+      <item name="Javadoc" href="apidocs/index.html"/>
+    </menu>
+    <menu name="Tutorial">
+      <item name="Guide" href="Tutorial.html"/>
+      <item name="Code @ GitHub" href="http://github.com/edrdo/jdbdt-tutorial"/>
     </menu>
     <menu name="Development">   
       <item name="Maven Central" href="http://search.maven.org/#search%7Cga%7C1%7Cjdbdt" />
       <item name="Source code" href="https://github.com/edrdo/jdbdt/" />
-      <item name="User group" href="https://groups.google.com/forum/#!forum/jdbdt-users/"/>
       <item name="Issue tracker" href="https://github.com/edrdo/jdbdt/issues/"/>
       <item name="Continuous integration" href="https://travis-ci.org/edrdo/jdbdt/"/>
+      <item name="Inception" href="Inception.html"/>
     </menu>
     <!-- <menu ref="reports"/> -->
   </body>

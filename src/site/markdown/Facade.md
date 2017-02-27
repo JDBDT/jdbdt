@@ -16,7 +16,7 @@ may be convenient to refer to the API methods concisely.
 
 ## Overview of functionality
 
-[(browse Javadoc instead)](apidocs/org/jdbdt/JDBDT.html)
+[(browse Javadoc instead)](apidocs/index.html?org/jdbdt/JDBDT.html)
 
 <table border="1">
   	<tr>
@@ -88,11 +88,13 @@ may be convenient to refer to the API methods concisely.
      	  	Setup methods can be used to define the contents of a database.
      	</td>
 		<td align="left">
+		    <code>changed</code><br/>
 			<code>commit</code><br/>
 			<code>deleteAll</code><br/>
 			<code>deleteAllWhere</code><br/> 
 			<code>insert</code><br/>
 			<code>populate</code><br/>
+			<code>populateIfChanged</code><br/>
 			<code>restore</code><br/>
 			<code>save</code><br/>
 			<code>truncate</code><br/>
