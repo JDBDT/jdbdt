@@ -40,7 +40,11 @@ Commands:
 
 # Change Log
 
-## 0.6-SNAPSHOT (current snapshot / next release)
+## 0.7-SNAPSHOT (current snapshot / next release)
+
+No changes yet.
+
+## 0.6
 
 * `populateIfChanged`, `changed`: new facade methods.
 * Improved handling of reusable/non-reusable statements.
