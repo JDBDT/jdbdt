@@ -19,7 +19,7 @@ without need to maintain external "data files".
 without dependencies from third-party libraries.
 
 For details,  browse the reference documentation 
-available in this site, along with the [Javadoc](apidocs/index.html) for the JDBDT API and the [JDBDT tutorial](Tutorial.html).
+available in this site, along with the [Javadoc](apidocs/index.html?org/jdbdt/JDBDT.html) for the JDBDT API and the [JDBDT tutorial](Tutorial.html).
 
 ## Issue tracking 
 
