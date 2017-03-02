@@ -60,7 +60,7 @@ public final class DataSetBuilder {
   /**
    * Target data set.
    */
-  private DataSet data;
+  private final DataSet data;
   
   /** 
    * Random number generator.
