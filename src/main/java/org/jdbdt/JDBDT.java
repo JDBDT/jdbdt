@@ -512,13 +512,13 @@ public final class JDBDT {
 
   /**
    * Truncate table.
-   * @param t Table.
+   * @param table Table.
    * @throws DBExecutionException if a database error occurs.
    * @see #deleteAll(Table)
    * @see #deleteAllWhere(Table,String,Object...)
    */
-  public static void truncate(Table t) throws DBExecutionException  {
-    DBSetup.truncate(CallInfo.create(), t);
+  public static void truncate(Table table) throws DBExecutionException  {
+    DBSetup.truncate(CallInfo.create(), table);
   }
   
   /**
