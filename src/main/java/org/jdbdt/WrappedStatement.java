@@ -17,7 +17,7 @@ final class WrappedStatement implements AutoCloseable {
   /**
    * Reuse flag.
    */
-  private boolean reuse;
+  private final boolean reuse;
   
   /**
    * Constructor.
