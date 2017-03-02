@@ -14,7 +14,7 @@ public final class QueryBuilder  {
   /**
    * Clauses/parameters that may be set for a builder.
    */
-  enum Param {
+  private enum Param {
     /** Columns (mandatory). */
     COLUMNS {
       @Override
