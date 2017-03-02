@@ -32,7 +32,7 @@ public abstract class DataSource {
   /**
    * Query arguments (if any).
    */
-  private Object[] queryArgs = null;
+  private final Object[] queryArgs;
 
   /**
    * Last snapshot (if any).
