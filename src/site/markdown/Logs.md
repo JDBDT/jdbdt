@@ -51,7 +51,7 @@ and SQL type (`sql-type`).
 
 ## Data sets <a name="DataSets"></a>
 
-A `data-set` node displays the contents of a data set that associates 
+A `data-set` node displays the contents of a [data set](DataSets.html) that associates 
 to some JDBDT operation (e.g., `populate`, `dump`). 
 All rows are detailed in `data-set/rows`. For each column in a row,
 a `column` node indicates the column value as well as its
