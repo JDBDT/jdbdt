@@ -1,11 +1,11 @@
+[![JDBDT](https://raw.githubusercontent.com/edrdo/jdbdt/master/src/site/resources/images/jdbdt-logo.png)](http://jdbdt.org)
+
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jdbdt/jdbdt/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/org.jdbdt/jdbdt)
 [![GitHub release](https://img.shields.io/github/release/edrdo/jdbdt.svg)](https://github.com/edrdo/jdbdt/releases)
 [![Build status](https://api.travis-ci.org/edrdo/jdbdt.png?branch=master)](https://travis-ci.org/edrdo/jdbdt)
 
-# JDBDT 
 
-JDBDT (Java Database Delta Testing) is a library for 
-Java database application testing. 
+JDBDT (Java Database Delta Testing) is a library for database test automation.
 
 Visit [http://jdbdt.org](http://jdbdt.org) for reference.
 
@@ -16,15 +16,13 @@ JDBDT is open-source software under the terms of the
 
 Copyright [Eduardo R. B. Marques](http://www.dcc.fc.up.pt/~edrdo), 2016-2017
 
-# Download / installation
+# Releases
 
-JDBDT is available at [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cjdbdt)  (click link on top of this page for the latest release).
-
-Individual release artifacts are also available at [GitHub](https://github.com/edrdo/jdbdt/releases).
+JDBDT releases are available from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cjdbdt) and [GitHub](https://github.com/edrdo/jdbdt/releases).
 
 # Dependencies
 
-JDBDT is self-contained: it uses the Java 8 SE API only.
+JDBDT is self-contained (it uses the Java 8 SE API only).
 
 # Compilation 
 
