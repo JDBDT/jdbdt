@@ -107,7 +107,7 @@
     <dependency>
       <groupId>ru.yandex.qatools.embed</groupId>
       <artifactId>postgresql-embedded</artifactId>
-      <version>1.21</version>
+      <version>1.22</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -159,7 +159,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.2</version>
       </plugin>
       <plugin>
         <artifactId>maven-deploy-plugin</artifactId>
@@ -219,7 +219,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.5.1</version>
+        <version>3.6.1</version>
         <configuration>
           <fork>true</fork>
           <encoding>${project.build.sourceEncoding}</encoding>
@@ -288,7 +288,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-site-plugin</artifactId>
-        <version>3.5.1</version>
+        <version>3.6</version>
         <dependencies>
           <dependency>
             <groupId>org.apache.maven.wagon</groupId>
