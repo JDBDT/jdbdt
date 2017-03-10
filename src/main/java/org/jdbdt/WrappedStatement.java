@@ -37,6 +37,11 @@ final class WrappedStatement implements AutoCloseable {
     return statement;
   }
   
+  /**
+   * Close.
+   * If the wrapped statement is reusable, it will only call {@link PreparedStatement#clearParameters()},
+   * otherwise it will call {@link PreparedStatement#close()}.
+   */
   @Override
   public void close() throws SQLException  {
     if (reuse) {
