@@ -82,6 +82,11 @@ final class DBSetup {
   }
 
   /**
+   * Max. batch size.
+   */
+  private static final int MAX_BATCH_SIZE = 100;
+  
+  /**
    * Utility method to perform actual data insertion.
    * @param callInfo Call Info.
    * @param table Table.
@@ -106,8 +111,12 @@ final class DBSetup {
         sql.append(",?");
       }
       sql.append(')');
+      
+      boolean performBatchInsertions = db.isEnabled(DB.Option.BATCH_INSERTIONS);
+      
       try(WrappedStatement ws = db.compile(sql.toString())) {
         PreparedStatement insertStmt = ws.getStatement();
+        int batchSize = 0;
         for (Row r : data.getRows()) {
           final int n = r.length();
           final Object[] cols = r.data();
@@ -117,7 +126,19 @@ final class DBSetup {
           for (int i = 0; i < n; i++) {
             insertStmt.setObject(i+1, cols[i]);
           }
-          insertStmt.execute();
+          if (performBatchInsertions) {
+            insertStmt.addBatch();
+            batchSize++;
+            if (batchSize == MAX_BATCH_SIZE) {
+              insertStmt.executeBatch();
+              batchSize = 0;
+            }
+          } else {
+            insertStmt.execute();
+          }
+        }
+        if (performBatchInsertions && batchSize > 0 ) {
+          insertStmt.executeBatch();
         }
       }
     }

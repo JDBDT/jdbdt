@@ -51,7 +51,11 @@ public final class DB {
     /**
      * Reuse statements (enabled by default).
      */
-    REUSE_STATEMENTS;
+    REUSE_STATEMENTS,
+    /**
+     * Batch insertions.
+     */
+    BATCH_INSERTIONS;
   }
   
   /**
