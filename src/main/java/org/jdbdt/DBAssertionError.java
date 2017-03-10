@@ -15,7 +15,9 @@ public final class DBAssertionError extends AssertionError {
     super(message);
   }
   
-  @SuppressWarnings("javadoc")
+  /**
+   * Serial version UID.
+   */
   private static final long serialVersionUID = 1L;
 
 }
