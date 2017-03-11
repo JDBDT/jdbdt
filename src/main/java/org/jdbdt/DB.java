@@ -100,7 +100,7 @@ public final class DB {
   private Map<String, WrappedStatement> pool;
 
   /**
-   * Savepoint, if set.
+   * Savepoint (non-null if set).
    */
   private Savepoint savepoint;
 
@@ -113,6 +113,7 @@ public final class DB {
    * Default value for maximum batch update size (if batch updates enabled).
    * @see #setMaximumBatchUpdateSize(int)
    * @see #getMaximumBatchUpdateSize()
+   * @see DB.Option#BATCH_UPDATES
    */
   public static final int DEFAULT_MAX_BATCH_UPDATE_SIZE = 1000;
 
@@ -157,6 +158,7 @@ public final class DB {
    * @param size The size to set.
    * @see #getMaximumBatchUpdateSize()
    * @see #DEFAULT_MAX_BATCH_UPDATE_SIZE
+   * @see DB.Option#BATCH_UPDATES
    */
   public void setMaximumBatchUpdateSize(int size) {
     if (!batchUpdateSupport) {
@@ -177,6 +179,7 @@ public final class DB {
    * by the database driver.
    * @see #setMaximumBatchUpdateSize(int)
    * @see #DEFAULT_MAX_BATCH_UPDATE_SIZE
+   * @see DB.Option#BATCH_UPDATES
    */
   public int getMaximumBatchUpdateSize() {
     return batchUpdateSupport ? maxBatchUpdateSize : 0;
