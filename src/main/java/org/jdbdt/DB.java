@@ -3,6 +3,7 @@ package org.jdbdt;
 import java.io.File;
 import java.io.PrintStream;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.util.EnumSet;
@@ -53,11 +54,16 @@ public final class DB {
      */
     REUSE_STATEMENTS;
   }
-  
+
   /**
    * Connection.
    */
   private final Connection connection;
+
+  /**
+   * Associated metadata.
+   */
+  private final DatabaseMetaData dbMetaData;
 
   /**
    * Trace options.
@@ -84,10 +90,14 @@ public final class DB {
    * @param connection Database connection.
    */
   DB(Connection connection) {
-    this.connection = connection;
-    log = Log.create(System.err);
-    enable(Option.REUSE_STATEMENTS);
-    enable(Option.LOG_ASSERTION_ERRORS);
+    try {
+      this.connection = connection;
+      dbMetaData = connection.getMetaData();
+      log = Log.create(System.err);
+      enable(Option.REUSE_STATEMENTS, Option.LOG_ASSERTION_ERRORS);
+    } catch (SQLException e) {
+      throw new DBExecutionException(e);
+    }
   }
 
   /**
@@ -99,16 +109,16 @@ public final class DB {
       optionSet.add(o);
     }
   }
-  
+
   /** 
    * Enable all logging options.
    */
   public void enableFullLogging() {
     enable(DB.Option.LOG_ASSERTION_ERRORS,
-           DB.Option.LOG_ASSERTIONS,
-           DB.Option.LOG_SETUP,
-           DB.Option.LOG_QUERIES,
-           DB.Option.LOG_SNAPSHOTS);
+        DB.Option.LOG_ASSERTIONS,
+        DB.Option.LOG_SETUP,
+        DB.Option.LOG_QUERIES,
+        DB.Option.LOG_SNAPSHOTS);
   }
 
   /**
@@ -122,8 +132,8 @@ public final class DB {
       optionSet.remove(o);
     }
   }
-  
-  
+
+
   /**
    * Check if option is enabled.
    * @param o Option.
@@ -163,7 +173,7 @@ public final class DB {
   public void setLog(File outputFile) {
     this.log = Log.create(outputFile);
   }
-  
+
   /**
    * Compile a SQL statement.
    * @param sql SQL code.
@@ -203,7 +213,7 @@ public final class DB {
       throw new DBExecutionException(e);
     }
   }
-  
+
   @SuppressWarnings("javadoc")
   private void clearSavePointIfSet() {
     if (savepoint != null) {
@@ -211,7 +221,7 @@ public final class DB {
       savepoint = null;
     }
   }
-  
+
   /**
    * Commit changes in the current transaction.
    * @param callInfo Call info.
@@ -226,7 +236,7 @@ public final class DB {
       throw new DBExecutionException(e); 
     }
   }
-  
+
   /**
    * Roll back changes to JDBDT save-point.
    * @param callInfo Call info.
@@ -250,7 +260,7 @@ public final class DB {
       clearSavePointIfSet();
     }
   }
-  
+
   /**
    * Tear down the database handle, freeing any internal
    * resources. 
@@ -273,7 +283,7 @@ public final class DB {
       ignoreSQLException(connection::close);
     }
   }
-  
+
   /**
    * Log query result.
    * @param callInfo Call info.
@@ -284,7 +294,7 @@ public final class DB {
       log.write(callInfo, data);
     }
   }
-  
+
   /**
    * Log query result.
    * @param callInfo Call info.
@@ -295,7 +305,7 @@ public final class DB {
       log.write(callInfo, data);
     }
   }
-  
+
   /**
    * Log insertion.
    * @param callInfo Call info.
@@ -315,11 +325,11 @@ public final class DB {
   void log(CallInfo callInfo, DeltaAssertion da) {
     if (isEnabled(Option.LOG_ASSERTIONS) ||
         (    ! da.passed() 
-          && isEnabled(Option.LOG_ASSERTION_ERRORS) )) {
+            && isEnabled(Option.LOG_ASSERTION_ERRORS) )) {
       log.write(callInfo, da);
     }
   }
-  
+
   /**
    * Log state assertion.
    * @param callInfo Call info.
@@ -328,7 +338,7 @@ public final class DB {
   void log(CallInfo callInfo, DataSetAssertion sa) {
     if (isEnabled(Option.LOG_ASSERTIONS) ||
         (    ! sa.passed() 
-          && isEnabled(Option.LOG_ASSERTION_ERRORS) )) {
+            && isEnabled(Option.LOG_ASSERTION_ERRORS) )) {
       log.write(callInfo, sa);
     }
   }
@@ -343,7 +353,7 @@ public final class DB {
       log.writeSQL(callInfo, sql);
     }
   }
-  
+
   /**
    * Log database setup call.
    * @param callInfo Call info.
@@ -353,13 +363,13 @@ public final class DB {
       log.writeCallInfo(callInfo);
     }
   }
-  
+
   @SuppressWarnings("javadoc")
   @FunctionalInterface
   private interface SQLOperationThatMayFail {
     void run() throws SQLException;
   }
-  
+
   @SuppressWarnings("javadoc")
   private void ignoreSQLException(SQLOperationThatMayFail op) {
     try {
@@ -369,5 +379,5 @@ public final class DB {
       // Do nothing.
     }
   }
-  
+
 }
