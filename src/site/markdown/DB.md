@@ -79,8 +79,9 @@ A call to `enableFullLogging()` enables all logging options at once.
 <a name="StatementReuse"></a>
 
 A database handle internally reuses `java.sql.PreparedStatement` objects
-to avoid re-compiling SQL code.  The scheme is enabled by default and, generally, 
-it should provide more efficiency and cause no problems.
+to avoid re-compiling SQL code, regardless of any statement pooling in place
+for the JDBC driver in use,  The scheme is enabled by default and 
+it should generally provide a little more efficiency and cause no problems.
 For drivers that do not deal well with statement reuse, however,
 the `REUSE_STATEMENTS` option should be disabled as follows:
 
@@ -96,6 +97,13 @@ the `REUSE_STATEMENTS` option should be disabled as follows:
 **Known issue**: statement reuse should be disabled for 
 [xerial's JDBC driver for sqlite](Compatibility.html#KnownIssues).
 No problems were detected for [all other JDBC drivers tested in the JDBDT build](Compatibility.html#Drivers).
+
+### Batch updates
+
+The `BATCH_UPDATES` option is enabled by default. 
+Database insertions will use the JDBC batch update mechanism if the option is set,
+unless the JDBC driver in does not support the feature (in this case the option
+will have no effect). 
 
 ## Summary of methods
 <a name="MethodReference"></a>
@@ -116,3 +124,5 @@ password.
 - `isEnabled(o)` tests if option `o` is enabled.
 - `enableFullLogging()` enables all logging options.
 - `setLog(out)` redirects log output to `out`, a `java.io.File` or `java.io.PrintStream`.
+- `setMaximumBatchUpdateSize(n)` sets `n` as the maximum number of operations in a batch update.
+- `getMaximumBatchUpdateSize()` gets the current setting for the maximum number of operations in a batch update.
