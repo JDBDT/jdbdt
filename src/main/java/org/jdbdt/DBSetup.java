@@ -112,7 +112,7 @@ final class DBSetup {
       }
       sql.append(')');
       
-      boolean performBatchInsertions = db.isEnabled(DB.Option.BATCH_INSERTIONS);
+      boolean performBatchInsertions = db.isEnabled(DB.Option.BATCH_UPDATES);
       
       try(WrappedStatement ws = db.compile(sql.toString())) {
         PreparedStatement insertStmt = ws.getStatement();

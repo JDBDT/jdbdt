@@ -34,7 +34,7 @@ public final class DB {
      */
     LOG_ASSERTIONS,
     /**
-     * Log failed assertions (enabled by default).
+     * Log failed assertions (enabled initially by default).
      */
     LOG_ASSERTION_ERRORS,
     /**
@@ -50,13 +50,13 @@ public final class DB {
      */
     LOG_SNAPSHOTS,
     /**
-     * Reuse statements (enabled by default).
+     * Reuse statements (enabled initially by default).
      */
     REUSE_STATEMENTS,
     /**
-     * Batch insertions.
+     * Batch updates (enabled initially if supported by database driver).
      */
-    BATCH_INSERTIONS;
+    BATCH_UPDATES;
   }
 
   /**
@@ -98,7 +98,12 @@ public final class DB {
       this.connection = connection;
       dbMetaData = connection.getMetaData();
       log = Log.create(System.err);
-      enable(Option.REUSE_STATEMENTS, Option.LOG_ASSERTION_ERRORS);
+      enable(Option.REUSE_STATEMENTS, 
+             Option.LOG_ASSERTION_ERRORS);
+      
+      if (dbMetaData.supportsBatchUpdates()) {
+        enable(Option.BATCH_UPDATES);
+      }
     } catch (SQLException e) {
       throw new DBExecutionException(e);
     }
