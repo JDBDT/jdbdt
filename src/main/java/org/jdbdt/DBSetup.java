@@ -112,7 +112,7 @@ final class DBSetup {
       }
       sql.append(')');
       
-      boolean performBatchInsertions = db.isEnabled(DB.Option.BATCH_UPDATES);
+      boolean batchMode = db.isEnabled(DB.Option.BATCH_UPDATES);
       
       try(WrappedStatement ws = db.compile(sql.toString())) {
         PreparedStatement insertStmt = ws.getStatement();
@@ -126,7 +126,7 @@ final class DBSetup {
           for (int i = 0; i < n; i++) {
             insertStmt.setObject(i+1, cols[i]);
           }
-          if (performBatchInsertions) {
+          if (batchMode) {
             insertStmt.addBatch();
             batchSize++;
             if (batchSize == MAX_BATCH_SIZE) {
@@ -137,7 +137,7 @@ final class DBSetup {
             insertStmt.execute();
           }
         }
-        if (performBatchInsertions && batchSize > 0 ) {
+        if (batchMode && batchSize > 0 ) {
           insertStmt.executeBatch();
         }
       }
