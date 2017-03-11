@@ -39,7 +39,11 @@ Commands:
 
 # Change Log
 
-## 0.7-SNAPSHOT (current snapshot / next release)
+## 0.8-SNAPSHOT (current snapshot)
+
+No changes yet.
+
+## 0.7
 
 * Database insertions now done in batch mode.
 * Validation of savepoint support.
