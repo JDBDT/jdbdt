@@ -54,7 +54,12 @@ public final class DB {
      */
     REUSE_STATEMENTS,
     /**
-     * Batch updates (enabled initially if supported by database driver).
+     * Batch updates (enabled initially by default).
+     * 
+     * This should provide better performance for row insertion when using
+     * {@link JDBDT#insert(DataSet)} and {@link JDBDT#populate(DataSet)}.
+     * The option has no effect though if the database driver does not support batch
+     * updates (as indicated by {@link DatabaseMetaData#supportsBatchUpdates()}.
      */
     BATCH_UPDATES;
   }
@@ -75,6 +80,16 @@ public final class DB {
   private final EnumSet<Option> optionSet = EnumSet.noneOf(Option.class);
 
   /**
+   * Flag indicating if batch updates are supported.
+   */
+  private final boolean batchUpdateSupport;
+  
+  /**
+   * Flag indicating if save points are supported.
+   */
+  private final boolean savepointSupport;
+  
+  /**
    * Log to use. 
    */
   private Log log = null;
@@ -90,6 +105,18 @@ public final class DB {
   private Savepoint savepoint;
 
   /**
+   * Maximum operations for batch updates.
+   */
+  private int maxBatchUpdateSize = 0;
+
+  /**
+   * Default value for maximum batch update size (if batch updates enabled).
+   * @see #setMaximumBatchUpdateSize(int)
+   * @see #getMaximumBatchUpdateSize()
+   */
+  public static final int DEFAULT_MAX_BATCH_UPDATE_SIZE = 1000;
+
+  /**
    * Constructor.
    * @param connection Database connection.
    */
@@ -101,8 +128,14 @@ public final class DB {
       enable(Option.REUSE_STATEMENTS, 
              Option.LOG_ASSERTION_ERRORS);
       
-      if (dbMetaData.supportsBatchUpdates()) {
+      batchUpdateSupport = dbMetaData.supportsBatchUpdates();
+      savepointSupport = dbMetaData.supportsSavepoints();
+      
+      if (batchUpdateSupport) {
+        maxBatchUpdateSize = DEFAULT_MAX_BATCH_UPDATE_SIZE;
         enable(Option.BATCH_UPDATES);
+      } else {
+        maxBatchUpdateSize = 0;
       }
     } catch (SQLException e) {
       throw new DBExecutionException(e);
@@ -119,15 +152,45 @@ public final class DB {
     }
   }
 
+  /**
+   * Set maximum size for batch updates.
+   * @param size The size to set.
+   * @see #getMaximumBatchUpdateSize()
+   * @see #DEFAULT_MAX_BATCH_UPDATE_SIZE
+   */
+  public void setMaximumBatchUpdateSize(int size) {
+    if (!batchUpdateSupport) {
+      throw new InvalidOperationException("Batch updates not allowed by database driver.");
+    }
+    if (! isEnabled(DB.Option.BATCH_UPDATES)) {
+      throw new InvalidOperationException(DB.Option.BATCH_UPDATES + "option is not enabled.");
+    }
+    if (size < 1) {
+      throw new InvalidOperationException("Invalid batch update size: " + size);
+    }
+    maxBatchUpdateSize = size;
+  }
+  
+  /**
+   * Get current setting for maximum batch update size.
+   * @return The value set, which will be 0 if batch updates are not supported
+   * by the database driver.
+   * @see #setMaximumBatchUpdateSize(int)
+   * @see #DEFAULT_MAX_BATCH_UPDATE_SIZE
+   */
+  public int getMaximumBatchUpdateSize() {
+    return batchUpdateSupport ? maxBatchUpdateSize : 0;
+  }
+  
   /** 
    * Enable all logging options.
    */
   public void enableFullLogging() {
     enable(DB.Option.LOG_ASSERTION_ERRORS,
-        DB.Option.LOG_ASSERTIONS,
-        DB.Option.LOG_SETUP,
-        DB.Option.LOG_QUERIES,
-        DB.Option.LOG_SNAPSHOTS);
+           DB.Option.LOG_ASSERTIONS,
+           DB.Option.LOG_SETUP,
+           DB.Option.LOG_QUERIES,
+           DB.Option.LOG_SNAPSHOTS);
   }
 
   /**
@@ -211,6 +274,9 @@ public final class DB {
    * @param callInfo Call info.
    */
   void save(CallInfo callInfo) {
+    if (!savepointSupport) {
+      throw new InvalidOperationException("Savepoints are not supported by the database driver.");
+    }
     logSetup(callInfo);
     clearSavePointIfSet();
     try {
@@ -291,6 +357,14 @@ public final class DB {
     if (closeConn) {
       ignoreSQLException(connection::close);
     }
+  }
+  
+  /**
+   * Test if batch updates should be performed.
+   * @return <code>true</code> if batch updates should be performed.
+   */
+  boolean useBatchUpdates() {
+    return batchUpdateSupport && isEnabled(DB.Option.BATCH_UPDATES); 
   }
 
   /**
