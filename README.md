@@ -41,7 +41,9 @@ Commands:
 
 ## 0.7-SNAPSHOT (current snapshot / next release)
 
-* Database insertions now make use of batch updates.
+* Database insertions now done in batch mode.
+* Validation of savepoint support.
+* Miscellaneous maintenance (code style, Javadoc, site).
 
 ## 0.6
 
