@@ -41,7 +41,7 @@ Commands:
 
 ## 0.7-SNAPSHOT (current snapshot / next release)
 
-No changes yet.
+* Database insertions now make use of batch updates.
 
 ## 0.6
 
