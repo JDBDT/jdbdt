@@ -1,7 +1,8 @@
 tt { font-weight: bold; background-color: transparent; }
 pre.prettyprint { border-style: none; background-color: transparent; margin-left: 25px; }
-h1 { font-size: 48 px; }
-h2 { font-size: 32 px; }
+h1 { font-size: 2em; }
+h2 { font-size: 1.5em; }
+h3 { font-size: 1.25em; }
 a.externalLink[href^=http] { background: none; padding-right: 0px; }
 a.externalLink[href^=https] { background: none; padding-right: 0px; }
 a.externalLink { background: none; padding-right: 0px; }
