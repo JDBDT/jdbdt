@@ -22,12 +22,6 @@ without dependencies from third-party libraries.
 For details,  browse the reference documentation 
 available in this site, along with the [Javadoc](apidocs/index.html?org/jdbdt/JDBDT.html) for the JDBDT API and the [JDBDT tutorial](Tutorial.html).
 
-## Issue tracking 
-
-Please use the 
-[issue tracker at GitHub](https://github.com/edrdo/jdbdt/issues)
-to report bugs or other issues.
-
 ## Installation 
 
 **Prerequisite:** JDBDT requires Java 8, it will not work 
@@ -59,6 +53,10 @@ the following commands:
 	cd jdbdt
 	mvn install 
 
+## Contribute
 
+The code is hosted at [GitHub](https://github.com/edrdo/jdbdt).
+Please use the [issue tracker](https://github.com/edrdo/jdbdt/issues)
+to report bugs or discuss feature requests.
 
 	
