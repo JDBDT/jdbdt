@@ -4,7 +4,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.function.Consumer;
 
 /**
  * Base class for data sources.
@@ -137,31 +136,34 @@ public abstract class DataSource {
    */
   final MetaData getMetaData() {
     if (metaData == null) {
-      try (WrappedStatement ws = db.compile(getSQLForQuery())) {
-        computeMetaData(ws.getStatement());
-      } 
-      catch (SQLException e) {
-        throw new DBExecutionException(e);
-      }
+      db.access(() -> {
+        try (WrappedStatement ws = db.compile(getSQLForQuery())) {
+          computeMetaData(ws.getStatement());
+        } 
+        return 0;
+      });
     }
     return metaData;
   }
-  
+
   /**
    * Get meta-data.
    * @param stmt Statement from which to derive the meta-data.
    */
   final void computeMetaData(PreparedStatement stmt) {
     if (metaData == null) {
-      MetaData md = new MetaData(stmt);
-      if (getColumns() == null) {
-        String[] cols = new String[md.getColumnCount()];
-        for (int i = 0; i < cols.length; i++) {
-          cols[i] = md.getLabel(i);
+      db.access(() -> {
+        MetaData md = new MetaData(stmt);
+        if (getColumns() == null) {
+          String[] cols = new String[md.getColumnCount()];
+          for (int i = 0; i < cols.length; i++) {
+            cols[i] = md.getLabel(i);
+          }
+          setColumns(cols);
         }
-        setColumns(cols);
-      }
-      metaData = md;
+        metaData = md;
+        return 0;
+      });
     }
   }
 
@@ -187,19 +189,19 @@ public abstract class DataSource {
    */
   final DataSet executeQuery(CallInfo callInfo, boolean takeSnapshot) {
     DataSet data = new DataSet(this);
-    try (WrappedStatement ws = db.compile(getSQLForQuery())) {
-      computeMetaData(ws.getStatement());
-      executeQuery(ws.getStatement(), metaData, getQueryArguments(), data::addRow);
-      if (takeSnapshot) {
-        setSnapshot(data);
-        getDB().logSnapshot(callInfo, data);
-      } else {
-        getDB().logQuery(callInfo, data);
+    return db.access( () -> {
+      try (WrappedStatement ws = db.compile(getSQLForQuery())) {
+        computeMetaData(ws.getStatement());
+        proceedWithQuery(ws.getStatement(), data);
+        if (takeSnapshot) {
+          setSnapshot(data);
+          getDB().logSnapshot(callInfo, data);
+        } else {
+          getDB().logQuery(callInfo, data);
+        }
       }
-    } catch (SQLException e) {
-      throw new DBExecutionException(e);
-    }
-    return data;
+      return data;
+    });
   }
 
   /**
@@ -228,35 +230,27 @@ public abstract class DataSource {
   /**
    * Execute query.
    * @param queryStmt Query statement.
-   * @param md Meta data.
-   * @param queryArgs Query arguments.
-   * @param action Row consumer.
+   * @param ds Target data set.
+   * @throws SQLException if a database error occurs.
    */
-  static void executeQuery
-  (PreparedStatement queryStmt, 
-      MetaData md, 
-      Object[] queryArgs, 
-      Consumer<Row> action) {
-    try { 
-      if (queryArgs != null && queryArgs.length > 0) {
-        for (int i=0; i < queryArgs.length; i++) {
-          queryStmt.setObject(i + 1, queryArgs[i]);
-        }
+  private void proceedWithQuery
+  (PreparedStatement queryStmt, DataSet ds) throws SQLException {
+    Object[] queryArgs = getQueryArguments();
+    if (queryArgs != null && queryArgs.length > 0) {
+      for (int i=0; i < queryArgs.length; i++) {
+        queryStmt.setObject(i + 1, queryArgs[i]);
       }
-      try(ResultSet rs = queryStmt.executeQuery()) {
-        int colCount = md.getColumnCount();
-        while (rs.next()) {
-          Object[] data = new Object[colCount];
-          for (int i = 0; i < colCount; i++) {  
-            data[i] = rs.getObject(i+1);
-          }
-          action.accept(new Row(data));
+    }
+    try(ResultSet rs = queryStmt.executeQuery()) {
+      int colCount = metaData.getColumnCount();
+      while (rs.next()) {
+        Object[] data = new Object[colCount];
+        for (int i = 0; i < colCount; i++) {  
+          data[i] = rs.getObject(i+1);
         }
+        ds.addRow(new Row(data));
       }
-    } 
-    catch(SQLException e) {
-      throw new DBExecutionException(e);
-    } 
+    }
   }
 
   /**

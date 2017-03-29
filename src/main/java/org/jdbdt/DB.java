@@ -83,12 +83,12 @@ public final class DB {
    * Flag indicating if batch updates are supported.
    */
   private final boolean batchUpdateSupport;
-  
+
   /**
    * Flag indicating if save points are supported.
    */
   private final boolean savepointSupport;
-  
+
   /**
    * Log to use. 
    */
@@ -127,11 +127,11 @@ public final class DB {
       dbMetaData = connection.getMetaData();
       log = Log.create(System.err);
       enable(Option.REUSE_STATEMENTS, 
-             Option.LOG_ASSERTION_ERRORS);
-      
+          Option.LOG_ASSERTION_ERRORS);
+
       batchUpdateSupport = dbMetaData.supportsBatchUpdates();
       savepointSupport = dbMetaData.supportsSavepoints();
-      
+
       if (batchUpdateSupport) {
         maxBatchUpdateSize = DEFAULT_MAX_BATCH_UPDATE_SIZE;
         enable(Option.BATCH_UPDATES);
@@ -172,7 +172,7 @@ public final class DB {
     }
     maxBatchUpdateSize = size;
   }
-  
+
   /**
    * Get current setting for maximum batch update size.
    * @return The value set, which will be 0 if batch updates are not supported
@@ -184,16 +184,16 @@ public final class DB {
   public int getMaximumBatchUpdateSize() {
     return batchUpdateSupport ? maxBatchUpdateSize : 0;
   }
-  
+
   /** 
    * Enable all logging options.
    */
   public void enableFullLogging() {
     enable(DB.Option.LOG_ASSERTION_ERRORS,
-           DB.Option.LOG_ASSERTIONS,
-           DB.Option.LOG_SETUP,
-           DB.Option.LOG_QUERIES,
-           DB.Option.LOG_SNAPSHOTS);
+        DB.Option.LOG_ASSERTIONS,
+        DB.Option.LOG_SETUP,
+        DB.Option.LOG_QUERIES,
+        DB.Option.LOG_SNAPSHOTS);
   }
 
   /**
@@ -253,23 +253,25 @@ public final class DB {
    * Compile a SQL statement.
    * @param sql SQL code.
    * @return Wrapper for prepared statement.
-   * @throws SQLException If there is a error preparing the statement.
+   * @throws DBExecutionException If there is a error preparing the statement.
    */
   WrappedStatement 
-  compile(String sql) throws SQLException {    
-    if (! isEnabled(Option.REUSE_STATEMENTS)) {
-      return new WrappedStatement(connection.prepareStatement(sql), false);
-    }
-    if (pool == null) {
-      pool = new IdentityHashMap<>();
-    } 
-    String sqlI = sql.intern();
-    WrappedStatement ws = pool.get(sqlI);
-    if (ws == null) {
-      ws =  new WrappedStatement(connection.prepareStatement(sql), true);
-      pool.put(sqlI, ws);
-    }
-    return ws;
+  compile(String sql) throws DBExecutionException {   
+    return access( () -> {
+      if (! isEnabled(Option.REUSE_STATEMENTS)) {
+        return new WrappedStatement(connection.prepareStatement(sql), false);
+      }
+      if (pool == null) {
+        pool = new IdentityHashMap<>();
+      } 
+      String sqlI = sql.intern();
+      WrappedStatement ws = pool.get(sqlI);
+      if (ws == null) {
+        ws =  new WrappedStatement(connection.prepareStatement(sql), true);
+        pool.put(sqlI, ws);
+      }
+      return ws;
+    }); 
   }
 
   /**
@@ -277,19 +279,18 @@ public final class DB {
    * @param callInfo Call info.
    */
   void save(CallInfo callInfo) {
-    if (!savepointSupport) {
-      throw new InvalidOperationException("Savepoints are not supported by the database driver.");
-    }
-    logSetup(callInfo);
-    clearSavePointIfSet();
-    try {
+    access( () -> {
+      if (!savepointSupport) {
+        throw new InvalidOperationException("Savepoints are not supported by the database driver.");
+      }
+      logSetup(callInfo);
+      clearSavePointIfSet();
       if (connection.getAutoCommit()) {
         throw new InvalidOperationException("Auto-commit is set for database connection.");
       }      
       savepoint = connection.setSavepoint();
-    } catch (SQLException e) {
-      throw new DBExecutionException(e);
-    }
+      return 0;
+    });
   }
 
   @SuppressWarnings("javadoc")
@@ -305,14 +306,12 @@ public final class DB {
    * @param callInfo Call info.
    */
   void commit(CallInfo callInfo) {
-    logSetup(callInfo);
-    clearSavePointIfSet();
-    try {
+    access( () -> {
+      logSetup(callInfo);
+      clearSavePointIfSet();
       connection.commit();
-    } 
-    catch(SQLException e) {
-      throw new DBExecutionException(e); 
-    }
+      return 0;
+    });
   }
 
   /**
@@ -323,20 +322,21 @@ public final class DB {
     // Note: this is a conservative implementation, it sets another save-point
     // after roll-back, some engines seem to implicitly release the save point on roll-back
     // (an issue with HSQLDB)
-    logSetup(callInfo);
-    try {
-      if (savepoint == null) {
-        throw new InvalidOperationException("Save point is not set.");
+    access(() -> {
+      logSetup(callInfo);
+      try {
+        if (savepoint == null) {
+          throw new InvalidOperationException("Save point is not set.");
+        }
+        Savepoint s = savepoint;
+        savepoint = null;
+        connection.rollback(s);
+        return 0;
       }
-      connection.rollback(savepoint);
-    }
-    catch(SQLException e) {
-      savepoint = null; // ensuring null in case of error
-      throw new DBExecutionException(e); 
-    }
-    finally {
-      clearSavePointIfSet();
-    }
+      finally {
+        clearSavePointIfSet();
+      }
+    });
   }
 
   /**
@@ -361,7 +361,40 @@ public final class DB {
       ignoreSQLException(connection::close);
     }
   }
-  
+
+  /**
+   * Functional interface for generic database access.
+   * @param <T> Type of result.
+   */
+  @FunctionalInterface
+  interface Access<T> {
+    /**
+     * Execute some code that accesses the DB.
+     * @return Result of executing the operation.
+     * @throws SQLException If a database error occurs.
+     */
+    public T execute() throws SQLException;
+  }
+
+  /**
+   * Run a operation. 
+   * 
+   * Any {@link java.sql.SQLException} error that occurs is wrapped
+   * into a {@link DBExecutionException} instance.
+   * @param <T> Type of result.
+   * @param op Operation.
+   * @return DB access result.
+   * @throws DBExecutionException If a database error occurs.
+   */
+  <T> T access(Access<T> op) throws DBExecutionException {
+    try {
+      return op.execute();
+    }
+    catch (SQLException e) {
+      throw new DBExecutionException(e); 
+    }
+  }
+
   /**
    * Test if batch updates should be performed.
    * @return <code>true</code> if batch updates should be performed.

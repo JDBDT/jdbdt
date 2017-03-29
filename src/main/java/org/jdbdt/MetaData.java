@@ -60,22 +60,20 @@ final class MetaData {
   /**
    * Constructs meta-data from given statement.
    * @param stmt Prepared statement for a query.
+   * @throws SQLException If an error occurs during meta-data creation.
    */
-  MetaData(PreparedStatement stmt) {
-    try {
-      ResultSetMetaData md = stmt.getMetaData();
-      int n = md.getColumnCount();
-      ArrayList<ColumnInfo> info = new ArrayList<>(n);
-      for (int i = 1; i <= n; i++) {
-        ColumnInfo ci = 
-            new ColumnInfo(md.getColumnLabel(i),
-                JDBCType.valueOf(md.getColumnType(i)));
-        info.add(ci);
-      }
-      columns = Collections.unmodifiableList(info);
-    } catch(SQLException e) {
-      throw new DBExecutionException(e);
+  MetaData(PreparedStatement stmt) throws SQLException {
+
+    ResultSetMetaData md = stmt.getMetaData();
+    int n = md.getColumnCount();
+    ArrayList<ColumnInfo> info = new ArrayList<>(n);
+    for (int i = 1; i <= n; i++) {
+      ColumnInfo ci = 
+          new ColumnInfo(md.getColumnLabel(i),
+              JDBCType.valueOf(md.getColumnType(i)));
+      info.add(ci);
     }
+    columns = Collections.unmodifiableList(info);
   }
   /**
    * Get column count.

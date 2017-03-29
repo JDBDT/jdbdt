@@ -1,7 +1,6 @@
 package org.jdbdt;
 
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
 /**
  * Utility class with methods for database setup.
@@ -90,8 +89,8 @@ final class DBSetup {
    */
   private static void doInsert(CallInfo callInfo, Table table, DataSet data)
       throws DBExecutionException {
-    try {
-      DB db = table.getDB();
+   final DB db = table.getDB();
+   db.access( () -> {
       db.logInsertion(callInfo, data);
       StringBuilder sql = new StringBuilder("INSERT INTO ");
       String[] columnNames = table.getColumns();
@@ -137,10 +136,8 @@ final class DBSetup {
           insertStmt.executeBatch();
         }
       }
-    }
-    catch(SQLException e) {
-      throw new DBExecutionException(e);
-    }
+      return 0;
+    });
   }
 
   /**
@@ -165,17 +162,15 @@ final class DBSetup {
    */
   private static int doDeleteAll(CallInfo callInfo, Table table) 
       throws DBExecutionException {
-    try {
+    final DB db = table.getDB();
+    return db.access( () -> {
       String sql = "DELETE FROM " + table.getName();
-      DB db = table.getDB();
       db.logSetup(callInfo, sql);
       try (WrappedStatement ws = db.compile(sql)) {
         return ws.getStatement().executeUpdate();
       }
-    } 
-    catch (SQLException e) {
-      throw new DBExecutionException(e);
-    }
+    });
+
   }
 
   /**
@@ -186,18 +181,17 @@ final class DBSetup {
    */
   static void truncate(CallInfo callInfo, Table table) 
       throws DBExecutionException {
-    try {
+    final DB db = table.getDB();   
+    db.access(() -> {
       String sql = "TRUNCATE TABLE " + table.getName();
       table.setDirtyStatus(true);
-      DB db = table.getDB();
       db.logSetup(callInfo, sql);
       try (WrappedStatement ws = db.compile(sql)) {
         ws.getStatement().execute();
       }
-    }
-    catch (SQLException e) {
-      throw new DBExecutionException(e);
-    }
+      return 0;
+    });
+   
   }
 
   /**
@@ -211,13 +205,13 @@ final class DBSetup {
    */
   static int deleteAll(CallInfo callInfo, Table table, String where, Object... args) 
       throws DBExecutionException {
-    try {
+    final DB db = table.getDB();
+
+    return  db.access( () -> {
       table.setDirtyStatus(true);
       String sql = 
           "DELETE FROM " + table.getName() +
           " WHERE " + where;
-
-      DB db = table.getDB();
       db.logSetup(callInfo, sql);
       try (WrappedStatement ws = db.compile(sql)) {
         PreparedStatement deleteStmt = ws.getStatement();
@@ -228,11 +222,7 @@ final class DBSetup {
         }
         return deleteStmt.executeUpdate(); 
       }
-    }
-    catch (SQLException e) {
-      throw new DBExecutionException(e);
-    }
-
+    });
   }
 
   /**
