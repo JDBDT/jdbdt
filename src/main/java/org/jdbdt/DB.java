@@ -70,11 +70,6 @@ public final class DB {
   private final Connection connection;
 
   /**
-   * Associated metadata.
-   */
-  private final DatabaseMetaData dbMetaData;
-
-  /**
    * Trace options.
    */
   private final EnumSet<Option> optionSet = EnumSet.noneOf(Option.class);
@@ -124,7 +119,7 @@ public final class DB {
   DB(Connection connection) {
     try {
       this.connection = connection;
-      dbMetaData = connection.getMetaData();
+      DatabaseMetaData dbMetaData = connection.getMetaData();
       log = Log.create(System.err);
       enable(Option.REUSE_STATEMENTS, 
           Option.LOG_ASSERTION_ERRORS);
