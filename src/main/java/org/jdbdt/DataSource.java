@@ -105,7 +105,10 @@ public abstract class DataSource {
    * @return Name of column.
    */
   public String getColumnName(int index) {
-    if (index < 0 || columns == null || index >= columns.length) {
+    if (columns == null) {
+      getMetaData();
+    }
+    if (index < 0 || index >= columns.length) {
       throw new InvalidOperationException("Invalid column index: " + index);
     }
     return columns[index];
