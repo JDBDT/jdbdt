@@ -1,10 +1,9 @@
 package org.jdbdt;
 
 /**
- * POJO to store call info, used in logs.
+ * Information regarding a call to the JDBDT API facade.
  * 
  * @since 0.1
- *
  */
 final class CallInfo {
 
