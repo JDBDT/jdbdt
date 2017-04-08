@@ -78,6 +78,18 @@ public abstract class DataSource {
       }
     });
   }
+  /**
+   * Constructor for mock data sources (for testing only).
+   * @param columns Columns.
+   */
+  DataSource(String[] columns) {
+    this.db = null;
+    this.querySQL = null;
+    this.queryArgs = null;
+    this.dirty = true;
+    this.metaData = null;
+    this.columns = columns;
+  }
 
   /**
    * Get database instance.

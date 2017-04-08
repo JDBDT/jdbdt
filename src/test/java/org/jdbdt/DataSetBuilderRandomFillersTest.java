@@ -27,10 +27,9 @@ import org.junit.runners.MethodSorters;
 
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class DataSetBuilderRandomFillersTest extends DBTestCase {
+public class DataSetBuilderRandomFillersTest {
 
-  private static Table table;
-  private static final String TABLE_NAME = "Foo";
+  private static DataSource mockDataSource;
   
   private static final 
   LinkedHashMap<String,Object> BASE_DATA = new LinkedHashMap<>();
@@ -49,7 +48,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
     BASE_DATA.put("cDate", new Date(0L));
     String[] columns = new String[BASE_DATA.size()];
     BASE_DATA.keySet().toArray(columns);
-    table = table(TABLE_NAME).columns(columns).build(getDB());
+    mockDataSource = new MockDataSource(columns);
   }
 
   @Rule 
@@ -61,8 +60,8 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
   
   @Before 
   public void setUp() {
-    rng = new Random(Arrays.hashCode(table.getColumns()));
-    theSUT = builder(table);
+    rng = new Random(Arrays.hashCode(mockDataSource.getColumns()));
+    theSUT = builder(mockDataSource);
     for (Map.Entry<String, Object> e : BASE_DATA.entrySet()) {
       theSUT.value(e.getKey(), e.getValue());
     }
@@ -73,7 +72,7 @@ public class DataSetBuilderRandomFillersTest extends DBTestCase {
   }
 
   static DataSet deriveRowSet(int n, DataGenerator dg) {
-    DataSet rs = new DataSet(table);
+    DataSet rs = new DataSet(mockDataSource);
     for (int i=0; i < n; i++) {
       @SuppressWarnings("unchecked")
       Map<String,Object> data = (Map<String,Object>) BASE_DATA.clone();

@@ -11,7 +11,9 @@ import org.junit.runners.Suite.SuiteClasses;
   CallInfoTest.class,
   DeltaTest.class,
   MiscTest.class,
-  WrappedStatementTest.class
+  WrappedStatementTest.class,
+  DataSetBuilderSequenceFillersTest.class,
+  DataSetBuilderRandomFillersTest.class
 })
 public class AllNonDBTests {
   
