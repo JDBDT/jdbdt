@@ -12,7 +12,6 @@ public final class Table extends DataSource {
    */
   private final String tableName;
 
-
   /**
    * Constructor.
    * @param db Database instance.
@@ -29,7 +28,7 @@ public final class Table extends DataSource {
    * Get table name.
    * @return The name of the table.
    */
-  public final String getName() {
+  public String getName() {
     return tableName;
   }  
 }
