@@ -146,13 +146,14 @@ that proceeds in the following steps:
 - ... and a JDBDT `Table` [data source](DataSources.html) for the `USERS` table. 
    
     	// Create table data source.
-    	theTable = table(theDB, "USERS")
+    	theTable = table("USERS")
                   .columns("ID",
                            "LOGIN", 
                            "NAME", 
                            "PASSWORD",
                            "ROLE",
-                           "CREATED" );
+                           "CREATED" )
+                  .build(theDB);
                        
 - ... plus, finally, the [data set](DataSets.html) for the initial contents of the database. The strategy in this case is to use a [data set builder](DataSets.html#Creation.Builder). 
 We populate the database with 1 `ADMIN` user, 3 `REGULAR` users, and 2 `GUEST`

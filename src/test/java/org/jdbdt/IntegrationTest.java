@@ -25,9 +25,9 @@ public class IntegrationTest extends DBTestCase {
   @BeforeClass
   public static void doSetup() throws SQLException {
     DBTestCase.useCustomInit();
-    table = table(getDB(),
-                  UserDAO.TABLE_NAME)
-            .columns(UserDAO.COLUMNS);
+    table = table(UserDAO.TABLE_NAME)
+            .columns(UserDAO.COLUMNS)
+            .build(getDB());
     DataSetBuilder dsb = 
       builder(table)
      .sequence("login", i -> "user"+ i, 1)

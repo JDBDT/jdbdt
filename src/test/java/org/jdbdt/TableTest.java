@@ -16,19 +16,12 @@ public class TableTest extends DBTestCase {
   
   @Before
   public void createTable() {
-    theSUT = table(getDB(), UserDAO.TABLE_NAME);
+    theSUT = table(UserDAO.TABLE_NAME).columns(UserDAO.COLUMNS).build(getDB());
   }
   
   @Test
   public void testInit() {
     assertEquals(UserDAO.TABLE_NAME, theSUT.getName());
-  }
-  
-  @Test
-  public void testReInitColumns() {
-    theSUT.columns(UserDAO.COLUMNS);
-    expectException(InvalidOperationException.class,
-     () -> theSUT.columns(UserDAO.COLUMNS));
   }
   
   @Test

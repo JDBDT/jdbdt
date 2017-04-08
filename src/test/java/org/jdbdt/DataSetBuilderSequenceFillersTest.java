@@ -44,7 +44,7 @@ public class DataSetBuilderSequenceFillersTest  extends DBTestCase {
     BASE_DATA.put("cDate", new Date(0L));
     String[] columns = new String[BASE_DATA.size()];
     BASE_DATA.keySet().toArray(columns);
-    table = table(getDB(), TABLE_NAME).columns(columns);
+    table = table(TABLE_NAME).columns(columns).build(getDB());
   }
 
   @Rule 

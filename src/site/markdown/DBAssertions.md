@@ -103,8 +103,9 @@ A number of other assertion methods are defined for convenience, all of which in
 *Illustration*
 
 	DB db = ... ;
-	Table t = table(db, "USER")
-	          .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
+	Table t = table("USERS")
+	         .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED")
+	         .build(db);
 	...   
     // Assert that no changes took place.
 	... define snapshot with populate or takeSnapshot ...
@@ -149,8 +150,9 @@ it verifies that the given data source has no defined rows.
 *Illustration*
 
 	DB db = ... ;
-	Table t = table(db, "USER")
-	          .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
+	Table t = table("USERS")
+	         .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED")
+	         .build(db);
 	...        
 	// Assert that table is empty.
 	letTheSUTDeleteAllUsers( ... );
@@ -175,8 +177,9 @@ This can be done using the `assertEquals` method.
 
     // Fill a database table.
 	DB db = ... ;
-	Table t = table(db, "USER")
-	          .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
+	Table t = table("USERS")
+	         .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED")
+	         .build(db);
 	DataSet initialData = ...; 
 	populate(initialData);
 	...      

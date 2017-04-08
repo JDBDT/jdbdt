@@ -3,7 +3,7 @@ package org.jdbdt;
 /**
  * Table data source.
  * 
- * @see JDBDT#table(DB, String)
+ * @see JDBDT#table(String)
  * @since 0.1
  */
 public final class Table extends DataSource {
@@ -17,10 +17,11 @@ public final class Table extends DataSource {
    * Constructor.
    * @param db Database instance.
    * @param tableName Table name
-   * @see JDBDT#table(DB,String)
+   * @param sql SQL for table query.
+   * @see JDBDT#table(String)
    */
-  Table(DB db, String tableName) {
-    super(db);
+  Table(DB db, String tableName, String sql) {
+    super(db, sql, new Object[0]);
     this.tableName = tableName;
   }
 
@@ -30,34 +31,5 @@ public final class Table extends DataSource {
    */
   public final String getName() {
     return tableName;
-  }
-
-  /** 
-   * Specify database columns to consider for the table. 
-   * 
-   * @param columns SQL columns.
-   * @return The table instance (for chained calls).
-   */
-  public Table columns(String... columns) {
-    super.setColumns(columns);
-    return this;
-  }
-  
-  @Override
-  public String getSQLForQuery() {
-    StringBuilder sql = new StringBuilder("SELECT ");
-    String[] columns = getColumns();
-    if (columns == null) {
-      sql.append('*');
-    } else {
-      sql.append(columns[0]);
-      for (int i = 1; i < columns.length;i++) {
-        sql.append(',').append(' ').append(columns[i]);
-      }
-    }
-    sql.append(" FROM ").append(tableName);
-    return sql.toString();
-  }
-
-  
+  }  
 }

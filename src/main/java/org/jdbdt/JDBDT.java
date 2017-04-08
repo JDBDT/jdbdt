@@ -157,13 +157,21 @@ public final class JDBDT {
   }
 
   /**
-   * Create a table data source.
-   * @param db Database handle.
+   * Create a table builder.
+   * 
+   * <p>
+   * A call to this method is equivalent to creating
+   * a {@link TableBuilder} instance as follows:
+   * </p>
+   * <code>
+   * &nbsp;&nbsp;new TableBuilder().name(tableName)
+   * </code>
+   * 
    * @param name Table name.
    * @return A new {@link Table} instance.
    */
-  public static Table table(DB db, String name) {
-    return new Table(db, name);
+  public static TableBuilder table(String name) {
+    return new TableBuilder().name(name);
   }
   
   /**

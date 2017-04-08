@@ -11,11 +11,6 @@ package org.jdbdt;
  *
  */
 public final class Query extends DataSource {
-
-  /**
-   * SQL code for query.
-   */
-  private final String sqlForQuery; 
   
   /**
    * Constructor.
@@ -24,13 +19,6 @@ public final class Query extends DataSource {
    * @param args Optional arguments for query.
    */
   Query(DB db, String sql, Object... args) {
-    super(db, args);
-    this.sqlForQuery = sql;
+    super(db, sql, args);
   }
-  
-  @Override
-  public String getSQLForQuery() {
-    return sqlForQuery;
-  } 
-  
 }

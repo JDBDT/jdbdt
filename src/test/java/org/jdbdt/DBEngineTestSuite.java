@@ -16,8 +16,8 @@ import org.junit.runners.Suite.SuiteClasses;
   DBAssertTest.class,
   DataSetBuilderCoreTest.class,
   DataSetBuilderCoreFillerTest.class,
-  DataSetBuilderSequenceFillersTest.class,
-  DataSetBuilderRandomFillersTest.class,
+//  DataSetBuilderSequenceFillersTest.class,
+//  DataSetBuilderRandomFillersTest.class,
   IntegrationTest.class
 })
 public class DBEngineTestSuite {

@@ -29,6 +29,11 @@ public abstract class DataSource {
   private String[] columns = null;
 
   /**
+   * SQL code for query.
+   */
+  private final String querySQL;
+  
+  /**
    * Query arguments (if any).
    */
   private final Object[] queryArgs;
@@ -52,12 +57,26 @@ public abstract class DataSource {
   /**
    * Constructor.
    * @param db Database instance.
+   * @param sql SQL code for query.
    * @param queryArgs Optional arguments for database query.
    */
-  DataSource(DB db, Object... queryArgs) {
+  DataSource(DB db, String sql, Object... queryArgs) {
     this.db = db;
+    this.querySQL = sql;
     this.queryArgs = queryArgs;
     this.dirty = true;
+    db.access(() -> {
+      try (WrappedStatement stmt = db.compile(querySQL)) {
+        MetaData md = new MetaData(stmt.getStatement());
+        String[] cols = new String[md.getColumnCount()];
+        for (int i = 0; i < cols.length; i++) {
+          cols[i] = md.getLabel(i);
+        }
+        columns = cols;
+        metaData = md;
+        return 0;
+      }
+    });
   }
 
   /**
@@ -66,18 +85,6 @@ public abstract class DataSource {
    */
   public final DB getDB() {
     return db;
-  }
-
-  /**
-   * Set columns for data source.
-   * 
-   * @param columns Column names.
-   */
-  final void setColumns(String[] columns) {
-    if (this.columns != null) {
-      throw new InvalidOperationException("Columns are already set.");
-    }
-    this.columns = columns.clone();    
   }
 
   /** 
@@ -93,9 +100,6 @@ public abstract class DataSource {
    * @return Column count.
    */
   public final int getColumnCount() {
-    if (columns == null) {
-      getMetaData();
-    }
     return columns.length;
   }
 
@@ -104,10 +108,7 @@ public abstract class DataSource {
    * @param index Column index between <code>0</code> and <code>getColumnCount() - 1</code>
    * @return Name of column.
    */
-  public String getColumnName(int index) {
-    if (columns == null) {
-      getMetaData();
-    }
+  public final String getColumnName(int index) {
     if (index < 0 || index >= columns.length) {
       throw new InvalidOperationException("Invalid column index: " + index);
     }
@@ -138,36 +139,7 @@ public abstract class DataSource {
    * @return Meta-data for the data source query.
    */
   final MetaData getMetaData() {
-    if (metaData == null) {
-      db.access(() -> {
-        try (WrappedStatement ws = db.compile(getSQLForQuery())) {
-          computeMetaData(ws.getStatement());
-        } 
-        return 0;
-      });
-    }
     return metaData;
-  }
-
-  /**
-   * Get meta-data.
-   * @param stmt Statement from which to derive the meta-data.
-   */
-  final void computeMetaData(PreparedStatement stmt) {
-    if (metaData == null) {
-      db.access(() -> {
-        MetaData md = new MetaData(stmt);
-        if (getColumns() == null) {
-          String[] cols = new String[md.getColumnCount()];
-          for (int i = 0; i < cols.length; i++) {
-            cols[i] = md.getLabel(i);
-          }
-          setColumns(cols);
-        }
-        metaData = md;
-        return 0;
-      });
-    }
   }
 
   /**
@@ -182,7 +154,9 @@ public abstract class DataSource {
    * Get SQL code for query.
    * @return SQL code for the database query.
    */
-  public abstract String getSQLForQuery();
+  public final String getSQLForQuery() {
+    return querySQL;
+  }
 
   /**
    * Execute query.
@@ -194,13 +168,12 @@ public abstract class DataSource {
     DataSet data = new DataSet(this);
     return db.access( () -> {
       try (WrappedStatement ws = db.compile(getSQLForQuery())) {
-        computeMetaData(ws.getStatement());
         proceedWithQuery(ws.getStatement(), data);
         if (takeSnapshot) {
           setSnapshot(data);
-          getDB().logSnapshot(callInfo, data);
+          db.logSnapshot(callInfo, data);
         } else {
-          getDB().logQuery(callInfo, data);
+          db.logQuery(callInfo, data);
         }
       }
       return data;

@@ -25,7 +25,7 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
 
   @BeforeClass
   public static void globalSetup() throws SQLException {
-    table = table(getDB(), UserDAO.TABLE_NAME).columns(UserDAO.COLUMNS);
+    table = table(UserDAO.TABLE_NAME).columns(UserDAO.COLUMNS).build(getDB());
   }
 
   DataSetBuilder theSUT;

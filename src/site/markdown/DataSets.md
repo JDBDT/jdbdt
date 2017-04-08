@@ -26,9 +26,11 @@ typically followed by a chained sequence of calls.
     import org.jdbdt.Table;
     ...
 	DB db = ...;
-	Table t = table(db, "USER")
-	         .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
-	DataSet userSet 
+	Table t = table("USERS")
+	         .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED")
+	         .build(db);
+	         
+	DataSet users
        = data(t)
 		.row(0,   "root",  "Root User",  "god",       null)
 	    .row(101, "john",  "John Doe",   "justDoeIt", Date.valueOf("2014-07-12"))
@@ -52,8 +54,9 @@ of column values.
     import org.jdbdt.Table;
     ...
 	DB db = ...;
-	Table t = table(db, "USER")
-	         .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
+	Table t = table("USERS")
+	         .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED")
+	         .build(db);
      
 	Conversion<User> conv = u -> new Object[] {  
 	                          u.getID(), 
@@ -91,8 +94,9 @@ set.
     import org.jdbdt.DataSet;
     ...
 	DB db = ...;
-	Table t = table(db, "USER")
-	         .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");	
+	Table t = table("USERS")
+	         .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED")
+	         .build(db);	
     
     // Create a fresh data set with 9 rows
     DataSet data = 

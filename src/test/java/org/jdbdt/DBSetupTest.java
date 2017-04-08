@@ -24,8 +24,7 @@ public class DBSetupTest extends DBTestCase {
 
   @BeforeClass
   public static void globalSetup() {
-    table = table(getDB(), UserDAO.TABLE_NAME)
-        .columns(UserDAO.COLUMNS);
+    table = table(UserDAO.TABLE_NAME).columns(UserDAO.COLUMNS).build(getDB());
   }
   
   @Before

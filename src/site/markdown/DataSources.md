@@ -7,10 +7,10 @@
 ## Tables
 <a name="Table"></a>
 
-Tables are represented by `Table`, a subclass of `DataSource`, and created
-using the `table` facade method in association to a [database handle](DB.html). 
-The `columns` method may be used to specify the table columns of interest, otherwise all
-columns in the table will be considered by default.
+Tables are represented by `Table`, a subclass of `DataSource`. A table is created
+using a builder (`TableBuilder`), as returned by the `table` facade method.
+In association, the `columns` should be used to specify the table columns of interest,
+and the `build` method to build the actual `Table` object in association to a [database handle](DB.html).
 
 *Illustration*
 
@@ -19,8 +19,9 @@ columns in the table will be considered by default.
     import org.jdbdt.Table;
     ...
     DB db = ...;
-    Table userTable = table(db, "USER")
-	                 .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
+    Table userTable = table("USER")
+	                 .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED")
+	                 .build(db);
 
 ## Queries
 <a name="Query"></a>
@@ -105,7 +106,7 @@ to the order of query results, but the use of `orderBy` may make it easier to in
 
 ### `JDBDT`
 
-* `table(db, tableName)` creates a new `Table` data source.
+* `table(name)` creates a new `TableBuilder` with table name set to `name`.
 * `query(db, sql [,args])` creates a new `Query` data source from SQL code.
 * `select(cols)` creates a new `QueryBuilder` with columns set to `cols`.
 
@@ -119,10 +120,15 @@ to the order of query results, but the use of `orderBy` may make it easier to in
 ### `Table` 
 
 * `getName()` returns the table name.
-* `columns(cols)` specifies the columns of interest.
+
+### `TableBuilder`
+
+* `columns(cols)` getDB(), 
+* `name(t)` sets the table name to `t`.
 
 ### `QueryBuilder`
 
+* `columns(cols)` sets the query columns to `cols`.
 * `from`, `where`, `distinct`, `groupBy`, `orderBy`, `having`, `arguments`: query parameterization methods (see [above](DataSources.html#QueryBuilder)).
 * `build(db)` builds the desired `Query` for database `db.
 

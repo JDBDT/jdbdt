@@ -79,8 +79,9 @@ for different database engines (e.g., <a href="https://en.wikipedia.org/wiki/Tru
     import org.jdbdt.Table;
     ...
     DB db = ...;
-    Table t = table(db, "USER")
-	         .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED");
+    Table t = table("USERS")
+	         .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED")
+	         .build(db);
 	...
 	// 1. Clear table using a DELETE statement.
 	deleteAll(t);
@@ -173,12 +174,12 @@ with `@AfterClass`).
 	    myDB = database( ... );
 	    
 	    // Define tables and corresponding initial data
-	    myTable1 = table("...").columns(...);
+	    myTable1 = table(...) ... 
 	    DataSet initialData1 = data(myTable1). ... ;
 	    populate(initialData1);
 	 
 	    // etc for myTable2 ...
-	    myTable2 = table("...").columns(...);
+	    myTable2 = table(...) ...;
 	    ...
 	    
 	    // Ensure that auto-commit is off
