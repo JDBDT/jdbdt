@@ -16,33 +16,9 @@ public final class TableBuilder  {
    */
   private enum Param {
     /** Name. */
-    NAME (true),
-    
+    NAME,
     /** Columns. */
-    COLUMNS (true),
-    
-    /** Primary key */
-    PRIMARY_KEY (false);
-    
-    /** Mandatory flag. */
-    private boolean mandatory;
-    /** Constructor. 
-     * @param mandatory Indicates if parameter is mandatory.
-     */
-    Param(boolean mandatory) {
-      this.mandatory = mandatory;
-    }
-    
-    /**
-     * Checks if parameter is mandatory.
-     * @return <code>true</code> if parameter is mandatory.
-     */
-    @SuppressWarnings("unused")
-    boolean isMandatory() {
-      return mandatory;
-    }
-    
-    
+    COLUMNS;
   }
   
   /**
@@ -74,16 +50,6 @@ public final class TableBuilder  {
    */
   public TableBuilder columns(String... columns) {
     set(Param.COLUMNS, columns);
-    return this;
-  }
-  
-  /**
-   * Set columns. 
-   * @param primaryKeyColumns Primary key columns for the table.
-   * @return The builder instance for chained calls.
-   */
-  public TableBuilder primaryKey(String... primaryKeyColumns) {
-    set(Param.PRIMARY_KEY, primaryKeyColumns.clone());
     return this;
   }
   
@@ -122,10 +88,18 @@ public final class TableBuilder  {
    * @return A new {@link Table} instance.
    */
   public Table build(DB db) {
+    String name = get(Param.NAME);
+    if (name == null) {
+      throw new InvalidOperationException("Table name has not been set!");
+    }
+    String cols = get(Param.COLUMNS);
+    if (cols == null) {
+      throw new InvalidOperationException("Table columns have not been set!");
+    }
     return new Table
            (db,
             get(Param.NAME), 
-            String.format("SELECT %s FROM %s", get(Param.COLUMNS), get(Param.NAME)));
+            String.format("SELECT %s FROM %s", cols, name));
   }
 
 }
