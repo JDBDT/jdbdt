@@ -204,7 +204,7 @@ public class DataSetTest extends DBTestCase {
   
   @Test(expected=InvalidOperationException.class)
   public void testAdd4() {
-    DataSource q = select(getDB(), "LOGIN").from(table).build();
+    DataSource q = select("LOGIN").from(table).build(getDB());
     theSUT.add( data(q).row("foo") );
   }
   

@@ -12,6 +12,7 @@ public final class Table extends DataSource {
    */
   private final String tableName;
 
+
   /**
    * Constructor.
    * @param db Database instance.

@@ -30,7 +30,7 @@ public class DBAssertTest extends DBTestCase {
   public static Collection<Object[]> parameterData() {
     return Arrays.asList(new Object[][] {     
         { null, null }, 
-        { "LOGIN LIKE '"+ EXISTING_DATA_ID1 + "%'", null }, 
+        { "LOGIN LIKE '"+ EXISTING_DATA_ID1 + "%'", new Object[0] }, 
         { "LOGIN LIKE ?",  new Object[] { EXISTING_DATA_ID1 + "%"} }  
     });
   }
@@ -60,8 +60,11 @@ public class DBAssertTest extends DBTestCase {
       dataSource = table;
     } else {
       dataSource = 
-        select(getDB(), UserDAO.COLUMNS)
-       .from(table).where(whereClause).build(queryArgs);
+        select(UserDAO.COLUMNS)
+       .from(table)
+       .where(whereClause)
+       .arguments(queryArgs)
+       .build(getDB());
     }
     initialState = takeSnapshot(dataSource);
   }

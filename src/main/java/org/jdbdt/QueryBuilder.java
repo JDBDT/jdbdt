@@ -52,7 +52,15 @@ public final class QueryBuilder  {
       String sqlKeywords() {
         return "ORDER BY";
       }
+    },
+    /** Query arguments. */
+    QUERY_ARGS {
+      @Override
+      String sqlKeywords() {
+        return "";
+      }
     };
+     
     
     /**
      * Get SQL keyword sequence for parameter.
@@ -71,13 +79,7 @@ public final class QueryBuilder  {
       return false;
     }
     
-    
   }
-  
-  /**
-   * Database handle.
-   */
-  private final DB db;
   
   /**
    * Parameter values.
@@ -85,45 +87,27 @@ public final class QueryBuilder  {
   private final String[] paramValues = new String[Param.values().length];
 
   /**
-   * Constructs a new query.
-   * @param db Database handle.
-   * @param columns Columns for query.
+   * Query arguments.
    */
-  QueryBuilder(DB db, String... columns) {
-    this.db = db;
+  private Object[] queryArgs = { };
+  
+  /**
+   * Constructs a new query builder.
+   */
+  public QueryBuilder() {
+   
+  }
+  
+  /**
+   * Set query columns.
+   * @param columns Columns to set.
+   * @return The query builder instance for chained calls.
+   */
+  public QueryBuilder columns(String... columns) {
     set(Param.COLUMNS, columns);
-  }
-
-  @SuppressWarnings("javadoc")
-  private String get(Param p) {
-    return paramValues[p.ordinal()];
+    return this;
   }
   
-  @SuppressWarnings("javadoc")
-  private void set(Param p, String value) {
-    final int idx = p.ordinal();
-    if (paramValues[idx] != null) {
-      throw new InvalidOperationException(p + " already defined.");
-    }
-    if (value == null) {
-      throw new InvalidOperationException("Null value for parameter");
-    }
-    paramValues[idx] = value;
-  }
-  
-  @SuppressWarnings("javadoc")
-  private void set(Param p, String... values) {
-    if (values == null || values.length == 0) {
-      throw new InvalidOperationException("Null or empty array argument.");
-    }
-    StringBuilder sb = new StringBuilder(values[0]);
-    for (int i=1; i < values.length; i++) {
-      sb.append(',').append(' ').append(values[i]);
-    }
-    set(p, sb.toString());
-  }
-
-
   /**
    * Set table as the data source to this query.
    * <p>
@@ -206,14 +190,26 @@ public final class QueryBuilder  {
     set(Param.HAVING, clause);
     return this;
   }
+  
+  /**
+   * Set arguments for query.
+   * @param args Arguments.
+   * @return The query builder instance for chained calls.
+   */
+  public QueryBuilder arguments(Object...args) {
+    set(Param.QUERY_ARGS, "");
+    queryArgs = args.clone();
+    return this;
+  }
+  
 
   /**
    * Build the query.
-   * @param args Optional query arguments.
+   * @param db Database handle.
    * @return A new query instance.
    */
-  public Query build(Object... args) {
-    return new Query(db, toSQL(), args); 
+  public Query build(DB db) {
+    return new Query(db, toSQL(), queryArgs); 
   }
   
   @SuppressWarnings("javadoc")
@@ -248,4 +244,34 @@ public final class QueryBuilder  {
   public String toString() {
     return toSQL();
   }
+  
+  @SuppressWarnings("javadoc")
+  private String get(Param p) {
+    return paramValues[p.ordinal()];
+  }
+  
+  @SuppressWarnings("javadoc")
+  private void set(Param p, String value) {
+    final int idx = p.ordinal();
+    if (paramValues[idx] != null) {
+      throw new InvalidOperationException(p + " already defined.");
+    }
+    if (value == null) {
+      throw new InvalidOperationException("Null value for parameter");
+    }
+    paramValues[idx] = value;
+  }
+  
+  @SuppressWarnings("javadoc")
+  private void set(Param p, String... values) {
+    if (values == null || values.length == 0) {
+      throw new InvalidOperationException("Null or empty array argument.");
+    }
+    StringBuilder sb = new StringBuilder(values[0]);
+    for (int i=1; i < values.length; i++) {
+      sb.append(',').append(' ').append(values[i]);
+    }
+    set(p, sb.toString());
+  }
+
 }

@@ -179,12 +179,19 @@ public final class JDBDT {
   
   /**
    * Create a query builder.
-   * @param db Database handle.
+   * <p>
+   * A call to this method is equivalent to 
+   * creating a {@link QueryBuilder} as follows:
+   * </p>
+   * <code>
+   * &nbsp;&nbsp;new QueryBuilder().columns(columns)
+   * </code>
+   * 
    * @param columns Columns for query.
    * @return A new query builder.
    */
-  public static QueryBuilder select(DB db, String... columns) {
-    return new QueryBuilder(db, columns);
+  public static QueryBuilder select(String... columns) {
+    return new QueryBuilder().columns(columns);
   }
   
 

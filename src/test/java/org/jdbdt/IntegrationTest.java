@@ -115,7 +115,11 @@ public class IntegrationTest extends DBTestCase {
   public void testUserInsertion3() throws SQLException {
     String newUserLogin = "new user";
     User u = new User(newUserLogin, "Name", "pass",Date.valueOf("2015-01-01"));
-    Query q = select(getDB(), "login").from(table).where("login=?").build(newUserLogin);
+    Query q = select("login")
+             .from(table)
+             .where("login=?")
+             .arguments(newUserLogin)
+             .build(getDB());
     takeSnapshot(q);
     getDAO().doInsert(u);
     assertInserted(data(q).row(newUserLogin));
@@ -125,7 +129,11 @@ public class IntegrationTest extends DBTestCase {
   public void testUserInsertion4() throws SQLException {
     String newUserLogin = "new user";
     User u = new User(newUserLogin, "Name", "pass",Date.valueOf("2015-01-01"));
-    Query q = select(getDB(), "login").from(table).where("login=?").build(newUserLogin);
+    Query q = select("login")
+             .from(table)
+             .where("login=?")
+             .arguments(newUserLogin)
+             .build(getDB());
     getDAO().doInsert(u);
     assertState(data(q).row(newUserLogin));
   }
@@ -155,7 +163,11 @@ public class IntegrationTest extends DBTestCase {
     User u1 = getDAO().query("user1");
     User u2 = u1.clone();
     u2.setPassword("new password");
-    Query q = select(getDB(), "password").from(table).where("login=?").build(u1.getLogin());
+    Query q = select("password")
+             .from(table)
+             .where("login=?")
+             .arguments(u1.getLogin())
+             .build(getDB());
     takeSnapshot(q);
     getDAO().doUpdate(u2);
     assertDelta(data(q).row(u1.getPassword()),
@@ -167,7 +179,11 @@ public class IntegrationTest extends DBTestCase {
     User u1 = getDAO().query("user1");
     User u2 = u1.clone();
     u2.setPassword("new password");
-    Query q = select(getDB(), "password").from(table).where("login=?").build(u1.getLogin());
+    Query q = select("password")
+             .from(table)
+             .where("login=?")
+             .arguments(u1.getLogin())
+             .build(getDB());
     getDAO().doUpdate(u2);
     assertState(data(q).row(u2.getPassword()));
   }
@@ -205,7 +221,11 @@ public class IntegrationTest extends DBTestCase {
   @Test
   public void testUserRemoval5() throws SQLException {
     User u = getDAO().query("user1");
-    Query q = select(getDB(), "login").from(table).where("login=?").build(u.getLogin());
+    Query q = select("login")
+             .from(table)
+             .where("login=?")
+             .arguments(u.getLogin())
+             .build(getDB());
     takeSnapshot(q);
     getDAO().doDelete(u.getLogin());
     assertDeleted(data(q).row(u.getLogin()));
@@ -214,7 +234,11 @@ public class IntegrationTest extends DBTestCase {
   @Test
   public void testUserRemoval6() throws SQLException {
     User u = getDAO().query("user1");
-    Query q = select(getDB(), "password").from(table).where("login=?").build(u.getLogin());
+    Query q = select("password")
+             .from(table)
+             .where("login=?")
+             .arguments(u.getLogin())
+             .build(getDB());
     getDAO().doDelete(u.getLogin());
     assertEmpty(q);
   }

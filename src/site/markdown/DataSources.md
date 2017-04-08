@@ -49,8 +49,9 @@ The `query` facade method may be used to define a query using raw SQL.
 
 `QueryBuilder` objects can be used to define queries programmatically.
 The `select` facade method creates a query builder that can be parameterized
-using a chained sequence of calls. A final call to `QueryBuilder.build` in 
-such a sequence creates a `Query` object. The parameterization methods are the following:
+using a chained sequence of calls. A final call to `build` in 
+such a sequence creates a `Query` object for a given database. 
+The parameterization methods are the following:
 
 * `from`: defines the `FROM` clause;
 * `where`: defines a `WHERE` clause; 
@@ -58,6 +59,7 @@ such a sequence creates a `Query` object. The parameterization methods are the f
 * `orderBy`: defines an `ORDER BY` clause;
 * `groupBy`: defines  a `GROUP BY` clause;
 * `having`: defines a `HAVING` clause.
+* `arguments`: supply arguments for the query.
 
 Note to `orderBy`: [database assertions](DBAssertions.html) are insensitive 
 to the order of query results, but the use of `orderBy` may make it easier to inspect
@@ -73,30 +75,31 @@ to the order of query results, but the use of `orderBy` may make it easier to in
     
     // [1] Query user login and name by id 
     int userId = ...;
-    Query q1 = select(db, "LOGIN", "NAME")
+    Query q1 = select("LOGIN", "NAME")
               .from("USER")
               .where("ID = ?")
-              .build(userId); 
+              .arguments(userId)
+              .build(db);
               
     // [2] Query distinct passwords in use
-    Query q2 = select(db, "PASSWORD")
+    Query q2 = select("PASSWORD")
               .distinct()
               .from("USER")
               .orderBy("PASSWORD")
-              .build();
+              .build(db);
               
     // [3] Get passwords that are used by more than one user and their count.
-    Query q3 = select(db, "PASSWORD", "COUNT(*)")
+    Query q3 = select("PASSWORD", "COUNT(*)")
               .from("USER")
               .groupBy("PASSWORD")
               .having("COUNT(*) > 1")
-              .build();
+              .build(db);
               
     // [4] Get pairs of users that have the same password.
-    Query q4 = select(db, "u1.LOGIN", "u2.LOGIN")
+    Query q4 = select("u1.LOGIN", "u2.LOGIN")
               .from("USER u1", "USER u2")
               .where("u1.LOGIN <> u2.LOGIN AND u1.PASSWORD = u2.PASSWORD")
-              .build();
+              .build(db);
    
 ## Summary of methods
 
@@ -104,7 +107,7 @@ to the order of query results, but the use of `orderBy` may make it easier to in
 
 * `table(db, tableName)` creates a new `Table` data source.
 * `query(db, sql [,args])` creates a new `Query` data source from SQL code.
-* `select(db, cols)` creates a new `QueryBuilder`.
+* `select(cols)` creates a new `QueryBuilder` with columns set to `cols`.
 
 ### `DataSource`
 
@@ -120,7 +123,7 @@ to the order of query results, but the use of `orderBy` may make it easier to in
 
 ### `QueryBuilder`
 
-* `from`, `where`, `distinct`, `groupBy`, `orderBy`, `having`: query parameterization methods (see [above](DataSources.html#QueryBuilder)).
-* `build([args])` builds the final `Query` with optional arguments `args`.
+* `from`, `where`, `distinct`, `groupBy`, `orderBy`, `having`, `arguments`: query parameterization methods (see [above](DataSources.html#QueryBuilder)).
+* `build(db)` builds the desired `Query` for database `db.
 
 

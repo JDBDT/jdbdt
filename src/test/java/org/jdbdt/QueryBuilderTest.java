@@ -25,9 +25,9 @@ public class QueryBuilderTest extends DBTestCase {
   @Test
   public void testExecPlain() {
     DataSource ds = 
-      select(getDB(), UserDAO.COLUMNS)
+      select(UserDAO.COLUMNS)
       .from(UserDAO.TABLE_NAME)
-      .build();
+      .build(getDB());
     DataSet actual = executeQuery(ds);
     DataSet expected = 
         data(ds, getConversion())
@@ -39,10 +39,10 @@ public class QueryBuilderTest extends DBTestCase {
   public void testExecWhere() throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
     DataSource ds = 
-     select(getDB(), UserDAO.COLUMNS)
+     select(UserDAO.COLUMNS)
       .from(UserDAO.TABLE_NAME)
       .where("login='" + EXISTING_DATA_ID1 + "'")
-      .build();
+      .build(getDB());
     DataSet actual = executeQuery(ds);
     DataSet expected = data(ds, getConversion()).row(u);
     assertDataSet(expected, actual);
@@ -53,10 +53,11 @@ public class QueryBuilderTest extends DBTestCase {
   public void testExecWhereWithArgs() throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
     DataSource ds = 
-      select(getDB(), UserDAO.COLUMNS)
+      select( UserDAO.COLUMNS)
       .from(UserDAO.TABLE_NAME)
       .where("login=?")
-      .build(EXISTING_DATA_ID1);
+      .arguments(EXISTING_DATA_ID1)
+      .build(getDB());
     DataSet actual = 
         executeQuery(ds);     
     DataSet expected = 
@@ -68,10 +69,11 @@ public class QueryBuilderTest extends DBTestCase {
   public void testExecColumns1() throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
     Query q =
-        select(getDB(), "password")
+        select("password")
         .from(UserDAO.TABLE_NAME)
         .where("login=?")
-        .build(EXISTING_DATA_ID1);
+        .arguments(EXISTING_DATA_ID1)
+        .build(getDB());
     DataSet actual = executeQuery(q);
     DataSet expected = 
         data(q)
@@ -83,10 +85,11 @@ public class QueryBuilderTest extends DBTestCase {
   public void testExecColumns2() throws SQLException {
     User u = getDAO().query(EXISTING_DATA_ID1);
     Query q =
-        select(getDB(), "password", "name")
+        select("password", "name")
         .from(UserDAO.TABLE_NAME)
         .where("login=?")
-        .build(EXISTING_DATA_ID1);
+        .arguments(EXISTING_DATA_ID1)
+        .build(getDB());
     DataSet actual = 
       executeQuery(q);
     DataSet expected = 
@@ -98,10 +101,10 @@ public class QueryBuilderTest extends DBTestCase {
   @Test
   public void testExecWithDistinct1() {
     Query q =
-        select(getDB(), UserDAO.COLUMNS)
+        select(UserDAO.COLUMNS)
         .distinct()
         .from(UserDAO.TABLE_NAME)
-        .build();
+        .build(getDB());
     DataSet actual = executeQuery(q);
     DataSet expected = 
         data(q, getConversion())
@@ -112,10 +115,10 @@ public class QueryBuilderTest extends DBTestCase {
   @Test
   public void testExecWithDistinct2() {
     Query q =
-        select(getDB(), "password")
+        select("password")
         .distinct()
         .from(UserDAO.TABLE_NAME)
-        .build();
+        .build(getDB());
     DataSet actual = 
      executeQuery(q);
     HashSet<String> distinctPass = new HashSet<>();
@@ -132,10 +135,10 @@ public class QueryBuilderTest extends DBTestCase {
   @Test
   public void testExecWithOrderBy1() {
     Query q =
-        select(getDB(), UserDAO.COLUMNS)
+        select(UserDAO.COLUMNS)
         .from(UserDAO.TABLE_NAME)
         .orderBy("login")
-        .build();
+        .build(getDB());
     DataSet actual = executeQuery(q);
     User[] sortedUsers = INITIAL_DATA.clone();
     Arrays.sort(sortedUsers, 
@@ -147,10 +150,10 @@ public class QueryBuilderTest extends DBTestCase {
   @Test
   public void testExecWithOrderBy2() {
     Query q =
-        select(getDB(), UserDAO.COLUMNS)
+        select(UserDAO.COLUMNS)
         .from(UserDAO.TABLE_NAME)
         .orderBy("password", "login")
-        .build();
+        .build(getDB());
     DataSet actual = executeQuery(q);
     User[] sortedUsers = INITIAL_DATA.clone();
     Arrays.sort(sortedUsers, 
@@ -167,8 +170,8 @@ public class QueryBuilderTest extends DBTestCase {
     assertTrue(expected.sameDataAs(actual));
   }
 
-  <T extends Number> DataSet passCount(DataSource ds, T zero, Function<T,T> incr, BiPredicate<String,T> pred) {
-    
+  <T extends Number> 
+  DataSet passCount(DataSource ds, T zero, Function<T,T> incr, BiPredicate<String,T> pred) {
     DataSet expected = data(ds);
     HashMap<String,T> count = new HashMap<>();
     for (User u : INITIAL_DATA) {
@@ -185,10 +188,10 @@ public class QueryBuilderTest extends DBTestCase {
   
   @Test
   public void testExecWithGroupBy1() {
-    Query q = select(getDB(), "password","count(*)")
+    Query q = select("password","count(*)")
         .from(UserDAO.TABLE_NAME)
         .groupBy("password")
-        .build();
+        .build(getDB());
     
     DataSet expected = 
         DBCfg.getConfig().doesCountReturnAnInteger() ?
@@ -201,11 +204,11 @@ public class QueryBuilderTest extends DBTestCase {
   
   @Test
   public void testExecWithGroupBy2() {
-    Query q = select(getDB(), "password","count(*)")
+    Query q = select("password","count(*)")
         .from(UserDAO.TABLE_NAME)
         .groupBy("password")
         .having("count(*) > 1")
-        .build();
+        .build(getDB());
     
     DataSet expected = 
         DBCfg.getConfig().doesCountReturnAnInteger() ?
@@ -219,10 +222,10 @@ public class QueryBuilderTest extends DBTestCase {
   @Test
   public void testExecWithMultipleSources() {
     Query q =
-        select(getDB(), "u1.LOGIN", "u2.LOGIN")
+        select("u1.LOGIN", "u2.LOGIN")
         .from(UserDAO.TABLE_NAME + " u1", UserDAO.TABLE_NAME + " u2" )
         .where("u1.login <> u2.login AND u1.PASSWORD = u2.PASSWORD")
-        .build();
+        .build(getDB());
 
     DataSet expected = data(q);
     for (int i=0; i < INITIAL_DATA.length; i++) {
