@@ -39,9 +39,14 @@ Commands:
 
 # Change Log
 
-## 0.8-SNAPSHOT (current snapshot)
+## 0.9-SNAPSHOT (current snapshot)
 
 No changes yet.
+
+## 0.8
+
+* Builder pattern now more properly used for tables (`TableBuilder`).
+* Improved handling of database errors.
 
 ## 0.7
 
