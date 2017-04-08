@@ -4,7 +4,7 @@ package org.jdbdt;
  * Query data source.
  *
  * @see JDBDT#query(DB, String, Object...)
- * @see JDBDT#select(DB, String...)
+ * @see JDBDT#select(String...)
  * @see QueryBuilder
  * 
  * @since 0.1 
