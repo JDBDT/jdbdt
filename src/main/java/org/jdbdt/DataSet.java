@@ -137,6 +137,7 @@ public class DataSet {
    * @see #add(DataSet)
    * @see #isReadOnly()
    */
+  @SafeVarargs
   public final DataSet row(Object... columnValues) {
     checkIfNotReadOnly();
     if (columnValues.length != source.getColumnCount()) {
@@ -291,6 +292,7 @@ public class DataSet {
    * is null or empty or if the data source is not the
    * same for all data sets.
    */
+  @SafeVarargs
   public static DataSet join(DataSet... dataSets) throws InvalidOperationException {
     if (dataSets == null || dataSets.length == 0) {
       throw new InvalidOperationException("No source data sets given for joining.");
