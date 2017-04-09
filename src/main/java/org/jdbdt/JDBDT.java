@@ -167,11 +167,11 @@ public final class JDBDT {
    * &nbsp;&nbsp;new TableBuilder().name(tableName)
    * </code>
    * 
-   * @param name Table name.
+   * @param tableName Table name.
    * @return A new {@link Table} instance.
    */
-  public static TableBuilder table(String name) {
-    return new TableBuilder().name(name);
+  public static TableBuilder table(String tableName) {
+    return new TableBuilder().name(tableName);
   }
   
   /**
