@@ -38,7 +38,7 @@ public final class TableBuilder  {
    * @param name Name for the table.
    * @return The builder instance for chained calls.
    */
-  public TableBuilder name(String name) {
+  public final TableBuilder name(String name) {
     set(Param.NAME, name);
     return this;
   }
@@ -48,7 +48,8 @@ public final class TableBuilder  {
    * @param columns Columns for the table.
    * @return The builder instance for chained calls.
    */
-  public TableBuilder columns(String... columns) {
+  @SafeVarargs
+  public final TableBuilder columns(String... columns) {
     set(Param.COLUMNS, columns);
     return this;
   }
