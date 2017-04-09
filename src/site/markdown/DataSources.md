@@ -125,11 +125,12 @@ to the order of query results, but the use of `orderBy` may make it easier to in
 
 * `columns(cols)` getDB(), 
 * `name(t)` sets the table name to `t`.
+* `build(db)` builds the desired `Table` for database `db`.
 
 ### `QueryBuilder`
 
 * `columns(cols)` sets the query columns to `cols`.
 * `from`, `where`, `distinct`, `groupBy`, `orderBy`, `having`, `arguments`: query parameterization methods (see [above](DataSources.html#QueryBuilder)).
-* `build(db)` builds the desired `Query` for database `db.
+* `build(db)` builds the desired `Query` for database `db`.
 
 
