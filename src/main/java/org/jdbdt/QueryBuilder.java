@@ -103,7 +103,8 @@ public final class QueryBuilder  {
    * @param columns Columns to set.
    * @return The query builder instance for chained calls.
    */
-  public QueryBuilder columns(String... columns) {
+  @SafeVarargs
+  public final QueryBuilder columns(String... columns) {
     set(Param.COLUMNS, columns);
     return this;
   }
@@ -115,7 +116,7 @@ public final class QueryBuilder  {
    * @param t Table source.
    * @return The query builder instance for chained calls.
    */
-  public QueryBuilder from(Table t) {
+  public final QueryBuilder from(Table t) {
     set(Param.FROM, t.getName());
     return this;
   }
@@ -136,7 +137,7 @@ public final class QueryBuilder  {
    * @param clause String for WHERE clause.
    * @return The query builder instance for chained calls.
    */
-  public QueryBuilder where(String clause) {
+  public final QueryBuilder where(String clause) {
     set(Param.WHERE, clause);
     return this;
   }
@@ -145,7 +146,7 @@ public final class QueryBuilder  {
    * Set DISTINCT clause for query.
    * @return The query builder instance for chained calls.
    */
-  public QueryBuilder distinct() {
+  public final QueryBuilder distinct() {
     set(Param.DISTINCT,"");
     return this;
   }
@@ -156,7 +157,8 @@ public final class QueryBuilder  {
    * @param fields GROUP BY fields.
    * @return The query builder instance for chained calls.
    */
-  public QueryBuilder groupBy(String... fields) {
+  @SafeVarargs
+  public final QueryBuilder groupBy(String... fields) {
     set(Param.GROUP_BY, fields);
     return this;
   }
@@ -176,7 +178,8 @@ public final class QueryBuilder  {
    * @param fields ORDER BY fields.
    * @return The query builder instance for chained calls.
    */
-  public QueryBuilder orderBy(String... fields) {
+  @SafeVarargs
+  public final QueryBuilder orderBy(String... fields) {
     set(Param.ORDER_BY, fields);
     return this;
   }
@@ -186,7 +189,7 @@ public final class QueryBuilder  {
    * @param clause String for HAVING clause.
    * @return The query builder instance for chained calls.
    */
-  public QueryBuilder having(String clause) {
+  public final QueryBuilder having(String clause) {
     set(Param.HAVING, clause);
     return this;
   }
@@ -196,7 +199,8 @@ public final class QueryBuilder  {
    * @param args Arguments.
    * @return The query builder instance for chained calls.
    */
-  public QueryBuilder arguments(Object...args) {
+  @SafeVarargs
+  public final QueryBuilder arguments(Object...args) {
     set(Param.QUERY_ARGS, "");
     queryArgs = args.clone();
     return this;
@@ -208,7 +212,7 @@ public final class QueryBuilder  {
    * @param db Database handle.
    * @return A new query instance.
    */
-  public Query build(DB db) {
+  public final Query build(DB db) {
     return new Query(db, toSQL(), queryArgs); 
   }
   
@@ -241,7 +245,7 @@ public final class QueryBuilder  {
    * @return The SQL code for the query being built.
    */
   @Override
-  public String toString() {
+  public final String toString() {
     return toSQL();
   }
   
