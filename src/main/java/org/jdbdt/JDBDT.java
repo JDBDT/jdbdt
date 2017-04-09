@@ -181,6 +181,7 @@ public final class JDBDT {
    * @param args Optional query arguments.
    * @return A new query data source.
    */
+  @SafeVarargs
   public static Query query(DB db, String sql, Object... args) {
     return new Query(db, sql, args);
   }
@@ -198,6 +199,7 @@ public final class JDBDT {
    * @param columns Columns for query.
    * @return A new query builder.
    */
+  @SafeVarargs
   public static QueryBuilder select(String... columns) {
     return new QueryBuilder().columns(columns);
   }
@@ -520,6 +522,7 @@ public final class JDBDT {
    * @see #deleteAll(Table)
    * @see #truncate(Table)
    */
+  @SafeVarargs
   public static int deleteAllWhere(Table table, String where, Object... args) 
   throws DBExecutionException  {
     return DBSetup.deleteAll(CallInfo.create(), table, where, args);
@@ -619,6 +622,7 @@ public final class JDBDT {
    *         is marked as changed.
    * @see #populateIfChanged(DataSet)
    */
+  @SafeVarargs
   public static boolean changed(DataSource... dataSources) {
     if (dataSources == null || dataSources.length == 0) {
       throw new InvalidOperationException("No data sources specified");
