@@ -55,6 +55,7 @@ may be convenient to refer to the API methods concisely.
 		<td align="left">
 			<code>DataSource</code><br/>
 			<code>Table</code><br/>
+			<code>TableBuilder</code><br/>
 			<code>Query</code><br/>
 			<code>QueryBuilder</code><br/>			
 		</td>
