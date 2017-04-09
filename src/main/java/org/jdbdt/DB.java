@@ -142,7 +142,8 @@ public final class DB {
    * Enable options.
    * @param options Options to enable.
    */
-  public void enable(Option... options) {
+  @SafeVarargs
+  public final void enable(Option... options) {
     for (Option o : options) {
       optionSet.add(o);
     }
@@ -197,7 +198,8 @@ public final class DB {
    * @see #enable(Option...)
    * @see #isEnabled(Option)
    */
-  public void disable(Option... options) {
+  @SafeVarargs
+  public final void disable(Option... options) {
     for (Option o : options) {
       optionSet.remove(o);
     }
