@@ -472,7 +472,6 @@ public final class JDBDT {
    * 
    * @param data Data set for insertion.
    * @throws DBExecutionException If a database error occurs.
-   *  
    */
   public static void populate(DataSet data) throws DBExecutionException {
     DBSetup.populate(CallInfo.create(), data);
@@ -534,6 +533,7 @@ public final class JDBDT {
    * @throws DBExecutionException if a database error occurs.
    * @see #deleteAll(Table)
    * @see #deleteAllWhere(Table,String,Object...)
+   * @throws DBExecutionException if a database error occurs.
    */
   public static void truncate(Table table) throws DBExecutionException  {
     DBSetup.truncate(CallInfo.create(), table);
@@ -554,8 +554,10 @@ public final class JDBDT {
    * @param db Database handle.
    * @throws UnsupportedOperationException if save-points are not supported for the database.
    * @throws InvalidOperationException if database has auto-commit turned on.
+   * @throws DBExecutionException if a database error occurs.
    */
-  public static void save(DB db) throws InvalidOperationException, UnsupportedOperationException {
+  public static void save(DB db) 
+  throws DBExecutionException, InvalidOperationException, UnsupportedOperationException {
     db.save(CallInfo.create());
   }
 
@@ -571,10 +573,12 @@ public final class JDBDT {
    * </p>
    * 
    * @param db Database handle.
-   * @throws UnsupportedOperationException if save-points are not supported for the database.
+   * @throws DBExecutionException if a database error occurs.
    * @throws InvalidOperationException if a save-point has not been set with {@link JDBDT#save(DB)}
+   * @throws UnsupportedOperationException if save-points are not supported for the database.
    */
-  public static void restore(DB db) throws InvalidOperationException, UnsupportedOperationException {
+  public static void restore(DB db) 
+  throws DBExecutionException, InvalidOperationException, UnsupportedOperationException {
     db.restore(CallInfo.create());
   }
 
@@ -590,9 +594,10 @@ public final class JDBDT {
    * </p>
    * 
    * @param db Database handle.
+   * @throws DBExecutionException if a database error occurs.
    * @see Connection#commit()
    */
-  public static void commit(DB db) {
+  public static void commit(DB db) throws DBExecutionException {
     db.commit(CallInfo.create());
   }
 
@@ -600,7 +605,7 @@ public final class JDBDT {
    * Check if given data sources are seen as changed.
    * 
    * <p>
-   * A data source is marked as unchanged by a succesfull assertion
+   * A data source is marked as unchanged by a successful assertion
    * through 
    * {@link #assertUnchanged(DataSource)}
    * or {@link #assertUnchanged(String,DataSource)}. 
@@ -665,8 +670,10 @@ public final class JDBDT {
    * Dump the database contents for a data source.
    * @param source Data source.
    * @param out Output stream.
+   * @throws DBExecutionException if a database error occurs.
    */
-  public static void dump(DataSource source, PrintStream out) {
+  public static void dump(DataSource source, PrintStream out)
+  throws DBExecutionException {
     try (Log log = Log.create(out);) {
       log.write(CallInfo.create(), executeQuery(source));
     }
@@ -676,11 +683,12 @@ public final class JDBDT {
    * Dump the database contents for a data source (file variant).
    * @param source Data source.
    * @param outputFile Output file.
+   * @throws DBExecutionException if a database error occurs.
    */
-  public static void dump(DataSource source, File outputFile) {
+  public static void dump(DataSource source, File outputFile) 
+  throws DBExecutionException {
     try (Log log = Log.create(outputFile);) {
       log.write(CallInfo.create(), executeQuery(source));
     } 
   }
-  
 }
