@@ -278,7 +278,7 @@ public final class DB {
   void save(CallInfo callInfo) {
     access( () -> {
       if (!savepointSupport) {
-        throw new InvalidOperationException("Savepoints are not supported by the database driver.");
+        throw new UnsupportedOperationException("Savepoints are not supported by the database driver.");
       }
       logSetup(callInfo);
       clearSavePointIfSet();
@@ -322,6 +322,9 @@ public final class DB {
     access(() -> {
       logSetup(callInfo);
       try {
+        if (!savepointSupport) {
+          throw new UnsupportedOperationException("Savepoints are not supported by the database driver.");
+        }
         if (savepoint == null) {
           throw new InvalidOperationException("Save point is not set.");
         }
