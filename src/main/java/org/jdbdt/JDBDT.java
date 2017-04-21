@@ -552,8 +552,10 @@ public final class JDBDT {
    * </p>
    * 
    * @param db Database handle.
+   * @throws UnsupportedOperationException if save-points are not supported for the database.
+   * @throws InvalidOperationException if database has auto-commit turned on.
    */
-  public static void save(DB db) {
+  public static void save(DB db) throws InvalidOperationException, UnsupportedOperationException {
     db.save(CallInfo.create());
   }
 
@@ -569,8 +571,10 @@ public final class JDBDT {
    * </p>
    * 
    * @param db Database handle.
+   * @throws UnsupportedOperationException if save-points are not supported for the database.
+   * @throws InvalidOperationException if a save-point has not been set with {@link JDBDT#save(DB)}
    */
-  public static void restore(DB db) {
+  public static void restore(DB db) throws InvalidOperationException, UnsupportedOperationException {
     db.restore(CallInfo.create());
   }
 
