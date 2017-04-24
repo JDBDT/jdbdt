@@ -1,17 +1,17 @@
 package org.jdbdt;
 
 /**
- * Exception thrown due to an invalid use of the JDBDT API.
+ * Runtime exception thrown by JDBDT.
  * 
- * @since 0.1
+ * @since 0.9
  */
-public final class InvalidOperationException extends JDBDTRuntimeException {
+public abstract class JDBDTRuntimeException extends RuntimeException {
 
   /**
    * Constructs a new exception using supplied message.
    * @param msg Exception message.
    */
-  public InvalidOperationException(String msg) {
+  protected JDBDTRuntimeException(String msg) {
     super(msg);
   }
   
@@ -21,7 +21,7 @@ public final class InvalidOperationException extends JDBDTRuntimeException {
    * @param msg Exception message.
    * @param cause Cause for exception.
    */
-  public InvalidOperationException(String msg, Throwable cause) {
+  protected JDBDTRuntimeException(String msg, Throwable cause) {
     super(msg, cause);
   }
   

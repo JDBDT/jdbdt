@@ -5,7 +5,7 @@ package org.jdbdt;
  * 
  * @since 0.9
  */
-public final class UnsupportedOperationException extends RuntimeException {
+public final class UnsupportedOperationException extends JDBDTRuntimeException {
 
   /**
    * Constructs a new exception using supplied message.

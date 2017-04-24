@@ -83,7 +83,7 @@ public class MiscTest {
     testSHA1("JDBDT: Java Database Delta Testing\n", "cff338d07e764c00e05c9d92abf35898f452301e");
   }
   
-  @Test (expected=InternalAPIError.class)
+  @Test (expected=InternalErrorException.class)
   public void testSHA1WithFileReadError() throws IOException {
     InputStream in = mock(InputStream.class);
     when(in.read(any())).thenThrow(new IOException());

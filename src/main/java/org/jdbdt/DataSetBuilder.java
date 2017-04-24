@@ -137,7 +137,7 @@ public final class DataSetBuilder {
               source.getColumns()[idx]);
         }
       }
-      throw new InternalAPIError("Filler count does not match fillers set.");
+      throw new InternalErrorException("Filler count does not match fillers set.");
     }
     final String[] colNames = data.getSource().getColumns();
     for (int r=0; r < count; r++) {

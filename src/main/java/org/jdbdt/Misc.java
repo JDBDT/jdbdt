@@ -84,7 +84,7 @@ final class Misc {
       return md.digest();
     }
     catch(NoSuchAlgorithmException | IOException e) {
-      throw new InternalAPIError(e);
+      throw new InternalErrorException(e);
     }
   }
 }

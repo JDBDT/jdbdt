@@ -108,7 +108,7 @@ final class Log implements AutoCloseable {
       out.flush();
     } 
     catch (Exception e) {
-      throw new InternalAPIError(e);
+      throw new InternalErrorException(e);
     } 
   }
 
@@ -326,7 +326,7 @@ final class Log implements AutoCloseable {
         is.close(); 
       } 
       catch (SQLException|IOException e) {
-        throw new InternalAPIError(e);
+        throw new InternalErrorException(e);
       }
     }
     else if (value instanceof Clob) {
@@ -338,7 +338,7 @@ final class Log implements AutoCloseable {
         is.close(); 
       } 
       catch (SQLException|IOException e) {
-        throw new InternalAPIError(e);
+        throw new InternalErrorException(e);
       }
     }
     else if (value instanceof SQLXML) {
@@ -350,7 +350,7 @@ final class Log implements AutoCloseable {
         is.close(); 
       }
       catch (SQLException|IOException e) {
-        throw new InternalAPIError(e);
+        throw new InternalErrorException(e);
       }
     }
     else {
@@ -502,7 +502,7 @@ final class Log implements AutoCloseable {
       ARRAY_STRING_FORMATTERS.put(Short.TYPE, o -> Arrays.toString((short[]) o));
     } catch (ParserConfigurationException | TransformerConfigurationException
         | TransformerFactoryConfigurationError e) {
-      throw new InternalAPIError(e);
+      throw new InternalErrorException(e);
     }
   }
   

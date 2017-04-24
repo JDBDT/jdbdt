@@ -6,19 +6,19 @@ package org.jdbdt;
  * 
  * <p>
  * Exceptions of this kind should never happen in principle.
- * If they do, there is either likely a bug in JDBDT or something
- * abnormal with the environment setup.
+ * If they do, there is either likely a bug in JDBDT or 
+ * abnormal conditions in the JVM environment.
  * </p>
  * 
- * @since 0.1
+ * @since 0.9
  */
-final class InternalAPIError extends Error {
+public final class InternalErrorException extends JDBDTRuntimeException {
 
   /**
    * Constructs exception with given cause.
    * @param cause Cause for the exception.
    */
-  public InternalAPIError(Throwable cause) {
+  public InternalErrorException(Throwable cause) {
     super("Unexpected internal error", cause);
   }
   
@@ -26,7 +26,7 @@ final class InternalAPIError extends Error {
    * Constructs exception using supplied message.
    * @param message Error message. 
    */
-  public InternalAPIError(String message) {
+  public InternalErrorException(String message) {
     super(message);
   }
 

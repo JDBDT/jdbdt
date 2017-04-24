@@ -68,7 +68,7 @@ final class DataSetAssertion {
         itr = delta.inserted();
         break;
       default:
-        throw new InternalAPIError("Unexpected case!");      
+        throw new InternalErrorException("Unexpected case!");      
     }
     return itr;
   }
