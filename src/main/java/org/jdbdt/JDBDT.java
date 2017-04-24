@@ -225,7 +225,6 @@ public final class JDBDT {
    * </p>
    * 
    * @param source Data source.
-   * @throws DBExecutionException if a database error occurs 
    * @return Data set representing the snapshot.
    * 
    * @see #assertDelta(DataSet, DataSet)
@@ -436,8 +435,7 @@ public final class JDBDT {
    * @see #assertState(String,DataSet)
    * @see #empty(DataSource)
    */
-  public static void assertEmpty(String message, DataSource source) 
-  throws DBAssertionError {
+  public static void assertEmpty(String message, DataSource source) throws DBAssertionError {
     DBAssert.stateAssertion(CallInfo.create(message), empty(source));
   }
   
@@ -451,19 +449,16 @@ public final class JDBDT {
    * @see #assertState(DataSet)
    * @see #empty(DataSource)
    */
-  public static void assertEmpty(DataSource source) 
-  throws DBAssertionError {
+  public static void assertEmpty(DataSource source) throws DBAssertionError {
     DBAssert.stateAssertion(CallInfo.create(), empty(source));
   }
   
   /**
    * Insert a data set onto database.
    * 
-   * @param data Data set for insertion.
-   * @throws DBExecutionException If a database error occurs.
-   *  
+   * @param data Data set for insertion.  
    */
-  public static void insert(DataSet data) throws DBExecutionException {
+  public static void insert(DataSet data) {
     DBSetup.insert(CallInfo.create(), data);
   }
 
@@ -471,9 +466,8 @@ public final class JDBDT {
    * Populate database with given data set.
    * 
    * @param data Data set for insertion.
-   * @throws DBExecutionException If a database error occurs.
    */
-  public static void populate(DataSet data) throws DBExecutionException {
+  public static void populate(DataSet data) {
     DBSetup.populate(CallInfo.create(), data);
   }
 
@@ -487,10 +481,9 @@ public final class JDBDT {
    * <code>if ( changed(data.getSource()) ) populate(data);</code>
    * </p>
    * @param data Data set for insertion.
-   * @throws DBExecutionException If a database error occurs.
    * @see #changed(DataSource...)
    */
-  public static void populateIfChanged(DataSet data) throws DBExecutionException {
+  public static void populateIfChanged(DataSet data) {
     DBSetup.populateIfChanged(CallInfo.create(), data);
   }
   
@@ -499,11 +492,10 @@ public final class JDBDT {
    *
    * @param table Table.
    * @return Number of deleted entries.
-   * @throws DBExecutionException if a database error occurs.
    * @see #truncate(Table)
    * @see #deleteAllWhere(Table,String,Object...)
    */
-  public static int deleteAll(Table table) throws DBExecutionException  {
+  public static int deleteAll(Table table) {
     return DBSetup.deleteAll(CallInfo.create(), table);
   }
 
@@ -517,25 +509,21 @@ public final class JDBDT {
    * @param where <code>WHERE</code> clause
    * @param args <code>WHERE</code> clause arguments, if any.
    * @return Number of deleted entries.
-   * @throws DBExecutionException if a database error occurs.
    * @see #deleteAll(Table)
    * @see #truncate(Table)
    */
   @SafeVarargs
-  public static int deleteAllWhere(Table table, String where, Object... args) 
-  throws DBExecutionException  {
+  public static int deleteAllWhere(Table table, String where, Object... args) {
     return DBSetup.deleteAll(CallInfo.create(), table, where, args);
   }
 
   /**
    * Truncate table.
    * @param table Table.
-   * @throws DBExecutionException if a database error occurs.
    * @see #deleteAll(Table)
    * @see #deleteAllWhere(Table,String,Object...)
-   * @throws DBExecutionException if a database error occurs.
    */
-  public static void truncate(Table table) throws DBExecutionException  {
+  public static void truncate(Table table) {
     DBSetup.truncate(CallInfo.create(), table);
   }
   
@@ -552,12 +540,8 @@ public final class JDBDT {
    * </p>
    * 
    * @param db Database handle.
-   * @throws UnsupportedOperationException if save-points are not supported for the database.
-   * @throws InvalidOperationException if database has auto-commit turned on.
-   * @throws DBExecutionException if a database error occurs.
    */
-  public static void save(DB db) 
-  throws DBExecutionException, InvalidOperationException, UnsupportedOperationException {
+  public static void save(DB db)  {
     db.save(CallInfo.create());
   }
 
@@ -573,12 +557,8 @@ public final class JDBDT {
    * </p>
    * 
    * @param db Database handle.
-   * @throws DBExecutionException if a database error occurs.
-   * @throws InvalidOperationException if a save-point has not been set with {@link JDBDT#save(DB)}
-   * @throws UnsupportedOperationException if save-points are not supported for the database.
    */
-  public static void restore(DB db) 
-  throws DBExecutionException, InvalidOperationException, UnsupportedOperationException {
+  public static void restore(DB db) {
     db.restore(CallInfo.create());
   }
 
@@ -594,10 +574,9 @@ public final class JDBDT {
    * </p>
    * 
    * @param db Database handle.
-   * @throws DBExecutionException if a database error occurs.
    * @see Connection#commit()
    */
-  public static void commit(DB db) throws DBExecutionException {
+  public static void commit(DB db) {
     db.commit(CallInfo.create());
   }
 
@@ -670,10 +649,8 @@ public final class JDBDT {
    * Dump the database contents for a data source.
    * @param source Data source.
    * @param out Output stream.
-   * @throws DBExecutionException if a database error occurs.
    */
-  public static void dump(DataSource source, PrintStream out)
-  throws DBExecutionException {
+  public static void dump(DataSource source, PrintStream out) {
     try (Log log = Log.create(out);) {
       log.write(CallInfo.create(), executeQuery(source));
     }
@@ -683,10 +660,8 @@ public final class JDBDT {
    * Dump the database contents for a data source (file variant).
    * @param source Data source.
    * @param outputFile Output file.
-   * @throws DBExecutionException if a database error occurs.
    */
-  public static void dump(DataSource source, File outputFile) 
-  throws DBExecutionException {
+  public static void dump(DataSource source, File outputFile) {
     try (Log log = Log.create(outputFile);) {
       log.write(CallInfo.create(), executeQuery(source));
     } 
