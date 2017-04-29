@@ -39,9 +39,12 @@ Commands:
 
 # Change Log
 
-## 0.9-SNAPSHOT (current snapshot)
+## 0.9
 
-No changes yet.
+* Fix for [Bug: DataSource.setSnapshot() clears the contents of previous snapshot set](https://github.com/edrdo/jdbdt/issues/2)
+* Exception hiearchy revised: `JDBDTRuntimeException` now base class
+for runtime exceptions, new `UnsupportedOperationException` and `InternalErrorException` classes.
+* Misc. documentation/site adjustments.
 
 ## 0.8
 
