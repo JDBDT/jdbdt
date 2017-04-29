@@ -209,12 +209,6 @@ public class DataSetTest extends DBTestCase {
     theSUT.add( data(q).row("foo") );
   }
   
-  @Test
-  public void testClear() {
-    theSUT.rows(genData(5));
-    theSUT.clear();
-    testInit();
-  }
   
   private void testSubsetMethod
   (int size, int start, int n, Supplier<DataSet> action) {

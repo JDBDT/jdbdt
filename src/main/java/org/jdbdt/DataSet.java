@@ -119,14 +119,6 @@ public class DataSet {
   final List<Row> getRows() {
     return rows;
   }
-  
-  /**
-   * Clear contents (for package-private use), even if data set
-   * is read-only.
-   */
-  final void clear() {
-    rows.clear();
-  }
 
   /**
    * Add a row to the data set.
