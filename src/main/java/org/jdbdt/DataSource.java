@@ -208,9 +208,6 @@ public abstract class DataSource {
    * @param s Data set to assume as snapshot.
    */
   final void setSnapshot(DataSet s) {
-    if (snapshot != null) {
-      snapshot.clear();
-    }
     s.setReadOnly();
     snapshot = s;
   }
