@@ -5,13 +5,13 @@ package org.jdbdt;
  * 
  * @since 0.9
  */
-public abstract class JDBDTRuntimeException extends RuntimeException {
+public class JDBDTRuntimeException extends RuntimeException {
 
   /**
    * Constructs a new exception using supplied message.
    * @param msg Exception message.
    */
-  protected JDBDTRuntimeException(String msg) {
+  public JDBDTRuntimeException(String msg) {
     super(msg);
   }
   
@@ -21,7 +21,7 @@ public abstract class JDBDTRuntimeException extends RuntimeException {
    * @param msg Exception message.
    * @param cause Cause for exception.
    */
-  protected JDBDTRuntimeException(String msg, Throwable cause) {
+  public JDBDTRuntimeException(String msg, Throwable cause) {
     super(msg, cause);
   }
   
