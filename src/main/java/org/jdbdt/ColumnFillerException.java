@@ -9,7 +9,7 @@ package org.jdbdt;
  *  
  * @since 0.2
  */
-public final class ColumnFillerException extends RuntimeException {
+public final class ColumnFillerException extends JDBDTRuntimeException {
   
   /**
    * Constructs a new exception using supplied message
