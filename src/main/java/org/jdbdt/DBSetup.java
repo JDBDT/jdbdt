@@ -14,54 +14,45 @@ final class DBSetup {
    * Insert a data set onto the database.
    * @param callInfo Call information.
    * @param data Data Set.
-   * @throws DBExecutionException If a database error occurs during insertion.
    */
-  static void insert(CallInfo callInfo, DataSet data) throws DBExecutionException {
-    DataSource source = data.getSource();
-    if ( ! (source instanceof Table)) {
-      throw new InvalidOperationException("Data set is not defined for a table.");
-    }
+  static void insert(CallInfo callInfo, DataSet data) {
+    Table table = asTable(data.getSource());
     if (data.isEmpty()) {
       throw new InvalidOperationException("Empty data set.");
     }
-    source.setDirtyStatus(true);
-    doInsert(callInfo, (Table) source, data);
+    table.setDirtyStatus(true);
+    doInsert(callInfo, table, data);
   }
 
   /**
    * Populate database with a data set.
    * @param callInfo Call Info.
    * @param data Data Set.
-   * @throws DBExecutionException If a database error occurs.
    */
-  static void populate(CallInfo callInfo, DataSet data) 
-      throws DBExecutionException {
-    DataSource source = data.getSource();
-    if ( ! (source instanceof Table)) {
-      throw new InvalidOperationException("Data set is not defined for a table.");
-    }
-
-    Table table = (Table) source;
+  static void populate(CallInfo callInfo, DataSet data) {
+    Table table = asTable(data.getSource());
     table.setDirtyStatus(true);
     doPopulate(callInfo, table, data);
 
   }
 
+  @SuppressWarnings("javadoc")
+  private static Table asTable(DataSource source) {
+    if ( ! (source instanceof Table)) {
+      throw new InvalidOperationException("Data set is not defined for a table.");
+    }
+    return (Table) source;
+  }
+  
   /**
    * Populate database table with a data set, if associated table
    * has changed.
    * 
    * @param callInfo Call Info.
    * @param data Data Set.
-   * @throws DBExecutionException If a database error occurs.
    */
-  static void populateIfChanged(CallInfo callInfo, DataSet data) 
-      throws DBExecutionException {
-    DataSource source = data.getSource();
-    if ( ! (source instanceof Table)) {
-      throw new InvalidOperationException("Data set is not defined for a table.");
-    }
-    Table table = (Table) source;
+  static void populateIfChanged(CallInfo callInfo, DataSet data) {
+    Table table = asTable(data.getSource()); 
     if ( table.getDirtyStatus() ) {
       table.setDirtyStatus(true);
       doPopulate(callInfo, table, data);
@@ -85,12 +76,10 @@ final class DBSetup {
    * @param callInfo Call Info.
    * @param table Table.
    * @param data Data set.
-   * @throws DBExecutionException If a database error occurs.
    */
-  private static void doInsert(CallInfo callInfo, Table table, DataSet data)
-      throws DBExecutionException {
+  private static void doInsert(CallInfo callInfo, Table table, DataSet data) {
    final DB db = table.getDB();
-   db.access( () -> {
+   db.access(() -> {
       db.logInsertion(callInfo, data);
       StringBuilder sql = new StringBuilder("INSERT INTO ");
       String[] columnNames = table.getColumns();
@@ -145,10 +134,8 @@ final class DBSetup {
    * @param callInfo Call info.
    * @param table Table.
    * @return Number of deleted rows.
-   * @throws DBExecutionException If a database error occurs.
    */
-  static int deleteAll(CallInfo callInfo, Table table) 
-      throws DBExecutionException {
+  static int deleteAll(CallInfo callInfo, Table table) {
     table.setDirtyStatus(true);
     return doDeleteAll(callInfo, table);
   }
@@ -158,11 +145,9 @@ final class DBSetup {
    * @param callInfo Call info.
    * @param table Table.
    * @return Number of deleted rows.
-   * @throws DBExecutionException If a database error occurs.
    */
-  private static int doDeleteAll(CallInfo callInfo, Table table) 
-      throws DBExecutionException {
-    final DB db = table.getDB();
+  private static int doDeleteAll(CallInfo callInfo, Table table) {
+    DB db = table.getDB();
     return db.access( () -> {
       String sql = "DELETE FROM " + table.getName();
       db.logSetup(callInfo, sql);
@@ -170,17 +155,14 @@ final class DBSetup {
         return ws.getStatement().executeUpdate();
       }
     });
-
   }
 
   /**
    * Truncate table.
    * @param callInfo Call info.
    * @param table Table.
-   * @throws DBExecutionException If a database error occurs.
    */
-  static void truncate(CallInfo callInfo, Table table) 
-      throws DBExecutionException {
+  static void truncate(CallInfo callInfo, Table table) {
     final DB db = table.getDB();   
     db.access(() -> {
       String sql = "TRUNCATE TABLE " + table.getName();
@@ -201,10 +183,8 @@ final class DBSetup {
    * @param where <code>WHERE</code> clause.
    * @param args Optional arguments for <code>WHERE</code> clause.
    * @return The number of deleted rows.
-   * @throws DBExecutionException If a database error occurs.
    */
-  static int deleteAll(CallInfo callInfo, Table table, String where, Object... args) 
-      throws DBExecutionException {
+  static int deleteAll(CallInfo callInfo, Table table, String where, Object... args) {
     final DB db = table.getDB();
 
     return  db.access( () -> {
