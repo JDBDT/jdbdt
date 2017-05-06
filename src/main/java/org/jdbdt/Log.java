@@ -286,17 +286,16 @@ final class Log implements AutoCloseable {
     int size = 0;
     Element topNode = createNode(parent, tag);
     while (itr.hasNext()) {
-      Row r = itr.next();
-      Object[] data = r.data();
-      Element rowElem = createNode(topNode, ROW_TAG);
-      for (int i=0; i < data.length; i++) {
-        Element colNode = createNode(rowElem, COLUMN_TAG);
+      Object[] data =  itr.next().data();
+      Element rowNode = createNode(topNode, ROW_TAG);
+      for (int i = 0; i < data.length; i++) {
+        Element colNode = createNode(rowNode, COLUMN_TAG);
         colNode.setAttribute(LABEL_TAG, columns.get(i).label());
         Object cValue = data[i];
         if (cValue != null) {
           handleColumnContent(colNode, cValue);
-
-        } else {
+        }
+        else {
           colNode.setAttribute(NULL_ATTR, "yes");
           colNode.setTextContent(NULL_VALUE);
         }
@@ -305,6 +304,7 @@ final class Log implements AutoCloseable {
     }
     topNode.setAttribute(COUNT_TAG,  String.valueOf(size));
   }
+  
   @SuppressWarnings("javadoc")
   private void handleColumnContent(Element node, Object value) {
     Class<?> theClass = value.getClass();

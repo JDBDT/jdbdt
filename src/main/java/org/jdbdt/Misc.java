@@ -18,7 +18,7 @@ final class Misc {
   private Misc() { } 
 
   @SuppressWarnings("javadoc")
-  private final static char[] HEX_CHARS = "0123456789abcdef".toCharArray();
+  private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
 
   /**
    * Convert byte array to a "hexa"-string.

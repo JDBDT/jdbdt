@@ -182,32 +182,32 @@ public class DataSet {
 
   /**
    * Add a row to the set (package-private version; ignores read-only setting).
-   * @param r Row to add.
+   * @param row Row to add.
    */
-  final void addRow(Row r) {
-    rows.add(r);
+  final void addRow(Row row) {
+    rows.add(row);
   }
 
   /**
    * Create a subset of the rows of given data set.
    * @param data Source data set.
    * @param startIndex Start index (from 0 to <code>data.size()-1</code>).
-   * @param n Number of rows.
+   * @param count Number of rows.
    * @return A new data set containing 
    *        the rows in the specified range.
    * @throws InvalidOperationException if the given data
    * set is null or if the specified column range is invalid.
    */
-  public static DataSet subset(DataSet data, int startIndex, int n) 
+  public static DataSet subset(DataSet data, int startIndex, int count) 
   throws InvalidOperationException {
     if (data == null) {
       throw new InvalidOperationException("Null data set");
     }
-    if (startIndex < 0 || n < 0 || startIndex + n > data.size()) {
+    if (startIndex < 0 || count < 0 || startIndex + count > data.size()) {
       throw new InvalidOperationException("Invalid range.");
     }
-    final DataSet sub = new DataSet(data.getSource());
-    final int endIndex = startIndex + n;
+    DataSet sub = new DataSet(data.getSource());
+    int endIndex = startIndex + count;
     for (int i = startIndex; i < endIndex; i++) {
       sub.rows.add(data.rows.get(i));
     }
@@ -232,15 +232,15 @@ public class DataSet {
   /**
    * Create sub-set with the first <code>n</code> rows.
    * @param data Source data set.
-   * @param n Number of rows.
+   * @param count Number of rows.
    * @return A new data set containing the first 
-   * <code>n</code> rows in the source data set.
+   * <code>count</code> rows in the source data set.
    * @throws InvalidOperationException if the given data
    * set is null or if the value of <code>n</code> is invalid.
    */
-  public static DataSet first(DataSet data, int n) 
+  public static DataSet first(DataSet data, int count) 
   throws InvalidOperationException {
-    return subset(data, 0, n);
+    return subset(data, 0, count);
   }
   
   /**
