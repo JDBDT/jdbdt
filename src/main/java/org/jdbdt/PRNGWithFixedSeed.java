@@ -36,7 +36,7 @@ final class PRNGWithFixedSeed extends Random {
    */
   @Override
   public void setSeed(long seed) throws InvalidOperationException {
-    if (seedIsSet == false) {
+    if (!seedIsSet) {
       super.setSeed(seed); // called from the constructor of java.util.Random
       seedIsSet = true;
     } else {

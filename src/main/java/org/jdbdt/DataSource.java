@@ -220,7 +220,6 @@ public abstract class DataSource {
    */
   private void proceedWithQuery
   (PreparedStatement queryStmt, DataSet ds) throws SQLException {
-    Object[] queryArgs = getQueryArguments();
     if (queryArgs != null && queryArgs.length > 0) {
       for (int i=0; i < queryArgs.length; i++) {
         queryStmt.setObject(i + 1, queryArgs[i]);

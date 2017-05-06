@@ -23,6 +23,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
@@ -39,7 +40,7 @@ import org.w3c.dom.Element;
  *
  */
 final class Log implements AutoCloseable {
-  
+
   /**
    * Creator method (stream variant).
    * @param out Output stream.
@@ -48,7 +49,7 @@ final class Log implements AutoCloseable {
   static Log create(PrintStream out) {
     return new Log(out, true);
   }
-  
+
   /**
    * Creator method (file variant).
    * @param outputFile Output file.
@@ -62,17 +63,17 @@ final class Log implements AutoCloseable {
       throw new InvalidOperationException("File does not exist.", e);
     }
   }
-  
+
   /**
    * Output stream.
    */
   private final PrintStream out;
-  
+
   /**
    * Closing behavior flag.
    */
   private final boolean ignoreClose;
-  
+
   /**
    * XML document instance.
    */
@@ -107,7 +108,7 @@ final class Log implements AutoCloseable {
       XML_TRANSFORMER.transform(ds, sr);
       out.flush();
     } 
-    catch (Exception e) {
+    catch (TransformerException e) {
       throw new InternalErrorException(e);
     } 
   }
@@ -126,7 +127,7 @@ final class Log implements AutoCloseable {
       out.close();
     }
   }
-  
+
   /**
    * Write a data set to the log.
    * @param callInfo Call info.
@@ -147,7 +148,7 @@ final class Log implements AutoCloseable {
     write(node, source.getMetaData());
     writeSQL(node, source.getSQLForQuery());
   }
-  
+
   @SuppressWarnings("javadoc")
   private void write(Element root, CallInfo info) {
     Element ctxNode = createNode(root, CONTEXT_TAG);
@@ -157,17 +158,17 @@ final class Log implements AutoCloseable {
     write(ctxNode, CTX_CALLER_TAG, info.getCallerMethodInfo());
     write(ctxNode, CTX_API_METHOD_TAG, info.getAPIMethodInfo());
   }
-  
+
   @SuppressWarnings("javadoc")
   private void write
   (Element ctxNode, String tag, MethodInfo mi) {
-     Element miNode = createNode(ctxNode, tag);
-     simpleNode(miNode, CTX_CLASS_TAG, mi.getClassName());
-     simpleNode(miNode, CTX_METHOD_TAG, mi.getMethodName());
-     simpleNode(miNode, CTX_FILE_TAG, mi.getFileName());
-     simpleNode(miNode, CTX_LINE_TAG, String.valueOf(mi.getLineNumber()));
+    Element miNode = createNode(ctxNode, tag);
+    simpleNode(miNode, CTX_CLASS_TAG, mi.getClassName());
+    simpleNode(miNode, CTX_METHOD_TAG, mi.getMethodName());
+    simpleNode(miNode, CTX_FILE_TAG, mi.getFileName());
+    simpleNode(miNode, CTX_LINE_TAG, String.valueOf(mi.getLineNumber()));
   }
-  
+
   @SuppressWarnings("javadoc")
   private void write(Element parent, MetaData md) {
     int index = 1;
@@ -180,7 +181,7 @@ final class Log implements AutoCloseable {
       colNode.setAttribute(SQL_TYPE_TAG, col.type().toString());
     } 
   }
-  
+
   /**
    * Log SQL code.
    * @param callInfo Call info.
@@ -191,13 +192,13 @@ final class Log implements AutoCloseable {
     writeSQL(rootNode, sql);
     flush(rootNode);
   }
-  
+
   @SuppressWarnings("javadoc")
   private void writeSQL(Element parent, String sql) {
     Element sqlNode = createNode(parent, SQL_TAG);
     sqlNode.appendChild(xmlDoc.createCDATASection(sql));
   }
-  
+
   /**
    * Log delta assertion.
    * @param callInfo Call info.
@@ -211,33 +212,33 @@ final class Log implements AutoCloseable {
     final List<MetaData.ColumnInfo> mdCols = ds.getMetaData().columns();
     final Element expectedNode = createNode(daNode, EXPECTED_TAG);    
     write(expectedNode, 
-          OLD_DATA_TAG, 
-          mdCols,
-          assertion.data(DeltaAssertion.IteratorType.OLD_DATA_EXPECTED));
+        OLD_DATA_TAG, 
+        mdCols,
+        assertion.data(DeltaAssertion.IteratorType.OLD_DATA_EXPECTED));
     write(expectedNode, 
-          NEW_DATA_TAG, 
-          mdCols,
-          assertion.data(DeltaAssertion.IteratorType.NEW_DATA_EXPECTED));
+        NEW_DATA_TAG, 
+        mdCols,
+        assertion.data(DeltaAssertion.IteratorType.NEW_DATA_EXPECTED));
     if (! assertion.passed()) {
       Element errorsNode = createNode(daNode, ERRORS_TAG),
-              oldDataErrors = createNode(errorsNode, OLD_DATA_TAG),
-              newDataErrors = createNode(errorsNode, NEW_DATA_TAG);
+          oldDataErrors = createNode(errorsNode, OLD_DATA_TAG),
+          newDataErrors = createNode(errorsNode, NEW_DATA_TAG);
       write(oldDataErrors, 
-            EXPECTED_TAG, 
-            mdCols,
-            assertion.data(DeltaAssertion.IteratorType.OLD_DATA_ERRORS_EXPECTED));
+          EXPECTED_TAG, 
+          mdCols,
+          assertion.data(DeltaAssertion.IteratorType.OLD_DATA_ERRORS_EXPECTED));
       write(oldDataErrors, 
-            ACTUAL_TAG, 
-            mdCols,
-            assertion.data(DeltaAssertion.IteratorType.OLD_DATA_ERRORS_ACTUAL));
+          ACTUAL_TAG, 
+          mdCols,
+          assertion.data(DeltaAssertion.IteratorType.OLD_DATA_ERRORS_ACTUAL));
       write(newDataErrors, 
           EXPECTED_TAG, 
           mdCols,
           assertion.data(DeltaAssertion.IteratorType.NEW_DATA_ERRORS_EXPECTED));
       write(newDataErrors, 
-            ACTUAL_TAG, 
-            mdCols,
-            assertion.data(DeltaAssertion.IteratorType.NEW_DATA_ERRORS_ACTUAL));
+          ACTUAL_TAG, 
+          mdCols,
+          assertion.data(DeltaAssertion.IteratorType.NEW_DATA_ERRORS_ACTUAL));
     }
     flush(rootNode);
   }
@@ -251,7 +252,7 @@ final class Log implements AutoCloseable {
     createNode(rootNode, callInfo.getAPIMethodInfo().getMethodName());
     flush(rootNode);
   }
-  
+
   /**
    * Log state assertion.
    * @param callInfo Call info.
@@ -264,19 +265,19 @@ final class Log implements AutoCloseable {
     final Element saNode = createNode(rootNode, ASSERTION_TAG);
     final List<MetaData.ColumnInfo> mdCols = ds.getMetaData().columns();
     write(saNode, 
-          EXPECTED_TAG, 
-          mdCols,
-          assertion.data(DataSetAssertion.IteratorType.EXPECTED_DATA));
+        EXPECTED_TAG, 
+        mdCols,
+        assertion.data(DataSetAssertion.IteratorType.EXPECTED_DATA));
     if (! assertion.passed()) {
       Element errorsNode = createNode(saNode, ERRORS_TAG);
       write(errorsNode, 
-            EXPECTED_TAG, 
-            mdCols,
-            assertion.data(DataSetAssertion.IteratorType.ERRORS_EXPECTED));
+          EXPECTED_TAG, 
+          mdCols,
+          assertion.data(DataSetAssertion.IteratorType.ERRORS_EXPECTED));
       write(errorsNode, 
-            ACTUAL_TAG, 
-            mdCols,
-            assertion.data(DataSetAssertion.IteratorType.ERRORS_ACTUAL));
+          ACTUAL_TAG, 
+          mdCols,
+          assertion.data(DataSetAssertion.IteratorType.ERRORS_ACTUAL));
     }
     flush(rootNode);
   }
@@ -294,7 +295,7 @@ final class Log implements AutoCloseable {
         Object cValue = data[i];
         if (cValue != null) {
           handleColumnContent(colNode, cValue);
-          
+
         } else {
           colNode.setAttribute(NULL_ATTR, "yes");
           colNode.setTextContent(NULL_VALUE);
@@ -311,61 +312,51 @@ final class Log implements AutoCloseable {
     String valueContent = "";
     long length = -1;
     byte[] sha1 = null;
-    
-    if (theClass.isArray()) {
-      length = Array.getLength(value);
-      typeAttr = value.getClass().getTypeName();
-      valueContent = arrayAsString(value, theClass.getComponentType());
-    } 
-    else if (value instanceof Blob) {
-      Blob blobData = (Blob) value;
-      try {
-        length = blobData.length();
-        InputStream is = blobData.getBinaryStream();
-        sha1 = Misc.sha1(is);
-        is.close(); 
+
+    try { 
+      if (theClass.isArray()) {
+        length = Array.getLength(value);
+        typeAttr = value.getClass().getTypeName();
+        valueContent = arrayAsString(value, theClass.getComponentType());
       } 
-      catch (SQLException|IOException e) {
-        throw new InternalErrorException(e);
+      else if (value instanceof Blob) {
+        Blob blobData = (Blob) value;
+        try (InputStream is = blobData.getBinaryStream()) {
+          sha1 = Misc.sha1(is);
+          length = blobData.length();
+        } 
+      }
+      else if (value instanceof Clob) {
+        Clob clobData = (Clob) value;
+        try (InputStream is = clobData.getAsciiStream()) {
+          sha1 = Misc.sha1(is);
+          length = clobData.length(); 
+        }
+      }
+      else if (value instanceof SQLXML) {
+        SQLXML xmlData = (SQLXML) value;
+        try (InputStream is = xmlData.getBinaryStream()) {
+          length = is.available();
+          sha1 = Misc.sha1(is);
+        }
+      }
+      else {
+        valueContent = value.toString();
+        if (theClass == String.class) {
+          length = ((String) value).length();
+        }
       }
     }
-    else if (value instanceof Clob) {
-      Clob clobData = (Clob) value;
-      try {
-        length = clobData.length();
-        InputStream is = clobData.getAsciiStream();
-        sha1 = Misc.sha1(is);
-        is.close(); 
-      } 
-      catch (SQLException|IOException e) {
-        throw new InternalErrorException(e);
-      }
+    catch (SQLException|IOException e) {
+      throw new InternalErrorException(e);
     }
-    else if (value instanceof SQLXML) {
-      SQLXML xmlData = (SQLXML) value;
-      try {
-        InputStream is = xmlData.getBinaryStream();
-        length = is.available();
-        sha1 = Misc.sha1(is);
-        is.close(); 
-      }
-      catch (SQLException|IOException e) {
-        throw new InternalErrorException(e);
-      }
-    }
-    else {
-      valueContent = value.toString();
-      if (theClass == String.class) {
-        length = ((String) value).length();
-      }
-    }
-    
+
     node.setAttribute(JAVA_TYPE_TAG, typeAttr);
-    
+
     if (length >= 0) {
       node.setAttribute(LENGTH_TAG, String.valueOf(length));
     }
-    
+
     if (sha1 == null) {
       node.setTextContent(valueContent);
     }
@@ -373,7 +364,7 @@ final class Log implements AutoCloseable {
       node.setAttribute(SHA1_TAG, Misc.toHexString(sha1));
     }
   }
-  
+
   @SuppressWarnings("javadoc")
   private Element createNode(Element parent, String tag) {
     Element node = xmlDoc.createElement(tag);
@@ -388,14 +379,14 @@ final class Log implements AutoCloseable {
     Element child = createNode(parent, tag);
     child.setTextContent(value);
   }
-  
+
   @SuppressWarnings("javadoc")
   private String arrayAsString(Object array, Class<?> elemClass) {
     return elemClass.isPrimitive() ?
         ARRAY_STRING_FORMATTERS.get(elemClass).apply(array)
-      : Arrays.deepToString((Object[]) array);
+        : Arrays.deepToString((Object[]) array);
   }
-  
+
   /**
    * Document builder factory handle.
    */
@@ -474,10 +465,10 @@ final class Log implements AutoCloseable {
   private static final String CTX_MESSAGE_TAG = "message";
   @SuppressWarnings("javadoc")
   private static final String CTX_METHOD_TAG = "method";
-  
+
   @SuppressWarnings("javadoc")
   private static final IdentityHashMap<Class<?>, Function<Object, String> > ARRAY_STRING_FORMATTERS;
-  
+
   static {
     try {
       // XML handles
@@ -505,5 +496,5 @@ final class Log implements AutoCloseable {
       throw new InternalErrorException(e);
     }
   }
-  
+
 }
