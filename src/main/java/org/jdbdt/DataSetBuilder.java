@@ -95,7 +95,7 @@ public final class DataSetBuilder {
     for (int idx=0; idx < columnNames.length; idx++) {
       columnIdx.put(columnNames[idx].toLowerCase(), idx);
     }
-    rng = new PRNGWithFixedSeed(Arrays.hashCode(columnNames));
+    rng = new FixedSeedRandom(Arrays.hashCode(columnNames));
   }
 
   /**

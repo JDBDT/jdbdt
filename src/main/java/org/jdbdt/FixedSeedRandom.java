@@ -13,7 +13,7 @@ import java.util.Random;
  * 
  * @since 0.5
  */
-final class PRNGWithFixedSeed extends Random {
+final class FixedSeedRandom extends Random {
   
   /**
    * Flag indicating if seed was set.
@@ -24,7 +24,7 @@ final class PRNGWithFixedSeed extends Random {
    * Constructor.
    * @param seed Initial seed.
    */
-  PRNGWithFixedSeed(long seed) {
+  FixedSeedRandom(long seed) {
     super(seed);
   }
   
@@ -40,7 +40,7 @@ final class PRNGWithFixedSeed extends Random {
       super.setSeed(seed); // called from the constructor of java.util.Random
       seedIsSet = true;
     } else {
-      throw new InvalidOperationException("You cannot reset the PRNG seed.");
+      throw new InvalidOperationException("For repeatable tests do not reset the seed.");
     }
   }
   
