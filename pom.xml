@@ -89,13 +89,6 @@
 			<version>10.13.1.1</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- DB test dependencies - HSQLDB -->
-		<dependency>
-			<groupId>org.hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<version>2.4.0</version>
-			<scope>test</scope>
-		</dependency>
 		<!-- DB test dependencies - H2 -->
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -103,24 +96,11 @@
 			<version>1.4.195</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- DB test dependencies - SQLite -->
+		<!-- DB test dependencies - HSQLDB -->
 		<dependency>
-			<groupId>org.xerial</groupId>
-			<artifactId>sqlite-jdbc</artifactId>
-			<version>3.16.1</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- DB test dependencies - PostgreSQL -->
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>42.1.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>ru.yandex.qatools.embed</groupId>
-			<artifactId>postgresql-embedded</artifactId>
-			<version>2.1</version>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.4.0</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- DB test dependencies - MySQL -->
@@ -140,6 +120,26 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-mxj-db-files</artifactId>
 			<version>5.0.12</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- DB test dependencies - PostgreSQL -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.1.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.yandex.qatools.embed</groupId>
+			<artifactId>postgresql-embedded</artifactId>
+			<version>2.1</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- DB test dependencies - SQLite -->
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.16.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
