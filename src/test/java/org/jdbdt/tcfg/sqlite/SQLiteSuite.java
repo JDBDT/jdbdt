@@ -1,6 +1,6 @@
 package org.jdbdt.tcfg.sqlite;
 
-import org.jdbdt.DBCfg;
+import org.jdbdt.DBConfig;
 import org.jdbdt.DBEngineTestSuite;
 import org.jdbdt.StatementReuseEnabled;
 import org.jdbdt.TruncateSupportEnabled;
@@ -18,7 +18,7 @@ import org.junit.experimental.categories.Categories.ExcludeCategory;
 public class SQLiteSuite extends DBEngineTestSuite {
   @BeforeClass 
   public static void setup() throws ClassNotFoundException { 
-    DBCfg.getConfig()
+    DBConfig.getConfig()
       .reset()
       .setDriver("org.sqlite.JDBC")
       .setURL("jdbc:sqlite:jdbdt-sqlite-test.db")

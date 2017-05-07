@@ -194,7 +194,7 @@ public class QueryBuilderTest extends DBTestCase {
         .build(getDB());
     
     DataSet expected = 
-        DBCfg.getConfig().doesCountReturnAnInteger() ?
+        DBConfig.getConfig().doesCountReturnAnInteger() ?
               passCount(q, 0, x -> x + 1, (p,n) -> true) 
             :
               passCount(q, 0L, x -> x + 1L, (p,n) -> true);
@@ -211,7 +211,7 @@ public class QueryBuilderTest extends DBTestCase {
         .build(getDB());
     
     DataSet expected = 
-        DBCfg.getConfig().doesCountReturnAnInteger() ?
+        DBConfig.getConfig().doesCountReturnAnInteger() ?
               passCount(q, 0, x -> x + 1, (p,n) -> n > 1) 
             :
               passCount(q, 0L, x -> x + 1L, (p,n) -> n > 1);

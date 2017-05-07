@@ -19,8 +19,6 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DataSetBuilderCoreTest extends DBTestCase {
 
-  @Rule public TestName testName = new TestName();
-
   private static Table table;
 
   private static final ColumnFiller<?> DUMMY_FILLER
@@ -30,6 +28,7 @@ public class DataSetBuilderCoreTest extends DBTestCase {
       return null;
     }
   };
+  
   @BeforeClass
   public static void globalSetup() throws SQLException {
     table = table(UserDAO.TABLE_NAME).columns(UserDAO.COLUMNS).build(getDB());

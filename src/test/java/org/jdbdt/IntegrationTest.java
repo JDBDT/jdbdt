@@ -36,7 +36,7 @@ public class IntegrationTest extends DBTestCase {
      .sequence("name", i -> "User " +i , 1)
      .sequence("password", i -> "pass_" + i , 1);
     
-    if (DBCfg.getConfig().isDateSupported()) {
+    if (DBConfig.getConfig().isDateSupported()) {
      dsb.sequence("created", Date.valueOf("2015-01-01"), 1);
     } else {
       dsb.sequence("created", Date.valueOf("2015-01-01").getTime(), DataSetBuilder.MILLIS_PER_DAY);

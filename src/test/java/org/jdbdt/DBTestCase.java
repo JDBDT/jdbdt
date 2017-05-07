@@ -48,7 +48,7 @@ public class DBTestCase {
       
   @BeforeClass
   public static void setupDB() throws Exception {
-    DBCfg cfg = DBCfg.getConfig();
+    DBConfig cfg = DBConfig.getConfig();
     Class.forName(cfg.getDriver());
     gDB = JDBDT.database(cfg.getURL());
     Connection c = gDB.getConnection();
@@ -132,7 +132,7 @@ public class DBTestCase {
   
   private static int newUserCounter = 0;
   
-  protected static User createNewUser() {
+  protected static User buildNewUser() {
     final int unique = newUserCounter++;
     return new User("user" + unique, 
         "New User" + unique, 

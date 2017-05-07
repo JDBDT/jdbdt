@@ -2,7 +2,7 @@ package org.jdbdt.tcfg.postgresql;
 
 import java.io.IOException;
 
-import org.jdbdt.DBCfg;
+import org.jdbdt.DBConfig;
 import org.jdbdt.DBEngineTestSuite;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -17,7 +17,7 @@ public class PostgreSQLSuite extends DBEngineTestSuite {
   
   @BeforeClass 
   public static void setup() throws ClassNotFoundException, IOException { 
-    DBCfg.getConfig()
+    DBConfig.getConfig()
       .reset()
       .setDriver("org.postgresql.Driver")
       .setURL(startDatabase());

@@ -39,7 +39,7 @@ public class DataSetTest extends DBTestCase {
   private Object[][] genData(int n) {
     Object[][] r = new Object[n][];
     for (int i = 0; i < n; i++) {
-      r[i] = rowFor(createNewUser());
+      r[i] = rowFor(buildNewUser());
     }
     return r;
   }
@@ -86,7 +86,7 @@ public class DataSetTest extends DBTestCase {
   @Test
   public void testSetReadOnly2() {
     theSUT.setReadOnly();
-    Object[] data = rowFor(createNewUser());
+    Object[] data = rowFor(buildNewUser());
     expectException(InvalidOperationException.class,
         () -> theSUT.row(data));
   }
@@ -95,8 +95,8 @@ public class DataSetTest extends DBTestCase {
   public void testSetReadOnly3() {
     theSUT.setReadOnly();
     Object[][] data = { 
-      rowFor(createNewUser()),
-      rowFor(createNewUser())
+      rowFor(buildNewUser()),
+      rowFor(buildNewUser())
     };
     expectException(InvalidOperationException.class,
         () -> theSUT.rows(data));
@@ -131,7 +131,7 @@ public class DataSetTest extends DBTestCase {
   
   @Test
   public void testChaining1() {
-    assertSame(theSUT, theSUT.row(rowFor(createNewUser())));
+    assertSame(theSUT, theSUT.row(rowFor(buildNewUser())));
   }
   
   @Test

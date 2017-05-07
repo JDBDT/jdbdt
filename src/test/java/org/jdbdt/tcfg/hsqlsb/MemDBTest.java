@@ -1,6 +1,6 @@
 package org.jdbdt.tcfg.hsqlsb;
 
-import org.jdbdt.DBCfg;
+import org.jdbdt.DBConfig;
 import org.jdbdt.DBEngineTestSuite;
 import org.junit.BeforeClass;
 
@@ -8,6 +8,6 @@ import org.junit.BeforeClass;
 public class MemDBTest extends DBEngineTestSuite {
   @BeforeClass 
   public static void setup() { 
-    DBCfg.getConfig().setURL(HSQLDBSuite.MEM_DB_URL);
+    DBConfig.getConfig().setURL(HSQLDBSuite.MEM_DB_URL);
   }
 }

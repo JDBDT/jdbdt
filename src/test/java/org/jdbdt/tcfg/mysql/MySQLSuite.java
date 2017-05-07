@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jdbdt.DBCfg;
+import org.jdbdt.DBConfig;
 import org.jdbdt.DBEngineTestSuite;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -17,7 +17,7 @@ public class MySQLSuite extends DBEngineTestSuite {
 
   @BeforeClass 
   public static void setup() throws ClassNotFoundException {
-    DBCfg.getConfig()
+    DBConfig.getConfig()
       .reset()
       .setDriver("com.mysql.jdbc.Driver")
       .setURL(startDatabase());

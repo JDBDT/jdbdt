@@ -1,6 +1,6 @@
 package org.jdbdt.tcfg.h2;
 
-import org.jdbdt.DBCfg;
+import org.jdbdt.DBConfig;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -12,6 +12,6 @@ import org.junit.runners.Suite.SuiteClasses;
 public class H2Suite {
   @BeforeClass 
   public static void setup() throws ClassNotFoundException { 
-    DBCfg.getConfig().reset().setDriver("org.h2.Driver");
+    DBConfig.getConfig().reset().setDriver("org.h2.Driver");
   }
 }

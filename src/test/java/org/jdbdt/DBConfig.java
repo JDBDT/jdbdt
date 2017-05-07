@@ -4,13 +4,13 @@ package org.jdbdt;
 import org.jdbdt.tcfg.hsqlsb.HSQLDBSuite;
 
 @SuppressWarnings("javadoc")
-public class DBCfg {
+public class DBConfig {
 
-  public static DBCfg getConfig() {
+  public static DBConfig getConfig() {
     return INSTANCE;
   }
   
-  private static final DBCfg INSTANCE = new DBCfg();
+  private static final DBConfig INSTANCE = new DBConfig();
   
   private String url;
   private String driver;    
@@ -18,11 +18,11 @@ public class DBCfg {
   private boolean countIsAnInt;
   private boolean reuseStatements;
   
-  private DBCfg() {
+  private DBConfig() {
     reset();
   }
   
-  public DBCfg reset() {
+  public DBConfig reset() {
     url = HSQLDBSuite.MEM_DB_URL;
     driver = HSQLDBSuite.DRIVER;    
     dateSupported = true;
@@ -31,7 +31,7 @@ public class DBCfg {
     return this;
   }
   
-  public DBCfg setDriver(String driver) {
+  public DBConfig setDriver(String driver) {
     this.driver = driver;
     return this;
   }
@@ -40,7 +40,7 @@ public class DBCfg {
     return driver;
   }
   
-  public DBCfg setURL(String url) {
+  public DBConfig setURL(String url) {
     this.url = url;
     return this;
   }
@@ -49,7 +49,7 @@ public class DBCfg {
     return url;
   }
   
-  public DBCfg dateNotSupported() {
+  public DBConfig dateNotSupported() {
     dateSupported = false;
     return this;
   }
@@ -57,7 +57,7 @@ public class DBCfg {
     return dateSupported;
   }
   
-  public DBCfg countReturnsInteger() {
+  public DBConfig countReturnsInteger() {
     countIsAnInt = true;
     return this;
   }
@@ -66,7 +66,7 @@ public class DBCfg {
     return countIsAnInt;
   }
 
-  public DBCfg doNotReuseStatements() {
+  public DBConfig doNotReuseStatements() {
     reuseStatements = false;
     return this;    
   }

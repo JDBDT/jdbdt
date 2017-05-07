@@ -14,6 +14,7 @@ import org.junit.runners.Suite.SuiteClasses;
   DataSetTest.class,
   DBSetupTest.class,
   DBAssertTest.class,
+  AssertEqualsTest.class,
   DataSetBuilderCoreTest.class,
   DataSetBuilderCoreFillerTest.class,
   IntegrationTest.class

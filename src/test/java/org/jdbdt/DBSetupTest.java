@@ -73,26 +73,26 @@ public class DBSetupTest extends DBTestCase {
 
   @Test 
   public void testInsert1() throws SQLException {
-    doInsert(createNewUser());  
+    doInsert(buildNewUser());  
   }
 
   @Test 
   public void testPopulate1() throws SQLException {
-    doPopulate(createNewUser());  
+    doPopulate(buildNewUser());  
   }
 
   @Test 
   public void testInsert2() throws SQLException {
-    doInsert(createNewUser(), 
-        createNewUser(), 
-        createNewUser());
+    doInsert(buildNewUser(), 
+        buildNewUser(), 
+        buildNewUser());
   }
 
   @Test 
   public void testPopulate2() throws SQLException {
-    doPopulate(createNewUser(), 
-        createNewUser(), 
-        createNewUser());
+    doPopulate(buildNewUser(), 
+        buildNewUser(), 
+        buildNewUser());
   }
 
   @Test(expected=DBExecutionException.class)
@@ -110,7 +110,7 @@ public class DBSetupTest extends DBTestCase {
   private User[] createBulkData() {
     User[] users = new User[BULK_DATA_SIZE];
     for (int i = 0; i < BULK_DATA_SIZE; i++) {
-      users[i] = createNewUser();
+      users[i] = buildNewUser();
     }
     return users;
   }

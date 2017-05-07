@@ -1,6 +1,6 @@
 package org.jdbdt.tcfg.hsqlsb;
 
-import org.jdbdt.DBCfg;
+import org.jdbdt.DBConfig;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -16,6 +16,6 @@ public class HSQLDBSuite {
   
   @BeforeClass 
   public static void setup() throws ClassNotFoundException { 
-    DBCfg.getConfig().reset().setDriver(DRIVER);
+    DBConfig.getConfig().reset().setDriver(DRIVER);
   }
 }
