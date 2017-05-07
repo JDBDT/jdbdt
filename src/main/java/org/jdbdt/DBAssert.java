@@ -77,7 +77,6 @@ final class DBAssert {
   /**
    * Perform a data set assertion.
    * 
-   * 
    * @param callInfo Call info.
    * @param expected Expected data.
    * @param actual Actual data.
