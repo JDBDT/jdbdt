@@ -312,7 +312,6 @@ final class Log implements AutoCloseable {
     String valueContent = "";
     long length = -1;
     byte[] sha1 = null;
-
     try { 
       if (theClass.isArray()) {
         length = Array.getLength(value);
