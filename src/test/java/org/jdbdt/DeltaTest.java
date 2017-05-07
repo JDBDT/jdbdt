@@ -8,16 +8,12 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.junit.FixMethodOrder;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestName;
 import org.junit.runners.MethodSorters;
 
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class DeltaTest {
-
-  @Rule public TestName testName = new TestName();
 
   Iterator<Row> empty() {
     return Collections.emptyIterator();

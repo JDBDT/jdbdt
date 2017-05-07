@@ -12,9 +12,7 @@ import java.util.Collection;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.junit.runners.Parameterized;
@@ -35,7 +33,6 @@ public class DBAssertTest extends DBTestCase {
     });
   }
 
-  @Rule public TestName testName = new TestName();
   private static Table table;
   private DataSource dataSource;
 
