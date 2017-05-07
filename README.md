@@ -42,7 +42,7 @@ Commands:
 ## 0.10
 
 * [#3 - ColumnFillerException should also extend JDBDTRuntimeException](https://github.com/edrdo/jdbdt/issues/2)
-* Misc. maintenance / refactoring / handling of Sonarqube issues
+* Misc. maintenance / refactoring / handling of SonarQube issues
 
 ## 0.9
 
