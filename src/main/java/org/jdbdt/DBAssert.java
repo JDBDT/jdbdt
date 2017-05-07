@@ -67,9 +67,11 @@ final class DBAssert {
    * @throws InvalidOperationException If the arguments are invalid. 
    */
   static void stateAssertion(CallInfo callInfo, DataSet expected) {
+    DataSource source =  expected.getSource();
+    source.setDirtyStatus(true);
     dataSetAssertion(callInfo, 
                      expected,   
-                     expected.getSource().executeQuery(callInfo, false));
+                     source.executeQuery(callInfo, false));
   }
   
   /**
@@ -86,7 +88,6 @@ final class DBAssert {
     validateDataSetAssertion(expected, actual);
     final DataSource source = expected.getSource();
     final Delta delta = new Delta(expected, actual); 
-    source.setDirtyStatus(true);
     
     final DataSetAssertion assertion = 
       new DataSetAssertion(expected, delta);
