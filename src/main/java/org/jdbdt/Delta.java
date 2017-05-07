@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 
 /**
- * Delta between row sets.
+ * Delta between data sets.
  * 
  * @since 0.1
  *
@@ -15,8 +15,8 @@ import java.util.Map.Entry;
 final class Delta {
 
   /**
-   * Storage of differences. 
-   * A map is used to keep row counts because row sets are in fact multi-sets.
+   * Record of differences. 
+   * A map is used to keep row counts because data sets are in fact multi-sets.
    */
   private final LinkedHashMap<Row, Integer> diff = new LinkedHashMap<>();
   
@@ -25,7 +25,7 @@ final class Delta {
    * @param ref Reference data set.
    * @param upd Updated data set.
    */
-  public Delta(DataSet ref, DataSet upd) {
+  Delta(DataSet ref, DataSet upd) {
     this(ref.getRows().iterator(), upd.getRows().iterator());
   }
   
@@ -76,6 +76,7 @@ final class Delta {
   boolean isEmpty() {
     return diff.isEmpty();
   }
+  
   /**
    * Get iterator for deleted data.
    * @return Iterator that allows the traversal of deleted rows.
@@ -99,6 +100,7 @@ final class Delta {
   
   @SuppressWarnings("javadoc")
   private static final IteratorFilter DELETED_FILTER = n -> n < 0 ? -n : 0;
+ 
   @SuppressWarnings("javadoc")
   private static final IteratorFilter INSERTED_FILTER = n -> n > 0 ? n : 0;
 
