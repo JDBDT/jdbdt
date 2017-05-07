@@ -93,13 +93,15 @@ public final class TableBuilder  {
     if (name == null) {
       throw new InvalidOperationException("Table name has not been set!");
     }
+    
     String cols = get(Param.COLUMNS);
     if (cols == null) {
       throw new InvalidOperationException("Table columns have not been set!");
     }
+    
     return new Table
            (db,
-            get(Param.NAME), 
+            name, 
             String.format("SELECT %s FROM %s", cols, name));
   }
 

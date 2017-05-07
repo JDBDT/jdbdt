@@ -79,7 +79,7 @@ public abstract class DataSource {
     });
   }
   /**
-   * Constructor for mock data sources (for testing only).
+   * Constructor for mock data sources (for testing only with no database access).
    * @param columns Columns.
    */
   DataSource(String[] columns) {

@@ -248,7 +248,7 @@ public final class JDBDT {
   }
   
   /**
-   * Assert that two data sets are equivalent (error message variant).
+   * Assert that two data sets are equivalent.
    * 
    * <p>
    * Note that the executed data set comparison is insensitive
