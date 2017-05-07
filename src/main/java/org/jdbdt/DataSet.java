@@ -33,7 +33,7 @@ public class DataSet {
    * Constructs a new data set.
    * @param ds Data source.
    */
-  DataSet(DataSource ds) {
+  public DataSet(DataSource ds) {
     this(ds, new ArrayList<>());
   }
 
