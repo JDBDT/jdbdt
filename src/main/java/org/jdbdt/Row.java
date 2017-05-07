@@ -20,7 +20,7 @@ final class Row {
   /**
    * Hash code (computed only once).
    */
-  private volatile int hash; 
+  private int hash; 
   
   /**
    * Constructs a new row.
