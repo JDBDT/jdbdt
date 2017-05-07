@@ -35,25 +35,25 @@ final class CallInfo {
      * Get class name.
      * @return The name of the class for the method at stake.
      */
-    public String getClassName() { return className; }
+    String getClassName() { return className; }
     
     /**
      * Get method name.
      * @return The name of the method.
      */
-    public String getMethodName() { return methodName; }
+    String getMethodName() { return methodName; }
     
     /**
      * Get file name. 
      * @return The name of the source file.
      */
-    public String getFileName() { return fileName; }
+    String getFileName() { return fileName; }
     
     /**
      * Get line number. 
      * @return The line number information.
      */
-    public int getLineNumber() { return lineNumber; }
+    int getLineNumber() { return lineNumber; }
     
     @Override
     public String toString() {
@@ -69,7 +69,7 @@ final class CallInfo {
    * Create call-info object. 
    * @return A new call info message with an empty message.
    */
-  public static CallInfo create() {
+  static CallInfo create() {
     return new CallInfo("");
   }
   
@@ -78,7 +78,7 @@ final class CallInfo {
    * @param message Message to set.
    * @return A new call info message with an empty message.
    */
-  public static CallInfo create(String message) {
+  static CallInfo create(String message) {
     return new CallInfo(message);
   }
   
