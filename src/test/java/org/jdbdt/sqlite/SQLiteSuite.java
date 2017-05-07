@@ -2,8 +2,7 @@ package org.jdbdt.sqlite;
 
 import org.jdbdt.DBConfig;
 import org.jdbdt.DBEngineTestSuite;
-import org.jdbdt.StatementReuseEnabled;
-import org.jdbdt.TruncateSupportEnabled;
+import org.jdbdt.TestCategories;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.experimental.categories.Categories;
@@ -12,8 +11,8 @@ import org.junit.experimental.categories.Categories.ExcludeCategory;
 @SuppressWarnings("javadoc")
 @RunWith(Categories.class)
 @ExcludeCategory({
-  TruncateSupportEnabled.class,
-  StatementReuseEnabled.class
+  TestCategories.Truncate.class,
+  TestCategories.StatementReuse.class
 })
 public class SQLiteSuite extends DBEngineTestSuite {
   @BeforeClass 

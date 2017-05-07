@@ -134,7 +134,7 @@ public class DBSetupTest extends DBTestCase {
     doPopulate(createBulkData());
   }
   
-  @Test @Category(TruncateSupportEnabled.class)
+  @Test @Category(TestCategories.Truncate.class)
   public void testTruncate() throws SQLException {
     truncate(table);
     assertEquals(0, getDAO().count());

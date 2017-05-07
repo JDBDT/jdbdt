@@ -19,14 +19,14 @@ public class DBTest extends DBTestCase {
     return getDB().compile(sql).getStatement();
   }
 
-  @Test @Category(StatementReuseEnabled.class)
+  @Test @Category(TestCategories.StatementReuse.class)
   public void testReuse1() throws SQLException {
     PreparedStatement s1 = compile("SELECT * FROM " + UserDAO.TABLE_NAME);
     PreparedStatement s2 = compile("SELECT * FROM " + UserDAO.TABLE_NAME);
     assertSame(s1, s2);
   }
 
-  @Test @Category(StatementReuseEnabled.class)
+  @Test @Category(TestCategories.StatementReuse.class)
   public void testReuse2() throws SQLException {
     getDB().disable(DB.Option.REUSE_STATEMENTS);
     PreparedStatement s1 = compile("SELECT * FROM " + UserDAO.TABLE_NAME);
@@ -60,19 +60,19 @@ public class DBTest extends DBTestCase {
     }
   }
   
-  @Test(expected=InvalidOperationException.class)
+  @Test(expected=InvalidOperationException.class) @Category(TestCategories.Savepoints.class)
   public void testRestoreWithoutSavepoint() throws SQLException {
     restore(getDB());
   }
   
-  @Test(expected=InvalidOperationException.class)
+  @Test(expected=InvalidOperationException.class) @Category(TestCategories.Savepoints.class)
   public void testSavepointWithAutoCommitOn() throws SQLException {
     try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(true)) {
       save(getDB());
     }
   }
    
-  @Test
+  @Test @Category(TestCategories.Savepoints.class)
   public void testSavepointRestore() throws SQLException {
     try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
       String originalName = h.query(); 
@@ -93,7 +93,7 @@ public class DBTest extends DBTestCase {
     }
   }
   
-  @Test
+  @Test @Category(TestCategories.Savepoints.class)
   public void testSavepointRestoreTwice() throws SQLException {
     try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
       String originalName = h.query(); 
@@ -120,7 +120,7 @@ public class DBTest extends DBTestCase {
     }
   }
   
-  @Test
+  @Test @Category(TestCategories.Savepoints.class)
   public void testSavepointDiscard() throws SQLException {
     try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
       String originalName = h.query(); 
@@ -148,7 +148,7 @@ public class DBTest extends DBTestCase {
     }
   }
   
-  @Test
+  @Test @Category(TestCategories.Savepoints.class)
   public void testRestoreAfterCommit() throws SQLException {
     try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
       String originalName = h.query(); 
@@ -175,7 +175,7 @@ public class DBTest extends DBTestCase {
     }
   }
   
-  @Test
+  @Test @Category(TestCategories.Savepoints.class)
   public void testRestoreAfterExternalCommit() throws SQLException {
     try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
       String originalName = h.query(); 
@@ -202,7 +202,7 @@ public class DBTest extends DBTestCase {
     }
   }
   
-  @Test
+  @Test @Category(TestCategories.Savepoints.class)
   public void testIntensiveSaveRestore() throws SQLException {
     final int INTENSIVE_TEST_ITERATIONS = 100;
     try (SaveRestoreTestHelper h = new SaveRestoreTestHelper(false)) {
