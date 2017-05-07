@@ -1,4 +1,4 @@
-package org.jdbdt.tcfg.sqlite;
+package org.jdbdt.sqlite;
 
 import org.jdbdt.DBConfig;
 import org.jdbdt.DBEngineTestSuite;

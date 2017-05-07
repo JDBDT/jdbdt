@@ -1,13 +1,14 @@
-package org.jdbdt.tcfg.hsqlsb;
+package org.jdbdt.hsqlsb;
 
 import org.jdbdt.DBConfig;
 import org.jdbdt.DBEngineTestSuite;
 import org.junit.BeforeClass;
 
 @SuppressWarnings("javadoc")
-public class MemDBTest extends DBEngineTestSuite {
+public class FileDBTest extends DBEngineTestSuite {
+
   @BeforeClass 
   public static void setup() { 
-    DBConfig.getConfig().setURL(HSQLDBSuite.MEM_DB_URL);
+    DBConfig.getConfig().setURL(HSQLDBSuite.FILE_DB_URL);
   }
 }

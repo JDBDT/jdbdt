@@ -1,4 +1,4 @@
-package org.jdbdt.tcfg.derby;
+package org.jdbdt.derby;
 
 import org.jdbdt.DBConfig;
 import org.jdbdt.DBEngineTestSuite;

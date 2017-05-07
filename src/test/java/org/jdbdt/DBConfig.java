@@ -1,7 +1,7 @@
 package org.jdbdt;
 
 
-import org.jdbdt.tcfg.hsqlsb.HSQLDBSuite;
+import org.jdbdt.hsqlsb.HSQLDBSuite;
 
 @SuppressWarnings("javadoc")
 public class DBConfig {

@@ -1,4 +1,4 @@
-package org.jdbdt.tcfg.hsqlsb;
+package org.jdbdt.hsqlsb;
 
 import org.jdbdt.DBConfig;
 import org.junit.BeforeClass;

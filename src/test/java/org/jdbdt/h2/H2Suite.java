@@ -1,4 +1,4 @@
-package org.jdbdt.tcfg.h2;
+package org.jdbdt.h2;
 
 import org.jdbdt.DBConfig;
 import org.junit.BeforeClass;

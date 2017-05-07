@@ -1,4 +1,4 @@
-package org.jdbdt.tcfg.postgresql;
+package org.jdbdt.postgresql;
 
 import java.io.IOException;
 

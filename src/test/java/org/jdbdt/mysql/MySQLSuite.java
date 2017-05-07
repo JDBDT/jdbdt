@@ -1,4 +1,4 @@
-package org.jdbdt.tcfg.mysql;
+package org.jdbdt.mysql;
 
 import java.io.File;
 import java.util.HashMap;
