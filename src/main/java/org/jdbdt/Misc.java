@@ -45,14 +45,13 @@ final class Misc {
       throw new InvalidOperationException("Hex-string has odd length!");
     }
     byte[] data = new byte[str.length() / 2];
-    int spos = 0;
-    for (int pos = 0; pos < data.length; pos++) {
+    for (int dpos = 0, spos=0; dpos < data.length; dpos++) {
       int d1 = Character.digit(str.charAt(spos++), 16);
       int d2 = Character.digit(str.charAt(spos++), 16);
       if (d1 < 0 || d2 < 0) {
         throw new InvalidOperationException("Mal-formed hex-string!");
       }
-      data[pos] = (byte) ((d1 << 4) | d2);
+      data[dpos] = (byte) ((d1 << 4) | d2);
     }
     return data;
   }
@@ -77,9 +76,9 @@ final class Misc {
       }
       md.reset();
       byte[] buffer = new byte[4096];
-      int n;
-      while ( (n = in.read(buffer)) > 0) {
-        md.update(buffer, 0, n);
+      int bytes;
+      while ( (bytes = in.read(buffer)) > 0) {
+        md.update(buffer, 0, bytes);
       }
       return md.digest();
     }
