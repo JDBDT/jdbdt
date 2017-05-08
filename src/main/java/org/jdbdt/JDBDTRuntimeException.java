@@ -1,7 +1,7 @@
 package org.jdbdt;
 
 /**
- * Runtime exception thrown by JDBDT.
+ * Base class for JDBDT runtime exceptions.
  * 
  * @since 0.9
  */
