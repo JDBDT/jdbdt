@@ -23,7 +23,7 @@ public final class TypedDataSet<T> extends DataSet {
    * @param ds Data source
    * @param conv Conversion function
    */
-  TypedDataSet(DataSource ds, Conversion<T> conv) {
+  public TypedDataSet(DataSource ds, Conversion<T> conv) {
     super(ds);
     this.conv = conv;
   }
