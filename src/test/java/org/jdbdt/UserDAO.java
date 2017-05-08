@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 @SuppressWarnings("javadoc")
 class UserDAO {
-  static final String TABLE_NAME = "USERS";
+  static final String TABLE_NAME = "Users";
 
   static final String[] COLUMNS = { 
       "login", "name", "password", "created" 
