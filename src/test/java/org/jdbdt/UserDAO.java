@@ -1,16 +1,17 @@
 package org.jdbdt;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @SuppressWarnings("javadoc")
 class UserDAO {
-  static final String TABLE_NAME = "Users";
+  static final String TABLE_NAME = "USERS";
 
   static final String[] COLUMNS = { 
-    "login", "name", "password", "created" 
+      "login", "name", "password", "created" 
   };
 
   private final Connection connection;
@@ -18,10 +19,13 @@ class UserDAO {
   public UserDAO(Connection c) throws SQLException {
     connection = c;
     try {
-      stmt(Op.DROP).execute();
+      dropTable();
     } 
-    catch(SQLException e) { }
-    stmt(Op.CREATE).execute();
+    catch(SQLException e) { 
+
+    }
+    createTable();
+
   }
 
   private PreparedStatement stmt(Op op) throws SQLException {
@@ -40,7 +44,21 @@ class UserDAO {
       }
     }
   }
+  public void createTable() throws SQLException {
+    stmt(Op.CREATE).execute();
+  }
 
+  public void dropTable() throws SQLException {
+    stmt(Op.DROP).execute();
+  }
+
+  public boolean tableExists() throws SQLException {
+    DatabaseMetaData dbmd = connection.getMetaData();
+    try(ResultSet rs = dbmd.getTables(null, null, TABLE_NAME, new String[] {"TABLE"})) {
+      return rs.next();
+    }
+  }
+  
   public int doDeleteAll() throws SQLException {
     try (PreparedStatement stmt = stmt(Op.DELETE_ALL)) {
       return stmt.executeUpdate();
@@ -83,7 +101,7 @@ class UserDAO {
                 rs.getString(1), 
                 rs.getString(2),
                 rs.getDate(3)) 
-        : null;
+            : null;
       } 
     }
   }
@@ -114,7 +132,7 @@ class UserDAO {
     Op(String sqlFmt) {
       this.sql = String.format(sqlFmt, TABLE_NAME);
     }
-    
+
     String getSQL() {
       return sql;
     }

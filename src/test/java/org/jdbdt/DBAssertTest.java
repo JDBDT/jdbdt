@@ -2,7 +2,7 @@ package org.jdbdt;
 
 
 import static org.jdbdt.JDBDT.*;
-
+import static org.junit.Assert.*;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -68,6 +68,41 @@ public class DBAssertTest extends DBTestCase {
   }
 
 
+  @Test 
+  public void testTableExists1() {
+    assertTableExists(table);
+  }
+  
+  @Test(expected=DBAssertionError.class)
+  public void testTableDoesNotExist1() throws SQLException {
+    assertTableDoesNotExist(table);
+  }
+  
+  @Test(expected=DBAssertionError.class)
+  public void testTableExists2() throws SQLException {
+    getDAO().dropTable();
+    try {
+      assertTableExists(table);
+      fail("Expected " + DBAssertionError.class);
+    }
+    finally {
+      getDAO().createTable();
+    }   
+  }
+  
+  @Test 
+  public void testTableDoesNotExist2() throws SQLException {
+    getDAO().dropTable();
+    try {
+      assertTableDoesNotExist(table);
+    }
+    finally {
+      getDAO().createTable();
+    }   
+  }
+  
+
+  
   @Test
   public void testNoChanges() {
     assertUnchanged(dataSource);

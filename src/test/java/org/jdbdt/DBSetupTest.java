@@ -172,4 +172,16 @@ public class DBSetupTest extends DBTestCase {
     assertEquals(1, getDAO().count());
     assertNotNull(getDAO().query(EXISTING_DATA_ID1));
   }
+  
+  @Test
+  public void testDrop() throws SQLException {
+    drop(table);
+    try {
+      assertFalse(getDAO().tableExists());
+    } 
+    finally {
+      getDAO().createTable();
+    }
+  }
+  
 }

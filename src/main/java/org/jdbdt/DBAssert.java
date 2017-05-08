@@ -1,5 +1,8 @@
 package org.jdbdt;
 
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+
 /**
  * Utility class with methods for assertion execution.
  * 
@@ -111,6 +114,38 @@ final class DBAssert {
     }
   }
   
+  /**
+   * Assert if table exists or not.
+   * @param callInfo Call info.
+   * @param table Table.
+   * @param exists Test if table exists or not.
+   */
+  static void assertTableExistence(CallInfo callInfo, Table table, boolean exists) {
+    if (exists != tableExists(callInfo, table.getDB(), table.getName())) {
+      throw new DBAssertionError(callInfo.getMessage());
+    }
+  }
+  
+  /**
+   * Check if table exists.
+   * @param callInfo Call info.
+   * @param db Database.
+   * @param tableName Table name.s
+   * @return <code>true<code> if and only if the table exists.
+   */
+  static boolean tableExists(CallInfo callInfo, DB db, String tableName) {
+    return db.access(() -> { 
+      DatabaseMetaData dbmd = db.getConnection().getMetaData();
+      try(ResultSet rs = dbmd.getTables(null, null, null, new String[] {"TABLE"})) {
+        while(rs.next()) { 
+          if (tableName.equalsIgnoreCase(rs.getString("TABLE_NAME"))) {
+            return true;
+          }
+        }
+      }
+      return false;
+    });
+  }
   /**
    * Private constructor to prevent instantiation.
    */

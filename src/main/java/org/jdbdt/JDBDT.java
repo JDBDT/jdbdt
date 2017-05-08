@@ -454,6 +454,43 @@ public final class JDBDT {
   }
   
   /**
+   * Assert that table exists in the database.
+   * @param table Table. 
+   * @throws DBAssertionError If the assertion fails.
+   */
+  public static void assertTableExists(Table table) throws DBAssertionError {
+    DBAssert.assertTableExistence(CallInfo.create(), table, true);
+  }
+  /**
+   * Assert that table exists in the database (error message variant).
+   * @param message Error message.s
+   * @param table Table. 
+   * @throws DBAssertionError If the assertion fails.
+   */
+  public static void assertTableExists(String message, Table table) throws DBAssertionError {
+    DBAssert.assertTableExistence(CallInfo.create(message), table, true);
+  }
+  
+  /**
+   * Assert that table does not exist in the database.
+   * @param table Table. 
+   * @throws DBAssertionError If the assertion fails.
+   */
+  public static void assertTableDoesNotExist(Table table) throws DBAssertionError {
+    DBAssert.assertTableExistence(CallInfo.create(), table, false);
+  }
+  
+  /**
+   * Assert that table does not exist in the database.
+   * @param message Error message.
+   * @param table Table. 
+   * @throws DBAssertionError If the assertion fails.
+   */
+  public static void assertTableDoesNotExist(String message, Table table) throws DBAssertionError {
+    DBAssert.assertTableExistence(CallInfo.create(), table, false);
+  }
+  
+  /**
    * Insert a data set onto database.
    * 
    * @param data Data set for insertion.  
@@ -498,7 +535,15 @@ public final class JDBDT {
   public static int deleteAll(Table table) {
     return DBSetup.deleteAll(CallInfo.create(), table);
   }
-
+  
+  /**
+   * Drop a table. 
+   *
+   * @param table Table.
+   */
+  public static void drop(Table table) {
+    DBSetup.drop(CallInfo.create(), table);
+  }
 
   /**
    * Delete all data from a table, subject to a <code>WHERE</code>

@@ -206,10 +206,30 @@ final class DBSetup {
   }
 
   /**
+   * Drop a table.
+   * @param callInfo Call info.
+   * @param table Table.
+   */
+  public static void drop(CallInfo callInfo, Table table) {
+    String sql = String.format("DROP TABLE %s", table.getName());
+    DB db = table.getDB();
+    db.access(() -> {
+      table.setDirtyStatus(true);
+      db.logSetup(callInfo, sql);
+      try (WrappedStatement ws = db.compile(sql)) {
+        PreparedStatement dropStmt = ws.getStatement();
+        dropStmt.execute();
+      }
+      return 0; 
+    });
+  }
+  
+  /**
    * Private constructor to prevent instantiation.
    */
   private DBSetup() {
 
   }
+
 
 }
