@@ -39,6 +39,7 @@
       <item name="Issue tracker" href="https://github.com/edrdo/jdbdt/issues/"/>
       <item name="Continuous integration" href="https://travis-ci.org/edrdo/jdbdt/"/>
       <item name="SonarQube" href="https://sonarqube.com/dashboard?id=org.jdbdt%3Ajdbdt"/>
+      <item name="Maven reports" href="project-info.html"/>
       <item name="Inception" href="Inception.html"/>
     </menu>
     <!-- <menu ref="reports"/> -->
