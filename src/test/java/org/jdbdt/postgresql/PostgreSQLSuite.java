@@ -1,6 +1,8 @@
 package org.jdbdt.postgresql;
 
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 
 import org.jdbdt.DBConfig;
 import org.jdbdt.DBEngineTestSuite;
@@ -18,8 +20,8 @@ public class PostgreSQLSuite extends DBEngineTestSuite {
   @BeforeClass 
   public static void setup() throws ClassNotFoundException, IOException { 
     postgres = new EmbeddedPostgres(Version.V9_6_2);
-
-    String url = postgres.start("localhost",  5432, "jdbdt", "jdbt", "jdbdt");
+    Path cachePath = FileSystems.getDefault().getPath(System.getProperty("user.home") + "/.embedpostgresql/");
+    String url = postgres.start(EmbeddedPostgres.cachedRuntimeConfig(cachePath));
     
     DBConfig.getConfig()
     .reset()
