@@ -11,5 +11,6 @@ addons:
     organization: "jdbdt" 
     token:
       secure: "rCWJ+3KyKvJJAQt/3yTI6/XUfpjQVgmSCPk5doo4DDLWmFW1D/UxDYcu7nsGMGkL7wLRY8kb+BJmF8SaA/iYDGKsiNm4j36WwtBPXTWt8YfDqqnqPx4X722xLfXEmtpDQALtFo4+vZu9wKh6ep4vKnGahQ+MvWOSMrE4n29C0xRfuo/DCXvNpFG+4A46uMbZp8kH8RwLTs94zf+6+5Rym98ZWS4wJ4VH7fZR+81qs7KvJbf/UMGeG4pRw+tRAMQYBCHBYwL/xPYFgpeZaqkbUxvTQF131dIOItTC8+/pWQit2al+RywUHq5Sh9HbxoGCdw0oMgBo8nBCAgRypRWjejNslYqxes25R4JgCZYZOVCBKm4FEn27tmh248z66fEKblVVHYbC/X8BJG7eXCFHlGcDaAdoeaJ+Z3UFFzDgTbZYYLhmwp4lCxVhueFWP7hK2XujKZeH0eFrBSpDzYusVxeFinGBRpx9bDm7MgvpYAQsu5CiTP91DzNWA3duIvEhhKWD3OwKUT/WA0fEpYZ0LQCwregqE7SMozcNVaYnsFaseitj3hjfeAvsRuxMM5qJtZR7MWwFortYyYc4lNfiJMgKBQgC543MzVNl+8lPNFgwtZ264XzDFRLc1LSKcyMjaGKip7zzbTPYJkzE6p26aVZHCWp6047kLYboqN1fzu0="
-script: mvn org.jacoco:jacoco-maven-plugin:prepare-agent test sonar:sonar site 
-
+script: 
+   - mvn -Prelease test site 
+   - sonar-scanner
