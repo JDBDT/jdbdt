@@ -36,12 +36,14 @@ public class MySQLSuite extends DBEngineTestSuite {
   private static MysqldResource engine;
   
   private static String startDatabase() {
-    engine = new MysqldResource(DB_PATH);
+
     Map<String,String> args = new HashMap<>();
     args.put(MysqldResourceI.PORT, Integer.toString(DB_PORT));
     args.put(MysqldResourceI.INITIALIZE_USER, "true");
     args.put(MysqldResourceI.INITIALIZE_USER_NAME, DB_USER);
     args.put(MysqldResourceI.INITIALIZE_PASSWORD, DB_PASS);
+    
+    engine = new MysqldResource(DB_PATH);
     engine.start("jdbdt-mysqld-thread", args);
     
     if (!engine.isRunning()) {
