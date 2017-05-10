@@ -5,5 +5,7 @@ cache:
   directories:
   - $HOME/.embedpostgresql
   - $HOME/.m2
+install: true
+    
 script: 
-   - mvn -Prelease test site 
+   - mvn -Prelease clean install site 
