@@ -487,7 +487,7 @@ public final class JDBDT {
    * @throws DBAssertionError If the assertion fails.
    */
   public static void assertTableDoesNotExist(String message, Table table) throws DBAssertionError {
-    DBAssert.assertTableExistence(CallInfo.create(), table, false);
+    DBAssert.assertTableExistence(CallInfo.create(message), table, false);
   }
   
   /**
