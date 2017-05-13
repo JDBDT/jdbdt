@@ -792,8 +792,8 @@ public final class DataSetBuilder {
    */
   public  DataSetBuilder random(String column, Date min, Date max) {
     ensureValidRange(min, max);
-    final long a = min.getTime() / MILLIS_PER_DAY,
-        b = max.getTime() / MILLIS_PER_DAY ;
+    final long a = min.getTime() / MILLIS_PER_DAY;
+    final long b = max.getTime() / MILLIS_PER_DAY ;
     return set(column, () -> new Date(nextRandomLong( a, b) * MILLIS_PER_DAY));
   }
 
@@ -826,8 +826,8 @@ public final class DataSetBuilder {
    */
   public  DataSetBuilder random(String column, Time min, Time max) {
     ensureValidRange(min, max);
-    final long a = min.getTime(),
-        b = max.getTime();
+    final long a = min.getTime();
+    final long b = max.getTime();
     return set(column, () -> new Time(nextRandomLong( a, b)));
   }
 
@@ -860,8 +860,8 @@ public final class DataSetBuilder {
    */
   public  DataSetBuilder random(String column, Timestamp min, Timestamp max) {
     ensureValidRange(min, max);
-    final long a = min.getTime() * NANO_PER_MSEC  + min.getNanos(), 
-        n = max.getTime() * NANO_PER_MSEC + max.getNanos() - a + 1;
+    final long a = min.getTime() * NANO_PER_MSEC  + min.getNanos(); 
+    final long n = max.getTime() * NANO_PER_MSEC + max.getNanos() - a + 1;
     return set(column, 
         () -> {
           long v = a + rng.nextLong() % n;

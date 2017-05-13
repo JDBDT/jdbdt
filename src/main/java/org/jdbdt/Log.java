@@ -205,12 +205,13 @@ final class Log implements AutoCloseable {
    * @param assertion Delta assertion.
    */
   void write(CallInfo callInfo, DeltaAssertion assertion) {
-    final Element rootNode = root(callInfo);
-    final DataSource ds = assertion.getSource();
+    Element rootNode = root(callInfo);
+    DataSource ds = assertion.getSource();
     write(rootNode, ds);
-    final Element daNode = createNode(rootNode, DELTA_ASSERTION_TAG);
-    final List<MetaData.ColumnInfo> mdCols = ds.getMetaData().columns();
-    final Element expectedNode = createNode(daNode, EXPECTED_TAG);    
+    
+    Element daNode = createNode(rootNode, DELTA_ASSERTION_TAG);
+    List<MetaData.ColumnInfo> mdCols = ds.getMetaData().columns();
+    Element expectedNode = createNode(daNode, EXPECTED_TAG);    
     write(expectedNode, 
         OLD_DATA_TAG, 
         mdCols,
@@ -220,9 +221,9 @@ final class Log implements AutoCloseable {
         mdCols,
         assertion.data(DeltaAssertion.IteratorType.NEW_DATA_EXPECTED));
     if (! assertion.passed()) {
-      Element errorsNode = createNode(daNode, ERRORS_TAG),
-          oldDataErrors = createNode(errorsNode, OLD_DATA_TAG),
-          newDataErrors = createNode(errorsNode, NEW_DATA_TAG);
+      Element errorsNode = createNode(daNode, ERRORS_TAG);
+      Element oldDataErrors = createNode(errorsNode, OLD_DATA_TAG);
+      Element newDataErrors = createNode(errorsNode, NEW_DATA_TAG);
       write(oldDataErrors, 
           EXPECTED_TAG, 
           mdCols,
@@ -248,7 +249,7 @@ final class Log implements AutoCloseable {
    * @param callInfo Call information.
    */
   void writeCallInfo(CallInfo callInfo) {
-    final Element rootNode = root(callInfo); 
+    Element rootNode = root(callInfo); 
     createNode(rootNode, callInfo.getAPIMethodInfo().getMethodName());
     flush(rootNode);
   }
@@ -259,11 +260,11 @@ final class Log implements AutoCloseable {
    * @param assertion State assertion.
    */
   void write(CallInfo callInfo, DataSetAssertion assertion) {
-    final Element rootNode = root(callInfo); 
-    final DataSource ds = assertion.getSource();
+    Element rootNode = root(callInfo); 
+    DataSource ds = assertion.getSource();
     write(rootNode, ds);
-    final Element saNode = createNode(rootNode, ASSERTION_TAG);
-    final List<MetaData.ColumnInfo> mdCols = ds.getMetaData().columns();
+    Element saNode = createNode(rootNode, ASSERTION_TAG);
+    List<MetaData.ColumnInfo> mdCols = ds.getMetaData().columns();
     write(saNode, 
         EXPECTED_TAG, 
         mdCols,
