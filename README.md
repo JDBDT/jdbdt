@@ -39,9 +39,21 @@ Commands:
 
 # Change Log
 
+## 0.11
+
+Features:
+* [#4 - Support for table dropping / table existence assertions](https://github.com/edrdo/jdbdt/issues/4)
+* [#10 - Support for compressed log files (GZIP)](https://github.com/edrdo/jdbdt/issues/10)
+
+Maintenance:
+* [#6 - SonarQube integration during Travis build](https://github.com/edrdo/jdbdt/issues/6)
+* [#7 - Adapt PostgreSQL test code (postgresql-embedded 2.x version features)](https://github.com/edrdo/jdbdt/issues/7)
+* [#8 - Let Travis cache Maven repository](https://github.com/edrdo/jdbdt/issues/8)
+* [#11 - Optionally run PIT mutation tests](https://github.com/edrdo/jdbdt/issues/11)
+
 ## 0.10
 
-* [#3 - ColumnFillerException should also extend JDBDTRuntimeException](https://github.com/edrdo/jdbdt/issues/2)
+* [#3: ColumnFillerException should also extend JDBDTRuntimeException](https://github.com/edrdo/jdbdt/issues/2)
 * Misc. maintenance / refactoring / handling of SonarQube issues
 
 ## 0.9
