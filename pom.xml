@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<name>JDBDT</name>
 	<description>JDBDT (Java Database Delta Testing) is a library for database test automation.</description>
@@ -60,6 +61,7 @@
 	<properties>
 		<required.java>1.8</required.java>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<skipPIT>false</skipPIT>
 	</properties>
 	<dependencies>
 		<!-- Common test dependencies -->
@@ -311,6 +313,23 @@
 					<arguments>-Djdbdt.site.path=${jdbdt.site.path}</arguments>
 					<releaseProfiles>release</releaseProfiles>
 					<preparationGoals>generate-sources</preparationGoals>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<version>1.2.0</version>
+				<configuration>
+					<timestampedReports>false</timestampedReports>
+					<targetClasses>
+						<param>org.jdbdt.*</param>
+					</targetClasses>
+					<targetTests>
+						<param>org.jdbdt.DBEngineTestSuite</param>
+						<param>org.jdbdt.AllNonDBTests</param>
+					</targetTests>
+					<failWhenNoMutations>false</failWhenNoMutations>
+					<skip>${skipPIT}</skip>
 				</configuration>
 			</plugin>
 		</plugins>
