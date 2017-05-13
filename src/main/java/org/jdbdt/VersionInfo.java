@@ -9,7 +9,7 @@ final class VersionInfo {
   /**
    * Version Id.
    */
-  static final String ID = "0.11-SNAPSHOT";
+  static final String ID = "0.12-SNAPSHOT";
   
   /**
    * Private constructor to avoid instantiation.
