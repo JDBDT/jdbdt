@@ -1,1 +1,1 @@
-mvn -Prelease release:perform -Djdbdt.site.url=$JDBDT_SITE_URL
+mvn -Prelease release:perform -Djdbdt.site.path=$JDBDT_SITE_PATH

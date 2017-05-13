@@ -1,1 +1,1 @@
-mvn site-deploy -D jdbdt.site.url=$JDBDT_SITE_URL
+mvn site-deploy -D jdbdt.site.path=$JDBDT_SITE_PATH

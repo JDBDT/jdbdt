@@ -44,7 +44,7 @@
 		</repository>
 		<site>
 			<id>jdbdt.org</id>
-			<url>${jdbdt.site.url}</url>
+			<url>${jdbdt.site.path}</url>
 		</site>
 	</distributionManagement>
 	<developers>
@@ -308,7 +308,7 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.5.3</version>
 				<configuration>
-					<arguments>-Djdbdt.site.url=${jdbdt.site.url}</arguments>
+					<arguments>-Djdbdt.site.path=${jdbdt.site.path}</arguments>
 					<releaseProfiles>release</releaseProfiles>
 					<preparationGoals>generate-sources</preparationGoals>
 				</configuration>
