@@ -74,7 +74,11 @@ A call to `enableFullLogging()` enables all logging options at once.
 	
 	// Enable all logging options
 	db.enableFullLogging();
-	
+
+Note that if you use a `.gz` extension for log files, they will be GZIP-compressed and much smaller in size, e.g.,
+
+	db.setLog(new File("MyLog.jdbdt.xml.gz"));
+
 ### Statement reuse
 <a name="StatementReuse"></a>
 

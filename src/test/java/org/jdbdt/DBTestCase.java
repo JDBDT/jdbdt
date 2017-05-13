@@ -64,7 +64,7 @@ public class DBTestCase {
     newUserCounter = 0;
 
     File logDir = new File("jdbdt-log");
-    String fileName = String.format("%02d_%s.jdbdt.log",
+    String fileName = String.format("%02d_%s.jdbdt.log.gz",
                                     ++gTestSuiteCounter,
                                     cfg.getDriver());
     logDir.mkdirs();

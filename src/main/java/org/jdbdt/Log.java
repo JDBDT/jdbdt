@@ -2,8 +2,10 @@ package org.jdbdt;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Array;
 import java.sql.Blob;
@@ -16,6 +18,7 @@ import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
+import java.util.zip.GZIPOutputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -57,10 +60,14 @@ final class Log implements AutoCloseable {
    */
   static Log create(File outputFile) {
     try {
-      return new Log(new PrintStream(outputFile), false);
+      OutputStream out = new FileOutputStream(outputFile);
+      if (outputFile.getName().endsWith(".gz")) {
+        out = new GZIPOutputStream(out);
+      } 
+      return new Log(new PrintStream(out), false);
     } 
-    catch (FileNotFoundException e) {
-      throw new InvalidOperationException("File does not exist.", e);
+    catch (IOException e) {
+      throw new InvalidOperationException("I/O error", e);
     }
   }
 

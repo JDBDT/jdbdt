@@ -681,6 +681,11 @@ public final class JDBDT {
   
   /**
    * Dump the contents of a data set (output file variant).
+   * 
+   * <p>
+   * The output file will be GZIP-compressed if it has a <code>.gz</code> extension.
+   * </p>
+   * 
    * @param data Data set.
    * @param outputFile Output file.
    */
@@ -692,6 +697,7 @@ public final class JDBDT {
   
   /**
    * Dump the database contents for a data source.
+   * 
    * @param source Data source.
    * @param out Output stream.
    */
@@ -703,6 +709,11 @@ public final class JDBDT {
   
   /**
    * Dump the database contents for a data source (file variant).
+   *
+   * <p>
+   * The output file will be GZIP-compressed if it has a <code>.gz</code> extension.
+   * </p>
+   * 
    * @param source Data source.
    * @param outputFile Output file.
    */

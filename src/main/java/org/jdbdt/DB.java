@@ -238,8 +238,13 @@ public final class DB {
 
   /**
    * Set output file for log output.
-   * The log set at creation time
-   * writes to <code>System.err</code>.
+   * 
+   * <p>
+   * The output file will be GZIP-compressed if it has a <code>.gz</code> extension.
+   * </p>
+   * 
+   * <p>Note that the log output set at creation time
+   * is <code>System.err</code>.</p>
    * @param outputFile Logging instance.
    */
   public void setLog(File outputFile) {
