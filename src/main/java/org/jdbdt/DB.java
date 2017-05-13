@@ -452,9 +452,22 @@ public final class DB {
   /**
    * Log state assertion.
    * @param callInfo Call info.
-   * @param sa state assertion.
+   * @param dsa state assertion.
    */
-  void log(CallInfo callInfo, DataSetAssertion sa) {
+  void log(CallInfo callInfo, DataSetAssertion dsa) {
+    if (isEnabled(Option.LOG_ASSERTIONS) ||
+        (    ! dsa.passed() 
+            && isEnabled(Option.LOG_ASSERTION_ERRORS) )) {
+      log.write(callInfo, dsa);
+    }
+  }
+  
+  /**
+   * Log simple assertion.
+   * @param callInfo Call info.
+   * @param sa Simple assertion.
+   */
+  void log(CallInfo callInfo, SimpleAssertion sa) {
     if (isEnabled(Option.LOG_ASSERTIONS) ||
         (    ! sa.passed() 
             && isEnabled(Option.LOG_ASSERTION_ERRORS) )) {
@@ -498,5 +511,7 @@ public final class DB {
       // Do nothing.
     }
   }
+
+  
 
 }

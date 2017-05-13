@@ -144,7 +144,7 @@ final class Log implements AutoCloseable {
   @SuppressWarnings("javadoc")
   private void write(Element parent, DataSource source) {
     Element node = createNode(parent, DATA_SOURCE_TAG);
-    node.setAttribute(JAVA_TYPE_TAG, source.getClass().getName());
+    node.setAttribute(SOURCE_TYPE_TAG, source.getClass().getSimpleName());
     write(node, source.getMetaData());
     writeSQL(node, source.getSQLForQuery());
   }
@@ -240,6 +240,25 @@ final class Log implements AutoCloseable {
           ACTUAL_TAG, 
           mdCols,
           assertion.data(DeltaAssertion.IteratorType.NEW_DATA_ERRORS_ACTUAL));
+    }
+    flush(rootNode);
+  }
+  
+  /**
+   * Log simple assertion.
+   * @param callInfo Call info.
+   * @param assertion Delta assertion.
+   */
+  void write(CallInfo callInfo, SimpleAssertion assertion) {
+    Element rootNode = root(callInfo);
+    write(rootNode, assertion.getSource());
+    Element saNode = createNode(rootNode, SIMPLE_ASSERTION_TAG);
+    if (! assertion.passed()) {
+      Element errorsNode = createNode(saNode, ERRORS_TAG);
+      createNode(errorsNode, EXPECTED_TAG)
+        .setAttribute(VALUE_ATTR, assertion.getExpectedResult().toString());
+      createNode(errorsNode, ACTUAL_TAG)
+        .setAttribute(VALUE_ATTR, assertion.getActualResult().toString());
     }
     flush(rootNode);
   }
@@ -434,6 +453,8 @@ final class Log implements AutoCloseable {
   @SuppressWarnings("javadoc")
   private static final String LABEL_TAG = "label";
   @SuppressWarnings("javadoc")
+  private static final String SOURCE_TYPE_TAG = "type";
+  @SuppressWarnings("javadoc")
   private static final String SQL_TYPE_TAG = "sql-type";
   @SuppressWarnings("javadoc")
   private static final String JAVA_TYPE_TAG = "java-type";
@@ -465,7 +486,11 @@ final class Log implements AutoCloseable {
   private static final String CTX_MESSAGE_TAG = "message";
   @SuppressWarnings("javadoc")
   private static final String CTX_METHOD_TAG = "method";
-
+  @SuppressWarnings("javadoc")
+  private static final String SIMPLE_ASSERTION_TAG = "simple-assertion";
+  @SuppressWarnings("javadoc")
+  private static final String VALUE_ATTR = "value";
+  
   @SuppressWarnings("javadoc")
   private static final IdentityHashMap<Class<?>, Function<Object, String> > ARRAY_STRING_FORMATTERS;
 

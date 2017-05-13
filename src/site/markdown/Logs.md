@@ -15,7 +15,7 @@ identifies the JDBDT version in use;
 related to the message (`context/caller`) and the API method that was invoked (`context/api-method`) -
 for both of these, there is information regarding the class, method, file, and line number
 (`class`, `method`, `file`, `line`);
-* `jdbdt-log-message/data-source` node describes the [data source](DataSources.html) associated to the message, if any - in that case, it informs the 
+* `jdbdt-log-message/data-source` node describes the [data source](DataSources.html) associated to the message, if any - in that case, it informs the source type (`type)`
 the SQL code that is executed on each query to the data source (`sql`), plus
 what are the columns for the data source at stake (`columns`), where 
 each column (`columns/column`) is detailed in terms of its index (`index`), label (`label`),
@@ -38,7 +38,7 @@ and SQL type (`sql-type`).
           <line>541</line>
         </api-method>
       </context>
-      <data-source java-type="org.jdbdt.Table">
+      <data-source type="Table">
         <columns count="4">
           <column index="1" label="LOGIN" sql-type="VARCHAR"/>
           <column index="2" label="NAME" sql-type="VARCHAR"/>

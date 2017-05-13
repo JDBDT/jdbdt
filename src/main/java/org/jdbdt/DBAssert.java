@@ -88,13 +88,11 @@ final class DBAssert {
    */
   static void dataSetAssertion(CallInfo callInfo, DataSet expected, DataSet actual) {
     validateDataSetAssertion(expected, actual);
-    final DataSource source = expected.getSource();
-    final Delta delta = new Delta(expected, actual); 
-    
-    final DataSetAssertion assertion = 
-      new DataSetAssertion(expected, delta);
-    
+    DataSource source = expected.getSource();
+    Delta delta = new Delta(expected, actual); 
+    DataSetAssertion assertion = new DataSetAssertion(expected, delta);
     source.getDB().log(callInfo, assertion);
+    
     if (! assertion.passed()) {
       throw new DBAssertionError(callInfo.getMessage());
     }
@@ -118,10 +116,14 @@ final class DBAssert {
    * Assert if table exists or not.
    * @param callInfo Call info.
    * @param table Table.
-   * @param exists Test if table exists or not.
+   * @param expected Expect if table exists or not.
    */
-  static void assertTableExistence(CallInfo callInfo, Table table, boolean exists) {
-    if (exists != tableExists(callInfo, table.getDB(), table.getName())) {
+  static void assertTableExistence(CallInfo callInfo, Table table, boolean expected) {
+    DB db = table.getDB();
+    boolean actual = tableExists(callInfo, db, table.getName());
+    SimpleAssertion assertion = new SimpleAssertion(table, expected, actual);
+    db.log(callInfo, assertion);
+    if (!assertion.passed()) {
       throw new DBAssertionError(callInfo.getMessage());
     }
   }
