@@ -457,6 +457,8 @@ public final class JDBDT {
    * Assert that table exists in the database.
    * @param table Table. 
    * @throws DBAssertionError If the assertion fails.
+   * @see #assertTableDoesNotExist(Table)
+   * @see #drop(Table)
    */
   public static void assertTableExists(Table table) throws DBAssertionError {
     DBAssert.assertTableExistence(CallInfo.create(), table, true);
@@ -466,6 +468,8 @@ public final class JDBDT {
    * @param message Error message.s
    * @param table Table. 
    * @throws DBAssertionError If the assertion fails.
+   * @see #assertTableDoesNotExist(String, Table)
+   * @see #drop(Table)
    */
   public static void assertTableExists(String message, Table table) throws DBAssertionError {
     DBAssert.assertTableExistence(CallInfo.create(message), table, true);
@@ -475,6 +479,9 @@ public final class JDBDT {
    * Assert that table does not exist in the database.
    * @param table Table. 
    * @throws DBAssertionError If the assertion fails.
+   * 
+   * @see #assertTableExists(Table)
+   * @see #drop(Table)
    */
   public static void assertTableDoesNotExist(Table table) throws DBAssertionError {
     DBAssert.assertTableExistence(CallInfo.create(), table, false);
@@ -485,6 +492,8 @@ public final class JDBDT {
    * @param message Error message.
    * @param table Table. 
    * @throws DBAssertionError If the assertion fails.
+   * @see #assertTableExists(String, Table)
+   * @see #drop(Table)
    */
   public static void assertTableDoesNotExist(String message, Table table) throws DBAssertionError {
     DBAssert.assertTableExistence(CallInfo.create(message), table, false);
@@ -539,7 +548,10 @@ public final class JDBDT {
   /**
    * Drop a table. 
    *
-   * @param table Table.
+   * @param table Table to drop.
+   * 
+   * @see #assertTableExists(Table)
+   * @see #assertTableDoesNotExist(Table)
    */
   public static void drop(Table table) {
     DBSetup.drop(CallInfo.create(), table);
