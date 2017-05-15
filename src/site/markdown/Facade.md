@@ -92,7 +92,8 @@ may be convenient to refer to the API methods concisely.
 		    <code>changed</code><br/>
 			<code>commit</code><br/>
 			<code>deleteAll</code><br/>
-			<code>deleteAllWhere</code><br/> 
+			<code>deleteAllWhere</code><br/>
+			<code>drop</code><br/>
 			<code>insert</code><br/>
 			<code>populate</code><br/>
 			<code>populateIfChanged</code><br/>
@@ -121,6 +122,8 @@ may be convenient to refer to the API methods concisely.
 			<code>assertEquals</code><br/> 
 			<code>assertInserted</code><br/> 
 			<code>assertState</code><br/>
+			<code>assertTableDoesNotExist</code><br/>
+			<code>assertTableExists</code><br/>
 			<code>assertUnchanged</code><br/> 
 			<code>takeSnapshot</code><br/> 
 		</td>
