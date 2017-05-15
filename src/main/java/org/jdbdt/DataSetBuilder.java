@@ -701,7 +701,7 @@ public final class DataSetBuilder {
    */
   public  DataSetBuilder random(String column, int min, int max) {
     ensureValidRange(min, max);
-    final int n = max - min + 1;
+    int n = max - min + 1;
     return set(column, () -> min + rng.nextInt(n));
   }
 
@@ -746,7 +746,7 @@ public final class DataSetBuilder {
    */
   public  DataSetBuilder random(String column, float min, float max) {
     ensureValidRange(min, max);
-    final float diff = max - min;
+    float diff = max - min;
     return set(column, () -> min + rng.nextFloat() * diff);
   }
 
@@ -769,7 +769,7 @@ public final class DataSetBuilder {
    */
   public  DataSetBuilder random(String column, double min, double max) {
     ensureValidRange(min, max);
-    final double diff = max - min;
+    double diff = max - min;
     return set(column, () -> min + rng.nextDouble() * diff);
   }
 
@@ -792,9 +792,9 @@ public final class DataSetBuilder {
    */
   public  DataSetBuilder random(String column, Date min, Date max) {
     ensureValidRange(min, max);
-    final long a = min.getTime() / MILLIS_PER_DAY;
-    final long b = max.getTime() / MILLIS_PER_DAY ;
-    return set(column, () -> new Date(nextRandomLong( a, b) * MILLIS_PER_DAY));
+    long a = min.getTime() / MILLIS_PER_DAY;
+    long b = max.getTime() / MILLIS_PER_DAY ;
+    return set(column, () -> new Date(nextRandomLong(a, b) * MILLIS_PER_DAY));
   }
 
   /**
