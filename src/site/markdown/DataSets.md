@@ -175,8 +175,10 @@ Utility methods (all `static`):
 
 - `data()` returns the underlying data set.
 - `generate(n)` adds `n` rows to the underlying data set based on the current column filler settings.
-- `nullValue(column)` sets a `NULL` value filler for `column`.
 - `value(column, v)`  sets a constant filler with value `v` for `column`.
+- `nullValue(column)` sets a `NULL` value filler for `column`.
+- `remainingColumnsNull()` sets the `NULL` value filler for all remaining columns
+- `allColumnsNull()` sets the `NULL` value filler for all columns
 - `sequence(column, ...)`  defines a sequence fillers for `column` (several method variants).
 - `random(column, ...)` defines a pseudo-random filler for `column` (several method variants).
 - `set(column, filler)` defines a custom column filler for `column`. 
