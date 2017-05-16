@@ -116,7 +116,7 @@ public final class DB {
    * Constructor.
    * @param connection Database connection.
    */
-  DB(Connection connection) {
+  public DB(Connection connection) {
     try {
       this.connection = connection;
       DatabaseMetaData dbMetaData = connection.getMetaData();
