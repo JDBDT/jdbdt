@@ -120,7 +120,7 @@ final class DBAssert {
    */
   static void assertTableExistence(CallInfo callInfo, Table table, boolean expected) {
     DB db = table.getDB();
-    boolean actual = tableExists(callInfo, db, table.getName());
+    boolean actual = tableExists(db, table.getName());
     SimpleAssertion assertion = new SimpleAssertion(table, expected, actual);
     db.log(callInfo, assertion);
     if (!assertion.passed()) {
@@ -130,12 +130,11 @@ final class DBAssert {
   
   /**
    * Check if table exists.
-   * @param callInfo Call info.
    * @param db Database.
-   * @param tableName Table name.s
+   * @param tableName Table name.
    * @return <code>true<code> if and only if the table exists.
    */
-  static boolean tableExists(CallInfo callInfo, DB db, String tableName) {
+  static boolean tableExists(DB db, String tableName) {
     return db.access(() -> { 
       DatabaseMetaData dbmd = db.getConnection().getMetaData();
       try(ResultSet rs = dbmd.getTables(null, null, null, new String[] {"TABLE"})) {
