@@ -208,13 +208,12 @@ final class DBSetup {
   /**
    * Drop a table.
    * @param callInfo Call info.
-   * @param table Table.
+   * @param db Database
+   * @param tableName  Table name.
    */
-  public static void drop(CallInfo callInfo, Table table) {
-    String sql = String.format("DROP TABLE %s", table.getName());
-    DB db = table.getDB();
+  public static void drop(CallInfo callInfo, DB db, String tableName) {
+    String sql = String.format("DROP TABLE %s", tableName);
     db.access(() -> {
-      table.setDirtyStatus(true);
       db.logSetup(callInfo, sql);
       try (WrappedStatement ws = db.compile(sql)) {
         PreparedStatement dropStmt = ws.getStatement();

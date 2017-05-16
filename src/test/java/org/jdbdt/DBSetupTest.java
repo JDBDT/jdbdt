@@ -174,8 +174,19 @@ public class DBSetupTest extends DBTestCase {
   }
   
   @Test
-  public void testDrop() throws SQLException {
+  public void testDrop1() throws SQLException {
     drop(table);
+    try {
+      assertFalse(getDAO().tableExists());
+    } 
+    finally {
+      getDAO().createTable();
+    }
+  }
+  
+  @Test
+  public void testDrop2() throws SQLException {
+    drop(getDB(), table.getName());
     try {
       assertFalse(getDAO().tableExists());
     } 

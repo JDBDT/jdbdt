@@ -551,17 +551,36 @@ public final class JDBDT {
   }
   
   /**
-   * Drop a table. 
+   * Drop a table (table handle variant). 
+   * 
+   * <p>
+   * A call to this method is shorthand for <code>drop(table.getDB(), table.getName()))</code>.
+   * </p>
    *
    * @param table Table to drop.
    * 
+   * @see #drop(DB, String)
    * @see #assertTableExists(DB, String)
    * @see #assertTableDoesNotExist(DB, String)
    */
   public static void drop(Table table) {
-    DBSetup.drop(CallInfo.create(), table);
+    DBSetup.drop(CallInfo.create(), table.getDB(), table.getName());
   }
 
+  
+  /**
+   * Drop a table. 
+   * @param db Database.
+   * @param tableName Table name.
+   * 
+   * @see #drop(Table)
+   * @see #assertTableExists(DB, String)
+   * @see #assertTableDoesNotExist(DB, String)
+   */
+  public static void drop(DB db, String tableName) {
+    DBSetup.drop(CallInfo.create(), db, tableName);
+  }
+  
   /**
    * Delete all data from a table, subject to a <code>WHERE</code>
    * clause. 
