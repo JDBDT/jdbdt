@@ -1,1 +1,1 @@
-mvn org.pitest:pitest-maven:mutationCoverage -DskipPIT=false
+mvn org.pitest:pitest-maven:mutationCoverage -Dskip.mutation.testing=false

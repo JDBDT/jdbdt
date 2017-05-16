@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<name>JDBDT</name>
 	<description>JDBDT (Java Database Delta Testing) is a library for database test automation.</description>
@@ -60,7 +61,7 @@
 	<properties>
 		<required.java>1.8</required.java>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<skipPIT>true</skipPIT>
+		<skip.mutation.testing>true</skip.mutation.testing>
 	</properties>
 	<dependencies>
 		<!-- Common test dependencies -->
@@ -328,8 +329,16 @@
 						<param>org.jdbdt.AllNonDBTests</param>
 					</targetTests>
 					<failWhenNoMutations>false</failWhenNoMutations>
-					<skip>${skipPIT}</skip>
+					<skip>${skip.mutation.testing}</skip>
 				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>mutationCoverage</goal>
+						</goals>
+						<phase>test</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
