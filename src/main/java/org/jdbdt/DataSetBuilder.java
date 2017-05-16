@@ -1055,7 +1055,7 @@ public final class DataSetBuilder {
      * @throws InvalidOperationException in all cases when called.
      */
     @Override
-    public void setSeed(long seed) throws InvalidOperationException {
+    public void setSeed(long seed) {
       if (!seedIsSet) {
         super.setSeed(seed); // called from the constructor of java.util.Random
         seedIsSet = true;
