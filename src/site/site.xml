@@ -37,7 +37,7 @@
       <item name="Maven Central" href="http://search.maven.org/#search%7Cga%7C1%7Cjdbdt" />
       <item name="Source code" href="https://github.com/edrdo/jdbdt/" />
       <item name="Issue tracker" href="https://github.com/edrdo/jdbdt/issues/"/>
-      <item name="Continuous integration" href="https://travis-ci.org/edrdo/jdbdt/"/>
+      <item name="Travis CI" href="https://travis-ci.org/edrdo/jdbdt/"/>
       <item name="SonarQube" href="https://sonarqube.com/organizations/jdbdt/projects"/>
       <item name="Maven reports" href="project-info.html"/>
       <item name="Inception" href="Inception.html"/>
