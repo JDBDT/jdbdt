@@ -161,4 +161,21 @@ public class DataSetBuilderCoreFillerTest extends DBTestCase {
     assertTrue(expected.sameDataAs(theSUT.data()));
   }
 
+  @Test
+  public void testAllColumnsNull() {
+    int count = 10;
+    DataSet expected = deriveRowSet(count, (u,i) -> {
+      User r = u.clone();
+      r.setLogin(null);
+      r.setName(null);
+      r.setPassword(null);
+      r.setCreated(null);
+      return r;
+    });
+    theSUT.reset();
+    theSUT.value("login", BASE_DATA.getLogin());
+    theSUT.allColumnsNull();
+    theSUT.generate(count);
+    assertTrue(expected.sameDataAs(theSUT.data()));
+  }
 }

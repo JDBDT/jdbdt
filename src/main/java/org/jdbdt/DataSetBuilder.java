@@ -260,6 +260,7 @@ public final class DataSetBuilder {
    * </p>
    * @return  The builder instance (for chained calls).
    * @see #nullValue(String)
+   * @see #allColumnsNull()
    */
   public DataSetBuilder remainingColumnsNull() {
     for (int i = 0; i < fillers.length; i++) {
@@ -268,6 +269,23 @@ public final class DataSetBuilder {
         fillerCount++;
       }
     }
+    return this;
+  }
+  
+  /**
+   * Set the NULL value filler for all columns. 
+   * 
+   * <p>
+   * A call to this method sets the {@link #nullValue} filler
+   * for all columns. 
+   * </p>
+   * @return  The builder instance (for chained calls).
+   * @see #nullValue(String)
+   * @see #remainingColumnsNull()
+   */
+  public DataSetBuilder allColumnsNull() {
+    Arrays.fill(fillers, NULL_FILLER);
+    fillerCount = fillers.length;
     return this;
   }
 
