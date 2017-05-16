@@ -11,16 +11,27 @@ package org.jdbdt;
  */
 public final class ColumnFillerException extends JDBDTRuntimeException {
   
+  
+  /**
+   * Constructs a new exception using supplied message.
+   * and associated cause.
+   * @param message Error message.
+   */
+  public ColumnFillerException(String message) {
+    super(message);
+  }
+  
   /**
    * Constructs a new exception using supplied message
    * and associated cause.
-   * @param msg Error message.
+   * @param message Error message.
    * @param cause Exception thrown during column filler execution.
    */
-  public ColumnFillerException(String msg, Exception cause) {
-    super(msg, cause);
+  public ColumnFillerException(String message, Exception cause) {
+    super(message, cause);
   }
-  
+
+
   /**
    * Serial version UID.
    */

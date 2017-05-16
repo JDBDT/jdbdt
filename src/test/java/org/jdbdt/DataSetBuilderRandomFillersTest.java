@@ -122,6 +122,7 @@ public class DataSetBuilderRandomFillersTest {
     theSUT.generate(COUNT);
     assertTrue(expected.sameDataAs(theSUT.data()));
   }
+  
   @Test
   public void testRandomInt() {
     column = "cInteger";
@@ -178,6 +179,12 @@ public class DataSetBuilderRandomFillersTest {
     assertTrue(expected.sameDataAs(theSUT.data()));
   }
 
+  @Test(expected=ColumnFillerException.class)
+  public void testIfReseedingIsAllowed() {
+    theSUT.random("cInteger", rng -> { rng.setSeed(0); return rng.nextInt(); });
+    theSUT.generate(1);
+  }
+  
   static boolean DEBUG = false;
   
   @After
