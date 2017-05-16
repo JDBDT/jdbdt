@@ -60,7 +60,7 @@
 	<properties>
 		<required.java>1.8</required.java>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<skipPIT>false</skipPIT>
+		<skipPIT>true</skipPIT>
 	</properties>
 	<dependencies>
 		<!-- Common test dependencies -->
