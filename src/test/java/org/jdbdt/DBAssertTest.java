@@ -70,19 +70,19 @@ public class DBAssertTest extends DBTestCase {
 
   @Test 
   public void testTableExists1() {
-    assertTableExists(table);
+    assertTableExists(getDB(), table.getName());
   }
   
   @Test(expected=DBAssertionError.class)
   public void testTableDoesNotExist1() throws SQLException {
-    assertTableDoesNotExist(table);
+    assertTableDoesNotExist(getDB(), table.getName());
   }
   
   @Test(expected=DBAssertionError.class)
   public void testTableExists2() throws SQLException {
     getDAO().dropTable();
     try {
-      assertTableExists(table);
+      assertTableExists(getDB(), table.getName());
       fail("Expected " + DBAssertionError.class);
     }
     finally {
@@ -94,7 +94,7 @@ public class DBAssertTest extends DBTestCase {
   public void testTableDoesNotExist2() throws SQLException {
     getDAO().dropTable();
     try {
-      assertTableDoesNotExist(table);
+      assertTableDoesNotExist(getDB(), table.getName());
     }
     finally {
       getDAO().createTable();

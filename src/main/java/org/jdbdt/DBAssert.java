@@ -114,14 +114,15 @@ final class DBAssert {
   
   /**
    * Assert if table exists or not.
+   * 
    * @param callInfo Call info.
-   * @param table Table.
+   * @param db Database.
+   * @param tableName Table.
    * @param expected Expect if table exists or not.
    */
-  static void assertTableExistence(CallInfo callInfo, Table table, boolean expected) {
-    DB db = table.getDB();
-    boolean actual = tableExists(db, table.getName());
-    SimpleAssertion assertion = new SimpleAssertion(table, expected, actual);
+  static void assertTableExistence(CallInfo callInfo, DB db, String tableName, boolean expected) {
+    boolean actual = tableExists(db, tableName);
+    SimpleAssertion assertion = new SimpleAssertion(null, expected, actual);
     db.log(callInfo, assertion);
     if (!assertion.passed()) {
       throw new DBAssertionError(callInfo.getMessage());

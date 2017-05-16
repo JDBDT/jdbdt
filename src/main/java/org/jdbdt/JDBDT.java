@@ -455,48 +455,53 @@ public final class JDBDT {
   
   /**
    * Assert that table exists in the database.
-   * @param table Table. 
+   * @param db Database.
+   * @param tableName Table name.
    * @throws DBAssertionError If the assertion fails.
-   * @see #assertTableDoesNotExist(Table)
+   * @see #assertTableDoesNotExist(DB, String)
    * @see #drop(Table)
    */
-  public static void assertTableExists(Table table) throws DBAssertionError {
-    DBAssert.assertTableExistence(CallInfo.create(), table, true);
+  public static void assertTableExists(DB db, String tableName) throws DBAssertionError {
+    DBAssert.assertTableExistence(CallInfo.create(), db, tableName, true);
   }
   /**
    * Assert that table exists in the database (error message variant).
-   * @param message Error message.s
-   * @param table Table. 
+   * @param message Error message.
+   * @param db Database.
+   * @param tableName Table name. 
    * @throws DBAssertionError If the assertion fails.
-   * @see #assertTableDoesNotExist(String, Table)
+   * @see #assertTableDoesNotExist(String, DB, String)
    * @see #drop(Table)
    */
-  public static void assertTableExists(String message, Table table) throws DBAssertionError {
-    DBAssert.assertTableExistence(CallInfo.create(message), table, true);
+  public static void assertTableExists(String message, DB db, String tableName) throws DBAssertionError {
+    DBAssert.assertTableExistence(CallInfo.create(message), db, tableName, true);
   }
   
   /**
-   * Assert that table does not exist in the database.
-   * @param table Table. 
+   * Assert that table does not exist in a database.
+   * 
+   * @param db Database.
+   * @param tableName Table name. 
    * @throws DBAssertionError If the assertion fails.
    * 
-   * @see #assertTableExists(Table)
+   * @see #assertTableExists(DB,String)
    * @see #drop(Table)
    */
-  public static void assertTableDoesNotExist(Table table) throws DBAssertionError {
-    DBAssert.assertTableExistence(CallInfo.create(), table, false);
+  public static void assertTableDoesNotExist(DB db, String tableName) throws DBAssertionError {
+    DBAssert.assertTableExistence(CallInfo.create(), db, tableName, false);
   }
   
   /**
-   * Assert that table does not exist in the database.
+   * Assert that table does not exist in a database (error message variant).
    * @param message Error message.
-   * @param table Table. 
+   * @param db Database.
+   * @param tableName Table. 
    * @throws DBAssertionError If the assertion fails.
-   * @see #assertTableExists(String, Table)
+   * @see #assertTableExists(String, DB, String)
    * @see #drop(Table)
    */
-  public static void assertTableDoesNotExist(String message, Table table) throws DBAssertionError {
-    DBAssert.assertTableExistence(CallInfo.create(message), table, false);
+  public static void assertTableDoesNotExist(String message, DB db, String tableName) throws DBAssertionError {
+    DBAssert.assertTableExistence(CallInfo.create(message), db, tableName, false);
   }
   
   /**
@@ -550,8 +555,8 @@ public final class JDBDT {
    *
    * @param table Table to drop.
    * 
-   * @see #assertTableExists(Table)
-   * @see #assertTableDoesNotExist(Table)
+   * @see #assertTableExists(DB, String)
+   * @see #assertTableDoesNotExist(DB, String)
    */
   public static void drop(Table table) {
     DBSetup.drop(CallInfo.create(), table);

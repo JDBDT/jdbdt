@@ -257,7 +257,9 @@ final class Log implements AutoCloseable {
    */
   void write(CallInfo callInfo, SimpleAssertion assertion) {
     Element rootNode = root(callInfo);
-    write(rootNode, assertion.getSource());
+    if (assertion.getSource() != null) {
+      write(rootNode, assertion.getSource());
+    }
     Element saNode = createNode(rootNode, SIMPLE_ASSERTION_TAG);
     if (! assertion.passed()) {
       Element errorsNode = createNode(saNode, ERRORS_TAG);
