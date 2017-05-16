@@ -55,4 +55,4 @@ A possible workaround is to issue a rollback statement before any further operat
 
 #### Table truncation not supported
 
-sqlite does not support `TRUNCATE` statements, so `JDBDT.truncate` will not work.
+[sqlite does not support `TRUNCATE` statements](https://www.sqlite.org/lang.html), so `JDBDT.truncate` will not work.
