@@ -16,7 +16,7 @@ implemented using these operations.
 Database data may be inserted using one of the following methods:
 
 1. `insert(data)` inserts `data` (a [data set](DataSets.html)) into the [table](DataSources.html) given by `data.getSource()`.
-2. `populate(data)` inserts `data` like `insert`, but clears the table first using a DELETE statement,
+2. `populate(data)` inserts `data` like `insert`, but clears the table first using a `DELETE` statement,
 and also records `data` as the [snapshot for subsequent delta assertions](DBAssertions.html#Snapshots).
 
 Thus, `insert` should be used for incremental additions to a table, whereas
@@ -60,15 +60,15 @@ More generally, you may query the changed status of data sources using the `chan
 ## Cleaning data
 <a name="Clean"></a>
 
-Database data may be cleaned up using one of the following methods:
+Database data may be cleaned up using one of the following methods for a `Table` instance `t`:
 
-1. `deleteAll(t)` clears  the entire contents of table `t` using a DELETE statement without an associated
-WHERE clause.
-2. `deleteAllWhere(t, where, [,args])` clears the contents of `t` using a DELETE
-statement with a WHERE clause `where` and optional WHERE clause arguments `args`.
-3. `truncate(t)` clears `t` using a TRUNCATE TABLE statement.
+1. `deleteAll(t)` clears  the entire contents of table `t` using a `DELETE` statement without an associated `WHERE` clause.
+2. `deleteAllWhere(t, whereClause, [,args])` clears the contents of `t` using a `DELETE` 
+statement with the specified `WHERE` clause  (`whereClause`) and optional `WHERE` clause arguments `args`.
+3. `truncate(t)` clears `t` using a `TRUNCATE TABLE` statement.
+4. `drop(t)` or `drop(db, tableName)` drops the entire table.
 
-Note that `truncate` may be faster than `deleteAll`, but the associated TRUNCATE TABLE statement 
+*Note*: `truncate` may be faster than `deleteAll`, but the associated TRUNCATE TABLE statement 
 may not respect integrity constraints and has variable semantics 
 for different database engines (e.g., <a href="https://en.wikipedia.org/wiki/Truncate_(SQL)">see here</a>). Some engines do not support table truncation altogether (for instance SQLite).
 
@@ -92,6 +92,9 @@ for different database engines (e.g., <a href="https://en.wikipedia.org/wiki/Tru
 	
 	// 3. Clear table using TRUNCATE.
 	truncate(t);
+	
+	// 4. Drop the table entirely.
+	drop(t);   // alternatively: drop(db, "USERS")
 
 ## Save and restore
 <a name="SaveAndRestore"></a>
@@ -112,7 +115,7 @@ These constraints try to ensure portable behavior across database engines.
 
 In relation to `save` and `restore`, `commit(db)` is a shorthand for
 `db.getConnection().commit()`. Such a call commits all database changes
-and discards the JDBDT save-point (or any other save-point set for the database otherwise).
+and discards the JDBDT save-point (or any other save-point set for the database otherwise, e.g., by the SUT itself).
 
 *Illustration*
 
