@@ -12,7 +12,7 @@ import java.sql.SQLException;
  * <p>
  * This utility class defines the front-end API for database 
  * assertions, setup operations, and creation of associated
- * object instances.
+ * class instances.
  * </p>
  *  
  * @since 0.1
