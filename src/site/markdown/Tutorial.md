@@ -1,24 +1,19 @@
 # Tutorial
 
-This tutorial helps you understand how to use the essential
-features of JDBDT.  The companion code is organized as a [Maven](http://maven.apache.org) project,
-and tests are written using [JUnit](http://junit.org). Some familiarity with Maven and JUnit 
-is assumed. 
+This tutorial will help you understand the essential features of JDBDT.
+
+## Tutorial code <a name="TheCode"></a>
 
 
-	
-## Tutorial project <a name="TheCode"></a>
+### GitHub repository <a name="TheCode.GetIt"></a>
 
-
-### Getting the project from GitHub <a name="TheCode.GetIt"></a>
-
-You may clone the tutorial project from [its github repository](http://github.com/edrdo/jdbdt-tutorial):
+Get the tutorial code from [GitHub](http://github.com/edrdo/jdbdt-tutorial):
 	
 	git clone git@github.com:edrdo/jdbdt-tutorial.git
 
 ### Maven project overview <a name="TheCode.MavenProject"></a>
 
-The Maven project for the tutorial comprises the following artifacts:
+The code is organized as a [Maven](http://maven.apache.org) project, and comprises the following artifacts:
 
 - An SQL table creation script for a table called `USERS`
 (`src/main/resources/tableCreation.sql`).	
@@ -87,7 +82,6 @@ The test code of `UserDAOTest` makes use of JDBDT to setup and validate the
 contents of the database. You should notice the following JDBDT imports:
 
 	import static org.jdbdt.JDBDT.*; 
-
 	import org.jdbdt.Conversion;
 	import org.jdbdt.DB;
 	import org.jdbdt.DataSet;
@@ -103,7 +97,7 @@ The static import (the very first one) relates to methods in the [JDBDT facade](
 
 To setup the database connection and define the initial contents of the database,
 each subclass of `UserDAOTest` defines a `globalSetup`
-method that is executed once before all tests, since it is marked with the `@BeforeClass` JUnit annotation. Each of these methods merely calls `UserDAO.globalSetup(dbDriverClass,dbURL)`, parameterizing the JDBC driver class to load and the database URL to use for the actual setup. For instance, `DerbyTest` contains:
+method that is executed once before all tests, since it is marked with the `@BeforeClass` JUnit annotation. Each of these methods merely call `UserDAO.globalSetup(dbDriverClass,dbURL)`, parameterizing the JDBC driver class to load and the database URL to use for the actual setup. For instance, `DerbyTest` contains:
 
 	private static final String 
     	JDBC_DRIVER_CLASS = "org.apache.derby.jdbc.EmbeddedDriver";
@@ -117,7 +111,7 @@ method that is executed once before all tests, since it is marked with the `@Bef
  
 This layout is merely a convenient one for the purpose of 
 testing multiple JDBC drivers in the tutorial code.
-In `UserDAO` we have:
+In `UserDAOTest` we have:
     
     protected static
     void globalSetup(String jdbcDriverClass, String databaseURL) ... { 
