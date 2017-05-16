@@ -82,12 +82,31 @@ public final class DataSetBuilder {
    */
   private int fillerCount;
 
+  /**
+   * Constructs a new data set builder for the given data source.
+   * 
+   * <p>
+   * The builder will be backed by a fresh data set for the
+   * given source.
+   * </p>
+   * 
+   * @param source Data source.
+   */
+  public DataSetBuilder(DataSource source) {
+    this(new DataSet(source));
+  }
 
   /**
-   * Constructs a new data set builder. 
+   * Constructs a new data set builder backed by an existing data set.
+   * 
+   * <p>
+   * New rows generated using the builder will be added to the given data set.
+   * without clearing previously existing rows in it.
+   * </p>
+   * 
    * @param data Data set associated to builder. 
    */
-  DataSetBuilder(DataSet data) {
+  public DataSetBuilder(DataSet data) {
     this.data = data;
     String[] columnNames = data.getSource().getColumns();
     fillers = new ColumnFiller[columnNames.length];

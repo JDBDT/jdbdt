@@ -114,7 +114,7 @@ public final class JDBDT {
    * @return A new data set builder.
    */
   public static DataSetBuilder builder(DataSource source) {
-    return new DataSet(source).build();
+    return new DataSetBuilder(source);
   }
 
   /**
@@ -138,6 +138,7 @@ public final class JDBDT {
   
   /**
    * Create a new data set.
+   * 
    * @param source Data source.
    * @return A new data set for the given source.
    */
