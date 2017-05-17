@@ -19,7 +19,7 @@ The code is organized as a [Maven](http://maven.apache.org) project, and compris
 (`src/main/resources/tableCreation.sql`).	
 - `User`, a POJO class to store user data (`src/main/java/org/jdbdt/tutorial/User.java`)
 - `UserDAO`,  a data-access object (DAO) class for user data (`src/main/java/org/jdbdt/tutorial/UserDAO.java`).
-- `UserDAOTest`, a class containing JUnit tests for `UserDAO`, making use of JDBDT (`src/test/java/org/jdbdt/tutorial/UserDAOTest.java`).
+- `UserDAOTest`, a class containing [JUnit](http://junit.org) tests for `UserDAO`, making use of JDBDT (`src/test/java/org/jdbdt/tutorial/UserDAOTest.java`).
 This class will be our main point of interest.
 - Subclasses of `UserDAOTest`, that merely configure the database driver to use.
 There are three such classes `DerbyTest`, `H2Test`, `HSQLDBTest` (in `src/test/java/org/jdbdt/tutorial`). As their name indicates, they make use of JDBC drivers for [Apache Derby](http://db.apache.org/derby), [H2](http://h2database.com), and [HSQLDB](http://hsqldb.org). 
