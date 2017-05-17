@@ -97,7 +97,7 @@ The static import (the very first one) relates to methods in the [JDBDT facade](
 
 To setup the database connection and define the initial contents of the database,
 each subclass of `UserDAOTest` defines a `globalSetup`
-method that is executed once before all tests, since it is marked with the `@BeforeClass` JUnit annotation. Each of these methods merely call `UserDAO.globalSetup(dbDriverClass,dbURL)`, parameterizing the JDBC driver class to load and the database URL to use for the actual setup. For instance, `DerbyTest` contains:
+method that is executed once before all tests, since it is marked with the `@BeforeClass` JUnit annotation; the method calls `UserDAO.globalSetup(dbDriverClass,dbURL)` in the parent class, parameterizing the JDBC driver class to load and the database URL to use for the actual setup. For instance, `DerbyTest` contains:
 
 	private static final String 
     	JDBC_DRIVER_CLASS = "org.apache.derby.jdbc.EmbeddedDriver";
@@ -109,9 +109,7 @@ method that is executed once before all tests, since it is marked with the `@Bef
       globalSetup(JDBC_DRIVER_CLASS, DATABASE_URL);
     }
  
-This layout is merely a convenient one for the purpose of 
-testing multiple JDBC drivers in the tutorial code.
-In `UserDAOTest` we have:
+This layout is merely a convenient one for the purpose of testing multiple JDBC drivers in the tutorial code. In the core code at `UserDAOTest` we have:
     
     protected static
     void globalSetup(String jdbcDriverClass, String databaseURL) ... { 
@@ -333,11 +331,9 @@ a prerequisite for using JDBDT save-points, that are discussed [later](Tutorial.
     	theDB.getConnection().setAutoCommit(false);
 
 
-#### Final tear-down <a name="TheTestCode.SetupAndTeardown.Final"></a>
+#### Test teardown <a name="TheTestCode.SetupAndTeardown.Final"></a>
 
-The `globalTeardown` method of `UserDAOTest`, annotated with JUnit's `@AfterClass` annotation, is executed after all tests are done.  
-Its purpose is to leave the test database in a clean state and freeing up
-resources.
+The `globalTeardown` method of `UserDAOTest`, annotated with JUnit's `@AfterClass` annotation, is executed after all tests are done.  Its purpose is to leave the test database in a clean state and freeing up any resources.
 
     @AfterClass 
     public static void globalTeardown() {
@@ -346,15 +342,13 @@ resources.
     }
 
 The `truncate(theTable)` statement [truncates](DBSetup.html#Clean) the `USERS` table.
-Then `teardown(theDB, true)` frees up any internal resources used by the [database handle](DB.html) and closes the database connection.
+Then `teardown(theDB, true)` frees up any internal resources used by the [database handle](DB.html) and closes the underlying database connection.
 
 
 #### Per-test setup and tear-down <a name="TheTestCode.SetupAndTeardown.PerTest"></a>
 
 
-In `UserDAOTest`, the `saveState` and `restoreState` methods are executed respectively before and
-after each test; observe the `@Before` and `@After` JUnit annotations in each method below.
-Their purpose is to make sure each test starts with the same initial database setup
+In `UserDAOTest`, the `saveState` and `restoreState` methods are executed respectively before and after each test, in line with the `@Before` and `@After` JUnit annotations in each method below. Their purpose is to make sure each test starts with the same initial database state
 ([described earlier](Tutorial.html#TheTestCode.SetupAndTeardown.Initial)), 
 making use of [JDBDT save-points](DBSetup.html#SaveAndRestore).
 
@@ -373,8 +367,7 @@ making use of [JDBDT save-points](DBSetup.html#SaveAndRestore).
 The `save(theDB)` call creates a database save-point, beginning
 a new database transaction. In symmetry, the `restore(theDB)` call rolls back any database
 changes made by the current transaction to the JDBDT save-point. 
-Note also that, for portability reasons, only one save-point is maintained per database handle and 
-that there must be exactly one call to `restore` per each call to `save`.
+Note also that, for portability reasons, only one save-point is maintained per database handle and that there must be exactly one call to `restore` per each call to `save`.
 
 This setup relies on disabling auto-commit for the database in `globalSetup` 
 as [described before](Tutorial.html#TheTestCode.DBSetup),
@@ -387,8 +380,7 @@ The tests in `UserDAOTest`, marked with the JUnit `@Test` annotation, validate t
 in `UserDAO`, using [JDBDT assertions](DBAssertions.html).
 These take form as [delta assertions](DBAssertions.html#DeltaAssertions), [state assertions](DBAssertions.html#StateAssertions), or [plain data set assertions](DBAssertions.html#DataSetAssertions).
 
-Before discussing test methods and assertions, we first make note of an auxiliary method in `UserDAOTest` called `toDataSet`, that is used throughout the rest of the code. It provides a shorthand to create  [a (typed) data set](DataSets.html#Creation.Typed) from a single `User` instance. 
-The conversion from `User` instances to row format is defined by the `CONVERSION` function shown.
+Before discussing test methods and assertions, we first make note of an auxiliary method in `UserDAOTest` called `toDataSet`, that is used throughout the rest of the code. It provides a shorthand to create  [a (typed) data set](DataSets.html#Creation.Typed) from a single `User` instance. The conversion from `User` instances to row format is defined by the `CONVERSION` function (defined as a lambda expression):
 
     private static final Conversion<User> CONVERSION = 
       u -> new Object[] { 
