@@ -15,8 +15,8 @@
 	</organization>
 	<licenses>
 		<license>
-			<name>Eclipse Public License 1.0</name>
-			<url>http://www.eclipse.org/legal/epl-v10.html</url>
+			<name>MIT License</name>
+			<url>https://opensource.org/licenses/MIT</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
