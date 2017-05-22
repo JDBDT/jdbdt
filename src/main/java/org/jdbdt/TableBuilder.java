@@ -76,11 +76,7 @@ public final class TableBuilder  {
     if (values == null || values.length == 0) {
       throw new InvalidOperationException("Null or empty array argument.");
     }
-    StringBuilder sb = new StringBuilder(values[0]);
-    for (int i=1; i < values.length; i++) {
-      sb.append(',').append(' ').append(values[i]);
-    }
-    set(p, sb.toString());
+    set(p, Misc.sqlArgumentList(values));
   }
 
   /**

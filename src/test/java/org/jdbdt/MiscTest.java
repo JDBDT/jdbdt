@@ -89,4 +89,24 @@ public class MiscTest {
     when(in.read(any())).thenThrow(new IOException());
     Misc.sha1(in);
   }
+  
+  @Test(expected=NullPointerException.class)
+  public void testSqlArgList1() {
+    Misc.sqlArgumentList((Object[]) null);
+  }
+  
+  @Test
+  public void testSqlArgList2() {
+    assertEquals("", Misc.sqlArgumentList());
+  }
+  
+  @Test
+  public void testSqlArgList3() {
+    assertEquals("1", Misc.sqlArgumentList(1));
+  }
+  
+  @Test
+  public void testSqlArgList4() {
+    assertEquals("1, a2, a3", Misc.sqlArgumentList(new Object[] { 1, "a2", "a3" }));
+  }
 }

@@ -86,4 +86,22 @@ final class Misc {
       throw new InternalErrorException(e);
     }
   }
+
+  /**
+   * Obtain string for SQL argument list from array.
+   * @param <T> Type of data.
+   * @param values Array of values.
+   * @return CSV string
+   */
+  @SafeVarargs
+  static <T> String sqlArgumentList(T... values) {
+    StringBuilder sb = new StringBuilder();
+    if (values.length != 0) {
+      sb.append(values[0]);
+      for (int i=1; i < values.length; i++) {
+        sb.append(',').append(' ').append(values[i]);
+      }
+    }
+    return sb.toString();
+  }
 }
