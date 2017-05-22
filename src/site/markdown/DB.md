@@ -104,7 +104,7 @@ No problems were detected for [all other JDBC drivers tested in the JDBDT build]
 
 ### Batch updates
 
-The `BATCH_UPDATES` option indicates that database insertions should use the JDBC batch update mechanism , unless the JDBC driver in does not support this feature 
+The `BATCH_UPDATES` option indicates that database insertions should use the JDBC batch update mechanism, unless the JDBC driver in does not support this feature 
 (in this case the option will have no effect). The option is enabled by default.
 
 ## Summary of methods
