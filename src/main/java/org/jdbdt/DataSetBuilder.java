@@ -146,8 +146,7 @@ public final class DataSetBuilder {
    * @throws InvalidOperationException for an invalid row count, or if
    *     there are columns with no associated fillers.
    */
-  public DataSetBuilder generate(int count)
-  throws ColumnFillerException, InvalidOperationException {
+  public DataSetBuilder generate(int count) {
     ensureValid(count, count > 0);
     if (fillerCount < fillers.length) {
       DataSource source = data.getSource();
@@ -954,8 +953,7 @@ public final class DataSetBuilder {
    * @param o Object reference.
    * @throws InvalidOperationException if <code>o == null</code>.
    */
-  private static void ensureArgNotNull(Object o) 
-      throws InvalidOperationException {
+  private static void ensureArgNotNull(Object o)  {
     if (o == null) {
       throw new InvalidOperationException("Null argument.");
     }
@@ -966,8 +964,7 @@ public final class DataSetBuilder {
    * @param array Array reference.
    * @throws InvalidOperationException if the array is <code>null</code> or empty.
    */
-  private static void ensureValidArray(Object[] array)
-      throws InvalidOperationException {
+  private static void ensureValidArray(Object[] array) {
     if (array == null) {
       throw new InvalidOperationException("Null array argument.");
     }
@@ -982,8 +979,7 @@ public final class DataSetBuilder {
    * @param list Array reference.
    * @throws InvalidOperationException if the list is <code>null</code> or empty.
    */
-  private static void ensureValidList(List<?> list) 
-      throws InvalidOperationException {
+  private static void ensureValidList(List<?> list) {
     if (list == null) {
       throw new InvalidOperationException("Null list argument.");
     }
@@ -997,8 +993,7 @@ public final class DataSetBuilder {
    * @param condition Boolean value for condition.
    * @throws InvalidOperationException if <code>condition == false</code>.
    */
-  private static void ensureValid(Object o, boolean condition) 
-      throws InvalidOperationException {
+  private static void ensureValid(Object o, boolean condition) {
     if (! condition) {
       throw new InvalidOperationException("Invalid value for parameter: " + o);
     }
