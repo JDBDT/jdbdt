@@ -62,7 +62,7 @@ final class Row {
    * 
    * 
    * @return Hash code for this row obtained by calling 
-   *        {@link Arrays#hashCode()} over {@link #data()}.
+   *        {@link Arrays#deepHashCode(Object[])} over {@link #data()}.
    *        The returned value is calculated only once and cached for subsequent.
    *        
    */
@@ -77,7 +77,7 @@ final class Row {
   
   /**
    * Get string representation for this row.
-   * @return String obtained by calling {@link Arrays#toString()} over {@link #data()}.
+   * @return String obtained by calling {@link Arrays#deepToString(Object[])} over {@link #data()}.
    */
   @Override
   public String toString() {
