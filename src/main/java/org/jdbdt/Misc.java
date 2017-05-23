@@ -45,7 +45,8 @@ final class Misc {
       throw new InvalidOperationException("Hex-string has odd length!");
     }
     byte[] data = new byte[str.length() / 2];
-    for (int dpos = 0, spos=0; dpos < data.length; dpos++) {
+    int spos = 0;
+    for (int dpos = 0; dpos < data.length; dpos++) {
       int d1 = Character.digit(str.charAt(spos++), 16);
       int d2 = Character.digit(str.charAt(spos++), 16);
       if (d1 < 0 || d2 < 0) {
