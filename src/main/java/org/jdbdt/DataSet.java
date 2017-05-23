@@ -198,8 +198,7 @@ public class DataSet {
    * @throws InvalidOperationException if the given data
    * set is null or if the specified column range is invalid.
    */
-  public static DataSet subset(DataSet data, int startIndex, int count) 
-  throws InvalidOperationException {
+  public static DataSet subset(DataSet data, int startIndex, int count) {
     if (data == null) {
       throw new InvalidOperationException("Null data set");
     }
@@ -224,8 +223,7 @@ public class DataSet {
    * @throws InvalidOperationException if the given data
    * set is null or if the specified column index is invalid.
    */
-  public static DataSet singleton(DataSet data, int index)
-  throws InvalidOperationException {
+  public static DataSet singleton(DataSet data, int index) {
     return subset(data, index, 1);
   }
   
@@ -238,8 +236,7 @@ public class DataSet {
    * @throws InvalidOperationException if the given data
    * set is null or if the value of <code>n</code> is invalid.
    */
-  public static DataSet first(DataSet data, int count) 
-  throws InvalidOperationException {
+  public static DataSet first(DataSet data, int count) {
     return subset(data, 0, count);
   }
   
@@ -252,8 +249,7 @@ public class DataSet {
    * @throws InvalidOperationException if the given data
    * set is null or if the value of <code>n</code> is invalid.
    */
-  public static DataSet last(DataSet data, int n)
-  throws InvalidOperationException {
+  public static DataSet last(DataSet data, int n) {
     return subset(data, data.size() - n, n);
   }
   
@@ -264,8 +260,7 @@ public class DataSet {
    *        rows in the source data set.
    * @throws InvalidOperationException if given data set is null.
    */
-  public static DataSet copyOf(DataSet data) 
-  throws InvalidOperationException {
+  public static DataSet copyOf(DataSet data) {
     if (data == null) {
       throw new InvalidOperationException("Null data set");
     }
@@ -285,7 +280,7 @@ public class DataSet {
    * same for all data sets.
    */
   @SafeVarargs
-  public static DataSet join(DataSet... dataSets) throws InvalidOperationException {
+  public static DataSet join(DataSet... dataSets) {
     if (dataSets == null || dataSets.length == 0) {
       throw new InvalidOperationException("No source data sets given for joining.");
     }
