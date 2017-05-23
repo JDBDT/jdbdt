@@ -711,7 +711,7 @@ public final class JDBDT {
    * @param out Output stream.
    */
   public static void dump(DataSet data, PrintStream out) {
-    try (Log log = Log.create(out);) {
+    try (Log log = Log.create(out)) {
       log.write(CallInfo.create(), data);
     }
   }
@@ -727,7 +727,7 @@ public final class JDBDT {
    * @param outputFile Output file.
    */
   public static void dump(DataSet data, File outputFile) {
-    try (Log log = Log.create(outputFile);) {
+    try (Log log = Log.create(outputFile)) {
       log.write(CallInfo.create(), data);
     } 
   }
@@ -739,7 +739,7 @@ public final class JDBDT {
    * @param out Output stream.
    */
   public static void dump(DataSource source, PrintStream out) {
-    try (Log log = Log.create(out);) {
+    try (Log log = Log.create(out)) {
       log.write(CallInfo.create(), executeQuery(source));
     }
   }
@@ -755,7 +755,7 @@ public final class JDBDT {
    * @param outputFile Output file.
    */
   public static void dump(DataSource source, File outputFile) {
-    try (Log log = Log.create(outputFile);) {
+    try (Log log = Log.create(outputFile)) {
       log.write(CallInfo.create(), executeQuery(source));
     } 
   }
