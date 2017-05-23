@@ -257,8 +257,7 @@ public final class DB {
    * @return Wrapper for prepared statement.
    * @throws DBExecutionException If there is a error preparing the statement.
    */
-  WrappedStatement 
-  compile(String sql) throws DBExecutionException {   
+  WrappedStatement compile(String sql) {   
     return access( () -> {
       if (! isEnabled(Option.REUSE_STATEMENTS)) {
         return new WrappedStatement(connection.prepareStatement(sql), false);
@@ -391,7 +390,7 @@ public final class DB {
    * @return DB access result.
    * @throws DBExecutionException If a database error occurs.
    */
-  <T> T access(Access<T> op) throws DBExecutionException {
+  <T> T access(Access<T> op) {
     try {
       return op.execute();
     }
