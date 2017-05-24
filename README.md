@@ -4,7 +4,6 @@
 [![GitHub release](https://img.shields.io/github/release/edrdo/jdbdt.svg)](https://github.com/edrdo/jdbdt/releases)
 [![Build status](https://api.travis-ci.org/edrdo/jdbdt.png?branch=master)](https://travis-ci.org/edrdo/jdbdt)
 
-
 JDBDT (Java Database Delta Testing) is a library for database test automation.
 
 Visit [http://jdbdt.org](http://jdbdt.org) for reference.
@@ -12,9 +11,9 @@ Visit [http://jdbdt.org](http://jdbdt.org) for reference.
 # License
 
 JDBDT is open-source software under the terms of the 
-[MIT license](https://opensource.org/licenses/MIT).
+[MIT License](https://opensource.org/licenses/MIT).
 
-Versions prior to 0.12 used the [Eclipse Public License v 1.0](http://www.eclipse.org/legal/epl-v10.html).
+Versions prior to 0.12 were released under the terms of the [Eclipse Public License v 1.0](http://www.eclipse.org/legal/epl-v10.html).
 
 Copyright [Eduardo R. B. Marques](http://www.dcc.fc.up.pt/~edrdo), 2016-2017
 
