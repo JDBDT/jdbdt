@@ -18,7 +18,7 @@ public final class Query extends DataSource {
    * @param sql SQL for query
    * @param args Optional arguments for query.
    */
-  Query(DB db, String sql, Object... args) {
+  public Query(DB db, String sql, Object... args) {
     super(db, sql, args);
   }
 }

@@ -15,13 +15,17 @@ public final class Table extends DataSource {
   /**
    * Constructor.
    * @param db Database instance.
-   * @param tableName Table name
-   * @param sql SQL for table query.
+   * @param name Table name
+   * @param columns Database columns.
    * @see JDBDT#table(String)
+   * @see TableBuilder
    */
-  Table(DB db, String tableName, String sql) {
-    super(db, sql, new Object[0]);
-    this.tableName = tableName;
+  public Table(DB db, String name, String[] columns) {
+    super(db, 
+          String.format("SELECT %s FROM %s", 
+                         Misc.sqlArgumentList(columns), name));
+
+    tableName = name;
   }
 
   /**
@@ -30,5 +34,5 @@ public final class Table extends DataSource {
    */
   public String getName() {
     return tableName;
-  }  
+  }
 }

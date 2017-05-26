@@ -60,7 +60,7 @@ public abstract class DataSource {
    * @param sql SQL code for query.
    * @param queryArgs Optional arguments for database query.
    */
-  DataSource(DB db, String sql, Object... queryArgs) {
+  protected DataSource(DB db, String sql, Object... queryArgs) {
     this.db = db;
     this.querySQL = sql;
     this.queryArgs = queryArgs;

@@ -12,25 +12,26 @@ package org.jdbdt;
 public final class TableBuilder  {
 
   /**
-   * Parameters that may be set for a builder.
+   * Constant for selecting all columns.
    */
-  private enum Param {
-    /** Name. */
-    NAME,
-    /** Columns. */
-    COLUMNS;
-  }
+  private static final String[] ALL_COLUMNS = { "*" };
   
   /**
-   * Parameter values.
+   * Name.
    */
-  private final String[] paramValues = new String[Param.values().length];
+  private String tableName;
+  
+  /**
+   * Columns.
+   */
+  private String[] tableColumns;
 
   /**
    * Constructs a new table builder.
    */
   public TableBuilder() {
-    
+    tableName = null;
+    tableColumns = null;
   }
   
   /**
@@ -38,11 +39,14 @@ public final class TableBuilder  {
    * @param name Name for the table.
    * @return The builder instance for chained calls.
    */
-  public final TableBuilder name(String name) {
-    set(Param.NAME, name);
+  public TableBuilder name(String name) {
+    if (tableName != null) {
+      throw new InvalidOperationException("Table name already defined.");
+    }
+    tableName = name;
     return this;
   }
-
+  
   /**
    * Set columns. 
    * @param columns Columns for the table.
@@ -50,55 +54,34 @@ public final class TableBuilder  {
    */
   @SafeVarargs
   public final TableBuilder columns(String... columns) {
-    set(Param.COLUMNS, columns);
+    if (columns == null || columns.length == 0) {
+      throw new InvalidOperationException("Column names array is null or empty");
+    }
+    
+    if (tableColumns != null) {
+      throw new InvalidOperationException("Table name already defined.");
+    }
+    tableColumns = columns.clone();
     return this;
   }
   
-  @SuppressWarnings("javadoc")
-  private String get(Param p) {
-    return paramValues[p.ordinal()];
-  }
-  
-  @SuppressWarnings("javadoc")
-  private void set(Param p, String value) {
-    final int idx = p.ordinal();
-    if (paramValues[idx] != null) {
-      throw new InvalidOperationException(p + " already defined.");
-    }
-    if (value == null) {
-      throw new InvalidOperationException("Null value for parameter " + p);
-    }
-    paramValues[idx] = value;
-  }
-  
-  @SuppressWarnings("javadoc")
-  private void set(Param p, String... values) {
-    if (values == null || values.length == 0) {
-      throw new InvalidOperationException("Null or empty array argument.");
-    }
-    set(p, Misc.sqlArgumentList(values));
-  }
-
   /**
    * Build the table object.
    * @param db Database.
    * @return A new {@link Table} instance.
    */
   public Table build(DB db) {
-    String name = get(Param.NAME);
-    if (name == null) {
+   
+    if (tableName == null) {
       throw new InvalidOperationException("Table name has not been set!");
     }
-    
-    String cols = get(Param.COLUMNS);
-    if (cols == null) {
-      throw new InvalidOperationException("Table columns have not been set!");
+     
+    if (tableColumns == null) {
+      tableColumns = ALL_COLUMNS;
     }
     
-    return new Table
-           (db,
-            name, 
-            String.format("SELECT %s FROM %s", cols, name));
+    return new Table(db, tableName, tableColumns); 
+           
   }
 
 }
