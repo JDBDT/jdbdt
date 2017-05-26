@@ -1,12 +1,13 @@
 
 # Assertions
 
-There are three kinds of JDBDT assertions:
+JDBDT assertions allow you to verify the contents of a database:
 
-1. **Delta (&delta;) assertions** verify database state against user-specified
-incremental changes (a **database delta**).
-2. More traditional **state assertions** verify that the database contents match a given data set. 
-3. Finally, **data set assertions** let you verify if two data sets are equivalent.
+* **Delta (&delta;) assertions** verify database state against user-specified
+incremental changes, i.e., a **database delta**.
+* More traditional **state assertions** verify that the database contents match a given data set. 
+* You may also perform complementary verifications, e.g., to compare data sets sets or 
+to check for the existence of database tables. 
 
 ## Delta assertions <a name="DeltaAssertions"></a>
 
@@ -167,8 +168,10 @@ it verifies that the given data source has no defined rows.
 	               data(t).row(999, "john", "John Doe", "justDoeIt", Date.valueOf("2016-01-01"))); 
 	letTheSUT_insertOneUser( ... ); 
 	assertState(expected);
-	
-## Data set assertions <a name="DataSetAssertions"></a>	
+
+## Other assertions
+
+### Data set assertions <a name="DataSetAssertions"></a>	
 
 A data set assertion verifies that two given data sets are equivalent.
 This can be done using the `assertEquals` method.
@@ -193,3 +196,15 @@ This can be done using the `assertEquals` method.
 
 **Note for JUnit users**: beware not to confuse `assertEquals` with [JUnit](http://junit.org) methods that go by the same name. JUnit's `assertEquals` will not work properly, since `DataSet` (deliberately) does *not* override `Object.equals`. All will go well if you use [a static import for all methods in the JDBDT facade](Facade.html#StaticImport).
 
+## Table existence assertions
+
+The `assertTableExists` assertion methods verifies if a given table exists in the database. Symmetrically, `assertTableDoesNotExist` verifies that a table does not
+exist (e.g., has been dropped by the SUT).
+
+*Illustration*
+
+    DB db = ...;
+    letSUTDoSomething();
+    assertTableExists(db, "Users")
+    assertTableDoesNotExist(db, "TempUsers")
+ 
