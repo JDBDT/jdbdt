@@ -66,7 +66,7 @@ Database data may be cleaned up using one of the following methods for a `Table`
 2. `deleteAllWhere(t, whereClause, [,args])` clears the contents of `t` using a `DELETE` 
 statement with the specified `WHERE` clause  (`whereClause`) and optional `WHERE` clause arguments `args`.
 3. `truncate(t)` clears `t` using a `TRUNCATE TABLE` statement.
-4. `drop(t)` or `drop(db, tableName)` drops the entire table.
+4. `drop(t)` or `drop(db, tableName)` drops a table.
 
 *Note*: `truncate` may be faster than `deleteAll`, but the associated TRUNCATE TABLE statement 
 may not respect integrity constraints and has variable semantics 
