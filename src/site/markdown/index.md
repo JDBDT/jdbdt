@@ -22,6 +22,12 @@ without dependencies from third-party libraries.
 For details,  browse the reference documentation 
 available in this site, along with the [Javadoc](apidocs/index.html?org/jdbdt/JDBDT.html) for the JDBDT API and the [JDBDT tutorial](Tutorial.html).
 
+## Contribute
+
+The code is hosted at [GitHub](https://github.com/edrdo/jdbdt).
+Please use the [issue tracker](https://github.com/edrdo/jdbdt/issues)
+to report bugs or propose new features.
+
 ## Installation 
 
 **Prerequisite:** JDBDT requires Java 8, it will not work 
@@ -30,18 +36,24 @@ with earlier Java versions.
 **Maven Central**
 
 JDBDT is available from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cjdbdt).
-Maven users can add the following dependency to a POM file:
 
+*Maven setup*
 
 	<dependency>
 		<groupId>org.jdbdt</groupId>
         <artifactId>jdbdt</artifactId>
         <version>0.12-SNAPSHOT</version>
     </dependency>
+
+*Gradle setup*
+
+     compile 'org.jdbdt:jdbdt:0.12-SNAPSHOT'
+
+Setup instructions for other build systems are available [here](dependency-info.html) .
     
 **GitHub**
 
-JDBDT releases are also available
+JDBDT release artifacts are also available
 at [GitHub](https://github.com/edrdo/jdbdt/releases).
 
 **Snapshot builds**
@@ -52,11 +64,3 @@ the following commands:
 	git clone git@github.com:edrdo/jdbdt.git
 	cd jdbdt
 	mvn install 
-
-## Contribute
-
-The code is hosted at [GitHub](https://github.com/edrdo/jdbdt).
-Please use the [issue tracker](https://github.com/edrdo/jdbdt/issues)
-to report bugs or discuss feature requests.
-
-	
