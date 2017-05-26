@@ -40,6 +40,17 @@ Commands:
 
 # Change Log
 
+## 0.12
+
+Slight API adjustments:
+* [#9 - API cleanup](https://github.com/edrdo/jdbdt/issues/9)
+* [#15 - Let assertTableExists/DoesNotExist take the table name as argument](https://github.com/edrdo/jdbdt/issues/15)
+* [#16 - Variant of drop operation supplying database handle and table name](https://github.com/edrdo/jdbdt/issues/16)
+
+Maintenance:
+* [#13 - Missing reference documentation in site for table dropping / table existence assertions](https://github.com/edrdo/jdbdt/issues/13)
+* [#14 - Start using MIT license from 0.12 onwards](https://github.com/edrdo/jdbdt/issues/14)
+
 ## 0.11
 
 Features:
