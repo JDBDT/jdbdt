@@ -42,12 +42,12 @@ JDBDT is available from [Maven Central](http://search.maven.org/#search%7Cga%7C1
 	<dependency>
 		<groupId>org.jdbdt</groupId>
         <artifactId>jdbdt</artifactId>
-        <version>0.12-SNAPSHOT</version>
+        <version>0.13-SNAPSHOT</version>
     </dependency>
 
 *Gradle setup*
 
-     compile 'org.jdbdt:jdbdt:0.12-SNAPSHOT'
+     compile 'org.jdbdt:jdbdt:0.13-SNAPSHOT'
 
 Setup instructions for other build systems are available [here](dependency-info.html) .
     
