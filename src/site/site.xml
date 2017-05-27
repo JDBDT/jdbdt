@@ -16,7 +16,7 @@
 
     <menu name="JDBDT">
       <item name="Home" href="index.html"/>
-      <item name="License" href="License.html"/>
+      <item name="License" href="MIT_License.html"/>
     </menu>
     <menu name="Reference">
       <item name="API facade" href="Facade.html"/>
