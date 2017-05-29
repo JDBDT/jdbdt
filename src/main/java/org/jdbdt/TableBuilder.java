@@ -57,7 +57,6 @@ public final class TableBuilder  {
     if (columns == null || columns.length == 0) {
       throw new InvalidOperationException("Columns array is null or empty.");
     }
-    
     if (tableColumns != null) {
       throw new InvalidOperationException("The table columns are already defined.");
     }
@@ -71,17 +70,13 @@ public final class TableBuilder  {
    * @return A new {@link Table} instance.
    */
   public Table build(DB db) {
-   
     if (tableName == null) {
       throw new InvalidOperationException("The table name has not been set.");
     }
-     
     if (tableColumns == null) {
       tableColumns = ALL_COLUMNS;
     }
-    
     return new Table(db, tableName, tableColumns); 
-           
   }
 
 }
