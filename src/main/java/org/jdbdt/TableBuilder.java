@@ -41,7 +41,7 @@ public final class TableBuilder  {
    */
   public TableBuilder name(String name) {
     if (tableName != null) {
-      throw new InvalidOperationException("Table name already defined.");
+      throw new InvalidOperationException("The table name is already defined.");
     }
     tableName = name;
     return this;
@@ -55,11 +55,11 @@ public final class TableBuilder  {
   @SafeVarargs
   public final TableBuilder columns(String... columns) {
     if (columns == null || columns.length == 0) {
-      throw new InvalidOperationException("Column names array is null or empty");
+      throw new InvalidOperationException("Columns array is null or empty.");
     }
     
     if (tableColumns != null) {
-      throw new InvalidOperationException("Table name already defined.");
+      throw new InvalidOperationException("The table columns are already defined.");
     }
     tableColumns = columns.clone();
     return this;
@@ -73,7 +73,7 @@ public final class TableBuilder  {
   public Table build(DB db) {
    
     if (tableName == null) {
-      throw new InvalidOperationException("Table name has not been set!");
+      throw new InvalidOperationException("The table name has not been set.");
     }
      
     if (tableColumns == null) {
