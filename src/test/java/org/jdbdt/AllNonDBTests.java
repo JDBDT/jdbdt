@@ -11,6 +11,7 @@ import org.junit.runners.Suite.SuiteClasses;
   CallInfoTest.class,
   DeltaTest.class,
   MiscTest.class,
+  RowTest.class,
   WrappedStatementTest.class,
   DataSetBuilderSequenceFillersTest.class,
   DataSetBuilderRandomFillersTest.class
