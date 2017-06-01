@@ -19,14 +19,17 @@ matrix:
       jdk: oraclejdk8
       env: 
         - GOALS="clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar site-deploy"
+        - MAVEN_OPTS="-Xmx4g -Xss512m"
     - os: osx
       osx_image: xcode8
       env: 
         - GOALS="clean package site-deploy"
+        - MAVEN_OPTS="-Xmx4g -Xss512m"
     - dist: trusty
       group: edge
       jdk: oraclejdk9
       env: 
         - GOALS="clean package site-deploy"
+        - MAVEN_OPTS="-Xmx4g -Xss512m"
 script: 
    - mvn -Djdbdt.site.path=file:///$HOME/jdbdt.org $GOALS
