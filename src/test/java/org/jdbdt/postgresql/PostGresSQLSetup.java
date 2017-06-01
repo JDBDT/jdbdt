@@ -9,11 +9,11 @@ import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres;
 import ru.yandex.qatools.embed.postgresql.distribution.Version;
 
 @SuppressWarnings("javadoc")
-public interface PostgresHandler {
+public interface PostGresSQLSetup {
   String start();
   void stop();
 
-  PostgresHandler AppVeyorHandler = new PostgresHandler() {
+  PostGresSQLSetup AppVeyorHandler = new PostGresSQLSetup() {
     @Override
     public String start() {
       return "jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Password12!";
@@ -22,7 +22,7 @@ public interface PostgresHandler {
     public void stop() { }
 
   };
-  PostgresHandler EmbeddedHandler = new PostgresHandler() {
+  PostGresSQLSetup EmbeddedHandler = new PostGresSQLSetup() {
     EmbeddedPostgres postgres;
 
     @Override
@@ -42,8 +42,8 @@ public interface PostgresHandler {
     }
   };
 
-  static PostgresHandler get() {
-    PostgresHandler h;
+  static PostGresSQLSetup get() {
+    PostGresSQLSetup h;
     switch (BuildEnvironment.get()) {
       case AppVeyor:
         h = AppVeyorHandler;

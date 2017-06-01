@@ -13,11 +13,11 @@ public class PostgreSQLSuite extends DBEngineTestSuite {
     DBConfig.getConfig()
     .reset()
     .setDriver("org.postgresql.Driver")
-    .setURL(PostgresHandler.get().start());
+    .setURL(PostGresSQLSetup.get().start());
   }
 
   @AfterClass
   public static void teardown() {
-    PostgresHandler.get().stop();
+    PostGresSQLSetup.get().stop();
   }
 }
