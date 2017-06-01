@@ -44,7 +44,7 @@ Commands:
 
 ## 0.13-SNAPSHOT (current snapshot)
 
-Continous integration:
+Continuous integration:
 
 * [#20 - Travis CI: also Java 9 builds ](https://github.com/edrdo/jdbdt/issues/20)
 * [#19 - Travis CI: also MacOS builds](https://github.com/edrdo/jdbdt/issues/19)
