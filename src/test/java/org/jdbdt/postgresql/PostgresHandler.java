@@ -24,9 +24,7 @@ public enum PostgresHandler {
       postgres = new EmbeddedPostgres(Version.V9_6_2);
       Path cachePath = FileSystems.getDefault().getPath(System.getProperty("user.home") + "/.embedpostgresql/");
       try {
-        String url = postgres.start(EmbeddedPostgres.cachedRuntimeConfig(cachePath));
-        System.out.println(url);
-        return url;
+        return postgres.start(EmbeddedPostgres.cachedRuntimeConfig(cachePath));
       } catch (Exception e) {
         throw new InternalError(e);
       }
