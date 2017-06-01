@@ -48,7 +48,7 @@ Continous integration:
 
 * [#20 - Travis CI: also Java 9 builds ](https://github.com/edrdo/jdbdt/issues/20)
 * [#19 - Travis CI: also MacOS builds](https://github.com/edrdo/jdbdt/issues/19)
-:* [#18 - Now using AppVeyor for Windows builds](https://github.com/edrdo/jdbdt/issues/18)
+* [#18 - Now using AppVeyor for Windows builds](https://github.com/edrdo/jdbdt/issues/18)
 
 ## 0.12
 
