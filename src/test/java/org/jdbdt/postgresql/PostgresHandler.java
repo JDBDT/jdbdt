@@ -3,24 +3,30 @@ package org.jdbdt.postgresql;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
+import org.jdbdt.BuildEnvironment;
+
 import ru.yandex.qatools.embed.postgresql.EmbeddedPostgres;
 import ru.yandex.qatools.embed.postgresql.distribution.Version;
 
 @SuppressWarnings("javadoc")
-public enum PostgresHandler {
-  AppVeyor {
+public interface PostgresHandler {
+  String start();
+  void stop();
+
+  PostgresHandler AppVeyorHandler = new PostgresHandler() {
     @Override
-    String start() {
+    public String start() {
       return "jdbc:postgresql://localhost:5432/postgres?user=postgres&password=Password12!";
     }
     @Override
-    void stop() { }
-  },
-  Embedded {
+    public void stop() { }
+
+  };
+  PostgresHandler EmbeddedHandler = new PostgresHandler() {
     EmbeddedPostgres postgres;
 
     @Override
-    String start() {
+    public String start() {
       postgres = new EmbeddedPostgres(Version.V9_6_2);
       Path cachePath = FileSystems.getDefault().getPath(System.getProperty("user.home") + "/.embedpostgresql/");
       try {
@@ -31,26 +37,21 @@ public enum PostgresHandler {
     }
 
     @Override
-    void stop() {
+    public void stop() {
       postgres.stop();
     }
-
   };
 
-  static PostgresHandler getInstance() {
-    String buildEnv = System.getenv("BUILD_ENVIRONMENT");
-    PostgresHandler handler = Embedded; // by default
-    if (buildEnv != null) {
-      try {
-        handler = Enum.valueOf(PostgresHandler.class, buildEnv);
-      } 
-      catch (IllegalArgumentException e) { 
-        // stick with default
-      }
+  static PostgresHandler get() {
+    PostgresHandler h;
+    switch (BuildEnvironment.get()) {
+      case AppVeyor:
+        h = AppVeyorHandler;
+        break;
+      default:
+        h = EmbeddedHandler;
     }
-    return handler;
+    return h;
   }
 
-  abstract String start();
-  abstract void stop();
 }
