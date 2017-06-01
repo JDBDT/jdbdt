@@ -17,12 +17,16 @@ matrix:
   include:
     - os: linux
       jdk: oraclejdk8
-      env: GOALS="clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar site-deploy"
+      env: 
+        - GOALS="clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar site-deploy"
     - os: osx
       osx_image: xcode8
-      env: GOALS="clean package site-deploy"
+      env: 
+        - GOALS="clean package site-deploy"
     - dist: trusty
       group: edge
       jdk: oraclejdk9
+      env: 
+        - GOALS="clean package site-deploy"
 script: 
    - mvn -Djdbdt.site.path=file:///$HOME/jdbdt.org $GOALS
