@@ -21,5 +21,8 @@ matrix:
     - os: osx
       osx_image: xcode8
       env: GOALS="clean package site-deploy"
+    - dist: trusty
+      group: edge
+      jdk: oraclejdk9
 script: 
    - mvn -Djdbdt.site.path=file:///$HOME/jdbdt.org $GOALS
