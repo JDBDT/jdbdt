@@ -18,7 +18,7 @@ public interface MySQLDBSetup {
 
     @Override
     public String start() {
-      return "jdbc:mysql://localhost:3306/jdbdt?user=root&password=Password12!";
+      return "jdbc:mysql://localhost:3306/jdbdt?user=root&password=Password12!&useSSL=false&createDatabaseIfNotExist=true";
     }
     @Override
     public void stop() { }
@@ -27,7 +27,7 @@ public interface MySQLDBSetup {
 
   MySQLDBSetup EmbeddedHandler = new MySQLDBSetup() {
     MysqldResource engine;
-    static final String   DB_PATH = "mysql";
+    static final String DB_PATH = "mysql";
     static final int    DB_PORT = 9999;
     static final String DB_USER = "jdbdt";
     static final String DB_PASS = "jdbdt";
