@@ -25,6 +25,11 @@ public final class TableBuilder  {
    * Columns.
    */
   private String[] tableColumns;
+  
+  /**
+   * Columns.
+   */
+  private String[] keyColumns;
 
   /**
    * Constructs a new table builder.
@@ -65,6 +70,29 @@ public final class TableBuilder  {
   }
   
   /**
+   * Set key columns.
+   * 
+   * <p>
+   * Values for the key columns are used to uniquely identify database rows, e.g., they 
+   * can be set to the columns that define the table's primary key. The key
+   * columns are used by key-based operations like {@link JDBDT#delete(DataSet)}
+   * and {@link JDBDT#update(DataSet)}.
+   * 
+   * @param columns Columns for the table.
+   * @return The builder instance for chained calls.
+   */
+  @SafeVarargs
+  public final TableBuilder key(String... columns) {
+    if (columns == null || columns.length == 0) {
+      throw new InvalidOperationException("Columns array is null or empty.");
+    }
+    if (keyColumns != null) {
+      throw new InvalidOperationException("The key columns are already defined.");
+    }
+    keyColumns = columns.clone();
+    return this;
+  }
+  /**
    * Build the table object.
    * @param db Database.
    * @return A new {@link Table} instance.
@@ -76,7 +104,7 @@ public final class TableBuilder  {
     if (tableColumns == null) {
       tableColumns = ALL_COLUMNS;
     }
-    return new Table(db, tableName, tableColumns); 
+    return new Table(db, tableName, tableColumns, keyColumns); 
   }
 
 }

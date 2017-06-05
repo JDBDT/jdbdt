@@ -513,6 +513,29 @@ public final class JDBDT {
   public static void insert(DataSet data) {
     DBSetup.insert(CallInfo.create(), data);
   }
+  
+  
+  /**
+   * Update a data set onto database.
+   * 
+   * @param data Data set for insertion.  
+   */
+  public static void update(DataSet data) {
+    DBSetup.update(CallInfo.create(), data);
+  }
+  
+  
+  /**
+   * Delete data set onto database.
+   * 
+   * 
+   * 
+   * @param data Data set for insertion.  
+   */
+  public static void delete(DataSet data) {
+    DBSetup.delete(CallInfo.create(), data);
+  }
+
 
   /**
    * Populate database with given data set.

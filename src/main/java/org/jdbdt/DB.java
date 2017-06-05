@@ -441,6 +441,28 @@ public final class DB {
   }
 
   /**
+   * Log data set update.
+   * @param callInfo Call info.
+   * @param data Data set.
+   */
+  void logUpdate(CallInfo callInfo, DataSet data) {
+    if (isEnabled(Option.LOG_SETUP)) {
+      log.write(callInfo, data);
+    }
+  }
+  
+  /**
+   * Log data set delete.
+   * @param callInfo Call info.
+   * @param data Data set.
+   */
+  void logDelete(CallInfo callInfo, DataSet data) {
+    if (isEnabled(Option.LOG_SETUP)) {
+      log.write(callInfo, data);
+    }
+  }
+  
+  /**
    * Log delta assertion.
    * @param callInfo Call info.
    * @param da Delta assertion.
@@ -515,6 +537,8 @@ public final class DB {
       // Do nothing.
     }
   }
+
+
 
   
 

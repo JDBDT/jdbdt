@@ -2,6 +2,7 @@ package org.jdbdt;
 
 import static org.jdbdt.JDBDT.*;
 
+import java.sql.Date;
 import java.sql.SQLException;
 
 import static org.junit.Assert.*;
@@ -21,7 +22,10 @@ public class DBSetupTest extends DBTestCase {
 
   @BeforeClass
   public static void globalSetup() {
-    table = table(UserDAO.TABLE_NAME).columns(UserDAO.COLUMNS).build(getDB());
+    table = table(UserDAO.TABLE_NAME)
+           .columns(UserDAO.COLUMNS)
+           .key(UserDAO.PRIMARY_KEY)
+           .build(getDB());
   }
   
   @Before
@@ -132,6 +136,56 @@ public class DBSetupTest extends DBTestCase {
   public void testPopulateBulkWithoutBatchUpdates() throws SQLException {
     getDB().disable(DB.Option.BATCH_UPDATES);
     doPopulate(createBulkData());
+  }
+  
+  private void testDataSetUpdate() throws SQLException {
+    User[] users = INITIAL_DATA.clone();    
+    for (int i = 0; i < users.length; i++) {
+      User u = users[i];
+      u.setPassword(u.getPassword() + "#" + i);
+      u.setName(u.getName() + "#" + i);
+      u.setCreated(Date.valueOf(String.format("2017-12-%02d", i+1)));
+    }
+    DataSet data = data(table, getConversion()).rows(INITIAL_DATA);
+    update(data);
+    for (User u : users) {
+      assertEquals(u, getDAO().query(u.getLogin()));
+    }
+  }
+  
+  @Test
+  public void testDSUpdateWithoutBatchUpdates() throws SQLException {
+    getDB().disable(DB.Option.BATCH_UPDATES);
+    testDataSetUpdate();
+  }
+  
+  @Test
+  public void testDSUpdateWithBatchUpdates() throws SQLException {
+    testDataSetUpdate();
+  }
+  
+  private void testDataSetDelete() throws SQLException {
+    User[] users = new User[INITIAL_DATA.length - 2];  
+    for (int i = 0; i < users.length; i++) {
+      users[i] = INITIAL_DATA[i+1].clone();
+    }
+    DataSet data = data(table, getConversion()).rows(users);
+    delete(data);
+    assertEquals(2, getDAO().count());
+    assertEquals(INITIAL_DATA[0], getDAO().query(INITIAL_DATA[0].getLogin()));
+    assertEquals(INITIAL_DATA[INITIAL_DATA.length-1], 
+                getDAO().query(INITIAL_DATA[INITIAL_DATA.length-1].getLogin()));
+  }
+  
+  @Test
+  public void testDSDeleteWithoutBatchUpdates() throws SQLException {
+    getDB().disable(DB.Option.BATCH_UPDATES);
+    testDataSetDelete();
+  }
+  
+  @Test
+  public void testDSDeleteWithBatchUpdates() throws SQLException {
+    testDataSetDelete();
   }
   
   @Test @Category(TestCategories.Truncate.class)

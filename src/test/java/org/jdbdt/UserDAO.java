@@ -14,6 +14,8 @@ class UserDAO {
       "login", "name", "password", "created" 
   };
 
+  public static final String PRIMARY_KEY = "LOGIN";
+
   private final Connection connection;
 
   public UserDAO(Connection c) throws SQLException {
