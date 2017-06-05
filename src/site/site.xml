@@ -39,7 +39,7 @@
       <item name="Issue tracker" href="https://github.com/edrdo/jdbdt/issues/"/>
       <item name="Travis CI" href="https://travis-ci.org/edrdo/jdbdt/"/>
       <item name="AppVeyor CI" href="https://ci.appveyor.com/project/edrdo/jdbdt"/>
-      <item name="SonarQube" href="https://sonarqube.com/organizations/jdbdt/projects"/>
+      <item name="SonarCloud" href="https://sonarcloud.io/organizations/jdbdt/projects"/>
       <item name="Maven reports" href="project-info.html"/>
       <item name="Inception" href="Inception.html"/>
     </menu>
