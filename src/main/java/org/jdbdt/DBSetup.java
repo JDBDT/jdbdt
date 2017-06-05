@@ -189,11 +189,11 @@ final class DBSetup {
     Map<String,Integer> colToStmtArg = new HashMap<>();
     int stmtArgCtr = 1;
     for (String c : columnsToUpdate) {
-      colToStmtArg.put(c.toLowerCase(), stmtArgCtr);
+      colToStmtArg.put(c.toUpperCase(), stmtArgCtr);
       stmtArgCtr++;
     }
     for (String c : keyColumns) {
-      colToStmtArg.put(c.toLowerCase(), stmtArgCtr);
+      colToStmtArg.put(c.toUpperCase(), stmtArgCtr);
       stmtArgCtr++;
     }
     // Perform operation
@@ -214,8 +214,8 @@ final class DBSetup {
           }
           for (int c = 0; c < n; c++) {
             //            System.out.printf("%d %s %s\n",  
-            //                c,colToStmtArg.get(tableColumns[c].toLowerCase()), colValues[c]);
-            updateStmt.setObject(colToStmtArg.get(tableColumns[c].toLowerCase()), colValues[c]);   
+            //                c,colToStmtArg.get(tableColumns[c].toUpperCase()), colValues[c]);
+            updateStmt.setObject(colToStmtArg.get(tableColumns[c].toUpperCase()), colValues[c]);   
           }
           if (batchMode) {
             updateStmt.addBatch();
@@ -272,7 +272,7 @@ final class DBSetup {
     Map<String,Integer> colToStmtArg = new HashMap<>();
     int stmtArgCtr = 1;
     for (String c : keyColumns) {
-      colToStmtArg.put(c.toLowerCase(), stmtArgCtr);
+      colToStmtArg.put(c.toUpperCase(), stmtArgCtr);
       stmtArgCtr++;
     }
     // Perform operation
@@ -293,8 +293,8 @@ final class DBSetup {
           }
           for (int c = 0; c < n; c++) {
             //              System.out.printf("%d %s %s\n",  
-            //                  c,colToStmtArg.get(tableColumns[c].toLowerCase()), colValues[c]);
-            int iParam = colToStmtArg.getOrDefault(tableColumns[c].toLowerCase(), 0);
+            //                  c,colToStmtArg.get(tableColumns[c].toUpperCase()), colValues[c]);
+            int iParam = colToStmtArg.getOrDefault(tableColumns[c].toUpperCase(), 0);
             if (iParam != 0) {
               deleteStmt.setObject(iParam, colValues[c]);   
             }

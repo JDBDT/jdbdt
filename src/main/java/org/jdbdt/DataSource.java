@@ -70,7 +70,7 @@ public abstract class DataSource {
         MetaData md = new MetaData(stmt.getStatement());
         String[] cols = new String[md.getColumnCount()];
         for (int i = 0; i < cols.length; i++) {
-          cols[i] = md.getLabel(i);
+          cols[i] = md.getLabel(i).toUpperCase();
         }
         columns = cols;
         metaData = md;

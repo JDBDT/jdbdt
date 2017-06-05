@@ -142,8 +142,8 @@ public class DBSetupTest extends DBTestCase {
     User[] users = INITIAL_DATA.clone();    
     for (int i = 0; i < users.length; i++) {
       User u = users[i];
-      u.setPassword(u.getPassword() + "#" + i);
-      u.setName(u.getName() + "#" + i);
+      u.setPassword("p#" + i);
+      u.setName("u#" + i);
       u.setCreated(Date.valueOf(String.format("2017-12-%02d", i+1)));
     }
     DataSet data = data(table, getConversion()).rows(INITIAL_DATA);
