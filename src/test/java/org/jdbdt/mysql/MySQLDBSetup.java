@@ -25,6 +25,17 @@ public interface MySQLDBSetup {
 
   };
 
+  MySQLDBSetup TravisHandler = new MySQLDBSetup() {
+
+    @Override
+    public String start() {
+      return "jdbc:mysql://localhost:9999/jdbdt?user=travis&password=&useSSL=false&createDatabaseIfNotExist=true";
+    }
+    
+    @Override
+    public void stop() { }
+  };
+  
   MySQLDBSetup EmbeddedHandler = new MySQLDBSetup() {
     MysqldResource engine;
     static final String DB_PATH = "mysql";
@@ -66,6 +77,9 @@ public interface MySQLDBSetup {
     switch (BuildEnvironment.get()) {
       case AppVeyor:
         h = AppVeyorHandler;
+        break;
+      case Travis:
+        h = TravisHandler;
         break;
       default:
         h = EmbeddedHandler;

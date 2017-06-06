@@ -8,6 +8,8 @@ before_install:
   - java -version
   - echo "MAVEN_OPTS='-Xmx4g -Xss512m'" > ~/.mavenrc
 install: true
+services:
+  - mysql
 addons:
   sonarqube:
     organization: "jdbdt" 
@@ -30,4 +32,5 @@ matrix:
       env: 
         - GOALS="clean package site-deploy"
 script: 
+   - echo 9999 > $HOME/.my.cnf 
    - mvn -Djdbdt.site.path=file:///$HOME/jdbdt.org $GOALS
