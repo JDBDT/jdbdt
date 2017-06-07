@@ -6,6 +6,7 @@ cache:
   - $HOME/.sonar/cache
 before_install:
   - java -version
+  - test $POSTGRESQL_SERVICE = true && psql --version 
   - echo "MAVEN_OPTS='-Xmx4g -Xss512m'" > ~/.mavenrc
 install: true
 env:
@@ -33,6 +34,7 @@ matrix:
     - os: osx
       osx_image: xcode8
       env: 
+        - POSTGRESQL_SERVICE=false
         - GOALS="clean package site-deploy"
     - dist: trusty
       group: edge
