@@ -13,8 +13,6 @@ env:
   global:
     - BUILD_ENVIRONMENT=Travis
     - POSTGRESQL_SERVICE=true
-services:
-  - postgresql
 addons:
   postgresql: "9.5"
 matrix:
