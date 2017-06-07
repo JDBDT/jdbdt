@@ -50,6 +50,7 @@ Continuous integration:
 * [#19 - Travis CI: also MacOS builds](https://github.com/edrdo/jdbdt/issues/19)
 * [#20 - Travis CI: also Java 9 builds ](https://github.com/edrdo/jdbdt/issues/20)
 * [#22 - Travis CI: using mysql service if available](https://github.com/edrdo/jdbdt/issues/22)
+* [#23 - Travis CI: using postgresql service if available](https://github.com/edrdo/jdbdt/issues/23)
 * [#24 - Travis CI: SonarQube add-on only for standard Linux build](https://github.com/edrdo/jdbdt/issues/24)
 
 ## 0.12
