@@ -79,8 +79,10 @@ public interface MySQLDBSetup {
         h = AppVeyorHandler;
         break;
       case Travis:
-        h = TravisHandler;
-        break;
+        if (System.getenv().getOrDefault("MYSQL_SERVICE", "false").equals("true")) {
+          h =  TravisHandler;
+          break;
+        }
       default:
         h = EmbeddedHandler;
     }
