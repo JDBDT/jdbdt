@@ -7,11 +7,13 @@ cache:
 before_install:
   - java -version
   - test $POSTGRESQL_SERVICE != true || psql --version 
+  - test $MYSQL_SERVICE != true || mysql --version 
   - echo "MAVEN_OPTS='-Xmx4g -Xss512m'" > ~/.mavenrc
 install: true
 env:
   global:
     - BUILD_ENVIRONMENT=Travis
+    - MYSQL_SERVICE=false
     - POSTGRESQL_SERVICE=true
 addons:
   postgresql: "9.5"
