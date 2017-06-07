@@ -29,7 +29,7 @@ public interface MySQLDBSetup {
 
     @Override
     public String start() {
-      return "jdbc:mysql://localhost:9999/jdbdt?user=travis&password=&useSSL=false&createDatabaseIfNotExist=true";
+      return "jdbc:mysql://localhost/jdbdt?user=travis&password=&useSSL=false&createDatabaseIfNotExist=true";
     }
     
     @Override
