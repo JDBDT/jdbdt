@@ -34,5 +34,7 @@ matrix:
       env: 
         - GOALS="clean package site-deploy"
 script: 
-   - echo 9999 > $HOME/.my.cnf 
+   - echo "[mysqld]" > $HOME/.my.cnf 
+   - echo "port=9999" >> $HOME/.my.cnf 
+   - echo "socket= /var/run/mysqld/mysql.sock" >> $HOME/.my.cnf
    - mvn -Djdbdt.site.path=file:///$HOME/jdbdt.org $GOALS
