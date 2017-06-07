@@ -11,6 +11,11 @@ install: true
 env:
   global:
     - BUILD_ENVIRONMENT=Travis
+    - POSTGRESQL_SERVICE=true
+services:
+  - postgresql
+addons:
+  postgresql: "9.5"
 matrix:
   include:
     - os: linux
@@ -34,5 +39,7 @@ matrix:
       jdk: oraclejdk9
       env: 
         - GOALS="clean package site-deploy"
-script: 
-   - mvn -Djdbdt.site.path=file:///$HOME/jdbdt.org $GOALS
+before_script:
+  - test $POSTGRESQL_SERVICE = true && psql -c 'create database jdbdt;' -U postgres 
+script:  
+  - mvn -Djdbdt.site.path=file:///$HOME/jdbdt.org $GOALS
