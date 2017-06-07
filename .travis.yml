@@ -6,7 +6,7 @@ cache:
   - $HOME/.sonar/cache
 before_install:
   - java -version
-  - test $POSTGRESQL_SERVICE = true && psql --version 
+  - test $POSTGRESQL_SERVICE != true || psql --version 
   - echo "MAVEN_OPTS='-Xmx4g -Xss512m'" > ~/.mavenrc
 install: true
 env:
@@ -42,6 +42,6 @@ matrix:
       env: 
         - GOALS="clean package site-deploy"
 before_script:
-  - test $POSTGRESQL_SERVICE = true && psql -c 'create database jdbdt;' -U postgres 
+  - test $POSTGRESQL_SERVICE != true || psql -c 'create database jdbdt;' -U postgres 
 script:  
   - mvn -Djdbdt.site.path=file:///$HOME/jdbdt.org $GOALS
