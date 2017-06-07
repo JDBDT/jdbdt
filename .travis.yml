@@ -8,8 +8,6 @@ before_install:
   - java -version
   - echo "MAVEN_OPTS='-Xmx4g -Xss512m'" > ~/.mavenrc
 install: true
-services:
-  - mysql
 addons:
   sonarqube:
     organization: "jdbdt" 
@@ -22,6 +20,8 @@ matrix:
   include:
     - os: linux
       jdk: oraclejdk8
+      services:
+        - mysql
       env: 
         - MYSQL_SERVICE=true
         - GOALS="clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar site-deploy"
@@ -34,7 +34,5 @@ matrix:
       jdk: oraclejdk9
       env: 
         - GOALS="clean package site-deploy"
-before_script:
-  - mysql -e 'create database jdbdt'
 script: 
    - mvn -Djdbdt.site.path=file:///$HOME/jdbdt.org $GOALS
