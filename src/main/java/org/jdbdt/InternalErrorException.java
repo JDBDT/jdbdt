@@ -15,11 +15,10 @@ package org.jdbdt;
 public final class InternalErrorException extends JDBDTRuntimeException {
 
   /**
-   * Constructs exception with given cause.
-   * @param cause Cause for the exception.
+   * Constructs exception with empty message.
    */
-  public InternalErrorException(Throwable cause) {
-    super("Unexpected internal error", cause);
+  public InternalErrorException() {
+    super("Internal error!");
   }
   
   /**
@@ -29,6 +28,18 @@ public final class InternalErrorException extends JDBDTRuntimeException {
   public InternalErrorException(String message) {
     super(message);
   }
+  
+  /**
+   * Constructs exception with given cause.
+   * @param cause Cause for the exception.
+   */
+  public InternalErrorException(Throwable cause) {
+    super("Unexpected internal error", cause);
+  }
+  
+ 
+
+  
 
   /**
    * Serial version UID.

@@ -434,29 +434,7 @@ public final class DB {
    * @param callInfo Call info.
    * @param data Data set.
    */
-  void logInsertion(CallInfo callInfo, DataSet data) {
-    if (isEnabled(Option.LOG_SETUP)) {
-      log.write(callInfo, data);
-    }
-  }
-
-  /**
-   * Log data set update.
-   * @param callInfo Call info.
-   * @param data Data set.
-   */
-  void logUpdate(CallInfo callInfo, DataSet data) {
-    if (isEnabled(Option.LOG_SETUP)) {
-      log.write(callInfo, data);
-    }
-  }
-  
-  /**
-   * Log data set delete.
-   * @param callInfo Call info.
-   * @param data Data set.
-   */
-  void logDelete(CallInfo callInfo, DataSet data) {
+  void logDataSetOperation(CallInfo callInfo, DataSet data) {
     if (isEnabled(Option.LOG_SETUP)) {
       log.write(callInfo, data);
     }

@@ -2,11 +2,9 @@ package org.jdbdt;
 
 import java.sql.PreparedStatement;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Utility class with methods for database setup.
@@ -84,55 +82,31 @@ final class DBSetup {
    * @param data Data set.
    */
   private static void doInsert(CallInfo callInfo, Table table, DataSet data) {
-    final DB db = table.getDB();
-    db.logInsertion(callInfo, data);
     StringBuilder sql = new StringBuilder("INSERT INTO ");
-    String[] columnNames = table.getColumns();
+    List<String> tableColumns = Arrays.asList(table.getColumns());
+    int[] paramIdx = new int[tableColumns.size()];
+    int param = 0;
+    Iterator<String> itr = tableColumns.iterator();
+    String col = itr.next();
+    
+    paramIdx[param] = ++param;
     sql.append(table.getName())
-    .append('(')
-    .append(columnNames[0]);
-    for (int i=1; i < columnNames.length; i++) {
-      sql.append(',').append(columnNames[i]);
+       .append('(')
+       .append(col);
+    
+    while (itr.hasNext()) {
+      paramIdx[param] = ++param;
+      col = itr.next();
+      sql.append(',')
+         .append(col);
     }
     sql.append(") VALUES (?");
-    for (int i=1; i < columnNames.length; i++) {
+    for (int i=1; i < tableColumns.size(); i++) {
       sql.append(",?");
     }
     sql.append(')');
 
-    db.access(() -> {
-      final boolean batchMode = db.useBatchUpdates();
-      final int maxBatchSize = db.getMaximumBatchUpdateSize();
-
-      try(WrappedStatement ws = db.compile(sql.toString())) {
-        PreparedStatement insertStmt = ws.getStatement();
-        int batchSize = 0;
-        for (Row r : data.getRows()) {
-          final int n = r.length();
-          final Object[] cols = r.data();
-          if (n != table.getColumnCount()) {
-            throw new InvalidOperationException("Invalid number of columns for insertion.");
-          }
-          for (int i = 0; i < n; i++) {
-            insertStmt.setObject(i+1, cols[i]);
-          }
-          if (batchMode) {
-            insertStmt.addBatch();
-            batchSize++;
-            if (batchSize == maxBatchSize) {
-              insertStmt.executeBatch();
-              batchSize = 0;
-            }
-          } else {
-            insertStmt.execute();
-          }
-        }
-        if (batchMode && batchSize > 0 ) {
-          insertStmt.executeBatch();
-        }
-      }
-      return 0;
-    });
+    dataSetOperation(callInfo, table, data, sql.toString(), paramIdx);
   }
 
   /**
@@ -148,92 +122,57 @@ final class DBSetup {
   public static void update(CallInfo callInfo, DataSet data) {
     Table table = asTable(data.getSource()); 
     List<String> keyColumns = table.getKeyColumns();
+    
     if (keyColumns.isEmpty()) {
       throw new InvalidOperationException("No key columns defined.");
     }
 
-    String[] tableColumns = table.getColumns();
+    List<String> tableColumns = Arrays.asList(table.getColumns());
     List<String> columnsToUpdate = new LinkedList<>();
-    columnsToUpdate.addAll(Arrays.asList(tableColumns));
+    columnsToUpdate.addAll(tableColumns);
     columnsToUpdate.removeAll(keyColumns);
 
     if (columnsToUpdate.isEmpty()) {
       throw new InvalidOperationException("No columns to update.");
     }
 
-    DB db = table.getDB();
-    db.logUpdate(callInfo, data);
-
     // Build SQL statement
+    int[] paramIdx = new int[tableColumns.size()];
+    int param = 0;
     StringBuilder sql = new StringBuilder("UPDATE ");
     Iterator<String> itr = columnsToUpdate.iterator();
+    String col = itr.next();
+    paramIdx[tableColumns.indexOf(col)] = ++param;
     sql.append(table.getName())
-    .append(" SET ")
-    .append(itr.next())
-    .append("=?");
+       .append(" SET ")
+       .append(col)
+       .append("=?");
+    
     while (itr.hasNext()) {
+      col = itr.next();
+      paramIdx[tableColumns.indexOf(col)] = ++param;
       sql.append(',')
-      .append(itr.next())
-      .append("=?");
+         .append(col)
+         .append("=?");
     }
+    
     itr = keyColumns.iterator();
+    col = itr.next();
+    paramIdx[tableColumns.indexOf(col)] = ++param;
     sql.append(" WHERE ")
-    .append(itr.next())
-    .append("=?");
+       .append(col)
+       .append("=?");
+    
     while (itr.hasNext()) {
+      col = itr.next();
+      paramIdx[tableColumns.indexOf(col)] = ++param;
       sql.append(" AND ")
-      .append(itr.next())
-      .append("=?");
+         .append(col)
+         .append("=?");
     }
-
-    Map<String,Integer> colToStmtArg = new HashMap<>();
-    int stmtArgCtr = 1;
-    for (String c : columnsToUpdate) {
-      colToStmtArg.put(c.toUpperCase(), stmtArgCtr);
-      stmtArgCtr++;
-    }
-    for (String c : keyColumns) {
-      colToStmtArg.put(c.toUpperCase(), stmtArgCtr);
-      stmtArgCtr++;
-    }
-    // Perform operation
+    
     table.setDirtyStatus(true);
-    //    System.out.println(sql.toString());
-    db.access(() -> {
-      final boolean batchMode = db.useBatchUpdates();
-      final int maxBatchSize = db.getMaximumBatchUpdateSize();
-
-      try(WrappedStatement ws = db.compile(sql.toString())) {
-        PreparedStatement updateStmt = ws.getStatement();
-        int batchSize = 0;
-        for (Row r : data.getRows()) {
-          final int n = r.length();
-          final Object[] colValues = r.data();
-          if (n != table.getColumnCount()) {
-            throw new InvalidOperationException("Invalid number of columns for update.");
-          }
-          for (int c = 0; c < n; c++) {
-            //            System.out.printf("%d %s %s\n",  
-            //                c,colToStmtArg.get(tableColumns[c].toUpperCase()), colValues[c]);
-            updateStmt.setObject(colToStmtArg.get(tableColumns[c].toUpperCase()), colValues[c]);   
-          }
-          if (batchMode) {
-            updateStmt.addBatch();
-            batchSize++;
-            if (batchSize == maxBatchSize) {
-              updateStmt.executeBatch();
-              batchSize = 0;
-            }
-          } else {
-            updateStmt.execute();
-          }
-        }
-        if (batchMode && batchSize > 0 ) {
-          updateStmt.executeBatch();
-        }
-      }
-      return 0;
-    });
+    dataSetOperation(callInfo, table, data, sql.toString(), paramIdx);
   }
 
   /**
@@ -248,76 +187,79 @@ final class DBSetup {
   public static void delete(CallInfo callInfo, DataSet data) {
     Table table = asTable(data.getSource()); 
     List<String> keyColumns = table.getKeyColumns();
+    
     if (keyColumns.isEmpty()) {
       throw new InvalidOperationException("No key columns defined.");
     }
-
-    DB db = table.getDB();
-    db.logDelete(callInfo, data);
-
-    // Build SQL statement
+    
+    List<String> tableColumns = Arrays.asList(table.getColumns());
+    int param = 0;
+    int[] paramIdx = new int[tableColumns.size()];
     Iterator<String> itr = keyColumns.iterator();
     StringBuilder sql = new StringBuilder();
+    String kcol = itr.next();
+    
+    paramIdx[tableColumns.indexOf(kcol)] = ++param;
     sql.append("DELETE FROM ")
-    .append(table.getName())
-    .append(" WHERE ")
-    .append(itr.next())
-    .append("=?");
+       .append(table.getName())
+       .append(" WHERE ")
+       .append(kcol)
+       .append("=?");
+    
     while (itr.hasNext()) {
+      kcol = itr.next();
+      paramIdx[tableColumns.indexOf(kcol)] = ++param;
       sql.append(" AND ")
-      .append(itr.next())
-      .append("=?");
+         .append(kcol)
+         .append("=?");
     }
-
-    Map<String,Integer> colToStmtArg = new HashMap<>();
-    int stmtArgCtr = 1;
-    for (String c : keyColumns) {
-      colToStmtArg.put(c.toUpperCase(), stmtArgCtr);
-      stmtArgCtr++;
-    }
-    // Perform operation
+   
     table.setDirtyStatus(true);
-    //      System.out.println(sql.toString());
+    dataSetOperation(callInfo, table, data, sql.toString(), paramIdx);
+  }
+  
+  @SuppressWarnings("javadoc")
+  private static void dataSetOperation(CallInfo callInfo, Table table, DataSet data, String sql, int[] paramIndex) {
+    DB db = table.getDB();
+    boolean batchMode = db.useBatchUpdates();
+    int maxBatchSize = db.getMaximumBatchUpdateSize();
+    int columnCount = table.getColumnCount();
+
+    db.logDataSetOperation(callInfo, data);
+    
     db.access(() -> {
-      final boolean batchMode = db.useBatchUpdates();
-      final int maxBatchSize = db.getMaximumBatchUpdateSize();
-      String[] tableColumns = table.getColumns();
-      try(WrappedStatement ws = db.compile(sql.toString())) {
-        PreparedStatement deleteStmt = ws.getStatement();
+      try(WrappedStatement ws = db.compile(sql)) {
+        PreparedStatement stmt = ws.getStatement();
         int batchSize = 0;
         for (Row r : data.getRows()) {
-          final int n = r.length();
-          final Object[] colValues = r.data();
-          if (n != table.getColumnCount()) {
+          Object[] colValues = r.data();
+          if (colValues.length != columnCount) {
             throw new InvalidOperationException("Invalid number of columns for update.");
           }
-          for (int c = 0; c < n; c++) {
-            //              System.out.printf("%d %s %s\n",  
-            //                  c,colToStmtArg.get(tableColumns[c].toUpperCase()), colValues[c]);
-            int iParam = colToStmtArg.getOrDefault(tableColumns[c].toUpperCase(), 0);
+          for (int c = 0; c < colValues.length; c++) {
+            int iParam = paramIndex[c];
             if (iParam != 0) {
-              deleteStmt.setObject(iParam, colValues[c]);   
+              stmt.setObject(iParam, colValues[c]);   
             }
           }
           if (batchMode) {
-            deleteStmt.addBatch();
+            stmt.addBatch();
             batchSize++;
             if (batchSize == maxBatchSize) {
-              deleteStmt.executeBatch();
+              stmt.executeBatch();
               batchSize = 0;
             }
           } else {
-            deleteStmt.execute();
+            stmt.execute();
           }
         }
         if (batchMode && batchSize > 0 ) {
-          deleteStmt.executeBatch();
+          stmt.executeBatch();
         }
       }
       return 0;
     });
   }
-
   /**
    * Delete all data from table.
    * @param callInfo Call info.
