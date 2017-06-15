@@ -103,8 +103,11 @@ public abstract class DataSource {
   }
 
   /** 
-   * Get column names.
-   * @return Array of column names.
+   * Get columns.
+   * 
+   * <p>Note: the returned list is unmodifiable.</p>
+   * 
+   * @return The list of columns for the data source.
    */
   public final List<String> getColumns() {
     return columns;
