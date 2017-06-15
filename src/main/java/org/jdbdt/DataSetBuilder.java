@@ -108,14 +108,15 @@ public final class DataSetBuilder {
    */
   public DataSetBuilder(DataSet data) {
     this.data = data;
-    String[] columnNames = data.getSource().getColumns();
-    fillers = new ColumnFiller[columnNames.length];
+    List<String> columns = data.getSource().getColumns();
+    fillers = new ColumnFiller[columns.size()];
     fillerCount = 0;
-    for (int idx=0; idx < columnNames.length; idx++) {
-      columnIdx.put(columnNames[idx].toLowerCase(), idx);
+    int index = 0;
+    for (String col : columns) {
+      columnIdx.put(col, index++);
     }
     // Prevent re-seeding in support of repeatable tests.
-    rng = new FixedSeedRandom(Arrays.hashCode(columnNames));
+    rng = new FixedSeedRandom(columns.hashCode());
   }
 
   /**
@@ -148,25 +149,25 @@ public final class DataSetBuilder {
    */
   public DataSetBuilder generate(int count) {
     ensureValid(count, count > 0);
+    DataSource source = data.getSource();
+    int columnCount = data.getSource().getColumnCount();
     if (fillerCount < fillers.length) {
-      DataSource source = data.getSource();
-      for (int idx = 0; idx < source.getColumnCount(); idx++) {
-        if (fillers[idx] == null) {
+      for (int c = 0; c < columnCount; c++) {
+        if (fillers[c] == null) {
           throw new InvalidOperationException("No filler is set for column '" + 
-              source.getColumns()[idx]);
+                                              source.getColumnName(c));
         }
       }
       throw new InternalErrorException("Filler count does not match fillers set.");
     }
-    final String[] colNames = data.getSource().getColumns();
     for (int r=0; r < count; r++) {
-      final Object[] colData = new Object[colNames.length];
-      for (int c = 0; c < colNames.length; c++) {
+      Object[] colData = new Object[columnCount];
+      for (int c = 0; c < columnCount; c++) {
         try {
           colData[c] = fillers[c].next();
         }
         catch (Exception e) {
-          throw new ColumnFillerException("Error evaluating filler for '" + colNames[c] + "'", e);
+          throw new ColumnFillerException("Error evaluating filler for '" + source.getColumnName(c) + "'", e);
         }
       }
       data.addRow(new Row(colData));
@@ -183,7 +184,7 @@ public final class DataSetBuilder {
   public DataSetBuilder set(String column, ColumnFiller<?> filler) {
     ensureArgNotNull(column);
     ensureArgNotNull(filler);
-    Integer idx = columnIdx.get(column.toLowerCase());
+    Integer idx = columnIdx.get(column.toUpperCase());
     if (idx == null) {
       throw new InvalidOperationException("Invalid column name: '" + column + "'.");
     }

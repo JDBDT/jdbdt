@@ -1,7 +1,6 @@
 package org.jdbdt;
 
 import java.sql.PreparedStatement;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -83,8 +82,9 @@ final class DBSetup {
    */
   private static void doInsert(CallInfo callInfo, Table table, DataSet data) {
     StringBuilder sql = new StringBuilder("INSERT INTO ");
-    List<String> tableColumns = Arrays.asList(table.getColumns());
-    int[] paramIdx = new int[tableColumns.size()];
+    List<String> tableColumns = table.getColumns();
+    int columnCount = tableColumns.size();
+    int[] paramIdx = new int[columnCount];
     int param = 0;
     Iterator<String> itr = tableColumns.iterator();
     String col = itr.next();
@@ -101,7 +101,7 @@ final class DBSetup {
          .append(col);
     }
     sql.append(") VALUES (?");
-    for (int i=1; i < tableColumns.size(); i++) {
+    for (int i=1; i < columnCount; i++) {
       sql.append(",?");
     }
     sql.append(')');
@@ -127,7 +127,8 @@ final class DBSetup {
       throw new InvalidOperationException("No key columns defined.");
     }
 
-    List<String> tableColumns = Arrays.asList(table.getColumns());
+    List<String> tableColumns = table.getColumns();
+    int columnCount = tableColumns.size();
     List<String> columnsToUpdate = new LinkedList<>();
     columnsToUpdate.addAll(tableColumns);
     columnsToUpdate.removeAll(keyColumns);
@@ -137,7 +138,7 @@ final class DBSetup {
     }
 
     // Build SQL statement
-    int[] paramIdx = new int[tableColumns.size()];
+    int[] paramIdx = new int[columnCount];
     int param = 0;
     StringBuilder sql = new StringBuilder("UPDATE ");
     Iterator<String> itr = columnsToUpdate.iterator();
@@ -192,7 +193,7 @@ final class DBSetup {
       throw new InvalidOperationException("No key columns defined.");
     }
     
-    List<String> tableColumns = Arrays.asList(table.getColumns());
+    List<String> tableColumns = table.getColumns();
     int param = 0;
     int[] paramIdx = new int[tableColumns.size()];
     Iterator<String> itr = keyColumns.iterator();

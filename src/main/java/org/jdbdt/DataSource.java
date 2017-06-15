@@ -4,6 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Base class for data sources.
@@ -24,9 +27,9 @@ public abstract class DataSource {
   private MetaData metaData = null;
 
   /**
-   * Column names.
+   * Columns.
    */
-  private String[] columns = null;
+  private List<String> columns;
 
   /**
    * SQL code for query.
@@ -72,7 +75,7 @@ public abstract class DataSource {
         for (int i = 0; i < cols.length; i++) {
           cols[i] = md.getLabel(i).toUpperCase();
         }
-        columns = cols;
+        columns = Collections.unmodifiableList(Arrays.asList(cols));
         metaData = md;
         return 0;
       }
@@ -88,7 +91,7 @@ public abstract class DataSource {
     this.queryArgs = null;
     this.dirty = true;
     this.metaData = null;
-    this.columns = columns;
+    this.columns = Collections.unmodifiableList(Arrays.asList(columns));;
   }
 
   /**
@@ -103,7 +106,7 @@ public abstract class DataSource {
    * Get column names.
    * @return Array of column names.
    */
-  final String[] getColumns() {
+  public final List<String> getColumns() {
     return columns;
   }
 
@@ -112,7 +115,7 @@ public abstract class DataSource {
    * @return Column count.
    */
   public final int getColumnCount() {
-    return columns.length;
+    return columns.size();
   }
 
   /**
@@ -121,10 +124,10 @@ public abstract class DataSource {
    * @return Name of column.
    */
   public final String getColumnName(int index) {
-    if (index < 0 || index >= columns.length) {
+    if (index < 0 || index >= columns.size()) {
       throw new InvalidOperationException("Invalid column index: " + index);
     }
-    return columns[index];
+    return columns.get(index);
   }
 
   /**

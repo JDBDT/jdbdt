@@ -60,7 +60,7 @@ public class DataSetBuilderRandomFillersTest {
   
   @Before 
   public void setUp() {
-    rng = new Random(Arrays.hashCode(mockDataSource.getColumns()));
+    rng = new Random(mockDataSource.getColumns().hashCode());
     theSUT = builder(mockDataSource);
     for (Map.Entry<String, Object> e : BASE_DATA.entrySet()) {
       theSUT.value(e.getKey(), e.getValue());
