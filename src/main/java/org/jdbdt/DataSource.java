@@ -91,7 +91,11 @@ public abstract class DataSource {
     this.queryArgs = null;
     this.dirty = true;
     this.metaData = null;
-    this.columns = Collections.unmodifiableList(Arrays.asList(columns));;
+    ArrayList<String> list = new ArrayList<>();
+    for (String c : columns) {
+      list.add(c.toUpperCase());
+    }
+    this.columns = Collections.unmodifiableList(list);
   }
 
   /**
