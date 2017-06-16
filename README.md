@@ -44,6 +44,10 @@ Commands:
 
 ## 0.13-SNAPSHOT (current snapshot)
 
+API:
+
+* [#25 - DataSource.getColumns() now available.](https://github.com/edrdo/jdbdt/issues/25)
+
 Continuous integration:
 
 * [#18 - Now using AppVeyor for Windows builds](https://github.com/edrdo/jdbdt/issues/18)
