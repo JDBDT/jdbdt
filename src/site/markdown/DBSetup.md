@@ -52,10 +52,51 @@ are performed over the table subsequently.
     insert(data);
 
 The `populateIfChanged` method is a variant of `populate` that 
-executes conditionally, i.e., if the table contents are seen as unchanged,no operation takes place. This only happens if an `assertUnchanged` [assertion](DBAssertions.html) previously succeeded,
+executes conditionally, i.e., if the table contents are seen as unchanged, no operation takes place. This only happens if an `assertUnchanged` [assertion](DBAssertions.html) previously succeeded,
 and no intervening subsequent JDBDT setup or assertion methods were called for the table. 
 
+*Illustration* 
+
+    static Table theTable ;
+    static Data initialStata; 
+    
+    @BeforeClass
+    public void globalSetuo() {
+      theTable = ... ;
+      initialData = data(theTable) ...
+    }
+    
+    @Before
+    public void perTestSetup() {
+       populateIfChanged(initialData);
+    }
+    
+    @Test
+    public void test1() {
+      theSUT.methodThatShouldNotChangeAnythin();
+      assertUnchanged(theTable);
+      // populateIfChanged will do nothing if the assertion succeeds
+    }
+    
+    @Test
+    public void test1() {
+      theSUT.methodThatPerformsChanges();
+      assertXXX(...); // any other assertion method
+      // populateIfChanged will repopulate the table again,
+      // regardless of whether the assertion succeeds or not
+    }
+
 More generally, you may query the changed status of data sources using the `changed` facade method, and use it to guide database setup if convenient.
+
+*Illustration* 
+
+    @Before
+    public void perTestSetup() {
+       if (changed(theTable)) {
+         populate(initialData); // re-populate
+         ...   // other necessary setup actions
+       }
+    }
 
 ## Cleaning data
 <a name="Clean"></a>
@@ -66,7 +107,7 @@ Database data may be cleaned up using one of the following methods for a `Table`
 2. `deleteAllWhere(t, whereClause, [,args])` clears the contents of `t` using a `DELETE` 
 statement with the specified `WHERE` clause  (`whereClause`) and optional `WHERE` clause arguments `args`.
 3. `truncate(t)` clears `t` using a `TRUNCATE TABLE` statement.
-4. `drop(t)` or `drop(db, tableName)` drops a table.
+4. `drop(t)` or `drop(db, tableName)` drops a table entirely.
 
 *Note*: `truncate` may be faster than `deleteAll`, but the associated TRUNCATE TABLE statement 
 may not respect integrity constraints and has variable semantics 
