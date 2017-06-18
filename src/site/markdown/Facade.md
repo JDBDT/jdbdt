@@ -91,6 +91,7 @@ may be convenient to refer to the API methods concisely.
 		<td align="left">
 		    <code>changed</code><br/>
 			<code>commit</code><br/>
+			<code>delete</code><br/>
 			<code>deleteAll</code><br/>
 			<code>deleteAllWhere</code><br/>
 			<code>drop</code><br/>
@@ -100,6 +101,7 @@ may be convenient to refer to the API methods concisely.
 			<code>restore</code><br/>
 			<code>save</code><br/>
 			<code>truncate</code><br/>
+			<code>update</code><br/>
 		</td>
 		<td align="left">
 		    <code>DataSet</code><br/>

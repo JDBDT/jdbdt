@@ -20,8 +20,18 @@ and the `build` method to build the actual `Table` object in association to a [d
     ...
     DB db = ...;
     Table userTable = table("USER")
-	                 .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED")
+	                 .columns("LOGIN", "NAME", "PASSWORD", "CREATED")
 	                 .build(db);
+
+In addition, if you wish to perform updates and deletes using data sets, `key` can be used to define the columns that form 
+the table's primary key (or that in some other form identify each database row uniquely) 
+
+*Illustration*
+
+     Table userTable = table("USER")
+	                  .columns("LOGIN", "NAME", "PASSWORD", "CREATED")
+	                  .key("LOGIN")
+	                  .build(db);
 
 ## Queries
 <a name="Query"></a>
@@ -124,7 +134,9 @@ to the order of query results, but the use of `orderBy` may make it easier to in
 
 ### `TableBuilder`
 
-* `columns(cols)` getDB(), 
+
+* `columns(cols)` set the table columns to cols.
+* `key(cols)` set the key columns to consider (optional).
 * `name(t)` sets the table name to `t`.
 * `build(db)` builds the desired `Table` for database `db`.
 

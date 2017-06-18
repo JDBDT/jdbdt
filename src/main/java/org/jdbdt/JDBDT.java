@@ -513,12 +513,18 @@ public final class JDBDT {
   public static void insert(DataSet data) {
     DBSetup.insert(CallInfo.create(), data);
   }
-  
-  
+   
   /**
-   * Update a data set onto database.
+   * Update database according to given data set.
+   * 
+   * <p>The data set should be associated to a table
+   * with defined key columns.
+   * </p>
    * 
    * @param data Data set for insertion.  
+   * @see #update(DataSet)
+   * @see TableBuilder#key(String...)
+   * @see Table#getKeyColumns()
    */
   public static void update(DataSet data) {
     DBSetup.update(CallInfo.create(), data);
@@ -526,11 +532,16 @@ public final class JDBDT {
   
   
   /**
-   * Delete data set onto database.
+   * Delete data set from the database.
    * 
-   * 
+   * <p>The data set should be associated to a table
+   * with defined key columns.
+   * </p>
    * 
    * @param data Data set for insertion.  
+   * @see #update(DataSet)
+   * @see TableBuilder#key(String...)
+   * @see Table#getKeyColumns()
    */
   public static void delete(DataSet data) {
     DBSetup.delete(CallInfo.create(), data);
