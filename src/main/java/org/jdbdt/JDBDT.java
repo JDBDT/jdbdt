@@ -506,9 +506,13 @@ public final class JDBDT {
   }
   
   /**
-   * Insert a data set onto database.
+   * Insert a data set into the database.
    * 
    * @param data Data set for insertion.  
+   * @see #update(DataSet)
+   * @see #delete(DataSet)
+   * @see #populate(DataSet)
+   * @see #populateIfChanged(DataSet)
    */
   public static void insert(DataSet data) {
     DBSetup.insert(CallInfo.create(), data);
@@ -523,10 +527,13 @@ public final class JDBDT {
    * and the remaining column values are used in the update.
    * </p>
    * 
-   * @param data Data set for insertion.  
-   * @see #update(DataSet)
+   * @param data Data set for update.  
    * @see TableBuilder#key(String...)
    * @see Table#getKeyColumns()
+   * @see #update(DataSet)
+   * @see #insert(DataSet)
+   * @see #populate(DataSet)
+   * @see #populateIfChanged(DataSet)
    */
   public static void update(DataSet data) {
     DBSetup.update(CallInfo.create(), data);
@@ -541,10 +548,13 @@ public final class JDBDT {
    * of each entry the data set determine the rows to delete.
    * </p>
    * 
-   * @param data Data set for insertion.  
-   * @see #update(DataSet)
+   * @param data Data set for deletion. 
    * @see TableBuilder#key(String...)
-   * @see Table#getKeyColumns()
+   * @see Table#getKeyColumns() 
+   * @see #update(DataSet)
+   * @see #insert(DataSet)
+   * @see #populate(DataSet)
+   * @see #populateIfChanged(DataSet)
    */
   public static void delete(DataSet data) {
     DBSetup.delete(CallInfo.create(), data);
@@ -555,6 +565,10 @@ public final class JDBDT {
    * Populate database with given data set.
    * 
    * @param data Data set for insertion.
+   * @see #populateIfChanged(DataSet)
+   * @see #insert(DataSet)
+   * @see #update(DataSet)
+   * @see #delete(DataSet)
    */
   public static void populate(DataSet data) {
     DBSetup.populate(CallInfo.create(), data);
@@ -571,6 +585,10 @@ public final class JDBDT {
    * </p>
    * @param data Data set for insertion.
    * @see #changed(DataSource...)
+   * @see #populate(DataSet)
+   * @see #insert(DataSet)
+   * @see #update(DataSet)
+   * @see #delete(DataSet)
    */
   public static void populateIfChanged(DataSet data) {
     DBSetup.populateIfChanged(CallInfo.create(), data);
