@@ -518,7 +518,9 @@ public final class JDBDT {
    * Update database according to given data set.
    * 
    * <p>The data set should be associated to a table
-   * with defined key columns.
+   * with defined key columns. The key column values
+   * of each entry the data set determine the rows to be updated,
+   * and the remaining column values are used in the update.
    * </p>
    * 
    * @param data Data set for insertion.  
@@ -535,7 +537,8 @@ public final class JDBDT {
    * Delete data set from the database.
    * 
    * <p>The data set should be associated to a table
-   * with defined key columns.
+   * with defined key columns. The key column values
+   * of each entry the data set determine the rows to delete.
    * </p>
    * 
    * @param data Data set for insertion.  
