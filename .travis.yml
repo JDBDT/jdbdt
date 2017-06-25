@@ -8,13 +8,13 @@ before_install:
   - java -version
   - test $POSTGRESQL_SERVICE != true || psql --version 
   - test $MYSQL_SERVICE != true || mysql --version 
-  - echo "MAVEN_OPTS='-Xmx4g -Xss512m'" > ~/.mavenrc
 install: true
 env:
   global:
     - BUILD_ENVIRONMENT=Travis
     - MYSQL_SERVICE=false
     - POSTGRESQL_SERVICE=true
+    - MAVEN_OPTS='-Xmx4g -Xss512m'
 addons:
   postgresql: "9.5"
 matrix:
@@ -41,6 +41,7 @@ matrix:
       jdk: oraclejdk9
       env: 
         - GOALS="clean package site-deploy"
+        - MAVEN_OPTS='-Xmx4g -Xss512m --add-opens java.base/java.lang=ALL-UNNAMED' 
 before_script:
   - test $POSTGRESQL_SERVICE != true || psql -c 'create database jdbdt;' -U postgres 
 script:  
