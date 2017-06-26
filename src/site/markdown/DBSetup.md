@@ -1,30 +1,23 @@
 # Database setup
 
 The contents of a database may be defined using setup methods 
-in the `JDBDT` facade. The functionality at stake comprises
-[inserting data / populating tables](DBSetup.html#Insert), 
-[cleaning up data from tables](DBSetup.html#Clean), 
-and [setting and restoring a save-point](DBSetup.html#SaveAndRestore).
-A number of [database setup patterns](DBSetup.html#Patterns) can be
-implemented using these operations.
+in the `JDBDT` facade. The functionality at stake comprises: 
+
+* the use of [data sets](DataSets.html) to [populate a table](DBSetup.html#Populate)
+but also for table row [insertions / updates / deletions](DBSetup.html#IUD);
+
+* [cleaning up database tables](DBSetup.html#Clean);
+
+* and [setting and restoring save-points](DBSetup.html#SaveAndRestore).
+
+These functionalities are described below, along with a discussion of a few   [database setup patterns](DBSetup.html#Patterns)  that can be implemented using these operations.
+
+&nbsp; <a name="Populate"></a>
+## Populating a table
 
 
-	  
-## Inserting data
-<a name="Insert"></a>
-
-Database data may be inserted using one of the following methods:
-
-1. `insert(data)` inserts `data` (a [data set](DataSets.html)) into the [table](DataSources.html) given by `data.getSource()`.
-2. `populate(data)` inserts `data` like `insert`, but clears the table first using a `DELETE` statement,
-and also records `data` as the [snapshot for subsequent delta assertions](DBAssertions.html#Snapshots).
-
-Thus, `insert` should be used for incremental additions to a table, whereas
-`populate` should be used to reset the contents of a table contents entirely. 
-The use of `populate` is more adequate in particular if [delta assertions](DBAssertions.html) 
-are performed over the table subsequently.
-
-
+The `populate` method may be used to populate a database table. Taking a data set for a table as argument, it first clears the table at stake, then 
+inserts the data set into the table. The supplied data set also sets a snapshot for [subsequent delta assertions](DBAssert.html#DeltaAssertions).
 
 *Illustration*
 
@@ -32,24 +25,16 @@ are performed over the table subsequently.
     import org.jdbdt.DB;
     import org.jdbdt.Table;
     import org.jdbdt.DataSet;
-    import java.sql.Date;
     ...
-	DB db = ...;
+	DB db = ... 
 	Table t = ...	
     
     // Create a data set for t.
-    DataSet data = 
-       builder(t)
-      . ...
-      .data();
-    ...
+    DataSet initialData = data(t) ... 
+                   // or ... builder(t) for instance
     
-    // 1. Reset contents of USER to data.
-    populate(data); 
-    ...
+    populate(initialData); 
     
-    // 2. OR insert data in USER table (does not clear previous contents).
-    insert(data);
 
 The `populateIfChanged` method is a variant of `populate` that 
 executes conditionally, i.e., if the table contents are seen as unchanged, no operation takes place. This only happens if an `assertUnchanged` [assertion](DBAssertions.html) previously succeeded,
@@ -97,9 +82,41 @@ More generally, you may query the changed status of data sources using the `chan
          ...   // other necessary setup actions
        }
     }
+ 
 
-## Cleaning data
-<a name="Clean"></a>
+&nbsp; <a name="IUD"></a>
+## Data set insertions, updates and deletes 
+
+Beyond `populate`, data sets may be used for insertions, updates and deletes.
+
+The `insert`  method inserts a given data set, without clearing any previous contents (unlike `populate` that clears it first).  
+
+    Table t = ...	
+    DataSet additionalData = data(t) ... 
+    insert(additionalData);
+
+<a name="DataSetUpdate"></a>
+<a name="DataSetDelete"></a>
+
+The `update` and `delete` method respectively update and delete a data set in the database. They require that [key columns](DataSources.html#Table) are defined for the table at stake. The corresponding key values for each data set element will determine which rows are to be updated / deleted.
+
+    DB db = ...; 
+    Table t = table("MyTable")
+             .columns( ... )
+             .key( ... )
+             .build(db);	
+    DataSet ds = ... 
+    
+    // Update
+    update(ds);  
+    
+    // Delete
+    delete(ds);
+
+
+&nbsp; <a name="Clean"></a>
+## Cleaning a table
+
 
 Database data may be cleaned up using one of the following methods for a `Table` instance `t`:
 
@@ -137,8 +154,9 @@ for different database engines (e.g., <a href="https://en.wikipedia.org/wiki/Tru
 	// 4. Drop the table entirely.
 	drop(t);   // alternatively: drop(db, "USERS")
 
-## Save and restore
-<a name="SaveAndRestore"></a>
+&nbsp; <a name="SaveAndRestore"></a>
+## Saving and restoring database state 
+
 
 Database state may be saved and restored as follows per [database handle](DB.html) `db`:
 
@@ -179,8 +197,9 @@ and discards the JDBDT save-point (or any other save-point set for the database 
     // Restore database state
     restore(db);
 
-    
-## Database setup patterns
+
+&nbsp; <a name="Patterns"></a>
+## Database setup patterns 
 
 A number of database test patterns can be implemented using JDBDT, as exemplified in the [JDBDT tutorial](Tutorial.html). The code skeleton below (assuming [JUnit](http://junit.org)-based tests) 
 illustrates the implementation of two patterns described in [xunitpatterns.com](http://xunitpatterns.com):
@@ -267,11 +286,13 @@ with `@AfterClass`).
 
 ### `JDBDT`
 
-Insertion:
+Operations using a data set `data` defined for a table `t` (`t` should correspond to `data.getSource()`):
 
-- `insert(data)` inserts `data` into a table (the table is `data.getSource()`).
-- `populate(data)` sets `data` as the contents of a table (the table is `data.getSource()`).
-- `populateIfChanged(data)` sets `data` as the contents of a table, if the table is perceived as having changed.
+- `populate(data)` sets `data` as the contents of a `t`.
+- `populateIfChanged(data)` sets `data` as the contents of `t`, if `t` is perceived as having changed.
+- `insert(data)` inserts `data` into `t`.
+- `delete(data)` deletes `data` from `t`.
+- `update(data)` uses `data` to update `t`.
 
 Clean-up:
 
