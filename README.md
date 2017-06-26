@@ -46,6 +46,7 @@ Commands:
 
 API:
 
+* [#21 - Data sets can now be used for table updates/deletes.](https://github.com/edrdo/jdbdt/issues/21)
 * [#25 - DataSource.getColumns() now available.](https://github.com/edrdo/jdbdt/issues/25)
 
 Continuous integration:
