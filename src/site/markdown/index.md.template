@@ -5,19 +5,101 @@
 [![Build status](https://api.travis-ci.org/edrdo/jdbdt.png?branch=master)](https://travis-ci.org/edrdo/jdbdt)
 
 JDBDT (Java DataBase Delta Testing) is an open-source Java library for 
-testing database applications. The library is designed for automation 
-of database setup and validation in test code. The main features are as follows:
+testing (SQL-based) database applications. The library is designed for automation 
+of database setup and validation in test code. 
+It has no third-party library dependencies (it just the Java 8 SE API internally), 
+making it also easy and lightweight to integrate. 
+Compared to existing database testing frameworks, the main conceptual novelty
+is the possibility of using [&delta;-assertions](DBAssertions.html#DeltaAssertions).
+
+In a nutshell, the main features are as follows:
+
+* The core functionality is exposed by a simple [API facade](Facade.html).
+
+
+    import static org.jdbdt.JDBDT.*;
+
+
+* [Tables and queries](DataSources.html) in association to a [database handle](DB.html) 
+can be used as data sources.   
+
+
+    DB db = database("jdbc:myFaveDBEngine://myDB");
+    
+    Table userTable = 
+      table("USER")
+	 .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED")
+	 .build(db);
+	 
+	Query idQuery = 
+	  select("LOGIN", "NAME")
+     .from("USER")
+     .where("ID = ?")
+     .arguments(userId)
+     .build(db);
+
+
+* [Data sets](DataSets.html) are defined programmatically,
+without need to maintain external "data files", for instance using data set builders
+
+
+    DataSet data = 
+       builder(t)
+      .sequence("ID", 1) // 1, 2, 3, ...
+      .sequence("LOGIN", "harry", "mark", "john")
+      .sequence("NAME", "Harry H", "Mark M", "John J")
+      .sequence("PASSWORD", i -> "password " + i , 1)
+      .random("CREATED", Date.valueOf("2015-01-01"), Date.valueOf("2015-12-31"))
+      .generate(3) // generate 3 rows, 
+      .sequence("LOGIN", i -> "guest_" + i, 4)  // "user_4", "user_5", ...
+      .sequence("NAME", i -> "Guest User " + i, 4) // "Guest User 4", ...
+      .value("password", "samePasswordForAllGuests") 
+      .generate(6) // 6 more rows keeping ID sequence and CREATED random filler
+      .data();   
+   
+      
+* [Setup methods](DBSetup.html) can be used to define database contents, 
+for instance to populate tables, clear them, setting & restoring save points, ..., e.g.
+
+
+    static Table theTable ;
+    static DataSet theinitialStata; 
+    
+    @BeforeClass
+    public void globalSetuo() {
+      theTable = ... ;
+      theInitialData = ...
+    }
+    
+    @Before
+    public void perTestSetup() {
+       populateIfChanged(initialData);
+    }
+
 
 * [&delta;-assertions](DBAssertions.html#DeltaAssertions) can be used to verify 
 database changes incrementally, in addition to standard
 assertions for [database state](DBAssertions.html#StateAssertions) 
-or [data set comparison](DBAssertions.html#DataSetAssertions).
-* [Setup methods](DBSetup.html) can be used to define database contents. 
-* [Data sets](DataSets.html) are defined programmatically,
-without need to maintain external "data files". 
-* The entire functionality is exposed by a "minimalistic" 
-[API facade](Facade.html). JDBDT is also self-contained,
-without dependencies from third-party libraries.
+or [data set comparison](DBAssertions.html#DataSetAssertions), e.g., 
+
+   
+    @Test
+    public void testUserInsertion() {
+      User uJohn = ...;
+      DataSet newRow = 
+        data(t).row(999, "john", "John", "jpass", Date.valueOf("2016-01-01"));
+	  sut.insertOneUser( uJohn ); 
+	  // Verify the insertion; assertion fails if other changes are detected
+	  assertInserted(newRow); 
+	}
+	
+	@Test
+	public void testHarmlessQuery() {
+	  User u = sut.getUser("john");
+	  ... // standard assertions
+	  assertUnchanged(theUserTable); // no delta
+    }
+    
 
 For details,  browse the reference documentation 
 available in this site, along with the [Javadoc](apidocs/index.html?org/jdbdt/JDBDT.html) for the JDBDT API and the [JDBDT tutorial](Tutorial.html).
