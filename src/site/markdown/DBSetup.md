@@ -43,7 +43,7 @@ and no intervening subsequent JDBDT setup or assertion methods were called for t
 *Illustration* 
 
     static Table theTable ;
-    static Data initialStata; 
+    static DataSet initialStata; 
     
     @BeforeClass
     public void globalSetuo() {
