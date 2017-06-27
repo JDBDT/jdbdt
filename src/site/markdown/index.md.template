@@ -3,14 +3,18 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.jdbdt/jdbdt/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/org.jdbdt/jdbdt)
 [![GitHub release](https://img.shields.io/github/release/edrdo/jdbdt.svg)](https://github.com/edrdo/jdbdt/releases)
 [![Build status](https://api.travis-ci.org/edrdo/jdbdt.png?branch=master)](https://travis-ci.org/edrdo/jdbdt)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/647d281hp1b8py3p?svg=false)](https://ci.appveyor.com/project/edrdo/jdbdt)
 
 JDBDT (Java DataBase Delta Testing) is an open-source Java library for 
 testing (SQL-based) database applications. The library is designed for automation 
 of database setup and validation in test code. 
-It has no third-party library dependencies (it just the Java 8 SE API internally), 
+JDBDT has no third-party library dependencies (it just the Java 8 SE API internally), 
 making it also easy and lightweight to integrate. 
 Compared to existing database testing frameworks, the main conceptual novelty
 is the possibility of using [&delta;-assertions](DBAssertions.html#DeltaAssertions).
+
+You may browse the reference documentation 
+available in this site, along with the [Javadoc](apidocs/index.html?org/jdbdt/JDBDT.html) for the JDBDT API and the [JDBDT tutorial](Tutorial.html).
 
 In a nutshell, the main features are as follows:
 
@@ -100,9 +104,36 @@ or [data set comparison](DBAssertions.html#DataSetAssertions), e.g.,
 	  assertUnchanged(theUserTable); // no delta
     }
     
+* Assertions and setup operations can be [logged onto (optionally compressed) XML files](Logs.html).
 
-For details,  browse the reference documentation 
-available in this site, along with the [Javadoc](apidocs/index.html?org/jdbdt/JDBDT.html) for the JDBDT API and the [JDBDT tutorial](Tutorial.html).
+
+	<jdbdt-log-message time="..." version="...">
+    ...
+	  <delta-assertion>
+        <expected>
+          <old-data count="0"/>
+          <new-data count="0"/>
+        </expected>
+        <errors>
+      	  <old-data>
+            <expected count="0"/>
+            <actual count="1">
+              <row>
+                <column java-type="java.lang.String" label="LOGIN">linus</column>
+                <column java-type="java.lang.String" label="NAME">Linus Torvalds</column>
+                <column java-type="java.lang.String" label="PASSWORD">linux</column>
+                <column java-type="java.sql.Date" label="CREATED">2015-01-01</column>
+              </row>
+            </actual>
+          </old-data>
+          <new-data>
+            <expected count="0"/>
+            <actual count="0"/>
+          </new-data>
+        </errors>
+      </delta-assertion>
+    </jdbdt-log-message>
+
 
 ## Contribute
 
