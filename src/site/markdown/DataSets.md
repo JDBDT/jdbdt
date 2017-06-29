@@ -2,17 +2,18 @@
 # Data sets
 
 A `DataSet` object represents a collection of rows for a [data source](DataSources.html)
-that may be used for database [setup](DBSetup.html) or [verification](DBAssertions.html).
+that may be used for database [setup](DBSetup.html) or [assertions](DBAssertions.html).
 
+&nbsp; <a name="Creation"></a>
 ## Creation
-<a name="Creation"></a>
+
 
 The examples below define data sets for a [table](DataSources.html#Table) (`Table`) object, 
 but the definition of data sets works similarly for
 [queries](DataSources.html#Query) (`Query`).
 
+&nbsp; <a name="Creation.Plain"></a>
 ### Plain definition 
-<a name="Creation.Plain"></a>
 
 In the simplest manner, 
 `DataSet` objects are created through the `data` JDBDT facade method,
@@ -37,8 +38,9 @@ typically followed by a chained sequence of calls.
 	    .row(102, "harry", "Harry H",    "meta",      Date.valueOf("2016-01-01"))
 	    .row(103, "guest", "Guest User", "welcome",   Date.valueOf("2016-01-02"));
 
+
+&nbsp; <a name="Creation.Typed"></a>
 ### Typed data sets
-<a name="Creation.Typed"></a>
 
 `TypedDataSet` is a typed extension of `DataSet`. It allows for a simple
 form of (one-way) object-relational mapping through conversion functions expressed
@@ -73,8 +75,8 @@ of column values.
 		.rows(john, harry, guest)
 		.rows(listOfOtherUsers);
 
+&nbsp; <a name="Creation.Builder"></a>
 ### Data set builders
-<a name="Creation.Builder"></a>
 
 A `DataSetBuilder` instance can be used to define or augment a data set 
 with the aid of expressive column filler methods. For instance,
@@ -122,17 +124,16 @@ set.
         .nullValue("CREATED") // set to NULL
         .generate(500);
  
+&nbsp; <a name="ReadOnly"></a>
 ## Read-only data sets
-<a name="ReadOnly"></a>
 
 A data set is marked read-only when defined as a [database snapshot](DBAssertions.html#Snapshots).
 Any attempt to modify it subsequently will cause an `InvalidOperationException`.
 
-## Summary of methods
-<a name="MethodReference"></a>
+&nbsp; <a name="SummaryOfMethods"></a>
+## Summary of API methods
 
 ### `JDBDT`
-
 
 Object creation - for a [data source](DataSources.html) `s`:
 
@@ -182,7 +183,3 @@ Utility methods (all `static`):
 - `sequence(column, ...)`  defines a sequence fillers for `column` (several method variants).
 - `random(column, ...)` defines a pseudo-random filler for `column` (several method variants).
 - `set(column, filler)` defines a custom column filler for `column`. 
-
-
-
-

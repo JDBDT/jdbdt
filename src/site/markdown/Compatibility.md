@@ -1,8 +1,8 @@
 
 # Compatibility
 
+&nbsp; <a name="Drivers"></a>
 ## JDBC drivers
-<a name="Drivers"></a>
 
 JDBDT is expected to work with any (sane) JDBC driver.
 The JDBDT build currently tests integration with:
@@ -14,11 +14,12 @@ The JDBDT build currently tests integration with:
 * [PostgreSQL](http://postgresql.org)
 * [SQLite](https://www.sqlite.org) through [xerial's JDBC driver](https://github.com/xerial/sqlite-jdbc)
 
+&nbsp; <a name="KnownIssues"></a>
 ## Known issues
-<a name="KnownIssues"></a>
 
+&nbsp; <a name="KnownIssues_PostgreSQL"></a>
 ### PostgreSQL
-<a name="KnownIssues_PostgreSQL"></a>
+
 
 #### Auto-commit off / Rollback on error
 
@@ -46,8 +47,9 @@ The `assertXXX` JDBDT assertion above (or any other code that issues a database 
 
 A possible workaround is to issue a rollback statement before any further operations, i.e., before `assertXXX` in the example snippet above.
 
+&nbsp;<a name="KnownIssues_sqlite"></a>
 ### sqlite
-<a name="KnownIssues_sqlite"></a>
+
 
 #### Statement reuse
 

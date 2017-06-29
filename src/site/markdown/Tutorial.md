@@ -2,7 +2,8 @@
 
 This tutorial will help you understand the essential features of JDBDT.
 
-## Tutorial code <a name="TheCode"></a>
+&nbsp; <a name="TheCode"></a>
+## Tutorial code 
 
 
 ### GitHub repository <a name="TheCode.GetIt"></a>
@@ -11,7 +12,8 @@ Get the tutorial code from [GitHub](http://github.com/edrdo/jdbdt-tutorial):
 	
 	git clone git@github.com:edrdo/jdbdt-tutorial.git
 
-### Maven project overview <a name="TheCode.MavenProject"></a>
+&nbsp; <a name="TheCode.MavenProject"></a>
+### Maven project overview 
 
 The code is organized as a [Maven](http://maven.apache.org) project, and comprises the following artifacts:
 
@@ -25,21 +27,23 @@ This class will be our main point of interest.
 There are three such classes `DerbyTest`, `H2Test`, `HSQLDBTest` (in `src/test/java/org/jdbdt/tutorial`). As their name indicates, they make use of JDBC drivers for [Apache Derby](http://db.apache.org/derby), [H2](http://h2database.com), and [HSQLDB](http://hsqldb.org). 
 - A JUnit test suite, `AllTests`, allowing tests in all classes mentioned above to be executed at once (`src/test/java/org/jdbdt/tutorial/AllTests.java`).
 
-### Running the tests <a name="TheCode.RunningTheTests"></a>
+&nbsp; <a name="TheCode.RunningTheTests"></a>
+### Running the tests 
 
 In the command line go to the root folder of the project and type `mvn test` to execute the `AllTests` suite.  
 
 Otherwise, import the project using a Maven-compatible IDE and run the tests from the IDE environment.
 [Eclipse](http://eclipse.org) users will find that a `.project` file is already in the root folder.
 
-### The test subject <a name="TheCode.TheTestSubject"></a>
+&nbsp; <a name="TheCode.TheTestSubject"></a>
+### The test subject 
 
 The SUT of the tutorial is the `UserDAO` class. Objects of this kind 
 works as a data-access object for a database table called `USERS`,
 whose Java representation is given by the POJO `User` class. 
 These items are described below.
 
-#### The `USERS` table <a name="TheCode.TheTestSubject.Table"></a>
+#### The `USERS` table 
 
 The `USERS` table represents user data in the form of a numeric id (primary key), a unique login, a name, a password, a role, and a creation date. The code for table creation below should be self-explanatory.  A sequence or identity column setting could be associated to the `ID` column, but we keep the example as simple as possible to ensure portability for different database engines. Likewise, for `ROLE`, a reference table or an `ENUM` type (as supported by some engines) could be used alternatively.
 
@@ -54,11 +58,11 @@ The `USERS` table represents user data in the form of a numeric id (primary key)
 		CREATED DATE NOT NULL
 	)
 	
-#### The `User` class <a name="TheCode.TheTestSubject.UserClass"></a>
+#### The `User` class 
 
 The `User` class is a POJO class with getter and setter methods for each of the user attributes (e.g.,`getId` and `setId`). Additionally, it overrides a number of `java.lang.Object` methods for convenience of use in test code (e.g., `equals`). 
 
-#### The `UserDAO` class <a name="TheCode.TheTestSubject.UserDAOClass"></a>
+#### The `UserDAO` class 
 
 The `UserDAO` class defines methods for interfacing with the `USERS` table 
 using `User` objects. The methods are in correspondence to database operations
@@ -73,10 +77,11 @@ for user insertion, update, removal and retrieval.
 * `getAllUsers()`: get a list of all users.
 * `getUsers(r)`: get a list of all users with a given role.
 
-## Test code / use of JDBDT <a name="TheTestCode"></a>
+&nbsp; <a name="TheTestCode"></a>
+## Test code / use of JDBDT 
 
-
-### JDBDT import statements <a name="TheTestCode.Imports"></a>
+&nbsp; <a name="TheTestCode.Imports"></a>
+### JDBDT import statements 
 
 The test code of `UserDAOTest` makes use of JDBDT to setup and validate the
 contents of the database. You should notice the following JDBDT imports:
@@ -89,11 +94,11 @@ contents of the database. You should notice the following JDBDT imports:
 
 The static import (the very first one) relates to methods in the [JDBDT facade](Facade.html) that exposes the core JDBDT API.
 
+&nbsp; <a name="TheTestCode.SetupAndTeardown"></a>
+### Database setup and tear-down 
 
-### Database setup and tear-down <a name="TheTestCode.SetupAndTeardown"></a>
 
-
-#### Initial setup <a name="TheTestCode.SetupAndTeardown.Initial"></a>
+#### Initial setup 
 
 To setup the database connection and define the initial contents of the database,
 each subclass of `UserDAOTest` defines a `globalSetup`
@@ -331,7 +336,7 @@ a prerequisite for using JDBDT save-points, that are discussed [later](Tutorial.
     	theDB.getConnection().setAutoCommit(false);
 
 
-#### Test teardown <a name="TheTestCode.SetupAndTeardown.Final"></a>
+#### Test teardown 
 
 The `globalTeardown` method of `UserDAOTest`, annotated with JUnit's `@AfterClass` annotation, is executed after all tests are done.  Its purpose is to leave the test database in a clean state and freeing up any resources.
 
@@ -345,7 +350,7 @@ The `truncate(theTable)` statement [truncates](DBSetup.html#Clean) the `USERS` t
 Then `teardown(theDB, true)` frees up any internal resources used by the [database handle](DB.html) and closes the underlying database connection.
 
 
-#### Per-test setup and tear-down <a name="TheTestCode.SetupAndTeardown.PerTest"></a>
+#### Per-test setup and tear-down 
 
 
 In `UserDAOTest`, the `saveState` and `restoreState` methods are executed respectively before and after each test, in line with the `@Before` and `@After` JUnit annotations in each method below. Their purpose is to make sure each test starts with the same initial database state
@@ -374,7 +379,8 @@ as [described before](Tutorial.html#TheTestCode.DBSetup),
 and also that `UserDAO` does not issue a database commit 
 (that would make any changes permanent and terminate the transaction started with `save(theDB)`). 
 
-### Tests and assertions <a name="TheTestCode.DBValidation"></a>
+&nbsp; <a name="TheTestCode.DBValidation"></a>
+### Tests and assertions 
 
 The tests in `UserDAOTest`, marked with the JUnit `@Test` annotation, validate the different methods
 in `UserDAO`, using [JDBDT assertions](DBAssertions.html).
@@ -412,7 +418,7 @@ It proceeds by first calling `nonExistingUser()`, an auxiliary method to creates
 Then it calls `theDAO.insertUser(u)` to insert the user. 
 To validate the database change `assertInserted`, a [delta assertion](DBAssertions.html#DeltaAssertion) method, is used. The assertion specifies that the expected state should differ only by the addition of the new user, i.e., `toDataSet(u)`. A fresh database query is issued for the `USERS` table, and the delta is verified against the [database snapshot](DBAssertions.html#Snapshots) defined in the [initial setup](Tutorial.html#TheTestCode.DBSetup) of `globalSetup`, more precisely the `populate(theInitialData)` step in that method. 
 
-#### State assertions <a name="TheTestCode.DBValidation.StateAssertions"></a>
+#### State assertions 
 
 Now consider `testNonExistingUserInsertionVariant`, an alternative test method with the same purpose as `testNonExistingUserInsertion`, but that uses a [state assertion](DBAssertions.html#StateAssertions) instead of a delta assertion:
 	
@@ -429,7 +435,7 @@ to match the current database state. The expected data set is formed by
 `theInitialData`, the data set defined in `globalSetup`, joined with `toDataSet(u)`.
 
 
-#### Plain data set assertions <a name="TheTestCode.DBValidation.DataSetAssertions"></a>
+#### Plain data set assertions 
 
 [Plain data set assertions](DBAssertions.html#DataSetAssertions) match the contents of two data set instances, via the `assertEquals` method
 (this should not be confused with the JUnit assertion method variants with the same name).  

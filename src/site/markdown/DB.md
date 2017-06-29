@@ -3,8 +3,8 @@
 A database handle encapsulates access to a database 
 connection.
 
+&nbsp;<a name="Creation"></a>
 ## Creation and teardown
-<a name="Creation"></a>
 
 A database handle is created using the `database` facade method, for instance
 supplying as argument a database URL. Once the database handle is no longer required,
@@ -27,8 +27,8 @@ internal resources may be freed up using the `teardown` method.
 	// In this case we close the connection.
 	teardown(db, true);
 
+&nbsp;<a name="Configuration"></a>
 ## Configuration 
-<a name="Configuration"></a>
 
 Database handle options are defined by the `DB.Option` enumeration.
 They may be enabled and disabled using  `enable` and `disable`, respectively. 
@@ -43,8 +43,9 @@ The available options relate to logging and a few other features discussed below
 	DB db = database(...);
 	db.enable(Option.LOG_SETUP);
 
+&nbsp; <a name="Logging"></a>
 ### Logging
-<a name="Logging"></a>
+
 
 For debugging purposes or report generation, trace output may be written to a [log file](Logs.html).
 The following logging options are defined in `DB.Option`
@@ -79,8 +80,8 @@ Note that if you use a `.gz` extension for log files, they will be GZIP-compress
 
 	db.setLog(new File("MyLog.jdbdt.xml.gz"));
 
+&nbsp; <a name="StatementReuse"></a>
 ### Statement reuse
-<a name="StatementReuse"></a>
 
 A database handle internally reuses `java.sql.PreparedStatement` objects
 to avoid re-compiling SQL code, regardless of any statement pooling in place
@@ -102,13 +103,15 @@ the `REUSE_STATEMENTS` option should be disabled as follows:
 [xerial's JDBC driver for sqlite](Compatibility.html#KnownIssues).
 No problems were detected for [all other JDBC drivers tested in the JDBDT build](Compatibility.html#Drivers).
 
+
+&nbsp; <a name="BatchUpdates"></a>
 ### Batch updates
 
 The `BATCH_UPDATES` option indicates that database insertions should use the JDBC batch update mechanism, unless the JDBC driver in does not support this feature 
 (in this case the option will have no effect). The option is enabled by default.
 
-## Summary of methods
-<a name="MethodReference"></a>
+&nbsp; <a name="SummaryOfMethods"></a>
+## Summary of API methods
 
 ### `JDBDT`
 

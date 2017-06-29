@@ -9,7 +9,11 @@ incremental changes, i.e., a **database delta**.
 * You may also perform complementary verifications, e.g., to compare data sets sets or 
 to check for the existence of database tables. 
 
-## Delta assertions <a name="DeltaAssertions"></a>
+&nbsp;<a name="DeltaAssertions"></a>
+## Delta assertions 
+
+&nbsp; <a name="Delta_About"></a>
+### &delta; assertions ? What do you mean ?
 
 &delta;-assertions state the expected incremental changes made to the database,
 i.e., an expected database delta. The figure below illustrates the mechanism. 
@@ -25,9 +29,9 @@ The programming pattern in line with this scheme is as follows:
 	Define reference snapshot(s) for the data source(s) of interest
 	theSUT.changesTheDB();
 	Call delta assertion method(s)
-	
+
+&nbsp; <a name="Snapshots"></a>	
 ### Snapshots 
-<a name="Snapshots"></a>
 
 A data source **snapshot** is a data set that is used as reference for subsequent delta
 assertions. It can be defined in two ways for a data source `s`:
@@ -53,7 +57,8 @@ will issue a fresh database query, and record the obtained data set as the snaps
 	// [2] OR take a snapshot.
 	DataSource s = ... ; // 's' can be a Table or Query
 	takeSnapshot(s); // --> internally takes and records a snapshot 
-	
+
+&nbsp; <a name="Assertion_Methods"></a>
 ### Assertion methods 
 
 The elementary &delta;-assertion method is `assertDelta`. 
@@ -130,8 +135,8 @@ A number of other assertion methods are defined for convenience, all of which in
 	letTheSUT_updatePassword(999, "dontDoeIt")
 	assertDelta(before, after);
 	
-	
-## State assertions <a name="StateAssertions"></a>
+&nbsp; <a name="StateAssertions"></a>
+## State assertions 
 
 A state assertion checks that the database contents in full, and
 is executed by calling `assertState`. 
@@ -169,12 +174,16 @@ it verifies that the given data source has no defined rows.
 	letTheSUT_insertOneUser( ... ); 
 	assertState(expected);
 
+&nbsp; <a name="OtherAssertions"></a>
 ## Other assertions
 
-### Data set assertions <a name="DataSetAssertions"></a>	
+&nbsp; <a name="DataSetAssertions"></a>	
+### Data set comparison  
 
-A data set assertion verifies that two given data sets are equivalent.
-This can be done using the `assertEquals` method.
+Two given data sets can be verified as equivalent using the `assertEquals` method.
+Note that an assertion of this kind will be insensitive to the order of rows in each data set (like all JDBDT delta or state assertions).
+
+**For JUnit users**: also beware not to confuse `assertEquals` with [JUnit](http://junit.org) methods that go by the same name. JUnit's `assertEquals` will not work properly, since `DataSet` (deliberately) does *not* override `Object.equals`. All will go well if you use [a static import for all methods in the JDBDT facade](Facade.html#StaticImport).
 
 *Illustration*
 
@@ -194,8 +203,8 @@ This can be done using the `assertEquals` method.
 	assertEquals(expected, actual);
 	
 
-**Note for JUnit users**: beware not to confuse `assertEquals` with [JUnit](http://junit.org) methods that go by the same name. JUnit's `assertEquals` will not work properly, since `DataSet` (deliberately) does *not* override `Object.equals`. All will go well if you use [a static import for all methods in the JDBDT facade](Facade.html#StaticImport).
 
+&nbsp; <a name="TableExistenceAssertions"></a>	
 ## Table existence assertions
 
 The `assertTableExists` assertion methods verifies if a given table exists in the database. Symmetrically, `assertTableDoesNotExist` verifies that a table does not
