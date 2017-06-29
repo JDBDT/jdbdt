@@ -117,8 +117,8 @@ to the order of query results, but the use of `orderBy` may make it easier to in
               .where("u1.LOGIN <> u2.LOGIN AND u1.PASSWORD = u2.PASSWORD")
               .build(db);
               
-&nbsp; <a name="SummaryOfMethods"></a>  
-## Summary of methods
+&nbsp; <a name="SummaryOfMethods"></a>
+## Summary of API methods
 
 ### `JDBDT`
 

@@ -69,7 +69,7 @@ for instance to populate tables, clear them, setting & restoring save points, ..
     static DataSet theinitialStata; 
     
     @BeforeClass
-    public void globalSetuo() {
+    public void globalSetup() {
       theTable = ... ;
       theInitialData = ...
     }
@@ -90,8 +90,9 @@ or [data set comparison](DBAssertions.html#DataSetAssertions), e.g.,
     public void testUserInsertion() {
       User uJohn = ...;
       DataSet newRow = 
-        data(t).row(999, "john", "John", "jpass", Date.valueOf("2016-01-01"));
-	  sut.insertOneUser( uJohn ); 
+         data(theTable)
+        .row(999, "john", "John", "jpass", Date.valueOf("2016-01-01"));
+	  sut.insertUser( uJohn ); 
 	  // Verify the insertion; assertion fails if other changes are detected
 	  assertInserted(newRow); 
 	}
@@ -100,7 +101,7 @@ or [data set comparison](DBAssertions.html#DataSetAssertions), e.g.,
 	public void testHarmlessQuery() {
 	  User u = sut.getUser("john");
 	  ... // standard assertions
-	  assertUnchanged(theUserTable); // no delta
+	  assertUnchanged(theTable); // no delta, query is really harmless!
     }
     
 * Assertions and setup operations can be [logged onto (optionally compressed) XML files](Logs.html).
