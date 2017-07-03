@@ -2,7 +2,7 @@
 
 This tutorial will help you understand the essential features of JDBDT.
 
-&nbsp; <a name="TheCode"></a>
+<a name="TheCode"></a>
 ## Tutorial code 
 
 
@@ -12,7 +12,7 @@ Get the tutorial code from [GitHub](http://github.com/edrdo/jdbdt-tutorial):
 	
 	git clone git@github.com:edrdo/jdbdt-tutorial.git
 
-&nbsp; <a name="TheCode.MavenProject"></a>
+<a name="TheCode.MavenProject"></a>
 ### Maven project overview 
 
 The code is organized as a [Maven](http://maven.apache.org) project, and comprises the following artifacts:
@@ -27,7 +27,7 @@ This class will be our main point of interest.
 There are three such classes `DerbyTest`, `H2Test`, `HSQLDBTest` (in `src/test/java/org/jdbdt/tutorial`). As their name indicates, they make use of JDBC drivers for [Apache Derby](http://db.apache.org/derby), [H2](http://h2database.com), and [HSQLDB](http://hsqldb.org). 
 - A JUnit test suite, `AllTests`, allowing tests in all classes mentioned above to be executed at once (`src/test/java/org/jdbdt/tutorial/AllTests.java`).
 
-&nbsp; <a name="TheCode.RunningTheTests"></a>
+<a name="TheCode.RunningTheTests"></a>
 ### Running the tests 
 
 In the command line go to the root folder of the project and type `mvn test` to execute the `AllTests` suite.  
@@ -35,7 +35,7 @@ In the command line go to the root folder of the project and type `mvn test` to 
 Otherwise, import the project using a Maven-compatible IDE and run the tests from the IDE environment.
 [Eclipse](http://eclipse.org) users will find that a `.project` file is already in the root folder.
 
-&nbsp; <a name="TheCode.TheTestSubject"></a>
+<a name="TheCode.TheTestSubject"></a>
 ### The test subject 
 
 The SUT of the tutorial is the `UserDAO` class. Objects of this kind 
@@ -77,10 +77,10 @@ for user insertion, update, removal and retrieval.
 * `getAllUsers()`: get a list of all users.
 * `getUsers(r)`: get a list of all users with a given role.
 
-&nbsp; <a name="TheTestCode"></a>
+<a name="TheTestCode"></a>
 ## Test code / use of JDBDT 
 
-&nbsp; <a name="TheTestCode.Imports"></a>
+<a name="TheTestCode.Imports"></a>
 ### JDBDT import statements 
 
 The test code of `UserDAOTest` makes use of JDBDT to setup and validate the
@@ -94,7 +94,7 @@ contents of the database. You should notice the following JDBDT imports:
 
 The static import (the very first one) relates to methods in the [JDBDT facade](Facade.html) that exposes the core JDBDT API.
 
-&nbsp; <a name="TheTestCode.SetupAndTeardown"></a>
+<a name="TheTestCode.SetupAndTeardown"></a>
 ### Database setup and tear-down 
 
 
@@ -379,7 +379,7 @@ as [described before](Tutorial.html#TheTestCode.DBSetup),
 and also that `UserDAO` does not issue a database commit 
 (that would make any changes permanent and terminate the transaction started with `save(theDB)`). 
 
-&nbsp; <a name="TheTestCode.DBValidation"></a>
+<a name="TheTestCode.DBValidation"></a>
 ### Tests and assertions 
 
 The tests in `UserDAOTest`, marked with the JUnit `@Test` annotation, validate the different methods

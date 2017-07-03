@@ -12,7 +12,7 @@ but also for table row [insertions / updates / deletions](DBSetup.html#IUD);
 
 These functionalities are described below, along with a discussion of a few   [database setup patterns](DBSetup.html#Patterns)  that can be implemented using these operations.
 
-&nbsp; <a name="Populate"></a>
+<a name="Populate"></a>
 ## Populating a table
 
 
@@ -84,12 +84,12 @@ More generally, you may query the changed status of data sources using the `chan
     }
  
 
-&nbsp; <a name="IUD"></a>
+<a name="IUD"></a>
 ## Data set insertions, updates and deletes 
 
-Beyond `populate`, data sets may be used for insertions, updates and deletes.
+Beyond `populate`, data sets may be used for table insertions, updates and deletes.
 
-The `insert`  method inserts a given data set, without clearing any previous contents (unlike `populate` that clears it first).  
+The `insert`  method inserts a given data set onto a table, without deleting any previous contents (unlike `populate` that clears the table first).  
 
     Table t = ...	
     DataSet additionalData = data(t) ... 
@@ -114,7 +114,7 @@ The `update` and `delete` method respectively update and delete a data set in th
     delete(ds);
 
 
-&nbsp; <a name="Clean"></a>
+<a name="Clean"></a>
 ## Cleaning a table
 
 
@@ -154,7 +154,7 @@ for different database engines (e.g., <a href="https://en.wikipedia.org/wiki/Tru
 	// 4. Drop the table entirely.
 	drop(t);   // alternatively: drop(db, "USERS")
 
-&nbsp; <a name="SaveAndRestore"></a>
+<a name="SaveAndRestore"></a>
 ## Saving and restoring database state 
 
 
@@ -198,7 +198,7 @@ and discards the JDBDT save-point (or any other save-point set for the database 
     restore(db);
 
 
-&nbsp; <a name="Patterns"></a>
+<a name="Patterns"></a>
 ## Database setup patterns 
 
 A number of database test patterns can be implemented using JDBDT, as exemplified in the [JDBDT tutorial](Tutorial.html). The code skeleton below (assuming [JUnit](http://junit.org)-based tests) 

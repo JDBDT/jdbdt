@@ -1,7 +1,7 @@
 
 # Compatibility
 
-&nbsp; <a name="Drivers"></a>
+<a name="Drivers"></a>
 ## JDBC drivers
 
 JDBDT is expected to work with any (sane) JDBC driver.
@@ -14,10 +14,10 @@ The JDBDT build currently tests integration with:
 * [PostgreSQL](http://postgresql.org)
 * [SQLite](https://www.sqlite.org) through [xerial's JDBC driver](https://github.com/xerial/sqlite-jdbc)
 
-&nbsp; <a name="KnownIssues"></a>
+<a name="KnownIssues"></a>
 ## Known issues
 
-&nbsp; <a name="KnownIssues_PostgreSQL"></a>
+<a name="KnownIssues_PostgreSQL"></a>
 ### PostgreSQL
 
 

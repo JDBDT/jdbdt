@@ -6,7 +6,7 @@ The `org.jdbdt.JDBDT` class  is the facade for the JDBDT API,
 providing the core interface methods for database setup, verification,
 and API object creation. 
 
-&nbsp; <a name="StaticImport"></a>
+<a name="StaticImport"></a>
 ## Static import
 
 
@@ -15,7 +15,7 @@ may be convenient to refer to the API methods concisely.
 
     import static org.jdbdt.JDBDT.*;
 
-&nbsp; <a name="Overview"></a>
+<a name="Overview"></a>
 ## Overview of functionality
 
 [(browse Javadoc instead)](apidocs/index.html?org/jdbdt/JDBDT.html)

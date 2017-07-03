@@ -4,7 +4,8 @@
 A `DataSet` object represents a collection of rows for a [data source](DataSources.html)
 that may be used for database [setup](DBSetup.html) or [assertions](DBAssertions.html).
 
-&nbsp; <a name="Creation"></a>
+<a name="Creation"></a>
+
 ## Creation
 
 
@@ -12,7 +13,8 @@ The examples below define data sets for a [table](DataSources.html#Table) (`Tabl
 but the definition of data sets works similarly for
 [queries](DataSources.html#Query) (`Query`).
 
-&nbsp; <a name="Creation.Plain"></a>
+<a name="Creation.Plain"></a>
+
 ### Plain definition 
 
 In the simplest manner, 
@@ -39,7 +41,8 @@ typically followed by a chained sequence of calls.
 	    .row(103, "guest", "Guest User", "welcome",   Date.valueOf("2016-01-02"));
 
 
-&nbsp; <a name="Creation.Typed"></a>
+<a name="Creation.Typed"></a>
+
 ### Typed data sets
 
 `TypedDataSet` is a typed extension of `DataSet`. It allows for a simple
@@ -75,7 +78,9 @@ of column values.
 		.rows(john, harry, guest)
 		.rows(listOfOtherUsers);
 
-&nbsp; <a name="Creation.Builder"></a>
+
+<a name="Creation.Builder"></a>
+
 ### Data set builders
 
 A `DataSetBuilder` instance can be used to define or augment a data set 
@@ -124,13 +129,16 @@ set.
         .nullValue("CREATED") // set to NULL
         .generate(500);
  
-&nbsp; <a name="ReadOnly"></a>
+
+<a name="ReadOnly"></a>
+
 ## Read-only data sets
 
 A data set is marked read-only when defined as a [database snapshot](DBAssertions.html#Snapshots).
 Any attempt to modify it subsequently will cause an `InvalidOperationException`.
 
-&nbsp; <a name="SummaryOfMethods"></a>
+<a name="SummaryOfMethods"></a>
+
 ## Summary of API methods
 
 ### `JDBDT`

@@ -3,7 +3,7 @@
 
 An XML format is used for [JDBDT log files](DB.html#Logging) and for the output of calls to `JDBDT.dump`. 
 
-&nbsp; <a name="Generic"></a>
+<a name="Generic"></a>
 ## Generic format 
 
 Every JDBDT log message is defined by a `jdbdt-log-message` XML node.
@@ -49,7 +49,7 @@ and SQL type (`sql-type`).
         <sql><![CDATA[SELECT login, name, password, created FROM Users]]></sql>
       </data-source>
 
-&nbsp; <a name="DataSets"></a>
+<a name="DataSets"></a>
 ## Data sets 
 
 A `data-set` node displays the contents of a [data set](DataSets.html) that associates 
@@ -89,7 +89,7 @@ column label (`label` attribute) and Java type (`java-type`).
 	    </rows>
 	  </data-set>
 
-&nbsp; <a name="StateAndDataSetAssertions"></a>
+<a name="StateAndDataSetAssertions"></a>
 ## State and data set assertions
 
 An `assertion` node refers to a [database state assertion](DBAssertions.html#StateAssertions) or a [data set assertion](DBAssertions.html#DataSetAssertions). It comprises:
@@ -150,7 +150,7 @@ The `steve` and `bill` "users" were matched.
       </errors>
     </assertion>
 
-&nbsp; <a name="DeltaAssertions"></a>  
+<a name="DeltaAssertions"></a>  
 ## Delta assertions 
 
 A `delta-assertion` node refers to a [database delta assertion](DBAssertions.html#DeltaAssertions). For an  assertion

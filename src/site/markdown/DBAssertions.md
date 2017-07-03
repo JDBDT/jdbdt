@@ -12,7 +12,7 @@ to check for the existence of database tables.
 &nbsp;<a name="DeltaAssertions"></a>
 ## Delta assertions 
 
-&nbsp; <a name="Delta_About"></a>
+<a name="Delta_About"></a>
 ### &delta; assertions ? What do you mean ?
 
 &delta;-assertions state the expected incremental changes made to the database,
@@ -30,7 +30,7 @@ The programming pattern in line with this scheme is as follows:
 	theSUT.changesTheDB();
 	Call delta assertion method(s)
 
-&nbsp; <a name="Snapshots"></a>	
+<a name="Snapshots"></a>	
 ### Snapshots 
 
 A data source **snapshot** is a data set that is used as reference for subsequent delta
@@ -58,7 +58,7 @@ will issue a fresh database query, and record the obtained data set as the snaps
 	DataSource s = ... ; // 's' can be a Table or Query
 	takeSnapshot(s); // --> internally takes and records a snapshot 
 
-&nbsp; <a name="Assertion_Methods"></a>
+<a name="Assertion_Methods"></a>
 ### Assertion methods 
 
 The elementary &delta;-assertion method is `assertDelta`. 
@@ -135,7 +135,7 @@ A number of other assertion methods are defined for convenience, all of which in
 	letTheSUT_updatePassword(999, "dontDoeIt")
 	assertDelta(before, after);
 	
-&nbsp; <a name="StateAssertions"></a>
+<a name="StateAssertions"></a>
 ## State assertions 
 
 A state assertion checks that the database contents in full, and
@@ -174,10 +174,10 @@ it verifies that the given data source has no defined rows.
 	letTheSUT_insertOneUser( ... ); 
 	assertState(expected);
 
-&nbsp; <a name="OtherAssertions"></a>
+<a name="OtherAssertions"></a>
 ## Other assertions
 
-&nbsp; <a name="DataSetAssertions"></a>	
+<a name="DataSetAssertions"></a>	
 ### Data set comparison  
 
 Two given data sets can be verified as equivalent using the `assertEquals` method.
@@ -204,7 +204,7 @@ Note that an assertion of this kind will be insensitive to the order of rows in 
 	
 
 
-&nbsp; <a name="TableExistenceAssertions"></a>	
+<a name="TableExistenceAssertions"></a>	
 ## Table existence assertions
 
 The `assertTableExists` assertion methods verifies if a given table exists in the database. Symmetrically, `assertTableDoesNotExist` verifies that a table does not

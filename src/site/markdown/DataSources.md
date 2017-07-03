@@ -4,10 +4,10 @@
 `DataSource` objects represent tables and queries that are used for database 
  [setup](DBSetup.html) or [assertions](DBAssertions.html).
  
-&nbsp; <a name="Table"></a>
+<a name="Table"></a>
 ## Tables
 
-&nbsp; <a name="Table_Builder"></a>
+<a name="Table_Builder"></a>
 ### Using table builders
 
 Tables are represented by `Table`, a subclass of `DataSource`. A table is created
@@ -26,7 +26,7 @@ and the `build` method to build the actual `Table` object in association to a [d
 	                 .columns("LOGIN", "NAME", "PASSWORD", "CREATED")
 	                 .build(db);
 
-&nbsp; <a name="Table_Key"></a>
+<a name="Table_Key"></a>
 ### Key columns for a table
 In addition, if you wish to perform updates and deletes using data sets, `key` can be used to define the columns that form 
 the table's primary key (or that in some other form identify each database row uniquely) 
@@ -38,13 +38,13 @@ the table's primary key (or that in some other form identify each database row u
 	                  .key("LOGIN")
 	                  .build(db);
 
-&nbsp; <a name="Query"></a>
+<a name="Query"></a>
 ## Queries
 
 Queries are represented by `Query`, a subclass of `DataSource`. 
 A `Query` object can be created from a raw SQL statements or using a `QueryBuilder`.    
            
-&nbsp; <a name="RawQuery"></a>
+<a name="RawQuery"></a>
 ### Definition from raw SQL 
 
 The `query` facade method may be used to define a query using raw SQL.
@@ -60,7 +60,7 @@ The `query` facade method may be used to define a query using raw SQL.
     int idArgument = ...;
     Query q = query(db, "SELECT LOGIN, NAME FROM USER WHERE ID = ?", idArgument);
 
-&nbsp; <a name="QueryBuilder"></a>
+<a name="QueryBuilder"></a>
 ### Definition using `QueryBuilder`
 
 `QueryBuilder` objects can be used to define queries programmatically.
@@ -117,7 +117,7 @@ to the order of query results, but the use of `orderBy` may make it easier to in
               .where("u1.LOGIN <> u2.LOGIN AND u1.PASSWORD = u2.PASSWORD")
               .build(db);
               
-&nbsp; <a name="SummaryOfMethods"></a>
+<a name="SummaryOfMethods"></a>
 ## Summary of API methods
 
 ### `JDBDT`

@@ -43,7 +43,7 @@ The available options relate to logging and a few other features discussed below
 	DB db = database(...);
 	db.enable(Option.LOG_SETUP);
 
-&nbsp; <a name="Logging"></a>
+<a name="Logging"></a>
 ### Logging
 
 
@@ -80,7 +80,7 @@ Note that if you use a `.gz` extension for log files, they will be GZIP-compress
 
 	db.setLog(new File("MyLog.jdbdt.xml.gz"));
 
-&nbsp; <a name="StatementReuse"></a>
+<a name="StatementReuse"></a>
 ### Statement reuse
 
 A database handle internally reuses `java.sql.PreparedStatement` objects
@@ -104,13 +104,13 @@ the `REUSE_STATEMENTS` option should be disabled as follows:
 No problems were detected for [all other JDBC drivers tested in the JDBDT build](Compatibility.html#Drivers).
 
 
-&nbsp; <a name="BatchUpdates"></a>
+<a name="BatchUpdates"></a>
 ### Batch updates
 
 The `BATCH_UPDATES` option indicates that database insertions should use the JDBC batch update mechanism, unless the JDBC driver in does not support this feature 
 (in this case the option will have no effect). The option is enabled by default.
 
-&nbsp; <a name="SummaryOfMethods"></a>
+<a name="SummaryOfMethods"></a>
 ## Summary of API methods
 
 ### `JDBDT`
