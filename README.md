@@ -59,6 +59,7 @@ Continuous integration:
 * [#24 - Travis CI: SonarQube add-on only for standard Linux build](https://github.com/edrdo/jdbdt/issues/24)
 
 Site:
+* [#26 - Fixed anchor link location in web pages](https://github.com/edrdo/jdbdt/issues/26)
 * [#27 - Start page is now a bit more appealing](https://github.com/edrdo/jdbdt/issues/27)
 
 ## 0.12
