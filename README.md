@@ -42,7 +42,7 @@ Commands:
 
 # Change Log
 
-## 0.13-SNAPSHOT (current snapshot)
+## 1.0.0-SNAPSHOT (current snapshot)
 
 API:
 
