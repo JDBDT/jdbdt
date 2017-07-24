@@ -40,7 +40,7 @@ matrix:
       group: edge
       jdk: oraclejdk9
       env: 
-        - GOALS="clean package site-deploy"
+        - GOALS="clean package"
         - MAVEN_OPTS='-Xmx4g -Xss512m --add-opens java.base/java.lang=ALL-UNNAMED' 
 before_script:
   - test $POSTGRESQL_SERVICE != true || psql -c 'create database jdbdt;' -U postgres 
