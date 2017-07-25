@@ -205,7 +205,7 @@ Note that an assertion of this kind will be insensitive to the order of rows in 
 
 
 <a name="TableExistenceAssertions"></a>	
-## Table existence assertions
+### Table existence assertions
 
 The `assertTableExists` assertion methods verifies if a given table exists in the database. Symmetrically, `assertTableDoesNotExist` verifies that a table does not
 exist (e.g., has been dropped by the SUT).
