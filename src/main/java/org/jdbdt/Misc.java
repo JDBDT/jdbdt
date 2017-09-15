@@ -57,9 +57,6 @@ final class Misc {
     return data;
   }
 
-  /** Thread-local handle for checksum handle. */
-  private static final ThreadLocal<MessageDigest> SHA1_DIGEST_TL = new ThreadLocal<>();
-
   /** SHA-1 digest constant. */
   private static final String SHA1_DIGEST = "SHA-1";
 
@@ -70,12 +67,7 @@ final class Misc {
    */
   static byte[] sha1(InputStream in) {
     try {
-      MessageDigest md = SHA1_DIGEST_TL.get();
-      if (md == null) {
-        md = MessageDigest.getInstance(SHA1_DIGEST);        
-        SHA1_DIGEST_TL.set(md);
-      }
-      md.reset();
+      MessageDigest md = MessageDigest.getInstance(SHA1_DIGEST); 
       byte[] buffer = new byte[4096];
       int bytes;
       while ( (bytes = in.read(buffer)) > 0) {
