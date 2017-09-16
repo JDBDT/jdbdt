@@ -49,7 +49,7 @@ Commands:
 
 Maintenance:
 
-* [#30 - Stopped using thread-local references](https://github.com/edrdo/jdbdt/issues/30)
+* [#30 - Stopped using thread-local data](https://github.com/edrdo/jdbdt/issues/30)
 
 Continuous integration:
 
