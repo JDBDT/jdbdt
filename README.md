@@ -4,6 +4,7 @@
 [![GitHub release](https://img.shields.io/github/release/edrdo/jdbdt.svg)](https://github.com/edrdo/jdbdt/releases)
 [![Travis build Status](https://api.travis-ci.org/edrdo/jdbdt.png?branch=master)](https://travis-ci.org/edrdo/jdbdt)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/647d281hp1b8py3p?svg=false)](https://ci.appveyor.com/project/edrdo/jdbdt)
+[![Coverity scan](https://scan.coverity.com/projects/13763/badge.svg?flat=1)](https://scan.coverity.com/projects/edrdo-jdbdt)
 
 
 JDBDT (Java Database Delta Testing) is a library for database test automation.
