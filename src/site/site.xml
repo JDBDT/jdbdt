@@ -40,6 +40,7 @@
       <item name="Travis CI" href="https://travis-ci.org/edrdo/jdbdt/"/>
       <item name="AppVeyor CI" href="https://ci.appveyor.com/project/edrdo/jdbdt"/>
       <item name="SonarCloud" href="https://sonarcloud.io/organizations/jdbdt/projects"/>
+      <item name="Coverity" href="https://scan.coverity.com/projects/edrdo-jdbdt"/>
       <item name="Maven reports" href="project-info.html"/>
       <item name="Inception" href="Inception.html"/>
     </menu>
