@@ -43,8 +43,20 @@ Commands:
 
 # Change Log
 
-## 1.0.0
+## 1.0.x
 
+### 1.0.1
+
+Maintenance:
+
+* [#30 - Stopped using thread-local references](https://github.com/edrdo/jdbdt/issues/30)
+
+Continuous integration:
+
+* [#29 - Coverity scan during Travis build](https://github.com/edrdo/jdbdt/issues/29)
+* [#28 - Fixed broken Java 9 build](https://github.com/edrdo/jdbdt/issues/28) 
+
+### 1.0.0
 API:
 
 * [#21 - Data sets can now be used for table updates/deletes.](https://github.com/edrdo/jdbdt/issues/21)
