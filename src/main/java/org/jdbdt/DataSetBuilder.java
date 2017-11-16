@@ -378,6 +378,22 @@ public final class DataSetBuilder {
     return sequence(column, step, 0);
   }
 
+  @SuppressWarnings("javadoc")
+  private static class SequenceFiller implements ColumnFiller<Object> {
+    private int step;
+    private final Function<Integer,?> stepFunction;
+    
+    SequenceFiller(Function<Integer,?> stepFunction, int initialValue) {
+      this.stepFunction = stepFunction;
+      this.step = initialValue;
+    }
+    
+    @Override
+    public Object next() {
+      return stepFunction.apply(step++);
+    }
+  }
+  
   /**
    * Set sequence filler using a index-based step-function.
    * 
@@ -399,13 +415,7 @@ public final class DataSetBuilder {
    */
   public DataSetBuilder sequence(String column, Function<Integer,?> step, int initial) {
     ensureArgNotNull(step);
-    return set(column, new ColumnFiller<Object>() {
-      int count = initial;
-      @Override
-      public Object next() {
-        return step.apply(count++);
-      }
-    });
+    return set(column, new SequenceFiller(step, initial));
   }
 
   /**
