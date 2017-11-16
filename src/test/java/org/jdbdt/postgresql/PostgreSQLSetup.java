@@ -37,7 +37,7 @@ public interface PostgreSQLSetup {
 
     @Override
     public String start() {
-      postgres = new EmbeddedPostgres(Version.V9_6_3);
+      postgres = new EmbeddedPostgres(Version.V9_6_5);
       Path cachePath = FileSystems.getDefault().getPath(System.getProperty("user.home") + "/.embedpostgresql/");
       try {
         return postgres.start(EmbeddedPostgres.cachedRuntimeConfig(cachePath));
