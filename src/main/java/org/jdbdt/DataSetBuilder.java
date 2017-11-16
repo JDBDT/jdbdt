@@ -53,11 +53,6 @@ import java.util.function.Function;
 public final class DataSetBuilder {
 
   /**
-   * Random number generator seed.
-   */
-  static final long RNG_SEED = 0xDA7ABA5EL;
-
-  /**
    * Target data set.
    */
   private final DataSet data;
