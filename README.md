@@ -45,6 +45,10 @@ Commands:
 
 ## 1.0.x
 
+### 1.0.2
+
+* [#31 - Maintenance tasks](https://github.com/edrdo/jdbdt/issues/31)
+
 ### 1.0.1
 
 Maintenance:
