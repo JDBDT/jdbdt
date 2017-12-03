@@ -33,7 +33,7 @@ JDBDT is self-contained (it uses the Java 8 SE API only).
 
 Requirements:
 
-* Maven 3.2 or higher
+* Maven 3.0 or higher
 * Java 8 compiler or higher
 
 Commands: 
