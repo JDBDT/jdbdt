@@ -59,11 +59,12 @@ final class Log implements AutoCloseable {
    */
   static Log create(File outputFile) {
     try {
-      OutputStream out = new FileOutputStream(outputFile);
-      if (outputFile.getName().endsWith(".gz")) {
-        out = new GZIPOutputStream(out);
-      } 
-      return new Log(new PrintStream(out), false);
+      return new Log(
+              new PrintStream(
+                 outputFile.getName().endsWith(".gz") ?
+                   new GZIPOutputStream(new FileOutputStream(outputFile))
+                 : new FileOutputStream(outputFile)),
+              false);  
     } 
     catch (IOException e) {
       throw new InvalidOperationException("I/O error", e);

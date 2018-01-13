@@ -13,6 +13,8 @@ import java.util.List;
  */
 final class DBSetup {
 
+ 
+
   /**
    * Insert a data set onto the database.
    * @param callInfo Call information.
@@ -160,7 +162,7 @@ final class DBSetup {
     itr = keyColumns.iterator();
     col = itr.next();
     paramIdx[tableColumns.indexOf(col)] = ++param;
-    sql.append(" WHERE ")
+    sql.append(_WHERE_)
        .append(col)
        .append("=?");
     
@@ -201,9 +203,9 @@ final class DBSetup {
     String kcol = itr.next();
     
     paramIdx[tableColumns.indexOf(kcol)] = ++param;
-    sql.append("DELETE FROM ")
+    sql.append(DELETE_FROM_)
        .append(table.getName())
-       .append(" WHERE ")
+       .append(_WHERE_)
        .append(kcol)
        .append("=?");
     
@@ -281,7 +283,7 @@ final class DBSetup {
   private static int doDeleteAll(CallInfo callInfo, Table table) {
     DB db = table.getDB();
     return db.access( () -> {
-      String sql = "DELETE FROM " + table.getName();
+      String sql = DELETE_FROM_ + table.getName();
       db.logSetup(callInfo, sql);
       try (WrappedStatement ws = db.compile(sql)) {
         return ws.getStatement().executeUpdate();
@@ -322,8 +324,8 @@ final class DBSetup {
     return  db.access( () -> {
       table.setDirtyStatus(true);
       String sql = 
-          "DELETE FROM " + table.getName() +
-          " WHERE " + where;
+          DELETE_FROM_ + table.getName() +
+          _WHERE_ + where;
       db.logSetup(callInfo, sql);
       try (WrappedStatement ws = db.compile(sql)) {
         PreparedStatement deleteStmt = ws.getStatement();
@@ -362,6 +364,9 @@ final class DBSetup {
 
   }
 
-
+  @SuppressWarnings("javadoc")
+  private static final String _WHERE_ = " WHERE ";
+  @SuppressWarnings("javadoc")
+  private static final String DELETE_FROM_ = " DELETE FROM ";
 
 }
