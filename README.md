@@ -46,26 +46,6 @@ Commands:
 
 ## 1.0.x
 
-### 1.0.3
-
-* [#32 - Maintenance tasks (1.0.3)](https://github.com/edrdo/jdbdt/issues/32)
-
-### 1.0.2
-
-* [#31 - Maintenance tasks (1.0.2)](https://github.com/edrdo/jdbdt/issues/31)
-
-### 1.0.1
-
-Maintenance:
-
-* [#30 - Stopped using thread-local data](https://github.com/edrdo/jdbdt/issues/30)
-
-Continuous integration:
-
-* [#29 - Coverity scan during Travis build](https://github.com/edrdo/jdbdt/issues/29)
-* [#28 - Fixed broken Java 9 build](https://github.com/edrdo/jdbdt/issues/28) 
-
-### 1.0.0
 API:
 
 * [#21 - Data sets can now be used for table updates/deletes.](https://github.com/edrdo/jdbdt/issues/21)
@@ -79,10 +59,19 @@ Continuous integration:
 * [#22 - Travis CI: using mysql service if available](https://github.com/edrdo/jdbdt/issues/22)
 * [#23 - Travis CI: using postgresql service if available](https://github.com/edrdo/jdbdt/issues/23)
 * [#24 - Travis CI: SonarQube add-on only for standard Linux build](https://github.com/edrdo/jdbdt/issues/24)
+* [#28 - Fixed broken Java 9 build (1.0.1)](https://github.com/edrdo/jdbdt/issues/28) 
+* [#29 - Coverity scan during Travis build (1.0.1)](https://github.com/edrdo/jdbdt/issues/29)
 
 Site:
 * [#26 - Fixed anchor link location in web pages](https://github.com/edrdo/jdbdt/issues/26)
 * [#27 - Start page is now a bit more appealing](https://github.com/edrdo/jdbdt/issues/27)
+
+Maintenance:
+* [#30 - Stopped using thread-local data (1.0.1)](https://github.com/edrdo/jdbdt/issues/30)
+* Standard maintenance tasks (dependency updates, minor adjustments) 
+  [#31 - 1.0.2)](https://github.com/edrdo/jdbdt/issues/31)
+  [#32 - 1.0.3](https://github.com/edrdo/jdbdt/issues/32)
+  [#34 - 1.0.4](https://github.com/edrdo/jdbdt/issues/32)
 
 ## 0.12
 
