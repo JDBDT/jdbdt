@@ -71,7 +71,7 @@ Maintenance:
 * Standard maintenance tasks (dependency updates, minor adjustments, etc) 
 	* [#31 - 1.0.2](https://github.com/edrdo/jdbdt/issues/31)
 	* [#32 - 1.0.3](https://github.com/edrdo/jdbdt/issues/32)
-	* [#34 - 1.0.4](https://github.com/edrdo/jdbdt/issues/32)
+	* [#34 - 1.0.4](https://github.com/edrdo/jdbdt/issues/34)
 
 ## 0.12
 
