@@ -8,9 +8,9 @@ This tutorial will help you understand the essential features of JDBDT.
 
 ### GitHub repository <a name="TheCode.GetIt"></a>
 
-Get the tutorial code from [GitHub](http://github.com/edrdo/jdbdt-tutorial):
+Get the tutorial code from [GitHub](http://github.com/JDBDT/jdbdt-tutorial):
 	
-	git clone git@github.com:edrdo/jdbdt-tutorial.git
+	git clone git@github.com:JDBDT/jdbdt-tutorial.git
 
 <a name="TheCode.MavenProject"></a>
 ### Maven project overview 

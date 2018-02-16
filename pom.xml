@@ -20,18 +20,18 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>https://github.com/edrdo/jdbdt</url>
-		<connection>scm:git:git@github.com:edrdo/jdbdt.git</connection>
-		<developerConnection>scm:git:git@github.com:edrdo/jdbdt.git</developerConnection>
+		<url>https://github.com/JDBDT/jdbdt</url>
+		<connection>scm:git:git@github.com:JDBDT/jdbdt.git</connection>
+		<developerConnection>scm:git:git@github.com:JDBDT/jdbdt.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 	<issueManagement>
 		<system>github</system>
-		<url>https://github.com/edrdo/jdbdt/issues/</url>
+		<url>https://github.com/JDBDT/jdbdt/issues/</url>
 	</issueManagement>
 	<ciManagement>
 		<system>Travis</system>
-		<url>https://travis-ci.org/edrdo/jdbdt/</url>
+		<url>https://travis-ci.org/JDBDT/jdbdt/</url>
 	</ciManagement>
 	<distributionManagement>
 		<snapshotRepository>

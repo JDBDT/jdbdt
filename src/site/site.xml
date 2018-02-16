@@ -31,13 +31,13 @@
     </menu>
     <menu name="Tutorial">
       <item name="Guide" href="Tutorial.html"/>
-      <item name="Code @ GitHub" href="http://github.com/edrdo/jdbdt-tutorial"/>
+      <item name="Code @ GitHub" href="http://github.com/JDBDT/jdbdt-tutorial"/>
     </menu>
     <menu name="Development">   
       <item name="Maven Central" href="http://search.maven.org/#search%7Cga%7C1%7Cjdbdt" />
-      <item name="Source code" href="https://github.com/edrdo/jdbdt/" />
-      <item name="Issue tracker" href="https://github.com/edrdo/jdbdt/issues/"/>
-      <item name="Travis CI" href="https://travis-ci.org/edrdo/jdbdt/"/>
+      <item name="Source code" href="https://github.com/JDBDT/jdbdt/" />
+      <item name="Issue tracker" href="https://github.com/JDBDT/jdbdt/issues/"/>
+      <item name="Travis CI" href="https://travis-ci.org/JDBDT/jdbdt/"/>
       <item name="AppVeyor CI" href="https://ci.appveyor.com/project/edrdo/jdbdt"/>
       <item name="SonarCloud" href="https://sonarcloud.io/organizations/jdbdt/projects"/>
       <item name="Coverity" href="https://scan.coverity.com/projects/edrdo-jdbdt"/>
