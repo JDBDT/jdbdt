@@ -73,7 +73,7 @@ Maintenance:
 	* [#32 - 1.0.3](https://github.com/JDBDT/jdbdt/issues/32)
 	* [#34 - 1.0.4](https://github.com/JDBDT/jdbdt/issues/34)
 	* [#35 - 1.0.5](https://github.com/JDBDT/jdbdt/issues/35)
-* [#36 - Tranferred ownership to JDBDT organisation (1.0.5)](https://github.com/JDBDT/jdbdt/issues/36)
+* [#36 - Transferred ownership to JDBDT organisation (1.0.5)](https://github.com/JDBDT/jdbdt/issues/36)
 
 ## 0.12
 
