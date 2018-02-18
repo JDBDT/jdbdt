@@ -8,7 +8,7 @@
 [![Coverity scan](https://scan.coverity.com/projects/13763/badge.svg?flat=1)](https://scan.coverity.com/projects/edrdo-jdbdt)
 
 JDBDT (Java DataBase Delta Testing) is an open-source Java library for 
-testing (SQL-based) database applications. The library is designed for automation 
+testing database applications. The library is designed for automation 
 of database setup and validation in test code. 
 JDBDT is compact and has no third-party library dependencies (it just the Java 8 SE API internally), 
 making it also easy and lightweight to integrate. 
