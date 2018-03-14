@@ -71,9 +71,9 @@ for instance to populate tables, clear them, setting & restoring save points, ..
     static DataSet theinitialStata; 
     
     @BeforeClass
-    public void globalSetup() {
+    public static void globalSetup() {
       theTable = ... ;
-      theInitialData = ...
+      theInitialData = ... ;
     }
     
     @Before

@@ -46,7 +46,7 @@ and no intervening subsequent JDBDT setup or assertion methods were called for t
     static DataSet initialStata; 
     
     @BeforeClass
-    public void globalSetuo() {
+    public static void globalSetup() {
       theTable = ... ;
       initialData = data(theTable) ...
     }
@@ -249,7 +249,7 @@ with `@AfterClass`).
 	    myDB.getConnection().setAutoCommit(false);
 	  }
 	  
-	  @AferClass
+	  @AfterClass
 	  public void oneTimeTeardown() {
 	    // Alternatively use deleteAll ...
 	    truncate(myTable1);
