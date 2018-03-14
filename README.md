@@ -68,12 +68,13 @@ Site:
 
 Maintenance:
 * [#30 - Stopped using thread-local data (1.0.1)](https://github.com/JDBDT/jdbdt/issues/30)
+* [#36 - Transferred ownership to JDBDT organisation (1.0.5)](https://github.com/JDBDT/jdbdt/issues/36)
 * Standard maintenance tasks (dependency updates, minor adjustments, etc) 
 	* [#31 - 1.0.2](https://github.com/JDBDT/jdbdt/issues/31)
 	* [#32 - 1.0.3](https://github.com/JDBDT/jdbdt/issues/32)
 	* [#34 - 1.0.4](https://github.com/JDBDT/jdbdt/issues/34)
 	* [#35 - 1.0.5](https://github.com/JDBDT/jdbdt/issues/35)
-* [#36 - Transferred ownership to JDBDT organisation (1.0.5)](https://github.com/JDBDT/jdbdt/issues/36)
+	* [#38 - 1.0.6](https://github.com/JDBDT/jdbdt/issues/38)
 
 ## 0.12
 
