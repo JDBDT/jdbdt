@@ -76,6 +76,7 @@ Maintenance:
 	* [#35 - 1.0.5](https://github.com/JDBDT/jdbdt/issues/35)
 	* [#38 - 1.0.6](https://github.com/JDBDT/jdbdt/issues/38)
 	* [#39 - 1.0.7](https://github.com/JDBDT/jdbdt/issues/39)
+	* [#40 - 1.0.8](https://github.com/JDBDT/jdbdt/issues/40)
 
 ## 0.12
 
