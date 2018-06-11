@@ -17,7 +17,7 @@ These functionalities are described below, along with a discussion of a few   [d
 
 
 The `populate` method may be used to populate a database table. Taking a data set for a table as argument, it first clears the table at stake, then 
-inserts the data set into the table. The supplied data set also sets a snapshot for [subsequent delta assertions](DBAssert.html#DeltaAssertions).
+inserts the data set into the table. The supplied data set also sets a snapshot for [subsequent delta assertions](DBAssertions.html#DeltaAssertions).
 
 *Illustration*
 
