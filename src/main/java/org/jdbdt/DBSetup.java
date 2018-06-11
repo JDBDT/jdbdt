@@ -12,9 +12,6 @@ import java.util.List;
  *
  */
 final class DBSetup {
-
- 
-
   /**
    * Insert a data set onto the database.
    * @param callInfo Call information.
@@ -169,7 +166,7 @@ final class DBSetup {
     while (itr.hasNext()) {
       col = itr.next();
       paramIdx[tableColumns.indexOf(col)] = ++param;
-      sql.append(" AND ")
+      sql.append(_AND_)
          .append(col)
          .append("=?");
     }
@@ -212,7 +209,7 @@ final class DBSetup {
     while (itr.hasNext()) {
       kcol = itr.next();
       paramIdx[tableColumns.indexOf(kcol)] = ++param;
-      sql.append(" AND ")
+      sql.append(_AND_)
          .append(kcol)
          .append("=?");
     }
@@ -363,10 +360,11 @@ final class DBSetup {
   private DBSetup() {
 
   }
-
+  
+  @SuppressWarnings("javadoc")
+  private static final String _AND_ = " AND ";
   @SuppressWarnings("javadoc")
   private static final String _WHERE_ = " WHERE ";
   @SuppressWarnings("javadoc")
   private static final String DELETE_FROM_ = " DELETE FROM ";
-
 }
