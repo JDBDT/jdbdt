@@ -15,7 +15,6 @@ import java.sql.SQLException;
  * @since 0.1
  */
 public final class DBExecutionException extends JDBDTRuntimeException {
-
   /**
    * Constructs the exception with given cause.
    * @param cause Cause for the exception.

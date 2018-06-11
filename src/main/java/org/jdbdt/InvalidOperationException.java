@@ -29,5 +29,4 @@ public final class InvalidOperationException extends JDBDTRuntimeException {
    * Serial version UID.
    */
   private static final long serialVersionUID = 1L;
-  
 }

@@ -6,7 +6,6 @@ package org.jdbdt;
  * @since 0.9
  */
 public final class UnsupportedOperationException extends JDBDTRuntimeException {
-
   /**
    * Constructs a new exception using supplied message.
    * @param msg Exception message.
@@ -18,6 +17,5 @@ public final class UnsupportedOperationException extends JDBDTRuntimeException {
   /**
    * Serial version UID.
    */
-  private static final long serialVersionUID = 1L;
-  
+  private static final long serialVersionUID = 1L; 
 }

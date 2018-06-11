@@ -13,7 +13,6 @@ package org.jdbdt;
  * @since 0.9
  */
 public final class InternalErrorException extends JDBDTRuntimeException {
-
   /**
    * Constructs exception with empty message.
    */
@@ -36,10 +35,6 @@ public final class InternalErrorException extends JDBDTRuntimeException {
   public InternalErrorException(Throwable cause) {
     super("Unexpected internal error", cause);
   }
-  
- 
-
-  
 
   /**
    * Serial version UID.

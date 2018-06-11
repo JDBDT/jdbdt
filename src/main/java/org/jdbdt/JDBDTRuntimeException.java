@@ -6,7 +6,6 @@ package org.jdbdt;
  * @since 0.9
  */
 public class JDBDTRuntimeException extends RuntimeException {
-
   /**
    * Constructs a new exception using supplied message.
    * @param msg Exception message.
@@ -29,5 +28,4 @@ public class JDBDTRuntimeException extends RuntimeException {
    * Serial version UID.
    */
   private static final long serialVersionUID = 1L;
-  
 }
