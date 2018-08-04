@@ -6,7 +6,6 @@ package org.jdbdt;
  * @since 0.11
  */
 final class SimpleAssertion {
-
   /**
    * Data source this assertion relates to.
    */

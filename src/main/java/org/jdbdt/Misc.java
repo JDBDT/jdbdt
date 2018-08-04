@@ -13,8 +13,9 @@ import java.security.NoSuchAlgorithmException;
  *
  */
 final class Misc {
-
-  /** Private constructor to prevent instantiation. */
+  /**
+   * Private constructor to prevent instantiation. 
+   */
   private Misc() { } 
 
   @SuppressWarnings("javadoc")

@@ -6,7 +6,6 @@ package org.jdbdt;
  * @since 0.1
  */
 final class CallInfo {
-
   /**
    * Method info.
    */

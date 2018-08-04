@@ -8,7 +8,6 @@ import java.util.Iterator;
  * @since 0.1
  */
 final class DataSetAssertion {
-
   /**
    * Iterator type enumeration.
    */

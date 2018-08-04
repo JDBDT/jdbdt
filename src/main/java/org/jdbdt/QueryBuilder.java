@@ -10,7 +10,6 @@ package org.jdbdt;
  * @since 0.1
  */
 public final class QueryBuilder  {
-
   /**
    * Clauses/parameters that may be set for a builder.
    */

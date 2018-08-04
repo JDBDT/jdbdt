@@ -41,7 +41,6 @@ import org.w3c.dom.Element;
  *
  */
 final class Log implements AutoCloseable {
-
   /**
    * Creator method (stream variant).
    * @param out Output stream.

@@ -13,7 +13,6 @@ import java.util.Map.Entry;
  *
  */
 final class Delta {
-
   /**
    * Record of differences. 
    * A map is used to keep row counts because data sets are in fact multi-sets.

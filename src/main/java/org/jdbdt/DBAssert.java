@@ -148,10 +148,12 @@ final class DBAssert {
       return false;
     });
   }
+  
   /**
    * Private constructor to prevent instantiation.
    */
   private DBAssert() {
     
   }
+  
 }

@@ -11,7 +11,6 @@ package org.jdbdt;
  *
  */
 public final class Query extends DataSource {
-  
   /**
    * Constructor.
    * @param db Database handle.

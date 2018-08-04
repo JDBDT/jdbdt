@@ -18,7 +18,6 @@ import java.sql.SQLException;
  * @since 0.1
  */
 public final class JDBDT {
-
   /**
    * Private constructor to avoid unintended instantiation.
    */

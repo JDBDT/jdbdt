@@ -6,7 +6,6 @@ package org.jdbdt;
  * @since 0.1
  */
 public final class InvalidOperationException extends JDBDTRuntimeException {
-
   /**
    * Constructs a new exception using supplied message.
    * @param msg Exception message.

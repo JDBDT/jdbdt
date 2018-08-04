@@ -12,7 +12,6 @@ import java.util.Collection;
  * @since 0.1
  */
 public final class TypedDataSet<T> extends DataSet {
-
   /**
    * Conversion function.
    */

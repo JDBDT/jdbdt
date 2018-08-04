@@ -9,11 +9,11 @@ import java.sql.SQLException;
  * @since 0.6
  */
 final class WrappedStatement implements AutoCloseable {
-
   /**
    * Wrapped statement.
    */
   private final PreparedStatement statement;
+  
   /**
    * Reuse flag.
    */

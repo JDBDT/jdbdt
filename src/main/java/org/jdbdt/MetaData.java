@@ -21,9 +21,14 @@ final class MetaData {
    * @since 0.1
    */
   static final class ColumnInfo {
-    /** Label */
+    /**
+     * Label. 
+     */
     private final String label;
-    /** Type */
+    
+    /**
+     * Type. 
+     */
     private final JDBCType type;
 
     /**
@@ -35,6 +40,7 @@ final class MetaData {
       this.label = label;
       this.type = type;
     }
+    
     /**
      * Get label.
      * @return The label for the column.
@@ -42,6 +48,7 @@ final class MetaData {
     String label() {
       return label;
     }
+    
     /**
      * Get type.
      * @return The JDBC type for the column.
@@ -51,11 +58,11 @@ final class MetaData {
     }
 
   }
+  
   /**
    * Unmodifiable column info.
    */
   private final List<ColumnInfo> columns;
-
 
   /**
    * Constructs meta-data from given statement.
@@ -75,6 +82,7 @@ final class MetaData {
     }
     columns = Collections.unmodifiableList(info);
   }
+  
   /**
    * Get column count.
    * @return The number of columns represented by this meta-data.
@@ -100,6 +108,7 @@ final class MetaData {
   JDBCType getType(int index) {
     return columns.get(index).type();
   }
+  
   /**
    * Get column info. 
    * The list is unmodifiable (created through {@link Collections#unmodifiableList(List)}).
@@ -108,4 +117,5 @@ final class MetaData {
   List<ColumnInfo> columns() {
     return columns;
   }
+  
 }

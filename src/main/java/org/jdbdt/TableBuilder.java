@@ -10,7 +10,6 @@ package org.jdbdt;
  * @since 0.8
  */
 public final class TableBuilder  {
-
   /**
    * Constant for selecting all columns.
    */
