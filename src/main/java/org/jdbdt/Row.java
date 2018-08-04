@@ -63,8 +63,7 @@ final class Row {
    * 
    * @return Hash code for this row obtained by calling 
    *        {@link Arrays#deepHashCode(Object[])} over {@link #data()}.
-   *        The returned value is calculated only once and cached for subsequent.
-   *        
+   *        The returned value is calculated only once and cached for subsequent calls.    
    */
   @Override
   public int hashCode() {
