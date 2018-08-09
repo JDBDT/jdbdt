@@ -110,6 +110,12 @@ No problems were detected for [all other JDBC drivers tested in the JDBDT build]
 The `BATCH_UPDATES` option indicates that database insertions should use the JDBC batch update mechanism, unless the JDBC driver in does not support this feature 
 (in this case the option will have no effect). The option is enabled by default.
 
+<a name="CaseSensitiveColumnNames"></a>
+### Case-sensitive column handling
+
+The `CASE_SENSITIVE_COLUMN_NAMES` option indicates that column names should be handled
+in case-sensitive manner. If this option is set, the behavior will be more dependent on the database engine in use, so you should make sure you are aware of the engine's policy regarding column names and be consistent with it.
+
 <a name="SummaryOfMethods"></a>
 ## Summary of API methods
 
