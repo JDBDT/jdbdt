@@ -135,7 +135,7 @@ final class DBAssert {
    * @param tableName Table name.
    * @return <code>true<code> if and only if the table exists.
    */
-  static boolean tableExists(DB db, String tableName) {
+  private static boolean tableExists(DB db, String tableName) {
     return db.access(() -> { 
       DatabaseMetaData dbmd = db.getConnection().getMetaData();
       try(ResultSet rs = dbmd.getTables(null, null, null, new String[] {"TABLE"})) {
