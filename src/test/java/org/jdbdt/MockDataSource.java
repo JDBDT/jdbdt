@@ -4,10 +4,9 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
-import org.mockito.Mockito;
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 @SuppressWarnings("javadoc")
 class MockDataSource extends DataSource {
   MockDataSource(String... columns) {
