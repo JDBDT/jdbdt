@@ -178,7 +178,10 @@ public final class DataSetBuilder {
   public DataSetBuilder set(String column, ColumnFiller<?> filler) {
     ensureArgNotNull(column);
     ensureArgNotNull(filler);
-    Integer idx = columnIdx.get(column.toUpperCase());
+    if (! data.getSource().getDB().isEnabled(DB.Option.CASE_SENSITIVE_COLUMN_NAMES)) {
+      column = column.toUpperCase();
+    }
+    Integer idx = columnIdx.get(column);
     if (idx == null) {
       throw new InvalidOperationException("Invalid column name: '" + column + "'.");
     }

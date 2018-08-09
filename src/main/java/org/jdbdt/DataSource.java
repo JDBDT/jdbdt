@@ -72,8 +72,13 @@ public abstract class DataSource {
       try (WrappedStatement stmt = db.compile(querySQL)) {
         MetaData md = new MetaData(stmt.getStatement());
         String[] cols = new String[md.getColumnCount()];
+        boolean case_sensitive = db.isEnabled(DB.Option.CASE_SENSITIVE_COLUMN_NAMES);
         for (int i = 0; i < cols.length; i++) {
-          cols[i] = md.getLabel(i).toUpperCase();
+          String cname = md.getLabel(i);
+          if (!case_sensitive) {
+            cname = cname.toUpperCase();
+          }
+          cols[i] = cname;
         }
         columns = Collections.unmodifiableList(Arrays.asList(cols));
         metaData = md;
@@ -82,18 +87,22 @@ public abstract class DataSource {
     });
   }
   /**
-   * Constructor for mock data sources (for testing only with no database access).
+   * Constructor with supplied columns (testing purposes only).
+   * @param db Database handle.
    * @param columns Columns.
    */
-  DataSource(String[] columns) {
-    this.db = null;
+  DataSource(DB db, String[] columns) {
+    this.db = db;
     this.querySQL = null;
     this.queryArgs = null;
     this.dirty = true;
     this.metaData = null;
     ArrayList<String> list = new ArrayList<>();
     for (String c : columns) {
-      list.add(c.toUpperCase());
+      if (!db.isEnabled(DB.Option.CASE_SENSITIVE_COLUMN_NAMES)) {
+        c = c.toUpperCase();
+      }
+      list.add(c);
     }
     this.columns = Collections.unmodifiableList(list);
   }

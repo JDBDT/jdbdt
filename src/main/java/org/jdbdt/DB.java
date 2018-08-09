@@ -61,7 +61,13 @@ public final class DB {
      * The option has no effect though if the database driver does not support batch
      * updates (as indicated by {@link DatabaseMetaData#supportsBatchUpdates()}.
      */
-    BATCH_UPDATES;
+    BATCH_UPDATES,
+    /**
+     * Handle column names in case-sensitive manner.
+     * 
+     * By default JDBDT will handle column names in case-insensitive manner.
+     */
+    CASE_SENSITIVE_COLUMN_NAMES;
   }
 
   /**
