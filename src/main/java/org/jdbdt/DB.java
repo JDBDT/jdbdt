@@ -38,6 +38,10 @@ public final class DB {
      */
     LOG_ASSERTION_ERRORS,
     /**
+     * Log database exceptions (enabled initially by default).
+     */
+    LOG_DATABASE_EXCEPTIONS,
+    /**
      * Log database queries. 
      */
     LOG_QUERIES,
@@ -128,7 +132,8 @@ public final class DB {
       DatabaseMetaData dbMetaData = connection.getMetaData();
       log = Log.create(System.err);
       enable(Option.REUSE_STATEMENTS, 
-          Option.LOG_ASSERTION_ERRORS);
+             Option.LOG_ASSERTION_ERRORS,
+             Option.LOG_DATABASE_EXCEPTIONS);
 
       batchUpdateSupport = dbMetaData.supportsBatchUpdates();
       savepointSupport = dbMetaData.supportsSavepoints();
@@ -192,10 +197,11 @@ public final class DB {
    */
   public void enableFullLogging() {
     enable(DB.Option.LOG_ASSERTION_ERRORS,
-        DB.Option.LOG_ASSERTIONS,
-        DB.Option.LOG_SETUP,
-        DB.Option.LOG_QUERIES,
-        DB.Option.LOG_SNAPSHOTS);
+           DB.Option.LOG_ASSERTIONS,
+           DB.Option.LOG_SETUP,
+           DB.Option.LOG_QUERIES,
+           DB.Option.LOG_SNAPSHOTS,
+           DB.Option.LOG_DATABASE_EXCEPTIONS);
   }
 
   /**
@@ -400,7 +406,9 @@ public final class DB {
       return op.execute();
     }
     catch (SQLException e) {
-      log.write(callInfo, e);
+      if (isEnabled(DB.Option.LOG_DATABASE_EXCEPTIONS)) {
+        log.write(callInfo, e);
+      }
       throw new DBExecutionException(e); 
     }
   }
