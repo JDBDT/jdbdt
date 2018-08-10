@@ -33,8 +33,5 @@ public class TableTest extends DBTestCase {
     assertDataSet(expected, actual);
   }
   
-  @Test
-  public void testXXX() {
-    theSUT = table(UserDAO.TABLE_NAME).columns("XXX").build(getDB());
-  }
+  
 }
