@@ -163,6 +163,7 @@ Properties:
 - `isEmpty()` indicates if the data set is empty.
 - `isReadOnly()` indicates if the data set is read-only.
 - `getDataSource()` returns the [data source](DataSources.html) instance for the data set.
+- `toString()` returns a textual representation of the data set.
 
 Mutators:
 

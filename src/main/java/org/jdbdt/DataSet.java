@@ -180,6 +180,15 @@ public class DataSet {
   }
 
   /**
+   * Get textual representation of the data set.
+   * 
+   * @returns An "array-style" string with one entry per row.
+   */
+  @Override
+  public final String toString() {
+    return rows.toString();
+  }
+  /**
    * Add a row to the set (package-private version; ignores read-only setting).
    * @param row Row to add.
    */

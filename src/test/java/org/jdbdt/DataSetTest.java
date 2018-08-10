@@ -71,6 +71,7 @@ public class DataSetTest extends DBTestCase {
     assertEquals(0, theSUT.size());
     assertEquals(0, theSUT.getRows().size());
     assertSame(table, theSUT.getSource());
+    assertEquals("[]", theSUT.toString());
   }
   
   @Test
@@ -320,4 +321,11 @@ public class DataSetTest extends DBTestCase {
     assertEquals(lRow(r), theSUT.getRows());
   }
   
+  @Test
+  public void testToString() {
+    Object[][] data = genData(3);
+    String str = Arrays.deepToString(data);
+    theSUT.rows(data);
+    assertEquals(str, theSUT.toString());
+  }
 }
