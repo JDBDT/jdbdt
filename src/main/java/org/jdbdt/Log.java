@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Array;
 import java.sql.Blob;
 import java.sql.Clob;
@@ -146,6 +148,21 @@ final class Log implements AutoCloseable {
     flush(rootNode);
   }
 
+  /**
+   * Report a database exception onto the log. 
+   * @param callInfo Call info.
+   * @param e Database exception.
+   */
+  void write(CallInfo callInfo, SQLException e) {
+    Element rootNode = root(callInfo);
+    Element exNode = createNode(rootNode, DATABASE_EXCEPTION_TAG);
+    StringWriter sw = new StringWriter();
+    sw.append('\n');
+    e.printStackTrace(new PrintWriter(sw));
+    exNode.appendChild(xmlDoc.createCDATASection(sw.toString()));
+    flush(rootNode);
+  }
+  
   @SuppressWarnings("javadoc")
   private void write(Element parent, DataSource source) {
     Element node = createNode(parent, DATA_SOURCE_TAG);
@@ -433,6 +450,8 @@ final class Log implements AutoCloseable {
   private static final String DELTA_ASSERTION_TAG = "delta-assertion";
   @SuppressWarnings("javadoc")
   private static final String ASSERTION_TAG = "assertion";
+  @SuppressWarnings("javadoc")
+  private static final String DATABASE_EXCEPTION_TAG = "database-exception";
   @SuppressWarnings("javadoc")
   private static final String ERRORS_TAG = "errors";
   @SuppressWarnings("javadoc")

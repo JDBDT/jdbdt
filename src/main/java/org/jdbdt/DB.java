@@ -261,24 +261,22 @@ public final class DB {
    * Compile a SQL statement.
    * @param sql SQL code.
    * @return Wrapper for prepared statement.
-   * @throws DBExecutionException If there is a error preparing the statement.
+   * @throws SQLException If there is a error preparing the statement.
    */
-  WrappedStatement compile(String sql) {   
-    return access( () -> {
-      if (! isEnabled(Option.REUSE_STATEMENTS)) {
-        return new WrappedStatement(connection.prepareStatement(sql), false);
-      }
-      if (pool == null) {
-        pool = new IdentityHashMap<>();
-      } 
-      String sqlI = sql.intern();
-      WrappedStatement ws = pool.get(sqlI);
-      if (ws == null) {
-        ws =  new WrappedStatement(connection.prepareStatement(sql), true);
-        pool.put(sqlI, ws);
-      }
-      return ws;
-    }); 
+  WrappedStatement compile(String sql) throws SQLException {
+    if (! isEnabled(Option.REUSE_STATEMENTS)) {
+      return new WrappedStatement(connection.prepareStatement(sql), false);
+    }
+    if (pool == null) {
+      pool = new IdentityHashMap<>();
+    } 
+    String sqlI = sql.intern();
+    WrappedStatement ws = pool.get(sqlI);
+    if (ws == null) {
+      ws =  new WrappedStatement(connection.prepareStatement(sql), true);
+      pool.put(sqlI, ws);
+    }
+    return ws;
   }
 
   /**
@@ -286,7 +284,7 @@ public final class DB {
    * @param callInfo Call info.
    */
   void save(CallInfo callInfo) {
-    access( () -> {
+    access(callInfo, () -> {
       if (!savepointSupport) {
         throw new UnsupportedOperationException("Savepoints are not supported by the database driver.");
       }
@@ -313,7 +311,7 @@ public final class DB {
    * @param callInfo Call info.
    */
   void commit(CallInfo callInfo) {
-    access( () -> {
+    access(callInfo, () -> {
       logSetup(callInfo);
       clearSavePointIfSet();
       connection.commit();
@@ -329,7 +327,7 @@ public final class DB {
     // Note: this is a conservative implementation, it sets another save-point
     // after roll-back, some engines seem to implicitly release the save point on roll-back
     // (an issue with HSQLDB)
-    access(() -> {
+    access(callInfo, () -> {
       logSetup(callInfo);
       try {
         if (!savepointSupport) {
@@ -392,15 +390,17 @@ public final class DB {
    * Any {@link java.sql.SQLException} error that occurs is wrapped
    * into a {@link DBExecutionException} instance.
    * @param <T> Type of result.
+   * @param callInfo Call info.
    * @param op Operation.
    * @return DB access result.
    * @throws DBExecutionException If a database error occurs.
    */
-  <T> T access(Access<T> op) {
+  <T> T access(CallInfo callInfo, Access<T> op) {
     try {
       return op.execute();
     }
     catch (SQLException e) {
+      log.write(callInfo, e);
       throw new DBExecutionException(e); 
     }
   }
@@ -445,7 +445,7 @@ public final class DB {
       log.write(callInfo, data);
     }
   }
-  
+
   /**
    * Log delta assertion.
    * @param callInfo Call info.
@@ -471,7 +471,7 @@ public final class DB {
       log.write(callInfo, dsa);
     }
   }
-  
+
   /**
    * Log simple assertion.
    * @param callInfo Call info.
@@ -524,6 +524,6 @@ public final class DB {
 
 
 
-  
+
 
 }

@@ -59,16 +59,17 @@ public abstract class DataSource {
 
   /**
    * Constructor.
+   * @param callInfo Call info.
    * @param db Database instance.
    * @param sql SQL code for query.
    * @param queryArgs Optional arguments for database query.
    */
-  protected DataSource(DB db, String sql, Object... queryArgs) {
+  protected DataSource(CallInfo callInfo, DB db, String sql, Object... queryArgs) {
     this.db = db;
     this.querySQL = sql;
     this.queryArgs = queryArgs;
     this.dirty = true;
-    db.access(() -> {
+    db.access(callInfo, () -> {
       try (WrappedStatement stmt = db.compile(querySQL)) {
         MetaData md = new MetaData(stmt.getStatement());
         String[] cols = new String[md.getColumnCount()];
@@ -197,7 +198,7 @@ public abstract class DataSource {
    */
   final DataSet executeQuery(CallInfo callInfo, boolean takeSnapshot) {
     DataSet data = new DataSet(this);
-    return db.access( () -> {
+    return db.access(callInfo, () -> {
       try (WrappedStatement ws = db.compile(getSQLForQuery())) {
         proceedWithQuery(ws.getStatement(), data);
         if (takeSnapshot) {

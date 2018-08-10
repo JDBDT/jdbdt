@@ -200,5 +200,22 @@ relates to the fact that the entry for "user" `linus` was removed.
         </new-data>
       </errors>
     </delta-assertion>
+    
+    <a name="DatabaseExceptions"></a>  
+## Database exceptions
+
+A `database-exception` node refers to the stack trace of an `SQLException` thrown by the database engine during the execution of a JDBDT operation. 
+
+*Illustration*
+
+    <database-exception><![CDATA[
+    java.sql.SQLSyntaxErrorException: user lacks privilege or object not found: XXX in statement [SELECT XXX FROM Users]
+        at org.hsqldb.jdbc.JDBCUtil.sqlException(Unknown Source)
+        at org.hsqldb.jdbc.JDBCUtil.sqlException(Unknown Source)
+        at org.hsqldb.jdbc.JDBCPreparedStatement.<init>(Unknown Source)
+        at org.hsqldb.jdbc.JDBCConnection.prepareStatement(Unknown Source)
+        at org.jdbdt.DB.compile(DB.java:276)
+    ... [etc]
+    ]]></database-exception>
 
 

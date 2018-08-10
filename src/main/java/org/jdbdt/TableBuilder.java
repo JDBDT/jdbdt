@@ -103,7 +103,7 @@ public final class TableBuilder  {
     if (tableColumns == null) {
       tableColumns = ALL_COLUMNS;
     }
-    return new Table(db, tableName, tableColumns, keyColumns); 
+    return new Table(CallInfo.create(), db, tableName, tableColumns, keyColumns); 
   }
 
 }

@@ -212,7 +212,7 @@ public final class QueryBuilder  {
    * @return A new query instance.
    */
   public final Query build(DB db) {
-    return new Query(db, toSQL(), queryArgs); 
+    return new Query(CallInfo.create(), db, toSQL(), queryArgs); 
   }
   
   @SuppressWarnings("javadoc")

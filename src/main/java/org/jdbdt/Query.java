@@ -18,6 +18,17 @@ public final class Query extends DataSource {
    * @param args Optional arguments for query.
    */
   public Query(DB db, String sql, Object... args) {
-    super(db, sql, args);
+    this(CallInfo.create(), db, sql, args);
+  }
+  
+  /**
+   * Constructor with supplied call information.
+   * @param callInfo Call info.
+   * @param db Database handle.
+   * @param sql SQL for query
+   * @param args Optional arguments for query.
+   */
+  Query(CallInfo callInfo, DB db, String sql, Object... args) {
+    super(callInfo, db, sql, args);
   }
 }

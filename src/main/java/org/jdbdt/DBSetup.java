@@ -227,7 +227,7 @@ final class DBSetup {
 
     db.logDataSetOperation(callInfo, data);
     
-    db.access(() -> {
+    db.access(callInfo, () -> {
       try(WrappedStatement ws = db.compile(sql)) {
         PreparedStatement stmt = ws.getStatement();
         int batchSize = 0;
@@ -279,7 +279,7 @@ final class DBSetup {
    */
   private static int doDeleteAll(CallInfo callInfo, Table table) {
     DB db = table.getDB();
-    return db.access( () -> {
+    return db.access(callInfo, () -> {
       String sql = DELETE_FROM_ + table.getName();
       db.logSetup(callInfo, sql);
       try (WrappedStatement ws = db.compile(sql)) {
@@ -295,7 +295,7 @@ final class DBSetup {
    */
   static void truncate(CallInfo callInfo, Table table) {
     final DB db = table.getDB();   
-    db.access(() -> {
+    db.access(callInfo, () -> {
       String sql = "TRUNCATE TABLE " + table.getName();
       table.setDirtyStatus(true);
       db.logSetup(callInfo, sql);
@@ -318,7 +318,7 @@ final class DBSetup {
   static int deleteAll(CallInfo callInfo, Table table, String where, Object... args) {
     final DB db = table.getDB();
 
-    return  db.access( () -> {
+    return  db.access(callInfo, () -> {
       table.setDirtyStatus(true);
       String sql = 
           DELETE_FROM_ + table.getName() +
@@ -344,7 +344,7 @@ final class DBSetup {
    */
   public static void drop(CallInfo callInfo, DB db, String tableName) {
     String sql = String.format("DROP TABLE %s", tableName);
-    db.access(() -> {
+    db.access(callInfo, () -> {
       db.logSetup(callInfo, sql);
       try (WrappedStatement ws = db.compile(sql)) {
         PreparedStatement dropStmt = ws.getStatement();
