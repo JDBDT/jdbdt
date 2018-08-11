@@ -342,7 +342,7 @@ final class DBSetup {
    * @param db Database
    * @param tableName  Table name.
    */
-  public static void drop(CallInfo callInfo, DB db, String tableName) {
+  static void drop(CallInfo callInfo, DB db, String tableName) {
     String sql = String.format("DROP TABLE %s", tableName);
     db.access(callInfo, () -> {
       db.logSetup(callInfo, sql);
@@ -351,6 +351,30 @@ final class DBSetup {
         dropStmt.execute();
       }
       return 0; 
+    });
+  }
+  
+  /**
+   * Execute arbitrary SQL code.
+   * @param callInfo Call info.
+   * @param db Database
+   * @param sql SQL statement.
+   * @param args Arguments.
+   * @return The value obtained through {@link PreparedStatement#getUpdateCount()}, after executing the statement.
+   */
+  static int execute(CallInfo callInfo, DB db, String sql, Object[] args) {
+    return db.access(callInfo, () -> {
+      db.logSetup(callInfo, sql);
+      try (WrappedStatement ws = db.compile(sql)) {
+        PreparedStatement stmt = ws.getStatement();
+        if (args != null && args.length != 0) {
+          for (int i=0; i < args.length; i++) {
+            stmt.setObject(i + 1, args[i]);
+          }
+        }
+        stmt.execute();
+        return stmt.getUpdateCount();
+      }
     });
   }
 
@@ -367,4 +391,5 @@ final class DBSetup {
   private static final String _WHERE_ = " WHERE ";
   @SuppressWarnings("javadoc")
   private static final String DELETE_FROM_ = " DELETE FROM ";
+  
 }

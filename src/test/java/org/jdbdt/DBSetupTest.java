@@ -249,4 +249,30 @@ public class DBSetupTest extends DBTestCase {
     }
   }
   
+  @Test 
+  public void testExecute1() throws SQLException {
+    int initially = getDAO().count();
+    int updateCount = 
+        execute(getDB(), "DELETE FROM " + 
+                     UserDAO.TABLE_NAME + " WHERE LOGIN='" +  
+                     DBTestCase.EXISTING_DATA_ID1 + 
+                     "' OR LOGIN='" +
+                     DBTestCase.EXISTING_DATA_ID2 + 
+                     "'");
+    assertEquals(2, updateCount);
+    assertEquals(initially - 2, getDAO().count());
+  }
+  
+  @Test 
+  public void testExecute2() throws SQLException {
+    int initially = getDAO().count();
+    int updateCount = 
+        execute(getDB(), "DELETE FROM " + 
+                     UserDAO.TABLE_NAME + " WHERE LOGIN=? OR LOGIN=?", 
+                     DBTestCase.EXISTING_DATA_ID1,
+                     DBTestCase.EXISTING_DATA_ID2);
+    assertEquals(2, updateCount);
+    assertEquals(initially - 2, getDAO().count());
+  }
+  
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
@@ -639,7 +640,6 @@ public final class JDBDT {
   /**
    * Delete all data from a table, subject to a <code>WHERE</code>
    * clause. 
-   * 
    *
    * @param table Table.
    * @param where <code>WHERE</code> clause
@@ -661,6 +661,22 @@ public final class JDBDT {
    */
   public static void truncate(Table table) {
     DBSetup.truncate(CallInfo.create(), table);
+  }
+  
+  /**
+   * Execute arbitrary SQL for a database instance.
+   * 
+   * <p>
+   * You may use this method for arbitrary database setup
+   * actions.
+   * </p>
+   * @param db Database.
+   * @param sql SQL statement.
+   * @param args SQL statement arguments.
+   * @return The value obtained through {@link PreparedStatement#getUpdateCount()}, after executing the statement.
+   */
+  public static int execute(DB db, String sql, Object... args) {
+    return DBSetup.execute(CallInfo.create(), db, sql, args);
   }
   
   /**

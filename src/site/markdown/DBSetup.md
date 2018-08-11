@@ -8,7 +8,9 @@ but also for table row [insertions / updates / deletions](DBSetup.html#IUD);
 
 * [cleaning up database tables](DBSetup.html#Clean);
 
-* and [setting and restoring save-points](DBSetup.html#SaveAndRestore).
+* [executing arbitrary SQL statements during setup](DBSetup.html#ExecuteSQL);
+
+* and [setting and restoring save-points](DBSetup.html#SaveAndRestore);
 
 These functionalities are described below, along with a discussion of a few   [database setup patterns](DBSetup.html#Patterns)  that can be implemented using these operations.
 
@@ -153,6 +155,23 @@ for different database engines (e.g., <a href="https://en.wikipedia.org/wiki/Tru
 	
 	// 4. Drop the table entirely.
 	drop(t);   // alternatively: drop(db, "USERS")
+
+<a name="ExecuteSQL"></a>
+## Executing arbitrary SQL statements during setup
+
+The `execute` method lets you execute plain SQL statements. 
+This may useful for database setup, when the statement
+has an effect for which the JDBDT API provides no equivalent operations.
+
+*Illustration* 
+
+    import static org.jdbdt.JDBDT.*;
+    import org.jdbdt.DB;
+    ...
+    DB db = ... ; 
+    arg1 = ... ; 
+    arg2 = ... ;
+    execute(db, "UPDATE MyTable SET X = ? WHERE Y = ?", arg1, arg2);    
 
 <a name="SaveAndRestore"></a>
 ## Saving and restoring database state 
@@ -300,6 +319,10 @@ Clean-up:
 - `deleteAll(t,w,a)` deletes data from table `t` subject to WHERE clause `w` and optional
 WHERE clause arguments.
 - `truncate(t)` clear table `t` with a TRUNCATE TABLE statement.
+
+Arbitrary SQL code execution:
+
+- `execute(db, sql, [arg1, ..., argN])`: for database `db` execute `sql` statement with optional arguments `arg1, ..., argN`.
 
 Save and restore:
 
