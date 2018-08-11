@@ -172,7 +172,7 @@ public final class DB {
       throw new InvalidOperationException("Batch updates not allowed by database driver.");
     }
     if (! isEnabled(DB.Option.BATCH_UPDATES)) {
-      throw new InvalidOperationException(DB.Option.BATCH_UPDATES + "option is not enabled.");
+      throw new InvalidOperationException(DB.Option.BATCH_UPDATES + " option is not enabled.");
     }
     if (size < 1) {
       throw new InvalidOperationException("Invalid batch update size: " + size);
