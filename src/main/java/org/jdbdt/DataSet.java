@@ -182,7 +182,9 @@ public class DataSet {
   /**
    * Get textual representation of the data set.
    * 
-   * @return An "array-style" string with one entry per row in the array.
+   * @return An "array-style" string with one entry per row in the data set.
+   * @see JDBDT#dump(DataSet, java.io.File)
+   * @see JDBDT#dump(DataSet, java.io.PrintStream)
    */
   @Override
   public final String toString() {
