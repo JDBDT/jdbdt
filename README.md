@@ -44,6 +44,20 @@ Commands:
 
 # Change Log
 
+## 1.1.x
+
+Features:
+
+* [#5 - Database exception logging](https://github.com/JDBDT/jdbdt/issues/5)
+* [#33 - Arbitrary SQL execution through JDBDT.execute](https://github.com/JDBDT/jdbdt/issues/33)
+* [#42 - Partial support for case-sensitive column names](https://github.com/JDBDT/jdbdt/issues/42)
+* [#43 - DataSet.toString() utility method](https://github.com/JDBDT/jdbdt/issues/43)
+
+Maintenance:
+
+* Standard maintenance tasks (dependency updates, minor adjustments, etc) 
+	* [#41 - 1.1.0](https://github.com/JDBDT/jdbdt/issues/41)
+  
 ## 1.0.x
 
 API:
