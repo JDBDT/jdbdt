@@ -21,7 +21,7 @@ The JDBDT build currently tests integration with:
 ### PostgreSQL
 
 
-#### Auto-commit off / Rollback on error
+**Auto-commit off / Rollback on error**
 
 If auto-commit is turned **off** for the database connection 
 and a SQL statement raises an error
@@ -51,10 +51,10 @@ A possible workaround is to issue a rollback statement before any further operat
 ### sqlite
 
 
-#### Statement reuse
+**Statement reuse**
 
 [Statement reuse should be disabled for xerial's JDBC driver for sqlite](DB.html#StatementReuse).
 
-#### Table truncation not supported
+**Table truncation is not supported**
 
 [sqlite does not support `TRUNCATE` statements](https://www.sqlite.org/lang.html), so `JDBDT.truncate` will not work.
