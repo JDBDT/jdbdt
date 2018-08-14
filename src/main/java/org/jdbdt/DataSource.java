@@ -76,7 +76,9 @@ public abstract class DataSource {
         boolean case_sensitive = db.isEnabled(DB.Option.CASE_SENSITIVE_COLUMN_NAMES);
         for (int i = 0; i < cols.length; i++) {
           String cname = md.getLabel(i);
-          if (!case_sensitive) {
+          if (case_sensitive && !cname.equals(cname.toUpperCase())) {
+            cname = '\"' + cname +  '\"';
+          } else {
             cname = cname.toUpperCase();
           }
           cols[i] = cname;

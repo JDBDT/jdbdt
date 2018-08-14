@@ -18,7 +18,8 @@ import org.junit.runners.Suite.SuiteClasses;
   AssertEqualsTest.class,
   DataSetBuilderCoreTest.class,
   DataSetBuilderCoreFillerTest.class,
-  IntegrationTest.class
+  IntegrationTest.class,
+  CaseSensitivityTest.class
 })
 public class DBEngineTestSuite {
 }

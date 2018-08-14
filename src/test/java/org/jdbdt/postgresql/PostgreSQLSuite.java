@@ -2,10 +2,18 @@ package org.jdbdt.postgresql;
 
 import org.jdbdt.DBConfig;
 import org.jdbdt.DBEngineTestSuite;
+import org.jdbdt.TestCategories;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.experimental.categories.Categories;
+import org.junit.experimental.categories.Categories.ExcludeCategory;
+import org.junit.runner.RunWith;
 
 @SuppressWarnings("javadoc")
+@RunWith(Categories.class)
+@ExcludeCategory({
+  TestCategories.CaseSensitive.class,
+})
 public class PostgreSQLSuite extends DBEngineTestSuite {
 
   @BeforeClass 

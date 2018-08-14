@@ -8,5 +8,6 @@ public interface TestCategories {
   interface Truncate { }
  
   interface StatementReuse { }
-  
+ 
+  interface CaseSensitive { }
 }
