@@ -68,8 +68,9 @@ public final class DB {
     BATCH_UPDATES,
     /**
      * Handle column names in case-sensitive manner.
-     * 
-     * By default JDBDT will handle column names in case-insensitive manner.
+     * This is required if you wish to use double-quotes with column 
+     * names, by default JDBDT will handle column names in case-insensitive 
+     * manner. This support may be fragile for some database engines.
      */
     CASE_SENSITIVE_COLUMN_NAMES;
   }
