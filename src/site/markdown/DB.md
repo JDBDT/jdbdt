@@ -113,8 +113,7 @@ The `BATCH_UPDATES` option indicates that database insertions should use the JDB
 <a name="CaseSensitiveColumnNames"></a>
 ### Case-sensitive column handling
 
-The `CASE_SENSITIVE_COLUMN_NAMES` option indicates that column names should be handled
-in case-sensitive manner. If this option is set, the behavior will be more dependent on the database engine in use, so you should make sure you are aware of the engine's policy regarding column names and be consistent with it.
+The `CASE_SENSITIVE_COLUMN_NAMES` option indicates that column names should be handled in case-sensitive manner. This is required if you wish to use double-quotes with column names. If this option is set, the behavior will be more dependent on the database engine in use, so you should make sure you are aware of the engine's policy regarding column names and be consistent with it.
 
 <a name="SummaryOfMethods"></a>
 ## Summary of API methods
