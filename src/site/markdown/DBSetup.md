@@ -10,7 +10,7 @@ but also for table row [insertions / updates / deletions](DBSetup.html#IUD);
 
 * [executing arbitrary SQL statements during setup](DBSetup.html#ExecuteSQL);
 
-* and [setting and restoring save-points](DBSetup.html#SaveAndRestore);
+* and [setting and restoring save-points](DBSetup.html#SaveAndRestore).
 
 These functionalities are described below, along with a discussion of a few   [database setup patterns](DBSetup.html#Patterns)  that can be implemented using these operations.
 
@@ -103,7 +103,7 @@ The `insert`  method inserts a given data set onto a table, without deleting any
 The `update` and `delete` method respectively update and delete a data set in the database. They require that [key columns](DataSources.html#Table) are defined for the table at stake. The corresponding key values for each data set element will determine which rows are to be updated / deleted.
 
     DB db = ...; 
-    Table t = table("MyTable")
+    Table t = table("MY_TABLE")
              .columns( ... )
              .key( ... )
              .build(db);	
@@ -171,7 +171,7 @@ has an effect for which the JDBDT API provides no equivalent operations.
     DB db = ... ; 
     arg1 = ... ; 
     arg2 = ... ;
-    execute(db, "UPDATE MyTable SET X = ? WHERE Y = ?", arg1, arg2);    
+    execute(db, "UPDATE MY_TABLE SET X = ? WHERE Y = ?", arg1, arg2);    
 
 <a name="SaveAndRestore"></a>
 ## Saving and restoring database state 
