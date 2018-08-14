@@ -214,6 +214,6 @@ exist (e.g., has been dropped by the SUT).
 
     DB db = ...;
     letSUTDoSomething();
-    assertTableExists(db, "Users")
-    assertTableDoesNotExist(db, "TempUsers")
+    assertTableExists(db, "USERS")
+    assertTableDoesNotExist(db, "TEMP_USERS")
  
