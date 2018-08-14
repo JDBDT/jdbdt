@@ -96,8 +96,8 @@ may be convenient to refer to the API methods concisely.
 			<code>delete</code><br/>
 			<code>deleteAll</code><br/>
 			<code>deleteAllWhere</code><br/>
-			<code>execute</code><br/>
 			<code>drop</code><br/>
+			<code>execute</code><br/>
 			<code>insert</code><br/>
 			<code>populate</code><br/>
 			<code>populateIfChanged</code><br/>
