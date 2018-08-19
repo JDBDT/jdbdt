@@ -33,30 +33,37 @@ public final class DB {
      * Log assertions (both failed and passed).
      */
     LOG_ASSERTIONS,
+    
     /**
      * Log failed assertions (enabled initially by default).
      */
     LOG_ASSERTION_ERRORS,
+    
     /**
      * Log database exceptions (enabled initially by default).
      */
     LOG_DATABASE_EXCEPTIONS,
+    
     /**
      * Log database queries. 
      */
     LOG_QUERIES,
+    
     /**
      * Log database setup operations.
      */
     LOG_SETUP,
+    
     /**
      * Log database snapshots. 
      */
     LOG_SNAPSHOTS,
+    
     /**
      * Reuse statements (enabled initially by default).
      */
     REUSE_STATEMENTS,
+    
     /**
      * Batch updates (enabled initially by default).
      * 
@@ -66,6 +73,7 @@ public final class DB {
      * updates (as indicated by {@link DatabaseMetaData#supportsBatchUpdates()}.
      */
     BATCH_UPDATES,
+    
     /**
      * Handle column names in case-sensitive manner.
      * This is required if you wish to use double-quotes with column 
@@ -133,8 +141,8 @@ public final class DB {
       DatabaseMetaData dbMetaData = connection.getMetaData();
       log = Log.create(System.err);
       enable(Option.REUSE_STATEMENTS, 
-             Option.LOG_ASSERTION_ERRORS,
-             Option.LOG_DATABASE_EXCEPTIONS);
+          Option.LOG_ASSERTION_ERRORS,
+          Option.LOG_DATABASE_EXCEPTIONS);
 
       batchUpdateSupport = dbMetaData.supportsBatchUpdates();
       savepointSupport = dbMetaData.supportsSavepoints();
@@ -198,11 +206,11 @@ public final class DB {
    */
   public void enableFullLogging() {
     enable(DB.Option.LOG_ASSERTION_ERRORS,
-           DB.Option.LOG_ASSERTIONS,
-           DB.Option.LOG_SETUP,
-           DB.Option.LOG_QUERIES,
-           DB.Option.LOG_SNAPSHOTS,
-           DB.Option.LOG_DATABASE_EXCEPTIONS);
+        DB.Option.LOG_ASSERTIONS,
+        DB.Option.LOG_SETUP,
+        DB.Option.LOG_QUERIES,
+        DB.Option.LOG_SNAPSHOTS,
+        DB.Option.LOG_DATABASE_EXCEPTIONS);
   }
 
   /**
@@ -271,17 +279,20 @@ public final class DB {
    * @throws SQLException If there is a error preparing the statement.
    */
   WrappedStatement compile(String sql) throws SQLException {
+    WrappedStatement ws;
     if (! isEnabled(Option.REUSE_STATEMENTS)) {
-      return new WrappedStatement(connection.prepareStatement(sql), false);
+      ws = new WrappedStatement(connection.prepareStatement(sql), false);
     }
-    if (pool == null) {
-      pool = new IdentityHashMap<>();
-    } 
-    String sqlI = sql.intern();
-    WrappedStatement ws = pool.get(sqlI);
-    if (ws == null) {
-      ws =  new WrappedStatement(connection.prepareStatement(sql), true);
-      pool.put(sqlI, ws);
+    else {
+      if (pool == null) {
+        pool = new IdentityHashMap<>();
+      }
+      String sqlI = sql.intern();
+      ws = pool.get(sqlI);
+      if (ws == null) {
+        ws =  new WrappedStatement(connection.prepareStatement(sql), true);
+        pool.put(sqlI, ws);
+      }
     }
     return ws;
   }
