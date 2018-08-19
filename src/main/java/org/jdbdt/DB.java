@@ -246,7 +246,6 @@ public final class DB {
     return connection;
   }
 
-
   /**
    * Redirect log output to a stream.
    * The log set at creation time
