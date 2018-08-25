@@ -107,6 +107,6 @@ public class MiscTest {
   
   @Test
   public void testSqlArgList4() {
-    assertEquals("1, a2, a3", Misc.sqlArgumentList(new Object[] { 1, "a2", "a3" }));
+    assertEquals("1, a2, a3", Misc.sqlArgumentList(1, "a2", "a3"));
   }
 }
