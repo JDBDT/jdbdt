@@ -14,6 +14,8 @@ public class CallInfoTest {
 
   @Rule public TestName testName = new TestName();
 
+  private static final String FILENAME = CallInfoTest.class.getSimpleName() + ".java";
+  
   private static class FakeClass {
     static CallInfo fake() { 
       return CallInfo.create(); 
@@ -27,6 +29,7 @@ public class CallInfoTest {
   static void assertMethodInfo(CallInfo.MethodInfo ci, String className, String methodName) {
     assertEquals("class name", className, ci.getClassName());
     assertEquals("method name", methodName, ci.getMethodName());
+    assertEquals("file name", FILENAME, ci.getFileName());
   }
 
   void assertCallInfo(CallInfo ci, String msg) {
