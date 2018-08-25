@@ -18,6 +18,7 @@ public class CallInfoTest {
     static CallInfo fake() { 
       return CallInfo.create(); 
     }
+    
     static CallInfo fake(String msg) { 
       return CallInfo.create(msg); 
     }
@@ -30,22 +31,22 @@ public class CallInfoTest {
 
   void assertCallInfo(CallInfo ci, String msg) {
     assertMethodInfo(ci.getCallerMethodInfo(),
-        getClass().getName(),
-        testName.getMethodName());
+                     getClass().getName(),
+                     testName.getMethodName());
     assertMethodInfo(ci.getAPIMethodInfo(), 
-        FakeClass.class.getName(),
-        "fake");
+                     FakeClass.class.getName(),
+                    "fake");
     assertEquals("message", msg, ci.getMessage());
   }
   
   @Test
   public void test1() {
-    assertCallInfo( FakeClass.fake(), "");
+    assertCallInfo(FakeClass.fake(), "");
   }
 
   @Test
   public void test2() {
     String msg = "this is the message";
-    assertCallInfo( FakeClass.fake(msg), msg);
+    assertCallInfo(FakeClass.fake(msg), msg);
   }
 }

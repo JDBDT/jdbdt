@@ -20,8 +20,7 @@ public class DeltaTest {
   }
   
   Delta emptyDelta() {
-    return new Delta(empty(),
-                     empty());
+    return new Delta(empty(), empty());
   }
   
   Iterator<Row> rows(Object... v) {

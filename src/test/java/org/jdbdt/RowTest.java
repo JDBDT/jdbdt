@@ -21,6 +21,7 @@ public class RowTest {
   public void setup() {
     theSUT = new Row(DATA);
   }
+  
   @Test
   public void testInit() {
     assertSame(DATA, theSUT.data());
