@@ -141,7 +141,8 @@ or [data set comparison](DBAssertions.html#DataSetAssertions), e.g.,
 
 The code is hosted at [GitHub](https://github.com/JDBDT/jdbdt).
 Please use the [issue tracker](https://github.com/edrdo/JDBDT/issues)
-to report bugs or propose new features.
+to report bugs or propose new features. For other issues e-mail
+`delta _at_ jdbdt.org`.
 
 ## Installation 
 
