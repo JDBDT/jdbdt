@@ -34,7 +34,7 @@ matrix:
         project:
           name: "edrdo/jdbdt"
           description: "Build submitted via Travis CI"
-        notification_email: edrdo@dcc.fc.up.pt
+        notification_email: delta@jdbdt.org
         build_command_prepend: "mvn clean"
         build_command:   "mvn -DskipTests=true compile"
         branch_pattern: master
