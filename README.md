@@ -47,7 +47,7 @@ Commands:
 Features:
 
 * [#5 - Database exception logging](https://github.com/JDBDT/jdbdt/issues/5)
-* [#33 - Arbitrary SQL execution through JDBDT.execute](https://github.com/JDBDT/jdbdt/issues/33)
+* [#33 - SQL statement execution through JDBDT.execute](https://github.com/JDBDT/jdbdt/issues/33)
 * [#42 - Partial support for case-sensitive column names](https://github.com/JDBDT/jdbdt/issues/42)
 * [#43 - DataSet.toString() utility method](https://github.com/JDBDT/jdbdt/issues/43)
 
