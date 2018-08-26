@@ -38,7 +38,7 @@ public class CallInfoTest {
                      testName.getMethodName());
     assertMethodInfo(ci.getAPIMethodInfo(), 
                      FakeClass.class.getName(),
-                    "fake");
+                     "fake");
     assertEquals("message", msg, ci.getMessage());
   }
   
@@ -49,7 +49,7 @@ public class CallInfoTest {
 
   @Test
   public void test2() {
-    String msg = "this is the message";
+    String msg = "alpha beta gamma delta";
     assertCallInfo(FakeClass.fake(msg), msg);
   }
 }
