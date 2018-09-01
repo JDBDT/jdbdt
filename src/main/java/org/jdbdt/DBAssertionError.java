@@ -3,7 +3,7 @@ package org.jdbdt;
 /**
  * Error thrown due to a failed assertion.
  * 
- * @since 0.1
+ * @since 1.0
  */
 public final class DBAssertionError extends AssertionError {
   /**

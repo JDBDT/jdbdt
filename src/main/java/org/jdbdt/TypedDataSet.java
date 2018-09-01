@@ -9,7 +9,7 @@ import java.util.Collection;
  * @see JDBDT#data(DataSource, Conversion)
  * @see Conversion
  * 
- * @since 0.1
+ * @since 1.0
  */
 public final class TypedDataSet<T> extends DataSet {
   /**

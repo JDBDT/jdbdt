@@ -9,7 +9,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Utility class grouping miscellaneous functionality.
  * 
- * @since 0.4
+ * @since 1.0
  *
  */
 final class Misc {

@@ -13,7 +13,7 @@ import org.junit.BeforeClass;
 /**
  * Parent class for a database test classes.
  * 
- * @since 0.1
+ * @since 1.0
  */
 @SuppressWarnings("javadoc")
 public class DBTestCase {

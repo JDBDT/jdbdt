@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 /**
  * Utility class with methods for assertion execution.
  * 
- * @since 0.1
+ * @since 1.0
  * 
  */
 final class DBAssert {

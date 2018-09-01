@@ -3,7 +3,7 @@ package org.jdbdt;
 /**
  * Exception thrown due to an unsupported operation.
  * 
- * @since 0.9
+ * @since 1.0
  */
 public final class UnsupportedOperationException extends JDBDTRuntimeException {
   /**

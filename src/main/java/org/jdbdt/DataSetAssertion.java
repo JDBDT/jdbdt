@@ -5,7 +5,7 @@ import java.util.Iterator;
 /**
  * Data set assertion.
  * 
- * @since 0.1
+ * @since 1.0
  */
 final class DataSetAssertion {
   /**

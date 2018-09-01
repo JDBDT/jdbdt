@@ -3,7 +3,7 @@ package org.jdbdt;
 /**
  * Exception thrown due to an invalid use of the JDBDT API.
  * 
- * @since 0.1
+ * @since 1.0
  */
 public final class InvalidOperationException extends JDBDTRuntimeException {
   /**

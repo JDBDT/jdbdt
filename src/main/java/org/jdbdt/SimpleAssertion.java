@@ -3,7 +3,7 @@ package org.jdbdt;
 /**
  * Simple assertion.
  * 
- * @since 0.11
+ * @since 1.0
  */
 final class SimpleAssertion {
   /**

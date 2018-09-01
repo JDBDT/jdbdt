@@ -10,7 +10,7 @@ package org.jdbdt;
  * abnormal conditions in the JVM environment.
  * </p>
  * 
- * @since 0.9
+ * @since 1.0
  */
 public final class InternalErrorException extends JDBDTRuntimeException {
   /**

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Utility class with methods for database setup.
  * 
- * @since 0.1
+ * @since 1.0
  *
  */
 final class DBSetup {

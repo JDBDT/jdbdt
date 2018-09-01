@@ -39,7 +39,7 @@ import org.w3c.dom.Element;
 /**
  * JDBDT log.
  * 
- * @since 0.1
+ * @since 1.0
  *
  */
 final class Log implements AutoCloseable {

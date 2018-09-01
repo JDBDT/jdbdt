@@ -6,7 +6,7 @@ import java.sql.SQLException;
 /**
  * Statement wrapper.
  *
- * @since 0.6
+ * @since 1.0
  */
 final class WrappedStatement implements AutoCloseable {
   /**

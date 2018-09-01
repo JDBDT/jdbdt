@@ -9,7 +9,7 @@ import java.util.List;
  * 
  * <p>A data set represents a collection of database rows.</p>
  * 
- * @since 0.1
+ * @since 1.0
  *
  */
 public class DataSet {
@@ -185,6 +185,7 @@ public class DataSet {
    * @return An "array-style" string with one entry per row in the data set.
    * @see JDBDT#dump(DataSet, java.io.File)
    * @see JDBDT#dump(DataSet, java.io.PrintStream)
+   * @since 1.1
    */
   @Override
   public final String toString() {

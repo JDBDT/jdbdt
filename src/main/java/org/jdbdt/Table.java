@@ -8,7 +8,7 @@ import java.util.List;
  * Table data source.
  * 
  * @see JDBDT#table(String)
- * @since 0.1
+ * @since 1.0
  */
 public final class Table extends DataSource {
   /**

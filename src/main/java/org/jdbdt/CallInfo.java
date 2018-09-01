@@ -3,7 +3,7 @@ package org.jdbdt;
 /**
  * Information regarding a call to the JDBDT API facade.
  * 
- * @since 0.1
+ * @since 1.0
  */
 final class CallInfo {
   /**

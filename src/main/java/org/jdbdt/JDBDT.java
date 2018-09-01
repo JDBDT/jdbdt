@@ -16,7 +16,7 @@ import java.sql.SQLException;
  * class instances.
  * </p>
  *  
- * @since 0.1
+ * @since 1.0
  */
 public final class JDBDT {
   /**
@@ -674,6 +674,7 @@ public final class JDBDT {
    * @param sql SQL statement.
    * @param args SQL statement arguments.
    * @return The value obtained through {@link PreparedStatement#getUpdateCount()}, after executing the statement.
+   * @since 1.1
    */
   public static int execute(DB db, String sql, Object... args) {
     return DBSetup.execute(CallInfo.create(), db, sql, args);
