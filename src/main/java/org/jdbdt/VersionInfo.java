@@ -3,7 +3,7 @@ package org.jdbdt;
 /**
  * Version info.
  * 
- * @since 0.1
+ * @since 1.0
  */
 final class VersionInfo {
   /**

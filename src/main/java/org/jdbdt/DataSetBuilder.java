@@ -45,7 +45,7 @@ import java.util.function.Function;
  * </ul>
  * 
  * 
- * @since 0.1 
+ * @since 1.0 
  * @see JDBDT#builder(DataSource)
  * @see DataSet#build()
  *

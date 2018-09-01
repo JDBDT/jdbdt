@@ -3,7 +3,7 @@ package org.jdbdt;
 /**
  * Base class for JDBDT runtime exceptions.
  * 
- * @since 0.9
+ * @since 1.0
  */
 public class JDBDTRuntimeException extends RuntimeException {
   /**

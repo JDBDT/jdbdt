@@ -10,7 +10,7 @@ import java.util.Arrays;
  * to represent database rows.
  * </p>
  * 
- * @since 0.1
+ * @since 1.0
  */
 final class Row {
   /**

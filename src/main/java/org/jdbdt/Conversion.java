@@ -21,7 +21,7 @@ package org.jdbdt;
  * 
  * @param <T> Type of objects.
  * 
- * @since 0.1
+ * @since 1.0
  */
 @FunctionalInterface
 public interface Conversion<T> {

@@ -11,14 +11,14 @@ import java.util.List;
 /**
  * Representation of statement meta-data.
  * 
- * @since 0.1
+ * @since 1.0
  *
  */
 final class MetaData {
 
   /**
    * Column information.
-   * @since 0.1
+   * @since 1.0
    */
   static final class ColumnInfo {
     /**

@@ -12,7 +12,7 @@ import java.sql.SQLException;
  * issued by JDBDT. 
  * </p>
  * 
- * @since 0.1
+ * @since 1.0
  */
 public final class DBExecutionException extends JDBDTRuntimeException {
   /**

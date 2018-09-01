@@ -7,7 +7,7 @@ package org.jdbdt;
  * @see JDBDT#select(String...)
  * @see Query
  * 
- * @since 0.1
+ * @since 1.0
  */
 public final class QueryBuilder  {
   /**

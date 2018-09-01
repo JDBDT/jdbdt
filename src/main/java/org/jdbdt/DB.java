@@ -19,14 +19,14 @@ import java.util.Map;
  * </p>
  * 
  * @see JDBDT#database(Connection)
- * @since 0.1
+ * @since 1.0
  *
  */
 public final class DB {
   /**
    * Database options.
    *
-   * @since 0.1
+   * @since 1.0
    */
   public enum Option {
     /**
@@ -41,6 +41,8 @@ public final class DB {
     
     /**
      * Log database exceptions (enabled initially by default).
+     * 
+     * @since 1.1
      */
     LOG_DATABASE_EXCEPTIONS,
     
@@ -79,6 +81,8 @@ public final class DB {
      * This is required if you wish to use double-quotes with column 
      * names, by default JDBDT will handle column names in case-insensitive 
      * manner. This support may be fragile for some database engines.
+     * 
+     * @since 1.1
      */
     CASE_SENSITIVE_COLUMN_NAMES;
   }

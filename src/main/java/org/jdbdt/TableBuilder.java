@@ -7,7 +7,7 @@ package org.jdbdt;
  * 
  * @see Table
  * 
- * @since 0.8
+ * @since 1.0
  */
 public final class TableBuilder  {
   /**

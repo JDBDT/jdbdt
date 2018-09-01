@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 /**
  * Delta between data sets.
  * 
- * @since 0.1
+ * @since 1.0
  *
  */
 final class Delta {

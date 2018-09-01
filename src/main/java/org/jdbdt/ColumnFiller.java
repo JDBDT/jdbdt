@@ -12,7 +12,7 @@ package org.jdbdt;
  * </p>
  * 
  * @param <T> Type of columns set by the filler.
- * @since 0.1
+ * @since 1.0
  */
 @FunctionalInterface
 public interface ColumnFiller<T> {
