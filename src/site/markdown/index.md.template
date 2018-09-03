@@ -55,7 +55,7 @@ without need to maintain external "data files", for instance using data set buil
       .sequence("NAME", "Harry H", "Mark M", "John J")
       .sequence("PASSWORD", i -> "password " + i , 1)
       .random("CREATED", Date.valueOf("2015-01-01"), Date.valueOf("2015-12-31"))
-      .generate(3) // generate 3 rows, 
+      .generate(3) // generate 3 rows 
       .sequence("LOGIN", i -> "guest_" + i, 4)  // "user_4", "user_5", ...
       .sequence("NAME", i -> "Guest User " + i, 4) // "Guest User 4", ...
       .value("password", "samePasswordForAllGuests") 
