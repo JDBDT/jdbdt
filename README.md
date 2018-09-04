@@ -55,6 +55,7 @@ Maintenance:
 
 * Standard maintenance tasks (dependency updates, minor adjustments, etc) 
 	* [#41 - 1.1.0](https://github.com/JDBDT/jdbdt/issues/41)
+	* [#44 - 1.1.1](https://github.com/JDBDT/jdbdt/issues/44)
   
 ## 1.0.x
 
