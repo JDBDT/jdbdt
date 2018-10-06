@@ -26,6 +26,6 @@
  * JDBDT (Java Database Delta Testing)
  * is a library for testing database applications.
  * 
- * @version 1.1.2-SNAPSHOT
+ * @version 1.1.3-SNAPSHOT
  */
 package org.jdbdt;
