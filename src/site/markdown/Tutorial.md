@@ -226,10 +226,10 @@ The following table summarizes the created entries (note that `FIXED_DATE` equal
 			<code>1</code>
 		</td>
 		<td align="left">
-		  	<code>harry</code>
+		  	<code>alice</code>
 		</td>
 	    <td align="left">
-		  	<code>Harry</code>
+		  	<code>Alice</code>
 		</td>
 		<td align="left">
 		  	<code>pass1</code>
@@ -246,10 +246,10 @@ The following table summarizes the created entries (note that `FIXED_DATE` equal
 			<code>2</code>
 		</td>
 		<td align="left">
-		  	<code>mark</code>
+		  	<code>bob</code>
 		</td>
 	    <td align="left">
-		  	<code>Mark</code>
+		  	<code>Bob</code>
 		</td>
 		<td align="left">
 		  	<code>pass2</code>
@@ -266,10 +266,10 @@ The following table summarizes the created entries (note that `FIXED_DATE` equal
 			<code>3</code>
 		</td>
 		<td align="left">
-		  	<code>john</code>
+		  	<code>charles</code>
 		</td>
 	    <td align="left">
-		  	<code>John</code>
+		  	<code>Charles</code>
 		</td>
 		<td align="left">
 		  	<code>pass3</code>
