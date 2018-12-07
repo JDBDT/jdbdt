@@ -69,11 +69,11 @@ public final class JDBDT {
   public static DB database(Connection c) {
     return new DB(c);
   }
-  
+
   /**
    * Create a new database handle for given database URL.
    * 
-  * <p>Calling this method is shorthand for:<br>
+   * <p>Calling this method is shorthand for:<br>
    * &nbsp;&nbsp;&nbsp;&nbsp;
    * <code>database( DriverManager.getConnection(url) )</code>.
    * </p>
@@ -87,7 +87,7 @@ public final class JDBDT {
   public static DB database(String url) throws SQLException {
     return database(DriverManager.getConnection(url));
   }
-  
+
   /**
    * Create a new database handle for given database
    * URL, user and password .
@@ -108,7 +108,7 @@ public final class JDBDT {
   public static DB database(String url, String user, String pass) throws SQLException {
     return database(DriverManager.getConnection(url, user, pass));
   }
-  
+
   /**
    * Tear-down a database handle.
    * 
@@ -131,7 +131,7 @@ public final class JDBDT {
   public static void teardown(DB db, boolean closeConn) {
     db.teardown(CallInfo.create(), closeConn);
   }
-  
+
   /**
    * Create a builder for a fresh data set.
    * @param source Data source.
@@ -159,7 +159,7 @@ public final class JDBDT {
   public static DataSet empty(DataSource source) {
     return source.theEmptySet();
   }
-  
+
   /**
    * Create a new data set.
    * 
@@ -198,7 +198,7 @@ public final class JDBDT {
   public static TableBuilder table(String tableName) {
     return new TableBuilder().name(tableName);
   }
-  
+
   /**
    * Create a query data source from given SQL code.
    * @param db Database handle.
@@ -210,7 +210,7 @@ public final class JDBDT {
   public static Query query(DB db, String sql, Object... args) {
     return new Query(db, sql, args);
   }
-  
+
   /**
    * Create a query builder.
    * <p>
@@ -228,7 +228,7 @@ public final class JDBDT {
   public static QueryBuilder select(String... columns) {
     return new QueryBuilder().columns(columns);
   }
-  
+
 
   /**
    * Take a database snapshot.
@@ -271,7 +271,7 @@ public final class JDBDT {
   executeQuery(DataSource source)  {
     return source.executeQuery(CallInfo.create(), false);
   }
-  
+
   /**
    * Assert that two data sets are equivalent.
    * 
@@ -288,7 +288,7 @@ public final class JDBDT {
   public static void assertEquals(DataSet expected, DataSet actual) throws DBAssertionError {
     DBAssert.dataSetAssertion(CallInfo.create(), expected, actual);
   }
-  
+
   /**
    * Assert that two data sets are equivalent (error message variant).
    * 
@@ -306,7 +306,7 @@ public final class JDBDT {
   public static void assertEquals(String message, DataSet expected, DataSet actual) throws DBAssertionError {
     DBAssert.dataSetAssertion(CallInfo.create(message), expected, actual);
   }
-  
+
   /**
    * Assert that no changes occurred for the given data source 
    * (error message variant).
@@ -322,7 +322,7 @@ public final class JDBDT {
     DataSet emptyDataSet = empty(source);
     DBAssert.deltaAssertion(CallInfo.create(message), emptyDataSet, emptyDataSet);
   }
-  
+
   /**
    * Assert that no changes occurred for the given data source.
    * 
@@ -351,7 +351,7 @@ public final class JDBDT {
   public static void assertDeleted(String message, DataSet data) throws DBAssertionError {
     DBAssert.deltaAssertion(CallInfo.create(message), data, empty(data.getSource())); 
   }
-  
+
   /**
    * Assert that database changed only by removal of a given
    * data set. 
@@ -379,7 +379,7 @@ public final class JDBDT {
   public static void assertInserted(String message, DataSet data) throws DBAssertionError {
     DBAssert.deltaAssertion(CallInfo.create(message), empty(data.getSource()), data);
   }
-  
+
   /**
    * Assert that database changed only by addition of a given
    * data set.
@@ -410,7 +410,7 @@ public final class JDBDT {
   public static void assertDelta(String message, DataSet oldData, DataSet newData) throws DBAssertionError {
     DBAssert.deltaAssertion(CallInfo.create(message), oldData, newData);
   }
-  
+
   /**
    * Assert database delta expressed by 'old' 
    * and 'new' data sets.
@@ -426,7 +426,7 @@ public final class JDBDT {
   public static void assertDelta(DataSet oldData, DataSet newData) throws DBAssertionError {
     DBAssert.deltaAssertion(CallInfo.create(), oldData, newData);
   }
-  
+
   /**
    * Assert that the database state matches the given data set 
    * (error message variant).
@@ -437,7 +437,7 @@ public final class JDBDT {
   public static void assertState(String message, DataSet data) throws DBAssertionError {
     DBAssert.stateAssertion(CallInfo.create(message), data);
   }
-  
+
   /**
    * Assert that the database state matches the given data set.
    * @param data Data set.
@@ -446,7 +446,7 @@ public final class JDBDT {
   public static void assertState(DataSet data) throws DBAssertionError {
     DBAssert.stateAssertion(CallInfo.create(), data);
   }
-  
+
   /**
    * Assert that the given data source 
    * has no rows (error message variant).
@@ -463,7 +463,7 @@ public final class JDBDT {
   public static void assertEmpty(String message, DataSource source) throws DBAssertionError {
     DBAssert.stateAssertion(CallInfo.create(message), empty(source));
   }
-  
+
   /**
    * Assert that the given data source has no rows.
    * 
@@ -477,7 +477,7 @@ public final class JDBDT {
   public static void assertEmpty(DataSource source) throws DBAssertionError {
     DBAssert.stateAssertion(CallInfo.create(), empty(source));
   }
-  
+
   /**
    * Assert that table exists in the database.
    * @param db Database.
@@ -501,7 +501,7 @@ public final class JDBDT {
   public static void assertTableExists(String message, DB db, String tableName) throws DBAssertionError {
     DBAssert.assertTableExistence(CallInfo.create(message), db, tableName, true);
   }
-  
+
   /**
    * Assert that table does not exist in a database.
    * 
@@ -515,7 +515,7 @@ public final class JDBDT {
   public static void assertTableDoesNotExist(DB db, String tableName) throws DBAssertionError {
     DBAssert.assertTableExistence(CallInfo.create(), db, tableName, false);
   }
-  
+
   /**
    * Assert that table does not exist in a database (error message variant).
    * @param message Error message.
@@ -528,7 +528,7 @@ public final class JDBDT {
   public static void assertTableDoesNotExist(String message, DB db, String tableName) throws DBAssertionError {
     DBAssert.assertTableExistence(CallInfo.create(message), db, tableName, false);
   }
-  
+
   /**
    * Insert a data set into the database.
    * 
@@ -541,7 +541,23 @@ public final class JDBDT {
   public static void insert(DataSet data) {
     DBSetup.insert(CallInfo.create(), data);
   }
-   
+  
+  /**
+   * Insert data sets into the database.
+   * 
+   * @param dataSets Data sets for insertion.  
+   * @see #insert(DataSet)
+   * @see #delete(DataSet...)
+   * @see #update(DataSet...)
+   * @see #populate(DataSet...)
+   * @see #populateIfChanged(DataSet...)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void insert(DataSet... dataSets) {
+    foreach(dataSets, DBSetup::insert, CallInfo.create());
+  }
+
   /**
    * Update database according to given data set.
    * 
@@ -554,7 +570,7 @@ public final class JDBDT {
    * @param data Data set for update.  
    * @see TableBuilder#key(String...)
    * @see Table#getKeyColumns()
-   * @see #update(DataSet)
+   * @see #update(DataSet...)
    * @see #insert(DataSet)
    * @see #populate(DataSet)
    * @see #populateIfChanged(DataSet)
@@ -563,13 +579,36 @@ public final class JDBDT {
     DBSetup.update(CallInfo.create(), data);
   }
   
-  
+  /**
+   * Update database according to given data sets.
+   * 
+   * <p>The data sets should be associated to tables
+   * with defined key columns. The key column values
+   * of each entry in a data set determine the rows to be updated,
+   * and the remaining column values are used in the update.
+   * </p>
+   * 
+   * @param dataSets Data sets for update.  
+   * @see TableBuilder#key(String...)
+   * @see Table#getKeyColumns()
+   * @see #update(DataSet)
+   * @see #insert(DataSet...)
+   * @see #populate(DataSet...)
+   * @see #populateIfChanged(DataSet...)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void update(DataSet... dataSets) {
+    foreach(dataSets, DBSetup::update, CallInfo.create());
+  }
+
+
   /**
    * Delete data set from the database.
    * 
    * <p>The data set should be associated to a table
    * with defined key columns. The key column values
-   * of each entry the data set determine the rows to delete.
+   * of each entry in the data set determine the rows to delete.
    * </p>
    * 
    * @param data Data set for deletion. 
@@ -584,6 +623,28 @@ public final class JDBDT {
     DBSetup.delete(CallInfo.create(), data);
   }
 
+  /**
+   * Delete data sets from the database.
+   * 
+   * <p>The data sets should be associated to tables
+   * with defined key columns. The key column values
+   * of each entry a data set determine the rows to delete.
+   * </p>
+   * 
+   * @param dataSets Data sets for deletion. 
+   * @see TableBuilder#key(String...)
+   * @see Table#getKeyColumns() 
+   * @see #update(DataSet...)
+   * @see #insert(DataSet...)
+   * @see #populate(DataSet...)
+   * @see #populateIfChanged(DataSet...)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void delete(DataSet... dataSets) {
+    foreach(dataSets, DBSetup::delete, CallInfo.create());
+  }
+
 
   /**
    * Populate database with given data set.
@@ -596,6 +657,22 @@ public final class JDBDT {
    */
   public static void populate(DataSet data) {
     DBSetup.populate(CallInfo.create(), data);
+  }
+  
+  /**
+   * Populate database with given data sets.
+   * 
+   * @param dataSets Data sets for insertion.
+   * @see #populate(DataSet)
+   * @see #populateIfChanged(DataSet)
+   * @see #insert(DataSet...)
+   * @see #update(DataSet...)
+   * @see #delete(DataSet...)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void populate(DataSet... dataSets) {
+    foreach(dataSets, DBSetup::populate, CallInfo.create());
   }
 
   /**
@@ -619,6 +696,23 @@ public final class JDBDT {
   }
   
   /**
+   * Populate database with given data sets if the associated
+   * tables are seen as changed.
+   * 
+   * @param dataSets Data sets for insertion.
+   * @see #populateIfChanged(DataSet)
+   * @see #changed(DataSource...)
+   * @see #populate(DataSet...)
+   * @see #insert(DataSet...)
+   * @see #update(DataSet...)
+   * @see #delete(DataSet...)
+   * @since 1.2
+   */
+  public static void populateIfChanged(DataSet... dataSets) {
+    foreach(dataSets, DBSetup::populateIfChanged, CallInfo.create());
+  }
+
+  /**
    * Delete all data from a table. 
    *
    * @param table Table.
@@ -628,6 +722,20 @@ public final class JDBDT {
    */
   public static int deleteAll(Table table) {
     return DBSetup.deleteAll(CallInfo.create(), table);
+  }
+  
+  /**
+   * Delete all data from given tables. 
+   *
+   * @param tables Tables.
+   * @see #deleteAll(Table)
+   * @see #truncate(Table...)
+   * @see #deleteAllWhere(Table,String,Object...)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void deleteAll(Table... tables) {
+    foreach(tables, DBSetup::deleteAll, CallInfo.create());
   }
   
   /**
@@ -646,10 +754,27 @@ public final class JDBDT {
   public static void drop(Table table) {
     DBSetup.drop(CallInfo.create(), table.getDB(), table.getName());
   }
-
   
   /**
-   * Drop a table. 
+   * Drop tables (table handle variant). 
+   * 
+   * @param tables Tables to drop.
+   * 
+   * @see #drop(Table)
+   * @see #drop(DB, String...)
+   * @see #assertTableExists(DB, String)
+   * @see #assertTableDoesNotExist(DB, String)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void drop(Table... tables) {
+    foreach(tables, 
+        (callInfo, table) -> DBSetup.drop(callInfo, table.getDB(), table.getName()), 
+        CallInfo.create());
+  }
+
+  /**
+   * Drop a table (table name variant).
    * @param db Database.
    * @param tableName Table name.
    * 
@@ -661,6 +786,24 @@ public final class JDBDT {
     DBSetup.drop(CallInfo.create(), db, tableName);
   }
   
+  /**
+   * Drop tables. 
+   * @param db Database.
+   * @param tableNames Table names.
+   * 
+   * @see #drop(Table)
+   * @see #drop(Table...)
+   * @see #assertTableExists(DB, String)
+   * @see #assertTableDoesNotExist(DB, String)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void drop(DB db, String... tableNames) {
+    foreach(tableNames, 
+           (callInfo, tableName) -> DBSetup.drop(callInfo, db, tableName), 
+           CallInfo.create());
+  }
+
   /**
    * Delete all data from a table, subject to a <code>WHERE</code>
    * clause. 
@@ -688,6 +831,19 @@ public final class JDBDT {
   }
   
   /**
+   * Truncate tables.
+   * @param tables Tables to truncate.
+   * @see #truncate(Table)
+   * @see #deleteAll(Table...)
+   * @see #drop(Table...)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void truncate(Table... tables) {
+    foreach(tables, DBSetup::truncate, CallInfo.create());
+  }
+
+  /**
    * Execute arbitrary SQL for a database instance.
    * 
    * <p>
@@ -703,7 +859,7 @@ public final class JDBDT {
   public static int execute(DB db, String sql, Object... args) {
     return DBSetup.execute(CallInfo.create(), db, sql, args);
   }
-  
+
   /**
    * Set JDBDT save-point for database.
    * 
@@ -758,7 +914,7 @@ public final class JDBDT {
   }
 
   /**
-   * Check if given data sources are seen as changed.
+   * Check if given data source is seen as changed.
    * 
    * <p>
    * A data source is marked as unchanged by a successful assertion
@@ -774,17 +930,35 @@ public final class JDBDT {
    * as illustrated below.
    * </p>
    * <pre>
-   * DataSource ds = ...; 
+   * Table t = ...; 
    * 
-   * if ( changed(ds) ) {
+   * if ( changed(t) ) {
    *   // Setup initial state again
    *   ...
    * }
    * </pre>
    * 
+   * @param dataSource Data sources.
+   * @return <code>true</code> if the data sources is marked as changed.
+   * @see #changed(DataSource...)
+   * @see #populateIfChanged(DataSet)
+   * @since 1.2
+   */
+  public static boolean changed(DataSource dataSource) {
+    if (dataSource == null ) {
+      throw new InvalidOperationException("Null data source specified!");
+    }
+    return dataSource.getDirtyStatus();
+  }
+  
+  /**
+   * Check if given data sources are seen as changed.
+   * 
+   * 
    * @param dataSources Data sources.
    * @return <code>true</code> if at least one of the given data sources 
    *         is marked as changed.
+   * @see #changed(DataSource)
    * @see #populateIfChanged(DataSet)
    */
   @SafeVarargs
@@ -799,7 +973,7 @@ public final class JDBDT {
     }
     return false;
   }
-  
+
   /**
    * Dump the contents of a data set.
    * @param data Data set.
@@ -810,7 +984,7 @@ public final class JDBDT {
       log.write(CallInfo.create(), data);
     }
   }
-  
+
   /**
    * Dump the contents of a data set (output file variant).
    * 
@@ -826,7 +1000,7 @@ public final class JDBDT {
       log.write(CallInfo.create(), data);
     } 
   }
-  
+
   /**
    * Dump the database contents for a data source.
    * 
@@ -838,7 +1012,7 @@ public final class JDBDT {
       log.write(CallInfo.create(), executeQuery(source));
     }
   }
-  
+
   /**
    * Dump the database contents for a data source (file variant).
    *
@@ -853,5 +1027,36 @@ public final class JDBDT {
     try (Log log = Log.create(outputFile)) {
       log.write(CallInfo.create(), executeQuery(source));
     } 
+  }
+
+  /**
+   * Auxiliary type for {@code JDBDT#varArgsCall(VAHandler)}.
+   *
+   * @param <T> Type of objects.
+   */
+  private interface CallHandler<T> {
+    /** 
+     * Execution action. 
+     * @param callInfo Call information.
+     * @param object Argument for handler.
+     */
+    void action(CallInfo callInfo, T object);
+  }
+
+  /**
+   * Utility method to deal with facade methods that accept 
+   * variable length arguments. 
+   * @param arguments Argument array.
+   * @param handler handler.
+   * @param callInfo Call info.
+   * @param <T> Type of objects.
+   */
+  private static <T> void foreach(T[] arguments, CallHandler<T> handler, CallInfo callInfo) {
+    if (arguments == null || arguments.length == 0) {
+      throw new InvalidOperationException("Empty or null array!");
+    }
+    for (T argument : arguments) {
+      handler.action(callInfo, argument);
+    }
   }
 }
