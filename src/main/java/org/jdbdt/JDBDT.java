@@ -261,6 +261,22 @@ public final class JDBDT {
   takeSnapshot(DataSource source)  {
     return source.executeQuery(CallInfo.create(), true);
   }
+  
+  /**
+   * Take a database snapshot for several data sources.
+   * 
+   * @param sources Data sources.
+   * 
+   * @see #takeSnapshot(DataSource)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void
+  takeSnapshot(DataSource... sources)  {
+    foreach(sources, 
+           (callInfo, source) -> source.executeQuery(callInfo, true), 
+           CallInfo.create());
+  }
 
   /**
    * Query the data source, without setting a snapshot.
