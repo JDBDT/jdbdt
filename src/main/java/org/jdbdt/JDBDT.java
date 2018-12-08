@@ -604,9 +604,7 @@ public final class JDBDT {
   @SuppressWarnings("javadoc")
   private static void 
   multipleStateAssertions(CallInfo callInfo, DataSet[] dataSets) {
-    foreach(dataSets,
-        (ci, dataSet) -> DBAssert.stateAssertion(ci, dataSet),
-        callInfo);
+    foreach(dataSets, DBAssert::stateAssertion, callInfo);
   }
   
   /**

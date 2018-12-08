@@ -97,11 +97,11 @@ public abstract class DataSource {
       try (WrappedStatement stmt = db.compile(querySQL)) {
         MetaData md = new MetaData(stmt.getStatement());
         String[] cols = new String[md.getColumnCount()];
-        boolean case_sensitive = db.isEnabled(DB.Option.CASE_SENSITIVE_COLUMN_NAMES);
+        boolean caseSensitive = db.isEnabled(DB.Option.CASE_SENSITIVE_COLUMN_NAMES);
         for (int i = 0; i < cols.length; i++) {
           String cname = md.getLabel(i);
           String cnameUC = cname.toUpperCase();
-          if (case_sensitive && !cname.equals(cnameUC)) {
+          if (caseSensitive && !cname.equals(cnameUC)) {
             cname = '\"' + cname +  '\"';
           } else {
             cname = cnameUC;

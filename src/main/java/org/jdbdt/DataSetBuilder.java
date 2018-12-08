@@ -33,6 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.function.UnaryOperator;
 
 /**
  * Data set builder. 
@@ -236,14 +238,14 @@ public final class DataSetBuilder {
     /** Next value */
     private T nextValue;
     /** Step function. */
-    private final Function<T,T> stepFunction;
+    private final UnaryOperator<T> stepFunction;
 
     /**
      * Constructor.
      * @param initial Initial value.
      * @param stepFunction Step function.
      */
-    StdSeqFiller(T initial, Function<T,T> stepFunction) {
+    StdSeqFiller(T initial, UnaryOperator<T> stepFunction) {
       nextValue = initial;
       this.stepFunction = stepFunction;
     }
@@ -374,9 +376,9 @@ public final class DataSetBuilder {
    * @param initial Initial value.
    * @param step Step function.
    * @return The builder instance (for chained calls).
-   * @see #sequence(String, Function)
+   * @see #sequence(String, IntFunction)
    */
-  public <T> DataSetBuilder sequence(String column, T initial, Function<T,T> step) {
+  public <T> DataSetBuilder sequence(String column, T initial, UnaryOperator<T> step) {
     ensureArgNotNull(initial);
     ensureArgNotNull(step);
     return set(column, new StdSeqFiller<T>(initial, step));
@@ -393,18 +395,18 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param step Step function.
    * @return The builder instance (for chained calls).
-   * @see #sequence(String, Function, int)
+   * @see #sequence(String, IntFunction, int)
    */
-  public DataSetBuilder sequence(String column, Function<Integer,?> step) {
+  public DataSetBuilder sequence(String column, IntFunction<?> step) {
     return sequence(column, step, 0);
   }
 
   @SuppressWarnings("javadoc")
   private static class SequenceFiller implements ColumnFiller<Object> {
     private int step;
-    private final Function<Integer,?> stepFunction;
+    private final IntFunction<?> stepFunction;
     
-    SequenceFiller(Function<Integer,?> stepFunction, int initialValue) {
+    SequenceFiller(IntFunction<?> stepFunction, int initialValue) {
       this.stepFunction = stepFunction;
       this.step = initialValue;
     }
@@ -432,9 +434,9 @@ public final class DataSetBuilder {
    * @param step Step function.
    * @param initial Initial value fed to step function.
    * @return The builder instance (for chained calls).
-   * @see #sequence(String, Object, Function)
+   * @see #sequence(String, Object, UnaryOperator)
    */
-  public DataSetBuilder sequence(String column, Function<Integer,?> step, int initial) {
+  public DataSetBuilder sequence(String column, IntFunction<?> step, int initial) {
     ensureArgNotNull(step);
     return set(column, new SequenceFiller(step, initial));
   }
@@ -452,7 +454,7 @@ public final class DataSetBuilder {
    * @return The builder instance (for chained calls).
    * 
    * @see #sequence(String, List)
-   * @see #sequence(String,Function)
+   * @see #sequence(String,IntFunction)
    * 
    */
   @SafeVarargs
@@ -473,7 +475,7 @@ public final class DataSetBuilder {
    * @param values Sequence of values to use.
    * @return The builder instance (for chained calls).
    * 
-   * @see #sequence(String,Function)
+   * @see #sequence(String,IntFunction)
    */
   public DataSetBuilder sequence(String column, List<?> values) { 
     ensureValidList(values);
@@ -510,7 +512,7 @@ public final class DataSetBuilder {
    * @param initial Initial sequence value.
    * @param step Sequence step.
    * @return The builder instance (for chained calls).
-   * @see #sequence(String, Object, Function)
+   * @see #sequence(String, Object, UnaryOperator)
    * @see #sequence(String, int)
    */
   public DataSetBuilder sequence(String column, int initial, int step) {
@@ -528,7 +530,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param initial Initial sequence value.
    * @return The builder instance (for chained calls).
-   * @see #sequence(String, Object, Function)
+   * @see #sequence(String, Object, UnaryOperator)
    * @see #sequence(String, long, long)
    */
   public DataSetBuilder sequence(String column, long initial) {
@@ -548,7 +550,7 @@ public final class DataSetBuilder {
    * @param initial Initial sequence value.
    * @param step Sequence step.
    * @return The builder instance (for chained calls).
-   * @see #sequence(String, Object, Function)
+   * @see #sequence(String, Object, UnaryOperator)
    * @see #sequence(String, long)
    */
   public DataSetBuilder sequence(String column, long initial, long step) {
@@ -566,7 +568,7 @@ public final class DataSetBuilder {
    * @param column Column name.
    * @param initial Initial sequence value.
    * @return The builder instance (for chained calls).
-   * @see #sequence(String, Object, Function)
+   * @see #sequence(String, Object, UnaryOperator)
    * @see #sequence(String, BigInteger, BigInteger)
    */
   public DataSetBuilder sequence(String column, BigInteger initial) {
@@ -587,7 +589,7 @@ public final class DataSetBuilder {
    * @param initial Initial sequence value.
    * @param step Sequence step.
    * @return The builder instance (for chained calls).
-   * @see #sequence(String, Object, Function)
+   * @see #sequence(String, Object, UnaryOperator)
    * @see #sequence(String, BigInteger)
    */
   public DataSetBuilder sequence(String column, BigInteger initial, BigInteger step) {
@@ -609,7 +611,7 @@ public final class DataSetBuilder {
    * @param initial Initial sequence value.
    * @param step Sequence step.
    * @return The builder instance (for chained calls).
-   * @see #sequence(String, Object, Function)
+   * @see #sequence(String, Object, UnaryOperator)
    * @see #sequence(String, double, double)
    */
   public DataSetBuilder sequence(String column, float initial, float step) {
@@ -628,7 +630,7 @@ public final class DataSetBuilder {
    * @param initial Initial sequence value.
    * @param step Sequence step.
    * @return The builder instance (for chained calls).
-   * @see #sequence(String, Object, Function)
+   * @see #sequence(String, Object, UnaryOperator)
    * @see #sequence(String, float, float)
    */
   public DataSetBuilder sequence(String column, double initial, double step) {
@@ -656,7 +658,7 @@ public final class DataSetBuilder {
    * 
    * @see #sequence(String, Time, int)
    * @see #sequence(String, Timestamp, long)
-   * @see #sequence(String, Object, Function)
+   * @see #sequence(String, Object, UnaryOperator)
    */
   public DataSetBuilder sequence(String column, Date initial, int step) {
     ensureArgNotNull(initial);
@@ -679,7 +681,7 @@ public final class DataSetBuilder {
    * 
    * @see #sequence(String, Date, int)
    * @see #sequence(String, Timestamp, long)
-   * @see #sequence(String, Object, Function)
+   * @see #sequence(String, Object, UnaryOperator)
    */
   public DataSetBuilder sequence(String column, Time initial, int step) {
     ensureArgNotNull(initial);
@@ -702,7 +704,7 @@ public final class DataSetBuilder {
    * 
    * @see #sequence(String, Date, int)
    * @see #sequence(String, Time, int)
-   * @see #sequence(String, Object, Function)
+   * @see #sequence(String, Object, UnaryOperator)
    */
   public DataSetBuilder sequence(String column, Timestamp initial, long step) {
     ensureArgNotNull(initial);

@@ -183,14 +183,14 @@ final class DBSetup {
     itr = keyColumns.iterator();
     col = itr.next();
     paramIdx[tableColumns.indexOf(col)] = ++param;
-    sql.append(_WHERE_)
+    sql.append(WHERE_)
        .append(col)
        .append("=?");
     
     while (itr.hasNext()) {
       col = itr.next();
       paramIdx[tableColumns.indexOf(col)] = ++param;
-      sql.append(_AND_)
+      sql.append(AND_)
          .append(col)
          .append("=?");
     }
@@ -226,14 +226,14 @@ final class DBSetup {
     paramIdx[tableColumns.indexOf(kcol)] = ++param;
     sql.append(DELETE_FROM_)
        .append(table.getName())
-       .append(_WHERE_)
+       .append(WHERE_)
        .append(kcol)
        .append("=?");
     
     while (itr.hasNext()) {
       kcol = itr.next();
       paramIdx[tableColumns.indexOf(kcol)] = ++param;
-      sql.append(_AND_)
+      sql.append(AND_)
          .append(kcol)
          .append("=?");
     }
@@ -346,7 +346,7 @@ final class DBSetup {
       table.setDirtyStatus(true);
       String sql = 
           DELETE_FROM_ + table.getName() +
-          _WHERE_ + where;
+          WHERE_ + where;
       db.logSetup(callInfo, sql);
       try (WrappedStatement ws = db.compile(sql)) {
         PreparedStatement deleteStmt = ws.getStatement();
@@ -410,9 +410,9 @@ final class DBSetup {
   }
   
   @SuppressWarnings("javadoc")
-  private static final String _AND_ = " AND ";
+  private static final String AND_ = " AND ";
   @SuppressWarnings("javadoc")
-  private static final String _WHERE_ = " WHERE ";
+  private static final String WHERE_ = " WHERE ";
   @SuppressWarnings("javadoc")
   private static final String DELETE_FROM_ = " DELETE FROM ";
   
