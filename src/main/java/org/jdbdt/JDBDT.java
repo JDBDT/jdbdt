@@ -338,26 +338,6 @@ public final class JDBDT {
     DataSet emptyDataSet = empty(dataSource);
     DBAssert.deltaAssertion(CallInfo.create(message), emptyDataSet, emptyDataSet);
   }
-  
-  /**
-   * Assert that no changes occurred for the given data sources 
-   * (error message variant).
-   * 
-   * @param message Assertion error message.
-   * @param dataSources Data sources. 
-   * @throws DBAssertionError if the assertion fails.
-   * @see #assertUnchanged(String,DataSource)
-   * @since 1.2
-   */
-  @SafeVarargs
-  public static void assertUnchanged(String message, DataSource... dataSources) throws DBAssertionError {
-    foreach(dataSources,
-            (callInfo, dataSource) -> {
-              DataSet emptyDataSet = empty(dataSource);
-              DBAssert.deltaAssertion(callInfo, emptyDataSet, emptyDataSet);
-            },
-            CallInfo.create(message)); 
-  }
 
   /**
    * Assert that no changes occurred for the given data source.
@@ -374,6 +354,21 @@ public final class JDBDT {
   }
   
   /**
+   * Assert that no changes occurred for the given data sources 
+   * (error message variant).
+   * 
+   * @param message Assertion error message.
+   * @param dataSources Data sources. 
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertUnchanged(String,DataSource)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertUnchanged(String message, DataSource... dataSources) throws DBAssertionError {
+    multipleUnchangedAssertions(CallInfo.create(message), dataSources);
+  }
+  
+  /**
    * Assert that no changes occurred for the given data sources.
    * 
    * @param dataSources Data sources. 
@@ -383,12 +378,18 @@ public final class JDBDT {
    */
   @SafeVarargs
   public static void assertUnchanged(DataSource... dataSources) throws DBAssertionError {
+    multipleUnchangedAssertions(CallInfo.create(), dataSources);
+  }
+  
+  @SuppressWarnings("javadoc")
+  private static void 
+  multipleUnchangedAssertions(CallInfo callInfo, DataSource[] dataSources) {
     foreach(dataSources,
-            (callInfo, dataSource) -> {
-              DataSet emptyDataSet = empty(dataSource);
-              DBAssert.deltaAssertion(callInfo, emptyDataSet, emptyDataSet);
-            },
-            CallInfo.create()); 
+        (ci, dataSource) -> {
+          DataSet emptyDataSet = empty(dataSource);
+          DBAssert.deltaAssertion(ci, emptyDataSet, emptyDataSet);
+        },
+        callInfo); 
   }
 
   /**
@@ -408,24 +409,6 @@ public final class JDBDT {
   
   /**
    * Assert that database changed by removal of given
-   * data sets (error message variant).
-   * 
-   * @param message Assertion error message.
-   * @param dataSets Data set.
-   * @throws DBAssertionError if the assertion fails.
-   * @see #assertDeleted(String,DataSet)
-   * @since 1.2
-   */
-  @SafeVarargs
-  public static void assertDeleted(String message, DataSet... dataSets) throws DBAssertionError {
-    foreach(dataSets,
-            (callInfo, dataSet) -> 
-               DBAssert.deltaAssertion(callInfo, dataSet, empty(dataSet.getSource())),
-            CallInfo.create(message));
-  }
-
-  /**
-   * Assert that database changed by removal of given
    * data set. 
    * 
    * @param dataSet Data set.
@@ -439,7 +422,21 @@ public final class JDBDT {
 
   /**
    * Assert that database changed by removal of given
-   * data sets. 
+   * data sets (error message variant).
+   * 
+   * @param message Assertion error message.
+   * @param dataSets Data sets.
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertDeleted(String,DataSet)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertDeleted(String message, DataSet... dataSets) throws DBAssertionError {
+    multipleDeleteAssertions(CallInfo.create(message), dataSets);
+  }
+  
+  /**
+   * Assert that database changed by removal of given data sets. 
    * 
    * @param dataSets Data set.
    * @throws DBAssertionError if the assertion fails.
@@ -448,14 +445,20 @@ public final class JDBDT {
    */
   @SafeVarargs
   public static void assertDeleted(DataSet... dataSets) throws DBAssertionError {
+    multipleDeleteAssertions(CallInfo.create(), dataSets);
+  }
+  
+  @SuppressWarnings("javadoc")
+  private static void
+  multipleDeleteAssertions(CallInfo callInfo, DataSet[] dataSets) {
     foreach(dataSets,
-            (callInfo, dataSet) -> 
-               DBAssert.deltaAssertion(callInfo, dataSet, empty(dataSet.getSource())),
-            CallInfo.create());
+        (ci, dataSet) -> 
+           DBAssert.deltaAssertion(ci, dataSet, empty(dataSet.getSource())),
+        callInfo);
   }
   
   /**
-   * Assert that database changed only by addition of a given
+   * Assert that database changed only by insertion of a given
    * data set (error message variant).
    * 
    * @param message Assertion error message.
@@ -470,25 +473,7 @@ public final class JDBDT {
   }
 
   /**
-   * Assert that database changed only by addition of given
-   * data sets (error message variant).
-   *
-   * @param message Assertion error message.
-   * @param dataSets Data sets.
-   * @throws DBAssertionError if the assertion fails.
-   * @see #assertInserted(String,DataSet)
-   * @since 1.2
-   */
-  @SafeVarargs
-  public static void assertInserted(String message, DataSet... dataSets) throws DBAssertionError {
-    foreach(dataSets,
-            (callInfo,dataSet) -> DBAssert.deltaAssertion(callInfo, empty(dataSet.getSource()), dataSet),
-            CallInfo.create(message));
-  }
-  
-  /**
-   * Assert that database changed only by addition of a given
-   * data set.
+   * Assert that database changed only by insertion of a given data set.
    *
    * @param dataSet Data set.
    * @throws DBAssertionError if the assertion fails.
@@ -501,8 +486,22 @@ public final class JDBDT {
   }
   
   /**
-   * Assert that database changed only by addition of given
-   * data sets.
+   * Assert that database changed only by insertion of given
+   * data sets (error message variant).
+   *
+   * @param message Assertion error message.
+   * @param dataSets Data sets.
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertInserted(String,DataSet)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertInserted(String message, DataSet... dataSets) throws DBAssertionError {
+    multipleInsertAssertions(CallInfo.create(message), dataSets);
+  }
+  
+  /**
+   * Assert that database changed only by addition of given data sets.
    *
    * @param dataSets Data sets.
    * @throws DBAssertionError if the assertion fails.
@@ -511,36 +510,39 @@ public final class JDBDT {
    */
   @SafeVarargs
   public static void assertInserted(DataSet... dataSets) throws DBAssertionError {
+    multipleInsertAssertions(CallInfo.create(), dataSets);
+  }
+  
+  @SuppressWarnings("javadoc")
+  private static void
+  multipleInsertAssertions(CallInfo callInfo, DataSet[] dataSets) {
     foreach(dataSets,
-            (callInfo,dataSet) -> DBAssert.deltaAssertion(callInfo, empty(dataSet.getSource()), dataSet),
-            CallInfo.create());
+        (ci,dataSet) -> DBAssert.deltaAssertion(ci, empty(dataSet.getSource()), dataSet),
+        callInfo);
   }
 
   /**
-   * Assert database delta expressed by 'old' 
-   * and 'new' data sets (error message variant).
+   * Assert database delta expressed by 'old' and 'new' data sets (error message variant).
    * 
    * @param message The error message for the assertion error.
    * @param oldData Expected 'old' data.
    * @param newData Expected 'new' data.
    * @throws DBAssertionError if the assertion fails.
    *
-   * @see #assertUnchanged(DataSource)
-   * @see #assertDeleted(DataSet)
-   * @see #assertInserted(DataSet)
+   * @see #assertUnchanged(String,DataSource)
+   * @see #assertDeleted(String,DataSet)
+   * @see #assertInserted(String,DataSet)
    */
   public static void assertDelta(String message, DataSet oldData, DataSet newData) throws DBAssertionError {
     DBAssert.deltaAssertion(CallInfo.create(message), oldData, newData);
   }
 
   /**
-   * Assert database delta expressed by 'old' 
-   * and 'new' data sets.
+   * Assert database delta expressed by 'old' and 'new' data sets.
    * 
    * @param oldData Expected 'old' data.
    * @param newData Expected 'new' data.
    * @throws DBAssertionError if the assertion fails.
-   *
    * @see #assertUnchanged(DataSource)
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
@@ -550,38 +552,41 @@ public final class JDBDT {
   }
 
   /**
-   * Assert that the database state matches the given data set 
-   * (error message variant).
+   * Assert that the database state matches the given data set (error message variant).
+   *
    * @param message Assertion error message.
    * @param dataSet Data set.
    * @throws DBAssertionError if the assertion fails.
+   * @see #assertEmpty(String, DataSource)
    */
   public static void assertState(String message, DataSet dataSet) throws DBAssertionError {
     DBAssert.stateAssertion(CallInfo.create(message), dataSet);
   }
-
+  
+  /**
+   * Assert that the database state matches the given data set.
+   * 
+   * @param dataSet Data set.
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertEmpty(DataSource)
+   */
+  public static void assertState(DataSet dataSet) throws DBAssertionError {
+    DBAssert.stateAssertion(CallInfo.create(), dataSet);
+  }
+  
   /**
    * Assert that the database state matches the given data sets (error message variant)
+   *
    * @param message Assertion error message.
    * @param dataSets Data sets.
    * @throws DBAssertionError if the assertion fails.
    * @see #assertState(String,DataSet)
+   * @see #assertEmpty(String,DataSource...)
    * @since 1.2
    */
   @SafeVarargs
   public static void assertState(String message, DataSet... dataSets) throws DBAssertionError {
-    foreach(dataSets,
-            (callInfo, dataSet) -> DBAssert.stateAssertion(callInfo, dataSet),
-            CallInfo.create(message));
-  }
-  
-  /**
-   * Assert that the database state matches the given data set.
-   * @param dataSet Data set.
-   * @throws DBAssertionError if the assertion fails.
-   */
-  public static void assertState(DataSet dataSet) throws DBAssertionError {
-    DBAssert.stateAssertion(CallInfo.create(), dataSet);
+    multipleStateAssertions(CallInfo.create(message), dataSets);
   }
   
   /**
@@ -593,14 +598,19 @@ public final class JDBDT {
    */
   @SafeVarargs
   public static void assertState(DataSet... dataSets) throws DBAssertionError {
-    foreach(dataSets,
-            (callInfo, dataSet) -> DBAssert.stateAssertion(callInfo, dataSet),
-            CallInfo.create());
+    multipleStateAssertions(CallInfo.create(), dataSets);
   }
 
+  @SuppressWarnings("javadoc")
+  private static void 
+  multipleStateAssertions(CallInfo callInfo, DataSet[] dataSets) {
+    foreach(dataSets,
+        (ci, dataSet) -> DBAssert.stateAssertion(ci, dataSet),
+        callInfo);
+  }
+  
   /**
-   * Assert that the given data source 
-   * has no rows (error message variant).
+   * Assert that the given data source has no rows (error message variant).
    * 
    * <p>A call to this method is equivalent to
    * <code>assertState(message, empty(dataSource))</code>.
@@ -616,23 +626,6 @@ public final class JDBDT {
   }
 
   /**
-   * Assert that the given data sources have no rows (error message variant).
-   * @param message Assertion error message.
-   * @param dataSources Data sources.
-   * @throws DBAssertionError if the assertion fails.
-   * @see #assertEmpty(DataSource)
-   * @see #assertState(DataSet...)
-   * @see #empty(DataSource)
-   * @since 1.2
-   */
-  @SafeVarargs
-  public static void assertEmpty(String message, DataSource... dataSources) throws DBAssertionError {
-    foreach(dataSources,
-            (callInfo, source) -> DBAssert.stateAssertion(callInfo, empty(source)),
-            CallInfo.create(message));
-  }
-  
-  /**
    * Assert that the given data source has no rows.
    * 
    * <p>A call to this method is equivalent to
@@ -647,9 +640,25 @@ public final class JDBDT {
   }
   
   /**
+   * Assert that the given data sources have no rows (error message variant).
+   *
+   * @param message Assertion error message.
+   * @param dataSources Data sources.
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertEmpty(String,DataSource)
+   * @see #assertState(String,DataSet...)
+   * @see #empty(DataSource)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertEmpty(String message, DataSource... dataSources) throws DBAssertionError {
+    multipleEmptyStateAssertions(CallInfo.create(message), dataSources);
+  }
+  
+  /**
    * Assert that the given data sources have no rows.
    * 
-   * @param sources Data sources.
+   * @param dataSources Data sources.
    * @throws DBAssertionError if the assertion fails.
    * @see #assertEmpty(DataSource)
    * @see #assertState(DataSet...)
@@ -657,12 +666,18 @@ public final class JDBDT {
    * @since 1.2
    */
   @SafeVarargs
-  public static void assertEmpty(DataSource... sources) throws DBAssertionError {
-    foreach(sources,
-            (callInfo, source) -> DBAssert.stateAssertion(callInfo, empty(source)),
-            CallInfo.create());
+  public static void assertEmpty(DataSource... dataSources) throws DBAssertionError {
+    multipleEmptyStateAssertions(CallInfo.create(), dataSources);
   }
 
+  @SuppressWarnings("javadoc")
+  private static void 
+  multipleEmptyStateAssertions(CallInfo callInfo, DataSource[] sources) {
+    foreach(sources,
+        (ci, source) -> DBAssert.stateAssertion(ci, empty(source)),
+        callInfo);
+  }
+  
   /**
    * Assert that table exists in the database.
    * 
@@ -674,21 +689,6 @@ public final class JDBDT {
    */
   public static void assertTableExists(DB db, String tableName) throws DBAssertionError {
     DBAssert.assertTableExistence(CallInfo.create(), db, tableName, true);
-  }
-  
-  /**
-   * Assert that tables exist in the database.
-   * 
-   * @param db Database.
-   * @param tableNames Table names.
-   * @throws DBAssertionError If the assertion fails.
-   * @see #assertTableDoesNotExist(DB, String...)
-   * @see #drop(Table...)
-   * @since 1.2
-   */
-  @SafeVarargs
-  public static void assertTableExists(DB db, String... tableNames) throws DBAssertionError {
-    multipleTableAssertion(CallInfo.create(), db, tableNames, true);
   }
   
   /**
@@ -706,28 +706,11 @@ public final class JDBDT {
   }
 
   /**
-   * Assert that tables exist in the database (error message variant).
-   * 
-   * @param message Assertion error message.
-   * @param db Database.
-   * @param tableNames Table names.
-   * @throws DBAssertionError If the assertion fails.
-   * @see #assertTableDoesNotExist(String, DB, String...)
-   * @see #drop(Table...)
-   * @since 1.2
-   */
-  @SafeVarargs
-  public static void assertTableExists(String message, DB db, String... tableNames) throws DBAssertionError {
-    multipleTableAssertion(CallInfo.create(message), db, tableNames, true);
-  }
-  
-  /**
    * Assert that table does not exist in a database.
    * 
    * @param db Database.
    * @param tableName Table name. 
    * @throws DBAssertionError If the assertion fails.
-   * 
    * @see #assertTableExists(DB,String)
    * @see #drop(Table)
    */
@@ -735,22 +718,6 @@ public final class JDBDT {
     DBAssert.assertTableExistence(CallInfo.create(), db, tableName, false);
   }
   
-  /**
-   * Assert that tables do not exist in a database.
-   * 
-   * @param db Database.
-   * @param tableNames Table names. 
-   * @throws DBAssertionError If the assertion fails.
-   * 
-   * @see #assertTableExists(DB,String...)
-   * @see #drop(Table...)
-   * @since 1.2
-   */
-  @SafeVarargs
-  public static void assertTableDoesNotExist(DB db, String... tableNames) throws DBAssertionError {
-    multipleTableAssertion(CallInfo.create(), db, tableNames, false);
-  }
-
   /**
    * Assert that table does not exist in a database (error message variant).
    * 
@@ -766,6 +733,53 @@ public final class JDBDT {
   }
   
   /**
+   * Assert that tables exist in the database.
+   * 
+   * @param db Database.
+   * @param tableNames Table names.
+   * @throws DBAssertionError If the assertion fails.
+   * @see #assertTableDoesNotExist(DB, String...)
+   * @see #drop(Table...)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertTableExists(DB db, String... tableNames) throws DBAssertionError {
+    multipleTableExistenceAssertions(CallInfo.create(), db, tableNames, true);
+  }
+  
+  /**
+   * Assert that tables exist in the database (error message variant).
+   * 
+   * @param message Assertion error message.
+   * @param db Database.
+   * @param tableNames Table names.
+   * @throws DBAssertionError If the assertion fails.
+   * @see #assertTableDoesNotExist(String, DB, String...)
+   * @see #drop(Table...)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertTableExists(String message, DB db, String... tableNames) throws DBAssertionError {
+    multipleTableExistenceAssertions(CallInfo.create(message), db, tableNames, true);
+  }
+  
+  /**
+   * Assert that tables do not exist in a database.
+   * 
+   * @param db Database.
+   * @param tableNames Table names. 
+   * @throws DBAssertionError If the assertion fails.
+   * 
+   * @see #assertTableExists(DB,String...)
+   * @see #drop(Table...)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertTableDoesNotExist(DB db, String... tableNames) throws DBAssertionError {
+    multipleTableExistenceAssertions(CallInfo.create(), db, tableNames, false);
+  }
+  
+  /**
    * Assert that tables do not exist in a database (error message variant).
    * 
    * @param message Error message.
@@ -778,16 +792,16 @@ public final class JDBDT {
    */
   @SafeVarargs
   public static void assertTableDoesNotExist(String message, DB db, String... tableNames) throws DBAssertionError {
-    multipleTableAssertion(CallInfo.create(message), db, tableNames, false);
+    multipleTableExistenceAssertions(CallInfo.create(message), db, tableNames, false);
   }
 
 
   @SuppressWarnings("javadoc")
   private static void 
-  multipleTableAssertion(CallInfo callInfo, DB db, String[] tableNames, boolean exists) {
+  multipleTableExistenceAssertions(CallInfo callInfo, DB db, String[] tableNames, boolean exists) {
     foreach(tableNames,
-        (ci, name) -> DBAssert.assertTableExistence(ci, db, name, exists),
-        callInfo); 
+            (ci, name) -> DBAssert.assertTableExistence(ci, db, name, exists),
+            callInfo); 
   }
   
   /**
