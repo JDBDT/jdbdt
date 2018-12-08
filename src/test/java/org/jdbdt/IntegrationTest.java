@@ -29,6 +29,7 @@ import static org.junit.Assert.*;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 import org.junit.AfterClass;
 import org.junit.After;
@@ -252,7 +253,7 @@ public class IntegrationTest extends DBTestCase {
         getDAO().query("user3")
     };
     getDAO().doDelete("user1", "user2", "user3");
-    assertDeleted(data(table, getConversion()).rows(u));
+    assertDeleted(data(table, getConversion()).rows(Arrays.asList(u)));
     assertTrue(changed(table));
   }
   
