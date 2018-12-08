@@ -26,7 +26,6 @@ package org.jdbdt;
 
 
 import static org.jdbdt.JDBDT.*;
-import static org.junit.Assert.*;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -42,6 +41,7 @@ import org.junit.runners.MethodSorters;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import static org.jdbdt.TestUtil.expectAssertionError;
 
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -56,6 +56,8 @@ public class DBAssertTest extends DBTestCase {
         { "LOGIN LIKE ?",  new Object[] { EXISTING_DATA_ID1 + "%"} }  
     });
   }
+  private static final String ERROR_MSG = "assertion error";
+  private static final String EMPTY_MSG = "";
 
   private static Table table;
   private DataSource dataSource;
@@ -91,63 +93,32 @@ public class DBAssertTest extends DBTestCase {
     initialState = takeSnapshot(dataSource);
   }
 
-
-  @Test 
-  public void testTableExists1() {
-    assertTableExists(getDB(), table.getName());
-  }
-  
-  @Test(expected=DBAssertionError.class)
-  public void testTableDoesNotExist1() throws SQLException {
-    assertTableDoesNotExist(getDB(), table.getName());
-  }
-  
-  @Test(expected=DBAssertionError.class)
-  public void testTableExists2() throws SQLException {
-    getDAO().dropTable();
-    try {
-      assertTableExists(getDB(), table.getName());
-      fail("Expected " + DBAssertionError.class);
-    }
-    finally {
-      getDAO().createTable();
-    }   
-  }
-  
-  @Test 
-  public void testTableDoesNotExist2() throws SQLException {
-    getDAO().dropTable();
-    try {
-      assertTableDoesNotExist(getDB(), table.getName());
-    }
-    finally {
-      getDAO().createTable();
-    }   
-  }
-  
-
-  
   @Test
   public void testNoChanges() {
     assertUnchanged(dataSource);
   }
+  
+  @Test
+  public void testNoChanges2() {
+    assertUnchanged(ERROR_MSG, dataSource);
+  }
 
-  @Test(expected=DBAssertionError.class)
-  public void testFailureInsertCase() throws SQLException {
+  @Test
+  public void testNoChanges3() throws SQLException {
     getDAO().doInsert(new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01")));
-    assertUnchanged(dataSource);
+    expectAssertionError(EMPTY_MSG, () -> assertUnchanged(dataSource));
   }
 
   @Test(expected=DBAssertionError.class)
-  public void testFailureDeleteCase() throws SQLException {
+  public void testNoChanges4() throws SQLException {
     getDAO().doDelete(EXISTING_DATA_ID1);
-    assertUnchanged(dataSource);
+    expectAssertionError(ERROR_MSG, () -> assertUnchanged(ERROR_MSG, dataSource));
   }
 
-  @Test(expected=DBAssertionError.class)
-  public void testFailureUpdateCase() throws SQLException {
+  @Test
+  public void testNoChanges5() throws SQLException {
     getDAO().doUpdate(new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-01-01")));
-    assertUnchanged(dataSource);
+    expectAssertionError(ERROR_MSG, () -> assertUnchanged(ERROR_MSG, dataSource));
   }
   
   @Test
@@ -160,6 +131,14 @@ public class DBAssertTest extends DBTestCase {
 
   @Test
   public void testSuccessInsertCase2() throws SQLException {
+    User u = new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01"));
+    getDAO().doInsert(u);
+    assertInserted(ERROR_MSG, data(dataSource)
+    .row(u.getLogin(), u.getName(), u.getPassword(), dateValue(u.getCreated())));
+  }
+  
+  @Test
+  public void testSuccessInsertCase3() throws SQLException {
     User u = new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01"));
     getDAO().doInsert(u);
     assertInserted( 
@@ -182,9 +161,21 @@ public class DBAssertTest extends DBTestCase {
              u.getPassword(), 
              dateValue(u.getCreated())));
   }
-
+  
   @Test
   public void testSuccessDeleteCase2() throws SQLException {
+    User u = getTestData(EXISTING_DATA_ID1);
+    getDAO().doDelete(EXISTING_DATA_ID1); 
+    assertDeleted("deleted",
+        data(dataSource)
+        .row(EXISTING_DATA_ID1, 
+             u.getName(), 
+             u.getPassword(), 
+             dateValue(u.getCreated())));
+  }
+
+  @Test
+  public void testSuccessDeleteCase3() throws SQLException {
     User u = getTestData(EXISTING_DATA_ID1);
     getDAO().doDelete(EXISTING_DATA_ID1);      
     assertDeleted( 
@@ -215,6 +206,20 @@ public class DBAssertTest extends DBTestCase {
     User u1 = getDAO().query(EXISTING_DATA_ID1);
     User u2 = new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-11-11"));
     getDAO().doUpdate(u2);
+    DataSet oldData = 
+      data(dataSource)
+        .row(EXISTING_DATA_ID1, u1.getName(), u1.getPassword(), dateValue(u1.getCreated()));
+    DataSet newData = 
+      data(dataSource)
+        .row(EXISTING_DATA_ID1, u2.getName(), u2.getPassword(), dateValue(u2.getCreated()));
+    assertDelta("delta", oldData, newData);
+  }
+  
+  @Test
+  public void testSuccessUpdateCase3() throws SQLException {
+    User u1 = getDAO().query(EXISTING_DATA_ID1);
+    User u2 = new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-11-11"));
+    getDAO().doUpdate(u2);
     assertDelta( 
         data(dataSource)
         .row(u1.getLogin(), 
@@ -234,16 +239,26 @@ public class DBAssertTest extends DBTestCase {
     assertState(initialState);
   }
   
+  @Test
+  public void testStateAssertion2() {
+    assertState("initial state", initialState);
+  }
+  
+  @Test
+  public void testStateAssertion3() throws SQLException {
+    getDAO().doDeleteAll();
+    assertEmpty(dataSource);
+  }
+  
+  @Test
+  public void testStateAssertion4() throws SQLException {
+    getDAO().doDeleteAll();
+    assertEmpty("empty", dataSource);
+  }
+ 
   @Test(expected=DBAssertionError.class)
   public void testStateAssertionFailure1() throws SQLException {
     getDAO().doDelete(EXISTING_DATA_ID1);
     assertState(initialState);
   }
-  
-  @Test
-  public void testStateAssertion2() throws SQLException {
-    getDAO().doDeleteAll();
-    assertEmpty(dataSource);
-  }
- 
 }

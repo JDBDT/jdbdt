@@ -24,6 +24,7 @@
 
 package org.jdbdt;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -34,7 +35,17 @@ class TestUtil {
   interface Thrower {
     void run() throws Throwable;
   }
-  
+
+  static void expectAssertionError(String msg, Runnable r) {
+    try { 
+      r.run();
+      fail(DBAssertionError.class.getName() + " expected!");
+    } 
+    catch (DBAssertionError e) {
+      assertEquals(msg, e.getMessage());
+    }
+  }
+
   static void 
   expectException(Class<? extends Throwable> excClass, Thrower thrower) {
     try {
@@ -43,15 +54,15 @@ class TestUtil {
     catch (Throwable e) {
       if (! excClass.isAssignableFrom(e.getClass())) {
         fail("Expected " + excClass.getName() + 
-              " but " + e.getClass().getName() + 
-              " was thrown instead");
+            " but " + e.getClass().getName() + 
+            " was thrown instead");
       }
       return;
     }
     fail("Expected " + excClass.getName() +
-         " but no exception was thrown");
+        " but no exception was thrown");
   }
-  
+
   static void assertDataSet(DataSet expected, DataSet actual) {
     actual.normalizeRowOrder();
     expected.normalizeRowOrder();

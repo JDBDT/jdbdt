@@ -37,6 +37,7 @@ import org.junit.runners.Suite.SuiteClasses;
   DataSetTest.class,
   DBSetupTest.class,
   DBAssertTest.class,
+  DBTableExistenceAssertionsTest.class,
   DBStatementReuseTest.class,
   DBSavepointTest.class,
   AssertEqualsTest.class,
