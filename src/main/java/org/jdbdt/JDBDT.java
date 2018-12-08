@@ -665,6 +665,7 @@ public final class JDBDT {
 
   /**
    * Assert that table exists in the database.
+   * 
    * @param db Database.
    * @param tableName Table name.
    * @throws DBAssertionError If the assertion fails.
@@ -674,8 +675,25 @@ public final class JDBDT {
   public static void assertTableExists(DB db, String tableName) throws DBAssertionError {
     DBAssert.assertTableExistence(CallInfo.create(), db, tableName, true);
   }
+  
+  /**
+   * Assert that tables exist in the database.
+   * 
+   * @param db Database.
+   * @param tableNames Table names.
+   * @throws DBAssertionError If the assertion fails.
+   * @see #assertTableDoesNotExist(DB, String...)
+   * @see #drop(Table...)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertTableExists(DB db, String... tableNames) throws DBAssertionError {
+    multipleTableAssertion(CallInfo.create(), db, tableNames, true);
+  }
+  
   /**
    * Assert that table exists in the database (error message variant).
+   * 
    * @param message Error message.
    * @param db Database.
    * @param tableName Table name. 
@@ -687,6 +705,22 @@ public final class JDBDT {
     DBAssert.assertTableExistence(CallInfo.create(message), db, tableName, true);
   }
 
+  /**
+   * Assert that tables exist in the database (error message variant).
+   * 
+   * @param message Assertion error message.
+   * @param db Database.
+   * @param tableNames Table names.
+   * @throws DBAssertionError If the assertion fails.
+   * @see #assertTableDoesNotExist(String, DB, String...)
+   * @see #drop(Table...)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertTableExists(String message, DB db, String... tableNames) throws DBAssertionError {
+    multipleTableAssertion(CallInfo.create(message), db, tableNames, true);
+  }
+  
   /**
    * Assert that table does not exist in a database.
    * 
@@ -700,9 +734,26 @@ public final class JDBDT {
   public static void assertTableDoesNotExist(DB db, String tableName) throws DBAssertionError {
     DBAssert.assertTableExistence(CallInfo.create(), db, tableName, false);
   }
+  
+  /**
+   * Assert that tables do not exist in a database.
+   * 
+   * @param db Database.
+   * @param tableNames Table names. 
+   * @throws DBAssertionError If the assertion fails.
+   * 
+   * @see #assertTableExists(DB,String...)
+   * @see #drop(Table...)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertTableDoesNotExist(DB db, String... tableNames) throws DBAssertionError {
+    multipleTableAssertion(CallInfo.create(), db, tableNames, false);
+  }
 
   /**
    * Assert that table does not exist in a database (error message variant).
+   * 
    * @param message Error message.
    * @param db Database.
    * @param tableName Table. 
@@ -713,7 +764,32 @@ public final class JDBDT {
   public static void assertTableDoesNotExist(String message, DB db, String tableName) throws DBAssertionError {
     DBAssert.assertTableExistence(CallInfo.create(message), db, tableName, false);
   }
+  
+  /**
+   * Assert that tables do not exist in a database (error message variant).
+   * 
+   * @param message Error message.
+   * @param db Database.
+   * @param tableNames Table names. 
+   * @throws DBAssertionError If the assertion fails.
+   * @see #assertTableExists(String, DB, String...)
+   * @see #drop(Table...)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertTableDoesNotExist(String message, DB db, String... tableNames) throws DBAssertionError {
+    multipleTableAssertion(CallInfo.create(message), db, tableNames, false);
+  }
 
+
+  @SuppressWarnings("javadoc")
+  private static void 
+  multipleTableAssertion(CallInfo callInfo, DB db, String[] tableNames, boolean exists) {
+    foreach(tableNames,
+        (ci, name) -> DBAssert.assertTableExistence(ci, db, name, exists),
+        callInfo); 
+  }
+  
   /**
    * Insert a data set into the database.
    * 
