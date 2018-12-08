@@ -396,14 +396,14 @@ public final class JDBDT {
    * data set (error message variant).
    * 
    * @param message The message for the assertion error.
-   * @param data Data set.
+   * @param dataSet Data set.
    * @throws DBAssertionError if the assertion fails.
    * @see #assertDelta(String, DataSet,DataSet)
    * @see #assertInserted(String, DataSet)
    * @see #assertUnchanged(String, DataSource)
    */
-  public static void assertDeleted(String message, DataSet data) throws DBAssertionError {
-    DBAssert.deltaAssertion(CallInfo.create(message), data, empty(data.getSource())); 
+  public static void assertDeleted(String message, DataSet dataSet) throws DBAssertionError {
+    DBAssert.deltaAssertion(CallInfo.create(message), dataSet, empty(dataSet.getSource())); 
   }
   
   /**
@@ -459,14 +459,14 @@ public final class JDBDT {
    * data set (error message variant).
    * 
    * @param message Assertion error message.
-   * @param data Data set.
+   * @param dataSet Data set.
    * @throws DBAssertionError if the assertion fails.
    * @see #assertUnchanged(DataSource)
    * @see #assertDeleted(DataSet)
    * @see #assertDelta(DataSet,DataSet)
    */
-  public static void assertInserted(String message, DataSet data) throws DBAssertionError {
-    DBAssert.deltaAssertion(CallInfo.create(message), empty(data.getSource()), data);
+  public static void assertInserted(String message, DataSet dataSet) throws DBAssertionError {
+    DBAssert.deltaAssertion(CallInfo.create(message), empty(dataSet.getSource()), dataSet);
   }
 
   /**
@@ -553,11 +553,11 @@ public final class JDBDT {
    * Assert that the database state matches the given data set 
    * (error message variant).
    * @param message Assertion error message.
-   * @param data Data set.
+   * @param dataSet Data set.
    * @throws DBAssertionError if the assertion fails.
    */
-  public static void assertState(String message, DataSet data) throws DBAssertionError {
-    DBAssert.stateAssertion(CallInfo.create(message), data);
+  public static void assertState(String message, DataSet dataSet) throws DBAssertionError {
+    DBAssert.stateAssertion(CallInfo.create(message), dataSet);
   }
 
   /**
@@ -577,11 +577,11 @@ public final class JDBDT {
   
   /**
    * Assert that the database state matches the given data set.
-   * @param data Data set.
+   * @param dataSet Data set.
    * @throws DBAssertionError if the assertion fails.
    */
-  public static void assertState(DataSet data) throws DBAssertionError {
-    DBAssert.stateAssertion(CallInfo.create(), data);
+  public static void assertState(DataSet dataSet) throws DBAssertionError {
+    DBAssert.stateAssertion(CallInfo.create(), dataSet);
   }
   
   /**
@@ -637,13 +637,13 @@ public final class JDBDT {
    * 
    * <p>A call to this method is equivalent to
    * <code>assertState(empty(source))</code>.
-   * @param source Data source.
+   * @param dataSource Data source.
    * @throws DBAssertionError if the assertion fails.
    * @see #assertState(DataSet)
    * @see #empty(DataSource)
    */
-  public static void assertEmpty(DataSource source) throws DBAssertionError {
-    DBAssert.stateAssertion(CallInfo.create(), empty(source));
+  public static void assertEmpty(DataSource dataSource) throws DBAssertionError {
+    DBAssert.stateAssertion(CallInfo.create(), empty(dataSource));
   }
   
   /**
