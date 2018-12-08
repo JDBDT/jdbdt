@@ -69,6 +69,31 @@ public class DBAssertTest extends DBTestCase {
            .build(getDB());
   }
   
+
+  static class Actions {
+    static final User EXISTING_USER = getTestData(EXISTING_DATA_ID1);
+    static final User USER_TO_INSERT = new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01"));
+    static final User EXISTING_USER_UPDATED = new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-01-01"));
+    
+    static void nop() { }
+    
+    static void insertNewUser() throws SQLException {
+      getDAO().doInsert(USER_TO_INSERT);
+    }
+    
+    static void deleteUser() throws SQLException {
+      getDAO().doDelete(EXISTING_DATA_ID1);
+    }
+    
+    static void updateUser() throws SQLException {
+      getDAO().doUpdate(EXISTING_USER_UPDATED);
+    }
+    
+    static void deleteAll() throws SQLException {
+      getDAO().doDeleteAll();
+    }
+  }
+  
   private final String whereClause;
   private final Object[] queryArgs;
   private DataSet initialState;
@@ -92,173 +117,168 @@ public class DBAssertTest extends DBTestCase {
     }
     initialState = takeSnapshot(dataSource);
   }
+  
+  DataSet d(User... users) {
+    DataSet dataSet = data(dataSource);
+    for (User u : users) {
+      dataSet.row(getConversion().convert(u));
+    }
+    return dataSet;
+  }
 
   @Test
-  public void testNoChanges() {
+  public void testAssertUnchanged1() {
+    Actions.nop();
     assertUnchanged(dataSource);
   }
   
   @Test
-  public void testNoChanges2() {
+  public void testAssertUnchanged2() {
+    Actions.nop();
     assertUnchanged(ERROR_MSG, dataSource);
   }
 
   @Test
-  public void testNoChanges3() throws SQLException {
-    getDAO().doInsert(new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01")));
+  public void testAssertUnchanged3() throws SQLException {
+    Actions.insertNewUser();
     expectAssertionError(EMPTY_MSG, () -> assertUnchanged(dataSource));
   }
 
-  @Test(expected=DBAssertionError.class)
-  public void testNoChanges4() throws SQLException {
-    getDAO().doDelete(EXISTING_DATA_ID1);
+  @Test
+  public void testAssertUnchanged4() throws SQLException {
+    Actions.deleteUser();
     expectAssertionError(ERROR_MSG, () -> assertUnchanged(ERROR_MSG, dataSource));
   }
 
   @Test
-  public void testNoChanges5() throws SQLException {
-    getDAO().doUpdate(new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-01-01")));
+  public void testAssertUnchanged5() throws SQLException {
+    Actions.updateUser();
     expectAssertionError(ERROR_MSG, () -> assertUnchanged(ERROR_MSG, dataSource));
   }
   
   @Test
-  public void testSuccessInsertCase() throws SQLException {
-    User u = new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01"));
-    getDAO().doInsert(u);
-    assertInserted(data(dataSource)
-    .row(u.getLogin(), u.getName(), u.getPassword(), dateValue(u.getCreated())));
+  public void testAssertInserted1() throws SQLException {
+    Actions.insertNewUser();
+    assertInserted(d(Actions.USER_TO_INSERT));
   }
 
   @Test
-  public void testSuccessInsertCase2() throws SQLException {
-    User u = new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01"));
-    getDAO().doInsert(u);
-    assertInserted(ERROR_MSG, data(dataSource)
-    .row(u.getLogin(), u.getName(), u.getPassword(), dateValue(u.getCreated())));
+  public void testAssertInserted2() throws SQLException {
+    Actions.insertNewUser();
+    assertInserted(ERROR_MSG, d(Actions.USER_TO_INSERT));
   }
   
   @Test
-  public void testSuccessInsertCase3() throws SQLException {
-    User u = new User(EXISTING_DATA_ID1 + "_", "New User", "pass", Date.valueOf("2099-01-01"));
-    getDAO().doInsert(u);
-    assertInserted( 
-        data(dataSource)
-        .row(u.getLogin(), 
-            u.getName(), 
-            u.getPassword(), 
-            dateValue(u.getCreated()))
-        );
+  public void testAssertInserted3() throws SQLException {
+    Actions.nop();
+    expectAssertionError(EMPTY_MSG, () -> assertInserted(d(Actions.EXISTING_USER)));
+  }
+  
+  @Test
+  public void testAssertInserted4() throws SQLException {
+    Actions.deleteUser();
+    expectAssertionError(ERROR_MSG, () -> assertInserted(ERROR_MSG, d(Actions.EXISTING_USER)));
+  }
+  
+  @Test
+  public void testDelete1() throws SQLException {
+    Actions.deleteUser();
+    assertDeleted(d(Actions.EXISTING_USER));
+  }
+  
+  @Test
+  public void testDelete2() throws SQLException {
+    Actions.deleteUser();
+    assertDeleted(ERROR_MSG, d(Actions.EXISTING_USER));
+  }
+  
+  @Test
+  public void testDelete3() throws SQLException {
+    Actions.nop();
+    expectAssertionError(EMPTY_MSG, () -> assertDeleted(d(Actions.EXISTING_USER)));
+  }
+  
+  @Test
+  public void testDelete4() throws SQLException {
+    Actions.insertNewUser();
+    expectAssertionError(ERROR_MSG, () -> assertDeleted(ERROR_MSG, d(Actions.EXISTING_USER)));
   }
 
   @Test
-  public void testSuccessDeleteCase() throws SQLException {
-    User u = getTestData(EXISTING_DATA_ID1);
-    getDAO().doDelete(EXISTING_DATA_ID1); 
-    assertDeleted(
-        data(dataSource)
-        .row(EXISTING_DATA_ID1, 
-             u.getName(), 
-             u.getPassword(), 
-             dateValue(u.getCreated())));
+  public void testAssertDelta1() throws SQLException {
+    Actions.updateUser();
+    assertDelta(d(Actions.EXISTING_USER), d(Actions.EXISTING_USER_UPDATED));
   }
   
   @Test
-  public void testSuccessDeleteCase2() throws SQLException {
-    User u = getTestData(EXISTING_DATA_ID1);
-    getDAO().doDelete(EXISTING_DATA_ID1); 
-    assertDeleted("deleted",
-        data(dataSource)
-        .row(EXISTING_DATA_ID1, 
-             u.getName(), 
-             u.getPassword(), 
-             dateValue(u.getCreated())));
-  }
-
-  @Test
-  public void testSuccessDeleteCase3() throws SQLException {
-    User u = getTestData(EXISTING_DATA_ID1);
-    getDAO().doDelete(EXISTING_DATA_ID1);      
-    assertDeleted( 
-        data(dataSource)
-        .row(u.getLogin(), 
-            u.getName(), 
-            u.getPassword(), 
-            dateValue(u.getCreated()))
-        );
-  }
-
-  @Test
-  public void testSuccessUpdateCase() throws SQLException {
-    User u1 = getDAO().query(EXISTING_DATA_ID1);
-    User u2 = new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-11-11"));
-    getDAO().doUpdate(u2);
-    DataSet oldData = 
-      data(dataSource)
-        .row(EXISTING_DATA_ID1, u1.getName(), u1.getPassword(), dateValue(u1.getCreated()));
-    DataSet newData = 
-      data(dataSource)
-        .row(EXISTING_DATA_ID1, u2.getName(), u2.getPassword(), dateValue(u2.getCreated()));
-    assertDelta(oldData, newData);
+  public void testAssertDelta2() throws SQLException {
+    Actions.updateUser();
+    assertDelta(ERROR_MSG, d(Actions.EXISTING_USER), d(Actions.EXISTING_USER_UPDATED));
   }
   
   @Test
-  public void testSuccessUpdateCase2() throws SQLException {
-    User u1 = getDAO().query(EXISTING_DATA_ID1);
-    User u2 = new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-11-11"));
-    getDAO().doUpdate(u2);
-    DataSet oldData = 
-      data(dataSource)
-        .row(EXISTING_DATA_ID1, u1.getName(), u1.getPassword(), dateValue(u1.getCreated()));
-    DataSet newData = 
-      data(dataSource)
-        .row(EXISTING_DATA_ID1, u2.getName(), u2.getPassword(), dateValue(u2.getCreated()));
-    assertDelta("delta", oldData, newData);
+  public void testAssertDelta3() throws SQLException {
+    Actions.nop();
+    expectAssertionError(EMPTY_MSG, () -> assertDelta(d(Actions.EXISTING_USER), d(Actions.EXISTING_USER_UPDATED)));
   }
   
   @Test
-  public void testSuccessUpdateCase3() throws SQLException {
-    User u1 = getDAO().query(EXISTING_DATA_ID1);
-    User u2 = new User(EXISTING_DATA_ID1, "new name", "new password", Date.valueOf("2099-11-11"));
-    getDAO().doUpdate(u2);
-    assertDelta( 
-        data(dataSource)
-        .row(u1.getLogin(), 
-            u1.getName(), 
-            u1.getPassword(), 
-            dateValue(u1.getCreated())),
-        data(dataSource)
-        .row(u2.getLogin(), 
-            u2.getName(), 
-            u2.getPassword(), 
-            dateValue(u2.getCreated()))
-        ); 
+  public void testAssertDelta4() throws SQLException {
+    Actions.insertNewUser();
+    expectAssertionError(ERROR_MSG, () -> assertDelta(ERROR_MSG, d(Actions.EXISTING_USER), d(Actions.EXISTING_USER_UPDATED)));
   }
   
   @Test
-  public void testStateAssertion1() {
+  public void testAssertState1() {
+    Actions.nop();
     assertState(initialState);
   }
   
   @Test
-  public void testStateAssertion2() {
-    assertState("initial state", initialState);
+  public void testAssertState2() {
+    Actions.nop();
+    assertState(ERROR_MSG, initialState);
   }
   
   @Test
-  public void testStateAssertion3() throws SQLException {
-    getDAO().doDeleteAll();
+  public void testAssertState3() throws SQLException {
+    Actions.insertNewUser();
+    expectAssertionError(EMPTY_MSG, () -> assertState(initialState));
+  }
+  
+  @Test
+  public void testAssertState4() throws SQLException {
+    Actions.deleteUser();
+    expectAssertionError(ERROR_MSG, () -> assertState(ERROR_MSG, initialState));
+  }
+  
+  @Test
+  public void testAssertState5() throws SQLException {
+    Actions.updateUser();
+    expectAssertionError(ERROR_MSG, () -> assertState(ERROR_MSG, initialState));
+  }
+  
+  @Test
+  public void testAssertEmpty1() throws SQLException {
+    Actions.deleteAll();
     assertEmpty(dataSource);
   }
   
   @Test
-  public void testStateAssertion4() throws SQLException {
-    getDAO().doDeleteAll();
+  public void testAssertEmpty2() throws SQLException {
+    Actions.deleteAll();
     assertEmpty("empty", dataSource);
   }
  
-  @Test(expected=DBAssertionError.class)
-  public void testStateAssertionFailure1() throws SQLException {
-    getDAO().doDelete(EXISTING_DATA_ID1);
-    assertState(initialState);
+  @Test
+  public void testAssertEmpty3() throws SQLException {
+    Actions.nop();
+    expectAssertionError(EMPTY_MSG, () -> assertEmpty(dataSource));
+  }
+  
+  @Test
+  public void testAssertEmpty4() throws SQLException {
+    Actions.insertNewUser();
+    expectAssertionError(ERROR_MSG, () -> assertEmpty(ERROR_MSG, dataSource));
   }
 }

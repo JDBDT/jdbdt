@@ -162,6 +162,11 @@ public class DBTestCase {
   protected Object[] rowFor(User u) {
     return getConversion().convert(u);
   }
+  
+  protected Object[] rowFor(String id) {
+    return getConversion().convert(getTestData(id));
+  }
+  
 
   private static int newUserCounter = 0;
 
