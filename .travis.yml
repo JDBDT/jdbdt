@@ -30,16 +30,7 @@ matrix:
         organization: jdbdt
         token:
           secure: rCWJ+3KyKvJJAQt/3yTI6/XUfpjQVgmSCPk5doo4DDLWmFW1D/UxDYcu7nsGMGkL7wLRY8kb+BJmF8SaA/iYDGKsiNm4j36WwtBPXTWt8YfDqqnqPx4X722xLfXEmtpDQALtFo4+vZu9wKh6ep4vKnGahQ+MvWOSMrE4n29C0xRfuo/DCXvNpFG+4A46uMbZp8kH8RwLTs94zf+6+5Rym98ZWS4wJ4VH7fZR+81qs7KvJbf/UMGeG4pRw+tRAMQYBCHBYwL/xPYFgpeZaqkbUxvTQF131dIOItTC8+/pWQit2al+RywUHq5Sh9HbxoGCdw0oMgBo8nBCAgRypRWjejNslYqxes25R4JgCZYZOVCBKm4FEn27tmh248z66fEKblVVHYbC/X8BJG7eXCFHlGcDaAdoeaJ+Z3UFFzDgTbZYYLhmwp4lCxVhueFWP7hK2XujKZeH0eFrBSpDzYusVxeFinGBRpx9bDm7MgvpYAQsu5CiTP91DzNWA3duIvEhhKWD3OwKUT/WA0fEpYZ0LQCwregqE7SMozcNVaYnsFaseitj3hjfeAvsRuxMM5qJtZR7MWwFortYyYc4lNfiJMgKBQgC543MzVNl+8lPNFgwtZ264XzDFRLc1LSKcyMjaGKip7zzbTPYJkzE6p26aVZHCWp6047kLYboqN1fzu0=
-      coverity_scan:
-        project:
-          name: "edrdo/jdbdt"
-          description: "Build submitted via Travis CI"
-        notification_email: delta@jdbdt.org
-        build_command_prepend: "mvn clean"
-        build_command:   "mvn -DskipTests=true compile"
-        branch_pattern: master
     env:
-    - secure: UUAT27NqItgbxnFELxeGkMpMp6jga4MNqfUUrm64BHz2uBeCzUeum9qY0UyHTbi68oxrJIZ4PD2gkipPnKqZ1mkWH9Rr3Bs+ey2MFcydUYLlnm7HWiI0uVc9WPHz9unQ2UHYrfkYexpqeR0JlSwziefdWacL7T5hgu7vZef0Oh1AvA9wa10sWVpq/yLGWa8AborddShKS2hJPbh6GTsWfFMCmAAMij3ibEbswVDHoUvPe51XG9jNq+E4xF9opU4zsKkpFhybr1oDnMVw4Jk2xrWMlIg0+x0UjTRkS7Qsh4eI+S44Dv+JRuJDA9aTeZGDV01FP2yKv9XMaDo0VxVPBcSNg9WOyyYauPRGbXsj2kI9Rx+unqi/K8joUY3ItrFnr00lhtRQk4F3bxOZBpN2nX/9lA62ZcabBFuNSphBKNidMz/Qf7KrEr5qlYOjGsULmEmuKFEO3qwpSNGgnnK5rW15sB4WtOhsyHQAqK4drsNrYbdXBKgSsLFtfuZkXhJ0N4Q0bsBUjU/hEOc5WlIQEGsUWqHDqitoMXdz9CJiMiOb6+SAf2x/ZVsFa1lT686eUe+8qzQNpEs+W65AAGq8FfPnTeBzBPrsA9JcunaN4nxtSp1qCiv5dYJeXBGI8ZWcwqMx4rxbdfSu0lmJaMz/UrxjghH1PoGyjTo8X52vL/E=
     - MYSQL_SERVICE=true
     - GOALS="clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar site-deploy"
   - os: osx
