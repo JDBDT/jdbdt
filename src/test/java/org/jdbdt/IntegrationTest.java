@@ -175,7 +175,7 @@ public class IntegrationTest extends DBTestCase {
     getDAO().doInsert(u);
     assertState(data(q).row(newUserLogin), 
                 DataSet.join(initialData,data(table, getConversion()).row(u)));
-    assertTrue(changed(table));
+    assertTrue(changed(q,table));
   }
   
   @Test
@@ -278,7 +278,7 @@ public class IntegrationTest extends DBTestCase {
     getDAO().doDelete(u.getLogin());
     assertDeleted(data(q).row(u.getLogin()),
                   data(table, getConversion()).rows(u));
-    assertTrue(changed(q));
+    assertTrue(changed(q, table));
   }
   
   @Test
@@ -292,6 +292,66 @@ public class IntegrationTest extends DBTestCase {
     getDAO().doDelete(u.getLogin());
     assertEmpty(q);
     assertTrue(changed(q));
+  }
+  
+  @Test
+  public void testDeleteAll1() throws SQLException {
+    Query q = select("password")
+             .from(table)
+             .build(getDB());
+    getDAO().doDeleteAll();
+    assertEmpty(q, table);
+    assertTrue(changed(q, table));
+  }
+  
+  public void testDeleteAll2() throws SQLException {
+    Query q = select("password")
+             .from(table)
+             .build(getDB());
+    getDAO().doDeleteAll();
+    assertEmpty("empty", q, table);
+    assertTrue(changed(q, table));
+  }
+  
+  @Test
+  public void testDeleteAll3() throws SQLException {
+    Query q = select("password")
+             .from(table)
+             .build(getDB());
+    DataSet pset = takeSnapshot(q);
+    getDAO().doDeleteAll();
+    assertDeleted(pset, initialData);
+    assertTrue(changed(q, table));
+  }
+  
+  @Test
+  public void testDeleteAll4() throws SQLException {
+    Query q = select("password")
+             .from(table)
+             .build(getDB());
+    DataSet pset = takeSnapshot(q);
+    getDAO().doDeleteAll();
+    assertDeleted("deleted", pset, initialData);
+    assertTrue(changed(q, table));
+  }
+  
+  @Test
+  public void testDeleteAll5() throws SQLException {
+    Query q = select("password")
+             .from(table)
+             .build(getDB());
+    getDAO().doDeleteAll();
+    assertState(empty(q), empty(table));
+    assertTrue(changed(q, table));
+  }
+  
+  public void testDeleteAll6() throws SQLException {
+    Query q = select("password")
+             .from(table)
+             .build(getDB());
+    getDAO().doDeleteAll();
+    assertState("empty", empty(q), empty(table));
+    assertTrue(changed(q, table));
   }
   
   @Test
