@@ -158,7 +158,8 @@ public class IntegrationTest extends DBTestCase {
              .build(getDB());
     takeSnapshot(q);
     getDAO().doInsert(u);
-    assertInserted(data(q).row(newUserLogin));
+    assertInserted(data(q).row(newUserLogin), 
+                   data(table, getConversion()).row(u));
     assertTrue(changed(table));
   }
 
@@ -172,7 +173,8 @@ public class IntegrationTest extends DBTestCase {
              .arguments(newUserLogin)
              .build(getDB());
     getDAO().doInsert(u);
-    assertState(data(q).row(newUserLogin));
+    assertState(data(q).row(newUserLogin), 
+                DataSet.join(initialData,data(table, getConversion()).row(u)));
     assertTrue(changed(table));
   }
   
@@ -274,7 +276,8 @@ public class IntegrationTest extends DBTestCase {
              .build(getDB());
     takeSnapshot(q);
     getDAO().doDelete(u.getLogin());
-    assertDeleted(data(q).row(u.getLogin()));
+    assertDeleted(data(q).row(u.getLogin()),
+                  data(table, getConversion()).rows(u));
     assertTrue(changed(q));
   }
   
