@@ -66,6 +66,16 @@ public class AssertEqualsTest extends DBTestCase {
     assertEquals(d(users), d(users));
   }
   
+  @Test
+  public void testValidateErrorMsg1() {
+    TestUtil.expectAssertionError("", () -> assertEquals(d(0), d(1)));
+  }
+  
+  @Test
+  public void testValidateErrorMsg2() {
+    TestUtil.expectAssertionError("msg", () -> assertEquals("msg", d(0), d(1)));
+  }
+  
   @Test(expected=DBAssertionError.class)
   public void testSlightChangeDetection1() {
     int n = 10;
