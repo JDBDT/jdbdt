@@ -134,11 +134,11 @@ public final class JDBDT {
 
   /**
    * Create a builder for a fresh data set.
-   * @param source Data source.
+   * @param dataSource Data source.
    * @return A new data set builder.
    */
-  public static DataSetBuilder builder(DataSource source) {
-    return new DataSetBuilder(source);
+  public static DataSetBuilder builder(DataSource dataSource) {
+    return new DataSetBuilder(dataSource);
   }
 
   /**
@@ -151,34 +151,34 @@ public final class JDBDT {
    * data source instance.
    * </p>
    * 
-   * @param source Data source.
+   * @param dataSource Data source.
    * @return A new data set for the given source.
    * @see DataSet#isEmpty()
    * @see DataSet#isReadOnly()
    */
-  public static DataSet empty(DataSource source) {
-    return source.theEmptySet();
+  public static DataSet empty(DataSource dataSource) {
+    return dataSource.theEmptySet();
   }
 
   /**
    * Create a new data set.
    * 
-   * @param source Data source.
+   * @param dataSource Data source.
    * @return A new data set for the given source.
    */
-  public static DataSet data(DataSource source) {
-    return new DataSet(source);
+  public static DataSet data(DataSource dataSource) {
+    return new DataSet(dataSource);
   }
 
   /**
    * Create a new typed data set.
    * @param <T> Type of objects.
-   * @param source Data source.
+   * @param dataSource Data source.
    * @param conv Conversion function.
    * @return A new typed data set for the given source.
    */
-  public static <T> TypedDataSet<T> data(DataSource source, Conversion<T> conv) {
-    return new TypedDataSet<>(source, conv);
+  public static <T> TypedDataSet<T> data(DataSource dataSource, Conversion<T> conv) {
+    return new TypedDataSet<>(dataSource, conv);
   }
 
   /**
@@ -249,7 +249,7 @@ public final class JDBDT {
    * by the caller. Also, the returned data set is read-only (see {@link DataSet#isReadOnly()}).
    * </p>
    * 
-   * @param source Data source.
+   * @param dataSource Data source.
    * @return Data set representing the snapshot.
    * 
    * @see #assertDelta(DataSet, DataSet)
@@ -258,34 +258,34 @@ public final class JDBDT {
    * @see #assertUnchanged(DataSource)
    */
   public static DataSet
-  takeSnapshot(DataSource source)  {
-    return source.executeQuery(CallInfo.create(), true);
+  takeSnapshot(DataSource dataSource)  {
+    return dataSource.executeQuery(CallInfo.create(), true);
   }
   
   /**
    * Take a database snapshot for several data sources.
    * 
-   * @param sources Data sources.
+   * @param dataSources Data sources.
    * 
    * @see #takeSnapshot(DataSource)
    * @since 1.2
    */
   @SafeVarargs
   public static void
-  takeSnapshot(DataSource... sources)  {
-    foreach(sources, 
-           (callInfo, source) -> source.executeQuery(callInfo, true), 
+  takeSnapshot(DataSource... dataSources)  {
+    foreach(dataSources, 
+           (callInfo, dataSource) -> dataSource.executeQuery(callInfo, true), 
            CallInfo.create());
   }
 
   /**
    * Query the data source, without setting a snapshot.
-   * @param source Data source.
+   * @param dataSource Data source.
    * @return Query result.
    */
   static DataSet
-  executeQuery(DataSource source)  {
-    return source.executeQuery(CallInfo.create(), false);
+  executeQuery(DataSource dataSource)  {
+    return dataSource.executeQuery(CallInfo.create(), false);
   }
 
   /**
@@ -328,29 +328,67 @@ public final class JDBDT {
    * (error message variant).
    * 
    * @param message Assertion error message.
-   * @param source Data source. 
+   * @param dataSource Data source. 
    * @throws DBAssertionError if the assertion fails.
    * @see #assertDelta(DataSet,DataSet)
    * @see #assertDeleted(String, DataSet)
    * @see #assertInserted(String, DataSet)
    */
-  public static void assertUnchanged(String message, DataSource source) throws DBAssertionError {
-    DataSet emptyDataSet = empty(source);
+  public static void assertUnchanged(String message, DataSource dataSource) throws DBAssertionError {
+    DataSet emptyDataSet = empty(dataSource);
     DBAssert.deltaAssertion(CallInfo.create(message), emptyDataSet, emptyDataSet);
+  }
+  
+  /**
+   * Assert that no changes occurred for the given data sources 
+   * (error message variant).
+   * 
+   * @param message Assertion error message.
+   * @param dataSources Data sources. 
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertUnchanged(String,DataSource)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertUnchanged(String message, DataSource... dataSources) throws DBAssertionError {
+    foreach(dataSources,
+            (callInfo, dataSource) -> {
+              DataSet emptyDataSet = empty(dataSource);
+              DBAssert.deltaAssertion(callInfo, emptyDataSet, emptyDataSet);
+            },
+            CallInfo.create(message)); 
   }
 
   /**
    * Assert that no changes occurred for the given data source.
    * 
-   * @param source Data source. 
+   * @param dataSource Data source. 
    * @throws DBAssertionError if the assertion fails.
    * @see #assertDelta(DataSet,DataSet)
    * @see #assertDeleted(DataSet)
    * @see #assertInserted(DataSet)
    */
-  public static void assertUnchanged(DataSource source) throws DBAssertionError {
-    DataSet emptyDataSet = empty(source);
+  public static void assertUnchanged(DataSource dataSource) throws DBAssertionError {
+    DataSet emptyDataSet = empty(dataSource);
     DBAssert.deltaAssertion(CallInfo.create(), emptyDataSet, emptyDataSet);
+  }
+  
+  /**
+   * Assert that no changes occurred for the given data sources.
+   * 
+   * @param dataSources Data sources. 
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertUnchanged(String,DataSource)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertUnchanged(DataSource... dataSources) throws DBAssertionError {
+    foreach(dataSources,
+            (callInfo, dataSource) -> {
+              DataSet emptyDataSet = empty(dataSource);
+              DBAssert.deltaAssertion(callInfo, emptyDataSet, emptyDataSet);
+            },
+            CallInfo.create()); 
   }
 
   /**
@@ -367,20 +405,55 @@ public final class JDBDT {
   public static void assertDeleted(String message, DataSet data) throws DBAssertionError {
     DBAssert.deltaAssertion(CallInfo.create(message), data, empty(data.getSource())); 
   }
+  
+  /**
+   * Assert that database changed by removal of given
+   * data sets (error message variant).
+   * 
+   * @param message Assertion error message.
+   * @param dataSets Data set.
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertDeleted(String,DataSet)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertDeleted(String message, DataSet... dataSets) throws DBAssertionError {
+    foreach(dataSets,
+            (callInfo, dataSet) -> 
+               DBAssert.deltaAssertion(callInfo, dataSet, empty(dataSet.getSource())),
+            CallInfo.create(message));
+  }
 
   /**
-   * Assert that database changed only by removal of a given
+   * Assert that database changed by removal of given
    * data set. 
    * 
-   * @param data Data set.
+   * @param dataSet Data set.
    * @throws DBAssertionError if the assertion fails.
    * @see #assertUnchanged(DataSource)
    * @see #assertInserted(DataSet)
    */
-  public static void assertDeleted(DataSet data) throws DBAssertionError {
-    DBAssert.deltaAssertion(CallInfo.create(), data, empty(data.getSource())); 
+  public static void assertDeleted(DataSet dataSet) throws DBAssertionError {
+    DBAssert.deltaAssertion(CallInfo.create(), dataSet, empty(dataSet.getSource())); 
   }
 
+  /**
+   * Assert that database changed by removal of given
+   * data sets. 
+   * 
+   * @param dataSets Data set.
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertDeleted(DataSet)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertDeleted(DataSet... dataSets) throws DBAssertionError {
+    foreach(dataSets,
+            (callInfo, dataSet) -> 
+               DBAssert.deltaAssertion(callInfo, dataSet, empty(dataSet.getSource())),
+            CallInfo.create());
+  }
+  
   /**
    * Assert that database changed only by addition of a given
    * data set (error message variant).
@@ -397,17 +470,50 @@ public final class JDBDT {
   }
 
   /**
+   * Assert that database changed only by addition of given
+   * data sets (error message variant).
+   *
+   * @param message Assertion error message.
+   * @param dataSets Data sets.
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertInserted(String,DataSet)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertInserted(String message, DataSet... dataSets) throws DBAssertionError {
+    foreach(dataSets,
+            (callInfo,dataSet) -> DBAssert.deltaAssertion(callInfo, empty(dataSet.getSource()), dataSet),
+            CallInfo.create(message));
+  }
+  
+  /**
    * Assert that database changed only by addition of a given
    * data set.
    *
-   * @param data data set.
+   * @param dataSet Data set.
    * @throws DBAssertionError if the assertion fails.
    * @see #assertUnchanged(DataSource)
    * @see #assertDeleted(DataSet)
    * @see #assertDelta(DataSet,DataSet)
    */
-  public static void assertInserted(DataSet data) throws DBAssertionError {
-    DBAssert.deltaAssertion(CallInfo.create(), empty(data.getSource()), data);
+  public static void assertInserted(DataSet dataSet) throws DBAssertionError {
+    DBAssert.deltaAssertion(CallInfo.create(), empty(dataSet.getSource()), dataSet);
+  }
+  
+  /**
+   * Assert that database changed only by addition of given
+   * data sets.
+   *
+   * @param dataSets Data sets.
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertInserted(DataSet)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertInserted(DataSet... dataSets) throws DBAssertionError {
+    foreach(dataSets,
+            (callInfo,dataSet) -> DBAssert.deltaAssertion(callInfo, empty(dataSet.getSource()), dataSet),
+            CallInfo.create());
   }
 
   /**
@@ -455,6 +561,21 @@ public final class JDBDT {
   }
 
   /**
+   * Assert that the database state matches the given data sets (error message variant)
+   * @param message Assertion error message.
+   * @param dataSets Data sets.
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertState(String,DataSet)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertState(String message, DataSet... dataSets) throws DBAssertionError {
+    foreach(dataSets,
+            (callInfo, dataSet) -> DBAssert.stateAssertion(callInfo, dataSet),
+            CallInfo.create(message));
+  }
+  
+  /**
    * Assert that the database state matches the given data set.
    * @param data Data set.
    * @throws DBAssertionError if the assertion fails.
@@ -462,24 +583,55 @@ public final class JDBDT {
   public static void assertState(DataSet data) throws DBAssertionError {
     DBAssert.stateAssertion(CallInfo.create(), data);
   }
+  
+  /**
+   * Assert that the database state matches the given data sets.
+   * @param dataSets Data sets.
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertState(DataSet)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertState(DataSet... dataSets) throws DBAssertionError {
+    foreach(dataSets,
+            (callInfo, dataSet) -> DBAssert.stateAssertion(callInfo, dataSet),
+            CallInfo.create());
+  }
 
   /**
    * Assert that the given data source 
    * has no rows (error message variant).
    * 
    * <p>A call to this method is equivalent to
-   * <code>assertState(message, empty(source))</code>.
+   * <code>assertState(message, empty(dataSource))</code>.
    * 
    * @param message Assertion error message.
-   * @param source Data source.
+   * @param dataSource Data source.
    * @throws DBAssertionError if the assertion fails.
    * @see #assertState(String,DataSet)
    * @see #empty(DataSource)
    */
-  public static void assertEmpty(String message, DataSource source) throws DBAssertionError {
-    DBAssert.stateAssertion(CallInfo.create(message), empty(source));
+  public static void assertEmpty(String message, DataSource dataSource) throws DBAssertionError {
+    DBAssert.stateAssertion(CallInfo.create(message), empty(dataSource));
   }
 
+  /**
+   * Assert that the given data sources have no rows (error message variant).
+   * @param message Assertion error message.
+   * @param dataSources Data sources.
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertEmpty(DataSource)
+   * @see #assertState(DataSet...)
+   * @see #empty(DataSource)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertEmpty(String message, DataSource... dataSources) throws DBAssertionError {
+    foreach(dataSources,
+            (callInfo, source) -> DBAssert.stateAssertion(callInfo, empty(source)),
+            CallInfo.create(message));
+  }
+  
   /**
    * Assert that the given data source has no rows.
    * 
@@ -492,6 +644,23 @@ public final class JDBDT {
    */
   public static void assertEmpty(DataSource source) throws DBAssertionError {
     DBAssert.stateAssertion(CallInfo.create(), empty(source));
+  }
+  
+  /**
+   * Assert that the given data sources have no rows.
+   * 
+   * @param sources Data sources.
+   * @throws DBAssertionError if the assertion fails.
+   * @see #assertEmpty(DataSource)
+   * @see #assertState(DataSet...)
+   * @see #empty(DataSource)
+   * @since 1.2
+   */
+  @SafeVarargs
+  public static void assertEmpty(DataSource... sources) throws DBAssertionError {
+    foreach(sources,
+            (callInfo, source) -> DBAssert.stateAssertion(callInfo, empty(source)),
+            CallInfo.create());
   }
 
   /**
@@ -866,6 +1035,7 @@ public final class JDBDT {
    * You may use this method for arbitrary database setup
    * actions.
    * </p>
+   * 
    * @param db Database.
    * @param sql SQL statement.
    * @param args SQL statement arguments.
@@ -889,6 +1059,7 @@ public final class JDBDT {
    * </p>
    * 
    * @param db Database handle.
+   * @see #restore(DB)
    */
   public static void save(DB db)  {
     db.save(CallInfo.create());
@@ -906,6 +1077,7 @@ public final class JDBDT {
    * </p>
    * 
    * @param db Database handle.
+   * @see #save(DB)
    */
   public static void restore(DB db) {
     db.restore(CallInfo.create());
@@ -955,7 +1127,7 @@ public final class JDBDT {
    * </pre>
    * 
    * @param dataSource Data sources.
-   * @return <code>true</code> if the data sources is marked as changed.
+   * @return <code>true</code> if the data source is marked as changed.
    * @see #changed(DataSource...)
    * @see #populateIfChanged(DataSet)
    * @since 1.2
@@ -970,12 +1142,11 @@ public final class JDBDT {
   /**
    * Check if given data sources are seen as changed.
    * 
-   * 
    * @param dataSources Data sources.
    * @return <code>true</code> if at least one of the given data sources 
    *         is marked as changed.
    * @see #changed(DataSource)
-   * @see #populateIfChanged(DataSet)
+   * @see #populateIfChanged(DataSet...)
    */
   @SafeVarargs
   public static boolean changed(DataSource... dataSources) {
@@ -1020,12 +1191,12 @@ public final class JDBDT {
   /**
    * Dump the database contents for a data source.
    * 
-   * @param source Data source.
+   * @param dataSource Data source.
    * @param out Output stream.
    */
-  public static void dump(DataSource source, PrintStream out) {
+  public static void dump(DataSource dataSource, PrintStream out) {
     try (Log log = Log.create(out)) {
-      log.write(CallInfo.create(), executeQuery(source));
+      log.write(CallInfo.create(), executeQuery(dataSource));
     }
   }
 
@@ -1036,12 +1207,12 @@ public final class JDBDT {
    * The output file will be GZIP-compressed if it has a <code>.gz</code> extension.
    * </p>
    * 
-   * @param source Data source.
+   * @param dataSource Data source.
    * @param outputFile Output file.
    */
-  public static void dump(DataSource source, File outputFile) {
+  public static void dump(DataSource dataSource, File outputFile) {
     try (Log log = Log.create(outputFile)) {
-      log.write(CallInfo.create(), executeQuery(source));
+      log.write(CallInfo.create(), executeQuery(dataSource));
     } 
   }
 
