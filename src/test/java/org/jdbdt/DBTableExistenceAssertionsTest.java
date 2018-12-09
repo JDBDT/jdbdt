@@ -29,8 +29,6 @@ import static org.jdbdt.JDBDT.assertTableDoesNotExist;
 import static org.jdbdt.JDBDT.assertTableExists;
 import static org.jdbdt.JDBDT.table;
 
-import java.sql.SQLException;
-
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -67,7 +65,7 @@ public class DBTableExistenceAssertionsTest extends DBTestCase {
   }
  
   @Test 
-  public void testTableDoesNotExist1() {
+  public void testTableDoesNotExist() {
     assertTableDoesNotExist(getDB(), NON_EXISTING_TABLE);
     assertTableDoesNotExist(NOT_EXISTS_MSG, getDB(), NON_EXISTING_TABLE);
     expectAssertionError(EMPTY_MSG, 
