@@ -108,7 +108,48 @@ public final class JDBDT {
   public static DB database(String url, String user, String pass) throws SQLException {
     return database(DriverManager.getConnection(url, user, pass));
   }
+  
+  /**
+   * Create a new database handle for given {@link javax.sql.DataSource}
+   * instance.
+   * 
+   * <p>Calling this method is shorthand for:<br>
+   * &nbsp;&nbsp;&nbsp;&nbsp;
+   * <code>database( xds.getConnection() )</code>.
+   * </p>
+   * 
+   * @param xds {@link javax.sql.DataSource} instance.
+   *
+   * @return A new database handle for the connection.
+   * @throws SQLException If the connection cannot be created.
+   * @see #database(Connection)
+   * @see javax.sql.DataSource#getConnection()
+   */
+  public static DB database(javax.sql.DataSource xds) throws SQLException {
+    return database(xds.getConnection());
+  }
 
+  /**
+   * Create a new database handle for given {@link javax.sql.DataSource}
+   * instance, user, and password.
+   * 
+   * <p>Calling this method is shorthand for:<br>
+   * &nbsp;&nbsp;&nbsp;&nbsp;
+   * <code>database( xds.getConnection(user, password) )</code>.
+   * </p>
+   * 
+   * @param xds {@link javax.sql.DataSource} instance.
+   * @param user User.
+   * @param password Password.
+   * @return A new database handle for the connection.
+   * @throws SQLException If the connection cannot be created.
+   * @see #database(Connection)
+   * @see javax.sql.DataSource#getConnection(String, String)
+   */
+  public static DB database(javax.sql.DataSource xds, String user, String password) throws SQLException {
+    return database(xds.getConnection());
+  }
+  
   /**
    * Tear-down a database handle.
    * 
