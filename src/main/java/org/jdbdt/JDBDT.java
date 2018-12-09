@@ -96,19 +96,19 @@ public final class JDBDT {
    * 
    * <p>Calling this method is shorthand for:<br>
    * &nbsp;&nbsp;&nbsp;&nbsp;
-   * <code>database( DriverManager.getConnection(url, user, pass) )</code>.
+   * <code>database( DriverManager.getConnection(url, user, password) )</code>.
    * </p>
    * 
    * @param url Database URL.
    * @param user Database user.
-   * @param pass Database password.
+   * @param password Database password.
    * @return A new database handle for the given connection.
    * @throws SQLException If the connection cannot be created.
    * @see #database(Connection)
    * @see DriverManager#getConnection(String, String, String)
    */
-  public static DB database(String url, String user, String pass) throws SQLException {
-    return database(DriverManager.getConnection(url, user, pass));
+  public static DB database(String url, String user, String password) throws SQLException {
+    return database(DriverManager.getConnection(url, user, password));
   }
   
   /**
@@ -141,15 +141,15 @@ public final class JDBDT {
    * </p>
    * 
    * @param xds {@link javax.sql.DataSource} instance.
-   * @param user User.
-   * @param password Password.
+   * @param user Database user.
+   * @param password Database password.
    * @return A new database handle for the connection.
    * @throws SQLException If the connection cannot be created.
    * @see #database(Connection)
    * @see javax.sql.DataSource#getConnection(String, String)
    */
   public static DB database(javax.sql.DataSource xds, String user, String password) throws SQLException {
-    return database(xds.getConnection());
+    return database(xds.getConnection(user, password));
   }
   
   /**
