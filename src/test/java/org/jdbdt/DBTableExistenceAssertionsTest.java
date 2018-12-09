@@ -57,107 +57,38 @@ public class DBTableExistenceAssertionsTest extends DBTestCase {
   }
 
   @Test 
-  public void testTableExists1() {
+  public void testTableExists() {
     assertTableExists(getDB(), table.getName());
-  }
-  
-  @Test 
-  public void testTableExists2() {
     assertTableExists(EXISTS_MSG, getDB(), table.getName());
-  }
-  
-  @Test
-  public void testTableExists3() throws SQLException {
     expectAssertionError(EMPTY_MSG, 
-                         () -> assertTableExists(getDB(), NON_EXISTING_TABLE));
-  }
-  
-  @Test
-  public void testTableExists4() throws SQLException {
+        () -> assertTableExists(getDB(), NON_EXISTING_TABLE));
     expectAssertionError(EXISTS_MSG, 
-                         () -> assertTableExists(EXISTS_MSG, getDB(), NON_EXISTING_TABLE));
+        () -> assertTableExists(EXISTS_MSG, getDB(), NON_EXISTING_TABLE));
   }
-  
-  
-  
+ 
   @Test 
   public void testTableDoesNotExist1() {
     assertTableDoesNotExist(getDB(), NON_EXISTING_TABLE);
-  }
-  
-  @Test 
-  public void testTableDoesNotExist2() {
     assertTableDoesNotExist(NOT_EXISTS_MSG, getDB(), NON_EXISTING_TABLE);
-  }
-  
-  @Test
-  public void testTableDoesNotExist3() throws SQLException {
     expectAssertionError(EMPTY_MSG, 
-                         () -> assertTableDoesNotExist(getDB(), table.getName()));
-  }
-  
-  @Test
-  public void testTableDoesNotExist4() throws SQLException {
+        () -> assertTableDoesNotExist(getDB(), table.getName()));
     expectAssertionError(NOT_EXISTS_MSG, 
-                         () -> assertTableDoesNotExist(NOT_EXISTS_MSG, getDB(), table.getName()));
+        () -> assertTableDoesNotExist(NOT_EXISTS_MSG, getDB(), table.getName()));
   }
   
   @Test
-  public void testTableExistsAfterDrop() throws Throwable {
+  public void testAssertionsAfterDrop() throws Throwable {
     getDAO().dropTable();
     try {
       expectAssertionError(EMPTY_MSG, 
-        () -> assertTableExists(getDB(), table.getName()));
+        () -> assertTableExists(getDB(), table.getName(), NON_EXISTING_TABLE));
+      expectAssertionError(EXISTS_MSG, 
+          () -> assertTableExists(EXISTS_MSG,getDB(), table.getName(), NON_EXISTING_TABLE));
+      assertTableDoesNotExist(NOT_EXISTS_MSG, getDB(), table.getName(), NON_EXISTING_TABLE);
+      assertTableDoesNotExist(EMPTY_MSG, getDB(), table.getName(), NON_EXISTING_TABLE);
     }
     finally {
       getDAO().createTable();
     }
   }
-  
-  @Test
-  public void testTableDoesNotExistAfterDrop() throws Throwable {
-    getDAO().dropTable();
-    try {
-      assertTableDoesNotExist(getDB(), table.getName());
-    }
-    finally {
-      getDAO().createTable();
-    }
-  }
-
-//  @Test 
-//  public void testTableExists33() {
-//    assertTableExists(getDB(), table.getName());
-//  }
-//  
-//  @Test 
-//  public void testTableExists44() {
-//    assertTableExists("exists", getDB(), table.getName());
-//  }
-//  
-//  @Test
-//  public void testTableDoesNotExist1() throws SQLException {
-//    expectAssertionError("", () -> assertTableDoesNotExist(getDB(), table.getName()));
-//  }
-//  
-//  @Test
-//  public void testTableDoesNotExist2() throws SQLException {
-//    expectAssertionError("does not exist", () -> assertTableDoesNotExist("not", getDB(), table.getName()));
-//  }
-//  
-//  
-
-//  
-//  @Test 
-//  public void testTableDoesNotExist3() throws SQLException {
-//    getDAO().dropTable();
-//    try {
-//      assertTableDoesNotExist(getDB(), table.getName());
-//    }
-//    finally {
-//      getDAO().createTable();
-//    }   
-//  }
-  
- 
 }
