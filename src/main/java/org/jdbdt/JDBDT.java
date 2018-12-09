@@ -30,6 +30,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.function.Function;
 
 /**
  * JDBDT facade.
@@ -314,6 +316,7 @@ public final class JDBDT {
   @SafeVarargs
   public static void
   takeSnapshot(DataSource... dataSources)  {
+    ensureDistinctDataSources(dataSources, Function.identity());
     foreach(dataSources, 
            (callInfo, dataSource) -> dataSource.executeQuery(callInfo, true), 
            CallInfo.create());
@@ -425,6 +428,7 @@ public final class JDBDT {
   @SuppressWarnings("javadoc")
   private static void 
   multipleUnchangedAssertions(CallInfo callInfo, DataSource[] dataSources) {
+    ensureDistinctDataSources(dataSources, Function.identity());
     foreach(dataSources,
         (ci, dataSource) -> {
           DataSet emptyDataSet = empty(dataSource);
@@ -492,6 +496,7 @@ public final class JDBDT {
   @SuppressWarnings("javadoc")
   private static void
   multipleDeleteAssertions(CallInfo callInfo, DataSet[] dataSets) {
+    ensureDistinctDataSources(dataSets, DataSet::getSource);
     foreach(dataSets,
         (ci, dataSet) -> 
            DBAssert.deltaAssertion(ci, dataSet, empty(dataSet.getSource())),
@@ -557,6 +562,7 @@ public final class JDBDT {
   @SuppressWarnings("javadoc")
   private static void
   multipleInsertAssertions(CallInfo callInfo, DataSet[] dataSets) {
+    ensureDistinctDataSources(dataSets, DataSet::getSource);
     foreach(dataSets,
         (ci,dataSet) -> DBAssert.deltaAssertion(ci, empty(dataSet.getSource()), dataSet),
         callInfo);
@@ -645,6 +651,7 @@ public final class JDBDT {
   @SuppressWarnings("javadoc")
   private static void 
   multipleStateAssertions(CallInfo callInfo, DataSet[] dataSets) {
+    ensureDistinctDataSources(dataSets, DataSet::getSource);
     foreach(dataSets, DBAssert::stateAssertion, callInfo);
   }
   
@@ -711,8 +718,9 @@ public final class JDBDT {
 
   @SuppressWarnings("javadoc")
   private static void 
-  multipleEmptyStateAssertions(CallInfo callInfo, DataSource[] sources) {
-    foreach(sources,
+  multipleEmptyStateAssertions(CallInfo callInfo, DataSource[] dataSources) {
+    ensureDistinctDataSources(dataSources, Function.identity());
+    foreach(dataSources,
         (ci, source) -> DBAssert.stateAssertion(ci, empty(source)),
         callInfo);
   }
@@ -986,6 +994,7 @@ public final class JDBDT {
    */
   @SafeVarargs
   public static void populate(DataSet... dataSets) {
+    ensureDistinctDataSources(dataSets, DataSet::getSource);
     foreach(dataSets, DBSetup::populate, CallInfo.create());
   }
 
@@ -1023,6 +1032,7 @@ public final class JDBDT {
    * @since 1.2
    */
   public static void populateIfChanged(DataSet... dataSets) {
+    ensureDistinctDataSources(dataSets, DataSet::getSource);
     foreach(dataSets, DBSetup::populateIfChanged, CallInfo.create());
   }
 
@@ -1373,6 +1383,17 @@ public final class JDBDT {
     }
     for (T argument : arguments) {
       handler.action(callInfo, argument);
+    }
+  }
+  
+  @SuppressWarnings("javadoc")
+  private static  <T> void
+  ensureDistinctDataSources(T[] objects, Function<T,DataSource> f) {
+    HashSet<DataSource> set = new HashSet<>();
+    for (T object : objects) {
+      if (! set.add(f.apply(object))) {
+        throw new InvalidOperationException("Repeated data source in call!");
+      }
     }
   }
 }
