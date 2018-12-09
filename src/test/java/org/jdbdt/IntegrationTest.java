@@ -156,7 +156,7 @@ public class IntegrationTest extends DBTestCase {
              .where("login=?")
              .arguments(newUserLogin)
              .build(getDB());
-    takeSnapshot(q);
+    takeSnapshot(q, table);
     getDAO().doInsert(u);
     assertInserted(data(q).row(newUserLogin), 
                    data(table, getConversion()).row(u));

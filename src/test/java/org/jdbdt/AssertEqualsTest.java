@@ -50,6 +50,11 @@ public class AssertEqualsTest extends DBTestCase {
     assertEquals(d(0), d(0));
   }
   
+  @Test
+  public void testEmptyVsEmpty2() {
+    assertEquals("msg", d(0), d(0));
+  }
+  
   @Test(expected=DBAssertionError.class)
   public void testEmptyVsNonEmpty() {
     assertEquals(d(0), d(1));
