@@ -42,6 +42,16 @@ Commands:
 
 # Change Log
 
+## 1.2.x 
+
+Features:
+* [#47 - JDBDT.database() variants using javax.sql.DataSource](https://github.com/JDBDT/jdbdt/issues/47)
+* [#52 - Var-args method variants in JDBDT facade](https://github.com/JDBDT/jdbdt/issues/52)
+
+Maintenance:
+* Standard maintenance tasks (dependency updates, minor adjustments, etc) 
+	* [#51 - 1.2.0](https://github.com/JDBDT/jdbdt/issues/51)
+
 ## 1.1.x
 
 Features:
