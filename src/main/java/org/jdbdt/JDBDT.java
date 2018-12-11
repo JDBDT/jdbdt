@@ -126,6 +126,7 @@ public final class JDBDT {
    * @throws SQLException If the connection cannot be created.
    * @see #database(Connection)
    * @see javax.sql.DataSource#getConnection()
+   * @since 1.2
    */
   public static DB database(javax.sql.DataSource xds) throws SQLException {
     return database(xds.getConnection());
@@ -147,6 +148,7 @@ public final class JDBDT {
    * @throws SQLException If the connection cannot be created.
    * @see #database(Connection)
    * @see javax.sql.DataSource#getConnection(String, String)
+   * @since 1.2
    */
   public static DB database(javax.sql.DataSource xds, String user, String password) throws SQLException {
     return database(xds.getConnection(user, password));
@@ -1031,6 +1033,7 @@ public final class JDBDT {
    * @see #delete(DataSet...)
    * @since 1.2
    */
+  @SafeVarargs
   public static void populateIfChanged(DataSet... dataSets) {
     ensureDistinctDataSources(dataSets, DataSet::getSource);
     foreach(dataSets, DBSetup::populateIfChanged, CallInfo.create());
@@ -1181,6 +1184,7 @@ public final class JDBDT {
    * @return The value obtained through {@link PreparedStatement#getUpdateCount()}, after executing the statement.
    * @since 1.1
    */
+  @SafeVarargs
   public static int execute(DB db, String sql, Object... args) {
     return DBSetup.execute(CallInfo.create(), db, sql, args);
   }
