@@ -37,6 +37,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import static org.jdbdt.TestUtil.expectAssertionError;
+import static org.jdbdt.TestUtil.expectException;
 
 @SuppressWarnings("javadoc")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -79,7 +80,6 @@ public class DBAssertTest extends DBTestCase {
   private DataSet newUserDs;
   private DataSet newUserLDs;
   private DataSet updUserDs;
-  private DataSet updUserLDs;
 
   @Before 
   public void takeDBSnapshot() {
@@ -96,7 +96,6 @@ public class DBAssertTest extends DBTestCase {
     updUserDs = d(Actions.EXISTING_USER_UPDATED);
     exUserLDs = d(Actions.EXISTING_USER.getLogin());
     newUserLDs = d(Actions.USER_TO_INSERT.getLogin());
-    updUserLDs = d(Actions.EXISTING_USER_UPDATED.getLogin());
   }
   
   DataSet d(User... users) {
@@ -207,5 +206,14 @@ public class DBAssertTest extends DBTestCase {
     Actions.updateUser();
     assertDelta(exUserDs, updUserDs);
     assertUnchanged(ERROR_MSG, query);
+  }
+  
+  @Test
+  public void testRepeatedDataSets() throws SQLException {
+    expectException(InvalidOperationException.class, () -> assertUnchanged(table, table));
+    expectException(InvalidOperationException.class, () -> assertEmpty(table, table));
+    expectException(InvalidOperationException.class, () -> assertState(empty(table), empty(table)));
+    expectException(InvalidOperationException.class, () -> assertInserted(newUserDs, newUserDs));
+    expectException(InvalidOperationException.class, () -> assertDeleted(newUserDs, newUserDs));
   }
 }
