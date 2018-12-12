@@ -43,8 +43,8 @@ public final class TypedDataSet<T> extends DataSet {
   
   /**
    * Construct a typed data set.
-   * @param ds Data source
-   * @param conv Conversion function
+   * @param ds Data source.
+   * @param conv Conversion function.
    */
   public TypedDataSet(DataSource ds, Conversion<T> conv) {
     super(ds);

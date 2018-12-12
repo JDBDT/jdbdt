@@ -46,7 +46,7 @@ final class WrappedStatement implements AutoCloseable {
   /**
    * Constructor.
    * @param statement Statement.
-   * @param reuse Flag indicating if 
+   * @param reuse Flag indicating if statement will be reused.
    */
   WrappedStatement(PreparedStatement statement, boolean reuse) {
     this.statement = statement;
