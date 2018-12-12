@@ -1364,6 +1364,7 @@ public final class JDBDT {
    *
    * @param <T> Type of objects.
    */
+  @FunctionalInterface
   private interface CallHandler<T> {
     /** 
      * Execution action. 
