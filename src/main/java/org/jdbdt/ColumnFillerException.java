@@ -36,7 +36,7 @@ package org.jdbdt;
 public final class ColumnFillerException extends JDBDTRuntimeException {
   /**
    * Constructs a new exception using supplied message.
-   * and associated cause.
+   * 
    * @param message Error message.
    */
   public ColumnFillerException(String message) {

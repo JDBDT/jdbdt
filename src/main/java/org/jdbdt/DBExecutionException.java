@@ -50,7 +50,7 @@ public final class DBExecutionException extends JDBDTRuntimeException {
   /**
    * Get cause of the exception. 
    * 
-   * @return An instance of {@link java.sql.SQLException}.n 
+   * @return An instance of {@link java.sql.SQLException}.
    */
   @Override
   public SQLException getCause() {
