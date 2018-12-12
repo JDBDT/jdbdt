@@ -234,7 +234,7 @@ public final class DataSetBuilder {
    * Standard sequence filler.
    * @param <T> Datum type.
    */
-  private static class StdSeqFiller<T> implements ColumnFiller<T> {
+  private static final class StdSeqFiller<T> implements ColumnFiller<T> {
     /** Next value */
     private T nextValue;
     /** Step function. */
@@ -264,7 +264,7 @@ public final class DataSetBuilder {
    * @see DataSetBuilder#value(String, Object)
    * @see DataSetBuilder#nullValue(String)
    */
-  private static class ConstantFiller<T> implements ColumnFiller<T> {
+  private static final class ConstantFiller<T> implements ColumnFiller<T> {
     /** Constant value. */
     private final T value;
     /** 
@@ -402,7 +402,7 @@ public final class DataSetBuilder {
   }
 
   @SuppressWarnings("javadoc")
-  private static class SequenceFiller implements ColumnFiller<Object> {
+  private static final class SequenceFiller implements ColumnFiller<Object> {
     private int step;
     private final IntFunction<?> stepFunction;
     
