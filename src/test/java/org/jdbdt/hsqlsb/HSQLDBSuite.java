@@ -35,7 +35,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({ FileDBTest.class, MemDBTest.class })
 public class HSQLDBSuite {
   public static final String DRIVER = "org.hsqldb.jdbcDriver";
-  public static final String MEM_DB_URL = "jdbc:hsqldb:mem:jdbdt-hsqldb-test;shutdown=true";;
+  public static final String MEM_DB_URL = "jdbc:hsqldb:mem:jdbdt-hsqldb-test;shutdown=true";
   public static final String FILE_DB_URL = "jdbc:hsqldb:file:jdbdt-hsqldb-test;shutdown=true";
   
   @BeforeClass 
