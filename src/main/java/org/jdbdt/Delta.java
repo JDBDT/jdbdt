@@ -92,8 +92,7 @@ final class Delta {
   }
   
   /**
-   * Check if the delta is empty, i.e., 
-   * if there were no differences found.
+   * Check if the delta is empty, i.e., if there were no differences found.
    * @return <code>true</code> if the delta is empty.
    */
   boolean isEmpty() {
@@ -117,7 +116,8 @@ final class Delta {
   }
   
   @SuppressWarnings("javadoc")
-  private static interface IteratorFilter {
+  @FunctionalInterface
+  private interface IteratorFilter {
     int eval(int v);    
   }
   
