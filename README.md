@@ -51,6 +51,7 @@ Features:
 Maintenance:
 * Standard maintenance tasks (dependency updates, minor adjustments, etc) 
 	* [#51 - 1.2.0](https://github.com/JDBDT/jdbdt/issues/51)
+	* [#53 - 1.2.1](https://github.com/JDBDT/jdbdt/issues/53)
 
 ## 1.1.x
 
