@@ -41,6 +41,7 @@
       <item name="AppVeyor CI" href="https://ci.appveyor.com/project/edrdo/jdbdt"/>
       <item name="SonarCloud" href="https://sonarcloud.io/organizations/jdbdt/projects"/>
       <item name="Coverity" href="https://scan.coverity.com/projects/edrdo-jdbdt"/>
+      <item name="CodeFactor" href="https://www.codefactor.io/repository/github/jdbdt/jdbdt"/>
       <item name="Maven reports" href="project-info.html"/>
       <item name="Inception" href="Inception.html"/>
     </menu>
