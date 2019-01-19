@@ -26,12 +26,12 @@ package org.jdbdt;
 
 
 /**
- * Exception thrown by JDBDT due to an unexpected internal error.
+ * Exception thrown due to an unexpected internal error.
  * 
  * <p>
  * Exceptions of this kind should never happen in principle.
  * If they do, there is either likely a bug in JDBDT or 
- * abnormal conditions in the JVM environment.
+ * an abnormal condition in the JVM environment.
  * </p>
  * 
  * @since 1.0
