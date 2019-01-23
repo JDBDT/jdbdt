@@ -13,7 +13,7 @@ to check for the existence of database tables.
 ## Delta assertions 
 
 <a name="Delta_About"></a>
-### &delta; assertions ? What do you mean ?
+### &delta;-assertions ? What do you mean ?
 
 &delta;-assertions state the expected incremental changes made to the database,
 i.e., an expected database delta. The figure below illustrates the mechanism. 
