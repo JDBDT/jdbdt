@@ -158,6 +158,7 @@ public class IntegrationTest extends DBTestCase {
              .build(getDB());
     takeSnapshot(q, table);
     getDAO().doInsert(u);
+    commit(getDB());
     assertInserted(data(q).row(newUserLogin), 
                    data(table, getConversion()).row(u));
     assertTrue(changed(table));
