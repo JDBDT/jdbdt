@@ -158,12 +158,12 @@ JDBDT is available from [Maven Central](http://search.maven.org/#search%7Cga%7C1
 	<dependency>
 		<groupId>org.jdbdt</groupId>
         <artifactId>jdbdt</artifactId>
-        <version>1.2.3-SNAPSHOT</version>
+        <version>1.2.4-SNAPSHOT</version>
     </dependency>
 
 *Gradle setup*
 
-     compile 'org.jdbdt:jdbdt:1.2.3-SNAPSHOT'
+     compile 'org.jdbdt:jdbdt:1.2.4-SNAPSHOT'
 
 Setup instructions for other build systems are available [here](dependency-info.html) .
     
