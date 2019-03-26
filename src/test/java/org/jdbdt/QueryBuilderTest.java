@@ -265,4 +265,23 @@ public class QueryBuilderTest extends DBTestCase {
     DataSet actual = executeQuery(q);
     assertDataSet(expected, actual);
   }
+
+  @Test
+  public void testExecWithOrderByAndLimit() {
+    Query q =
+        select(UserDAO.COLUMNS)
+        .from(UserDAO.TABLE_NAME)
+        .orderBy("login")
+        .limit(2)
+        .build(getDB());
+    DataSet actual = executeQuery(q);
+    User[] sortedUsers = INITIAL_DATA.clone();
+    Arrays.sort(sortedUsers, 
+        (a,b) -> a.getLogin().compareTo(b.getLogin()));
+    DataSet expected = 
+        data(q, getConversion())
+        .rows(sortedUsers[0], sortedUsers[1]);
+    assertDataSet(expected, actual);
+    assertTrue(expected.sameDataAs(actual));
+  }
 }
