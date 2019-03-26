@@ -230,7 +230,7 @@ public final class QueryBuilder  {
    * Set LIMIT clause for query.
    * @param n Query limit.
    * @return The query builder instance for chained calls.
-   * @throws InvalidOperationException for an invalid LIMIT value (<= 0).
+   * @throws InvalidOperationException for an invalid LIMIT value (lower or equal than 0).
    */
   public final QueryBuilder limit(int n) {
     if ( n <= 0) {
