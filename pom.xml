@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>2.24.5</version>
+			<version>2.25.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -139,7 +139,7 @@
 		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
-			<version>3.25.2</version>
+			<version>3.27.2.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
