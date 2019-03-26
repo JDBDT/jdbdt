@@ -40,6 +40,7 @@ import static org.junit.Assert.*;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runners.MethodSorters;
 
 @SuppressWarnings("javadoc")
@@ -266,7 +267,7 @@ public class QueryBuilderTest extends DBTestCase {
     assertDataSet(expected, actual);
   }
 
-  @Test
+  @Test @Category(TestCategories.SupportForLimit.class)
   public void testExecWithOrderByAndLimit() {
     Query q =
         select(UserDAO.COLUMNS)

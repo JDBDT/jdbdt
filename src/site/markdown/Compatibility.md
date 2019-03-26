@@ -17,6 +17,12 @@ The JDBDT build currently tests integration with:
 <a name="KnownIssues"></a>
 ## Known issues
 
+<a name="KnownIssues_Derby"></a>
+### Derby
+
+Derby does not support `LIMIT` in association to SQL queries, hence
+`QueryBuilder.limit()` should not be used.
+
 <a name="KnownIssues_PostgreSQL"></a>
 ### PostgreSQL
 
@@ -58,3 +64,4 @@ A possible workaround is to issue a rollback statement before any further operat
 **Table truncation is not supported**
 
 [sqlite does not support `TRUNCATE` statements](https://www.sqlite.org/lang.html), so `JDBDT.truncate` will not work.
+

@@ -34,4 +34,6 @@ public interface TestCategories {
   interface StatementReuse { }
  
   interface CaseSensitive { }
+  
+  interface SupportForLimit { }
 }
