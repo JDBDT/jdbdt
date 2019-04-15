@@ -7,6 +7,8 @@
 [![Build status](https://api.travis-ci.org/JDBDT/jdbdt.png?branch=master)](https://travis-ci.org/JDBDT/jdbdt)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/647d281hp1b8py3p?svg=false)](https://ci.appveyor.com/project/edrdo/jdbdt)
 
+## About 
+
 JDBDT (Java DataBase Delta Testing) is an open-source Java library for 
 testing database applications. The library is designed for automation 
 of database setup and validation in test code. 
@@ -17,16 +19,64 @@ Compared to existing database testing frameworks, the main conceptual novelty
 is the possibility of using [&delta;-assertions](DBAssertions.html#DeltaAssertions). 
 For details, you may browse the reference documentation available in this site, along with the [Javadoc](apidocs/index.html?org/jdbdt/JDBDT.html) for the JDBDT API and the [JDBDT tutorial](Tutorial.html).
 
-In a nutshell, the main features are as follows:
+## Contribute
 
-* The core functionality is exposed by a simple [API facade](Facade.html).
+The code is hosted at [GitHub](https://github.com/JDBDT/jdbdt).
+Please use the [issue tracker](https://github.com/edrdo/JDBDT/issues)
+to report bugs or propose new features. For other issues e-mail
+`delta _at_ jdbdt.org`.
+
+## Installation 
+
+**Prerequisite:** JDBDT requires Java 8, it will not work 
+with earlier Java versions. 
+
+### Maven Central
+
+JDBDT is available from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cjdbdt).
+
+*Maven setup*
+
+	<dependency>
+		<groupId>org.jdbdt</groupId>
+        <artifactId>jdbdt</artifactId>
+        <version>1.2.4-SNAPSHOT</version>
+    </dependency>
+
+*Gradle setup*
+
+     compile 'org.jdbdt:jdbdt:1.2.4-SNAPSHOT'
+
+Setup instructions for other build systems are available [here](dependency-info.html) .
+    
+### GitHub
+
+JDBDT release artifacts are also available
+at [GitHub](https://github.com/JDBDT/jdbdt/releases).
+
+### Snapshot builds
+
+To compile and install the latest snapshot from scratch, use
+the following commands:
+
+	git clone git@github.com:JDBDT/jdbdt.git
+	cd jdbdt
+	mvn install 
+
+## Main features
+
+### API facade
+
+The core functionality is exposed by a simple [API facade](Facade.html).
 
 
     import static org.jdbdt.JDBDT.*;
 
 
-* [Tables and queries](DataSources.html) in association to a [database handle](DB.html) 
-can be used as data sources.   
+### Data sources
+
+[Tables and queries](DataSources.html) 
+can be used as data sources in association to a [database](DB.html).   
 
 
     DB db = database("jdbc:myFaveDBEngine://myDB");
@@ -43,8 +93,9 @@ can be used as data sources.
      .arguments(userId)
      .build(db);
 
+### Programmatic definition of data sets
 
-* [Data sets](DataSets.html) are defined programmatically,
+[Data sets](DataSets.html) are defined programmatically,
 without need to maintain external "data files", for instance using data set builders
 
 
@@ -62,8 +113,11 @@ without need to maintain external "data files", for instance using data set buil
       .generate(6) // 6 more rows keeping ID sequence and CREATED random filler
       .data();   
    
-      
-* [Setup methods](DBSetup.html) can be used to define database contents, 
+ 
+ 
+### Database setup      
+
+[Setup methods](DBSetup.html) can be used to define database contents, 
 for instance to populate tables, clear them, setting & restoring save points, ..., e.g.
 
 
@@ -81,8 +135,9 @@ for instance to populate tables, clear them, setting & restoring save points, ..
        populateIfChanged(initialData);
     }
 
+### &delta;-assertions
 
-* [&delta;-assertions](DBAssertions.html#DeltaAssertions) can be used to verify 
+[&delta;-assertions](DBAssertions.html#DeltaAssertions) can be used to verify 
 database changes incrementally, in addition to standard
 assertions for [database state](DBAssertions.html#StateAssertions) 
 or [data set comparison](DBAssertions.html#DataSetAssertions), e.g., 
@@ -105,8 +160,10 @@ or [data set comparison](DBAssertions.html#DataSetAssertions), e.g.,
 	  ... // standard assertions
 	  assertUnchanged(theTable); // no delta, query is really harmless!
     }
-    
-* Assertions and setup operations can be [logged onto (optionally compressed) XML files](Logs.html).
+
+### Logging    
+
+Assertions and setup operations can be [logged onto (optionally compressed) XML files](Logs.html).
 
 
 	<jdbdt-log-message time="..." version="...">
@@ -135,48 +192,3 @@ or [data set comparison](DBAssertions.html#DataSetAssertions), e.g.,
         </errors>
       </delta-assertion>
     </jdbdt-log-message>
-
-
-## Contribute
-
-The code is hosted at [GitHub](https://github.com/JDBDT/jdbdt).
-Please use the [issue tracker](https://github.com/edrdo/JDBDT/issues)
-to report bugs or propose new features. For other issues e-mail
-`delta _at_ jdbdt.org`.
-
-## Installation 
-
-**Prerequisite:** JDBDT requires Java 8, it will not work 
-with earlier Java versions. 
-
-**Maven Central**
-
-JDBDT is available from [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Cjdbdt).
-
-*Maven setup*
-
-	<dependency>
-		<groupId>org.jdbdt</groupId>
-        <artifactId>jdbdt</artifactId>
-        <version>1.2.4-SNAPSHOT</version>
-    </dependency>
-
-*Gradle setup*
-
-     compile 'org.jdbdt:jdbdt:1.2.4-SNAPSHOT'
-
-Setup instructions for other build systems are available [here](dependency-info.html) .
-    
-**GitHub**
-
-JDBDT release artifacts are also available
-at [GitHub](https://github.com/JDBDT/jdbdt/releases).
-
-**Snapshot builds**
-
-To compile and install the latest snapshot from scratch, use
-the following commands:
-
-	git clone git@github.com:JDBDT/jdbdt.git
-	cd jdbdt
-	mvn install 
