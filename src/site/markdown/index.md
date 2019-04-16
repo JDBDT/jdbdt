@@ -63,7 +63,7 @@ the following commands:
 	cd jdbdt
 	mvn install 
 
-## Main features
+## Main features in a nutshell
 
 ### API facade
 
@@ -96,7 +96,8 @@ can be used as data sources in association to a [database](DB.html).
 ### Programmatic definition of data sets
 
 [Data sets](DataSets.html) are defined programmatically,
-without need to maintain external "data files", for instance using data set builders
+without need to maintain external "data files",
+for instance using data set builders.
 
 
     DataSet data = 
@@ -118,10 +119,10 @@ without need to maintain external "data files", for instance using data set buil
 ### Database setup      
 
 [Setup methods](DBSetup.html) can be used to define database contents, 
-for instance to populate tables, clear them, setting & restoring save points, ..., e.g.
+for instance to populate tables, clear them, setting & restoring save points, ...
 
 
-    static Table theTable ;
+    static Table theTable;
     static DataSet theinitialStata; 
     
     @BeforeClass
@@ -140,7 +141,7 @@ for instance to populate tables, clear them, setting & restoring save points, ..
 [&delta;-assertions](DBAssertions.html#DeltaAssertions) can be used to verify 
 database changes incrementally, in addition to standard
 assertions for [database state](DBAssertions.html#StateAssertions) 
-or [data set comparison](DBAssertions.html#DataSetAssertions), e.g., 
+or [data set comparison](DBAssertions.html#DataSetAssertions). 
 
    
     @Test
