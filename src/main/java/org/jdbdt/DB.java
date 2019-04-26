@@ -300,6 +300,60 @@ public final class DB {
   }
 
   /**
+   * Set auto-commit mode for the underlying database connection.
+   *
+   * <p>
+   * A call to this method is equivalent to <code>getConnection().setAutoCommit(enable)</code>.
+   * with the sole difference than any thrown {@link java.sql.SQLException} 
+   * (a checked exception) is "wrapped" a
+   * {@link DBExecutionException} (an unchecked exception).
+   * </p>
+   *
+   * @param enable Enable/disable auto-commit setting.
+   * @throws DBExecutionException if a database exception occurs.
+   * 
+   * @see #getAutoCommit()
+   * @see java.sql.Connection#getAutoCommit()
+   * @see java.sql.Connection#setAutoCommit(boolean)
+   * @since 1.3
+   */
+  public void setAutoCommit(boolean enable) throws DBExecutionException {
+    try {
+      getConnection().setAutoCommit(enable);
+    } 
+    catch (SQLException e) {
+      throw new DBExecutionException(e);
+    }
+  }
+
+  /**
+   * Get auto-commit mode for the underlying database connection. 
+   *
+   * <p>
+   * A call to this method is equivalent to <code>getConnection().getAutoCommit()</code>.
+   * with the sole difference than any thrown {@link java.sql.SQLException} 
+   * (a checked exception) is "wrapped" a
+   * {@link DBExecutionException} (an unchecked exception).
+   * </p>
+   *
+   * @return Auto-commit mode for the database connection.
+   * @throws DBExecutionException if a database exception occurs.
+   * 
+   * @see #setAutoCommit(boolean)
+   * @see java.sql.Connection#getAutoCommit()
+   * @see java.sql.Connection#setAutoCommit(boolean)
+   * @since 1.3
+   */
+  public boolean getAutoCommit() throws DBExecutionException {
+    try {
+      return getConnection().getAutoCommit();
+    } 
+    catch (SQLException e) {
+      throw new DBExecutionException(e);
+    }
+  }
+
+  /**
    * Compile a SQL statement.
    * @param sql SQL code.
    * @return Wrapper for prepared statement.
@@ -335,7 +389,7 @@ public final class DB {
       }
       logSetup(callInfo);
       clearSavePointIfSet();
-      if (connection.getAutoCommit()) {
+      if (getAutoCommit()) {
         throw new InvalidOperationException("Auto-commit is set for database connection.");
       }      
       savepoint = connection.setSavepoint();
@@ -568,9 +622,4 @@ public final class DB {
       // Do nothing.
     }
   }
-
-
-
-
-
 }

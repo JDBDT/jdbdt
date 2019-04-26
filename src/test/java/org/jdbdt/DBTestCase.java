@@ -25,7 +25,6 @@
 package org.jdbdt;
 
 import java.io.File;
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 
@@ -78,9 +77,8 @@ public class DBTestCase {
     DBConfig cfg = DBConfig.getConfig();
     Class.forName(cfg.getDriver());
     gDB = JDBDT.database(cfg.getURL());
-    Connection c = gDB.getConnection();
-    c.setAutoCommit(true);
-    gDAO = new UserDAO(c);
+    gDB.setAutoCommit(true);
+    gDAO = new UserDAO(gDB.getConnection());
     gConversion = cfg.isDateSupported() ? STD_CONVERSION : ALT_CONVERSION;
     if (!cfg.reuseStatements()) {
       gDB.disable(DB.Option.REUSE_STATEMENTS);

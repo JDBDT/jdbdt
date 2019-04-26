@@ -138,3 +138,5 @@ password.
 - `setLog(out)` redirects log output to `out`, a `java.io.File` or `java.io.PrintStream`.
 - `setMaximumBatchUpdateSize(n)` sets `n` as the maximum number of operations in a batch update.
 - `getMaximumBatchUpdateSize()` gets the current setting for the maximum number of operations in a batch update.
+- `setAutoCommit(enable)` enables/disables the auto-commit mode for the underlying database connection.
+- `getAutoCommit()` gets the auto-commit mode for the underlying database connection.
