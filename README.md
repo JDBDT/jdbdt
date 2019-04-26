@@ -53,6 +53,7 @@ Maintenance:
 	* [#53 - 1.2.1](https://github.com/JDBDT/jdbdt/issues/53)
 	* [#54 - 1.2.2](https://github.com/JDBDT/jdbdt/issues/54)
 	* [#55 - 1.2.3](https://github.com/JDBDT/jdbdt/issues/55)
+	* [#59 - 1.2.4](https://github.com/JDBDT/jdbdt/issues/59)
 
 ## 1.1.x
 
