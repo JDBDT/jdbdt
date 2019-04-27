@@ -44,7 +44,8 @@ import org.junit.runners.Suite.SuiteClasses;
   DataSetBuilderCoreTest.class,
   DataSetBuilderCoreFillerTest.class,
   IntegrationTest.class,
-  CaseSensitivityTest.class
+  CaseSensitivityTest.class,
+  CSVTest.class
 })
 public class DBEngineTestSuite {
 }

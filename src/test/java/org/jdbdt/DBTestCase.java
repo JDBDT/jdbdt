@@ -127,16 +127,16 @@ public class DBTestCase {
       new User("linus", "Linus Torvalds", "linux", Date.valueOf("2015-01-01")),
       new User("steve", "Steve Jobs", "macos", Date.valueOf("2015-12-31")),
       new User("bill", "Bill Gates", "windows", Date.valueOf("2015-09-12")),
-      new User("alanis", "Alanis ", "xyz", Date.valueOf("2015-01-01")),
-      new User("blanis", "Blanis ", "xyz", Date.valueOf("2015-01-02")),
-      new User("clanis", "Clanis ", "xyz", Date.valueOf("2015-01-03")),
-      new User("dlanis", "Dlanis ", "xyz", Date.valueOf("2015-01-04")),
-      new User("elanis", "Elanis ", "xyz", Date.valueOf("2015-01-05")),
-      new User("flanis", "Flanis ", "xyz", Date.valueOf("2015-01-06")),
-      new User("glanis", "Glanis ", "xyz", Date.valueOf("2015-01-07")),
-      new User("hlanis", "Hlanis ", "xyz", Date.valueOf("2015-01-08")),
-      new User("ilanis", "Ilanis ", "xyz", Date.valueOf("2015-01-09")),
-      new User("jlanis", "Jlanis ", "xyz", Date.valueOf("2015-01-10"))
+      new User("alanis", "Alanis", "xyz", Date.valueOf("2015-01-01")),
+      new User("blanis", "Blanis", "xyz", Date.valueOf("2015-01-02")),
+      new User("clanis", "Clanis", "xyz", Date.valueOf("2015-01-03")),
+      new User("dlanis", "Dlanis", "xyz", null),
+      new User("elanis", "Elanis", "xyz", Date.valueOf("2015-01-05")),
+      new User("flanis", "Flanis", "xyz", Date.valueOf("2015-01-06")),
+      new User("glanis", "Glanis", "xyz", Date.valueOf("2015-01-07")),
+      new User("hlanis", "Hlanis", "xyz", Date.valueOf("2015-01-08")),
+      new User("ilanis", "Ilanis", "xyz", Date.valueOf("2015-01-09")),
+      new User("jlanis", "Jlanis", "xyz", null)
   };
 
   protected static final String EXISTING_DATA_ID1 =

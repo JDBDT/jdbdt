@@ -36,4 +36,6 @@ public interface TestCategories {
   interface CaseSensitive { }
   
   interface SupportForLimit { }
+  
+  interface CSVSupport { }
 }

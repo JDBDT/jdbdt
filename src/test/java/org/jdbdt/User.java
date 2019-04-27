@@ -86,7 +86,7 @@ public final class User implements Cloneable {
     return login.equals(other.login)
         && name.equals(other.name)
         && password.equals(other.password)
-        && created.equals(other.created);
+        && ((created == null && other.created == null) || created.equals(other.created));
   }
   
   @Override

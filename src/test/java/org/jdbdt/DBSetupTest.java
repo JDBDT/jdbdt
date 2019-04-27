@@ -165,7 +165,7 @@ public class DBSetupTest extends DBTestCase {
   private void testDataSetUpdate() throws SQLException {
     User[] users = INITIAL_DATA.clone();    
     for (int i = 0; i < users.length; i++) {
-      User u = users[i];
+      User u = users[i].clone();
       u.setPassword("p#" + i);
       u.setName("u#" + i);
       u.setCreated(Date.valueOf(String.format("2017-12-%02d", i+1)));
