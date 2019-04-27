@@ -62,10 +62,7 @@ public final class CSV {
      */
     CR_LF("\r\n");
     
-    
-    /**
-     * Line separator string.
-     */
+    /** Line separator string. */
     private final String separator;
     
     /**
@@ -209,7 +206,6 @@ public final class CSV {
         if (commentSeqDefined && line.startsWith(format.lineCommentSequence)) {
           continue;
         }
-
         String[] values = line.split(format.separator, columnCount);
         if (values.length != columnCount) {
           throw new IOException("Invalid number of values at line " + lineCount + ".");
@@ -246,20 +242,16 @@ public final class CSV {
   public static void 
   write(DataSet dataSet, Format format, File file) throws IOException {
     try(BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
-      
       final DataSource source = dataSet.getSource();
       final int colCount = source.getColumnCount(); 
       final String eol = format.lineSeparator.separator();
-      
       format = format.clone();
-      
       if (format.lineCommentSequence.length() > 0) {
         out.write(format.lineCommentSequence);
         out.write(" CSV data file generated using JDBDT ");
         out.write(VersionInfo.ID); 
         out.write(eol);
       }
-      
       if (format.header) {
         out.write(source.getColumnName(0));
         for (int i = 1; i < colCount; i++) {
@@ -268,7 +260,6 @@ public final class CSV {
         }
         out.write(eol);
       }
-
       for (Row r : dataSet.getRows()) {
         Object[] values = r.data();
         writeValue(out, format, values[0]);
@@ -286,8 +277,4 @@ public final class CSV {
   writeValue(BufferedWriter out, Format format, Object value) throws IOException {
     out.write(value == null ? format.nullValue : value.toString());
   }
-  
-  
 }
-
-
