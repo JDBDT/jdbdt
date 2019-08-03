@@ -96,6 +96,8 @@ public final class CSV {
     private boolean header = false;
     /** Null value string. */
     private String nullValue = "";
+    /** Read conversions flag. */
+    private boolean useReadConversions = false;
  
     /** Constructor. Default values will be set. */
     public Format() { }
@@ -156,6 +158,17 @@ public final class CSV {
       header = true;
       return this;
     }
+    
+    /**
+     * Indicates that type conversions should be used in 
+     * conjunction with {@link CSV#read(DataSource, Format, File)}.
+     * 
+     * @return The object instance (to facilitate chained calls).
+     */
+    public Format useReadConversions() {
+      useReadConversions = true;
+      return this;
+    }
 
     @Override
     public Format clone() {
@@ -199,6 +212,8 @@ public final class CSV {
       }
       final DataSet dataSet = new DataSet(source);
       final int columnCount = source.getColumnCount();
+      final MetaData md = source.getMetaData();
+      
       final boolean commentSeqDefined = format.lineCommentSequence.length() > 0;
       String line;
       while ((line = in.readLine()) != null) {
@@ -212,19 +227,26 @@ public final class CSV {
         }
         Object[] data = new Object[columnCount];
         for (int i = 0; i < columnCount; i++) {
-          data[i] = parseValue(format, values[i]);
+          String s = values[i];
+          Object o;
+          if (s.equals(format.nullValue)) {
+            o = null; 
+          }
+          else if (format.useReadConversions) {
+            o = CSVInputConversion.INSTANCE.convert(md.getType(i), s);
+          } 
+          else {
+            o = values[i];
+          }
+          data[i] = o;
         }
+       
         dataSet.addRow(new Row(data));
       }
       return dataSet;
     }
   }
 
-  @SuppressWarnings("javadoc")
-  private static String 
-  parseValue(Format format, String value) {
-    return value.equals(format.nullValue) ? null : value;
-  }
 
   /**
    * Write data set to CSV file.
@@ -277,4 +299,6 @@ public final class CSV {
   writeValue(BufferedWriter out, Format format, Object value) throws IOException {
     out.write(value == null ? format.nullValue : value.toString());
   }
+  
+  
 }

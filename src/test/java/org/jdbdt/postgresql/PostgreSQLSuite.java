@@ -37,7 +37,7 @@ import org.junit.runner.RunWith;
 @RunWith(Categories.class)
 @ExcludeCategory({
   TestCategories.CaseSensitive.class,
-  TestCategories.CSVSupport.class
+  //TestCategories.CSVSupport.class
 })
 public class PostgreSQLSuite extends DBEngineTestSuite {
 
