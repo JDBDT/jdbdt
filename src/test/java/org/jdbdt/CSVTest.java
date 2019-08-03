@@ -61,10 +61,10 @@ public class CSVTest extends DBTestCase {
     format.useReadConversions();
     testCounter++;
     CSV.write(initialDataSet, format, f);
-    dump(initialDataSet, System.out);
+    //dump(initialDataSet, System.out);
     getDAO().doDeleteAll();
     DataSet readDataSet = CSV.read(table, format, f); 
-    dump(readDataSet, System.out);
+    //dump(readDataSet, System.out);
     insert(readDataSet);
     DataSet dataSetInDB = executeQuery(table); 
     assertEquals(initialDataSet, dataSetInDB);
