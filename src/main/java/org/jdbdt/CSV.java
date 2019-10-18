@@ -118,7 +118,7 @@ public final class CSV {
      * Set line comment sequence.
      * Lines starting with the specified sequence will be ignored.
      * By default no comment sequence is set.
-     * @param s Line comment sequence .
+     * @param s Line comment sequence.
      * @return The object instance (to facilitate chained calls).
      */
     public Format lineComment(String s) {
