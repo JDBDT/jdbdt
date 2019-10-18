@@ -142,11 +142,15 @@ enum CSVInputConversion  {
 
     // DECIMAL
     init(JDBCType.DECIMAL, BigDecimal.class);
-    init(JDBCType.DECIMAL, String.class, s -> new BigDecimal(Double.parseDouble(s)));
+    init(JDBCType.DECIMAL, Double.class, BigDecimal::valueOf);
+    init(JDBCType.DECIMAL, Long.class, BigDecimal::valueOf);
+    init(JDBCType.DECIMAL, String.class, s -> BigDecimal.valueOf(Double.parseDouble(s)));
 
     // NUMERIC
     init(JDBCType.NUMERIC, BigDecimal.class);
-    init(JDBCType.NUMERIC, String.class, s -> new BigDecimal(Double.parseDouble(s)));
+    init(JDBCType.NUMERIC, Double.class, BigDecimal::valueOf);
+    init(JDBCType.NUMERIC, Long.class, BigDecimal::valueOf);
+    init(JDBCType.NUMERIC, String.class, s -> BigDecimal.valueOf(Double.parseDouble(s)));
 
     // DATE
     init(JDBCType.DATE, java.sql.Date.class);
