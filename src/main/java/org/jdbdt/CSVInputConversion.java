@@ -140,10 +140,11 @@ enum CSVInputConversion  {
     init(JDBCType.DOUBLE, Number.class, Number::doubleValue);
     init(JDBCType.DOUBLE, String.class, Double::parseDouble);
 
-    // DECIMAL, NUMERIC
+    // DECIMAL
     init(JDBCType.DECIMAL, BigDecimal.class);
     init(JDBCType.DECIMAL, String.class, s -> new BigDecimal(Double.parseDouble(s)));
 
+    // NUMERIC
     init(JDBCType.NUMERIC, BigDecimal.class);
     init(JDBCType.NUMERIC, String.class, s -> new BigDecimal(Double.parseDouble(s)));
 
