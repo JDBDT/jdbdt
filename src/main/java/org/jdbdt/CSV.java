@@ -37,6 +37,8 @@ import java.io.IOException;
  */
 public final class CSV {
 
+
+
   /**
    * Line separator setting.
    * @see Format#lineSeparator(LineSeparator)
@@ -61,10 +63,10 @@ public final class CSV {
      * Carriage return and line feed (<code>\r\n</code>).
      */
     CR_LF("\r\n");
-    
+
     /** Line separator string. */
     private final String separator;
-    
+
     /**
      * Constructor.
      * @param separator Separator.
@@ -72,7 +74,7 @@ public final class CSV {
     LineSeparator(String separator) {
       this.separator = separator; 
     }
-    
+
     /**
      * Get separator.
      * @return The line separator string.
@@ -81,7 +83,7 @@ public final class CSV {
       return separator;
     }
   }
-  
+
   /**
    * CSV format specification.
    */
@@ -98,7 +100,7 @@ public final class CSV {
     private String nullValue = "";
     /** Read conversions flag. */
     private boolean useReadConversions = false;
- 
+
     /** Constructor. Default values will be set. */
     public Format() { }
 
@@ -126,7 +128,7 @@ public final class CSV {
       lineCommentSequence = s;
       return this;
     }
-    
+
     /**
      * Set line separator.
      * By default, the line separator is {@link LineSeparator#SYSTEM_DEFAULT}. 
@@ -137,7 +139,7 @@ public final class CSV {
       lineSeparator = ls;
       return this;
     }
-    
+
     /**
      * Set string for representing NULL values. 
      * By default the empty string is used for NULL values.
@@ -158,7 +160,7 @@ public final class CSV {
       header = true;
       return this;
     }
-    
+
     /**
      * Indicates that type conversions should be used in 
      * conjunction with {@link CSV#read(DataSource, Format, File)}.
@@ -178,7 +180,7 @@ public final class CSV {
         throw new InternalErrorException(e);
       }
     }
-    
+
     @SuppressWarnings("javadoc")
     private void validateSequence(String s) {
       if (s == null || s.length() == 0) {
@@ -186,7 +188,7 @@ public final class CSV {
       }   
     }
   }
-  
+
   /**
    * Read data set from CSV file.
    * 
@@ -213,7 +215,7 @@ public final class CSV {
       final DataSet dataSet = new DataSet(source);
       final int columnCount = source.getColumnCount();
       final MetaData md = source.getMetaData();
-      
+
       final boolean commentSeqDefined = format.lineCommentSequence.length() > 0;
       String line;
       while ((line = in.readLine()) != null) {
@@ -240,7 +242,7 @@ public final class CSV {
           }
           data[i] = o;
         }
-       
+
         dataSet.addRow(new Row(data));
       }
       return dataSet;
@@ -293,12 +295,29 @@ public final class CSV {
       }
     }
   }
-  
+
   @SuppressWarnings("javadoc")
   private static void 
   writeValue(BufferedWriter out, Format format, Object value) throws IOException {
     out.write(value == null ? format.nullValue : value.toString());
   }
-  
-  
+
+  /**
+   * Exception thrown during CSV input conversion.
+   */
+  public static class InvalidConversionException extends JDBDTRuntimeException {
+    /**
+     * Constructor.
+     * @param message Message.
+     * @param cause Original cause of exception.
+     */
+    public InvalidConversionException(String message, Throwable cause) {
+      super(message, cause);
+    }
+
+    @SuppressWarnings("javadoc")
+    private static final long serialVersionUID = 1L;
+
+  }
+
 }

@@ -71,14 +71,17 @@ enum CSVInputConversion  {
           if (conv.func == null) {
             break;
           }
-          else {
-            try {
-              o = ((Function<Object,Object>) conv.func).apply(o);
-              break;
+          try {
+            o = ((Function<Object,Object>) conv.func).apply(o);
+            break;
+          }
+          catch(IllegalArgumentException e) {
+            if (javaClass != String.class) {
+              throw new CSV.InvalidConversionException(javaClass.getCanonicalName(), e);
             }
-            catch(RuntimeException e) {
-
-            }
+          }
+          catch(RuntimeException e) {
+            throw new CSV.InvalidConversionException(javaClass.getCanonicalName(), e);
           }
         }
       }
