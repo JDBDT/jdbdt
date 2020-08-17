@@ -75,6 +75,8 @@ public class CSVTest extends DBTestCase {
     performTest(new CSV.Format());
   }
   
+
+  
   @Test
   public void test2() throws IOException, SQLException {
     performTest(new CSV.Format().hasHeader());
@@ -121,4 +123,9 @@ public class CSVTest extends DBTestCase {
     performTest(new CSV.Format().lineSeparator(LineSeparator.CR_LF));
   }
 
+  @Test
+  public void test11() throws IOException, SQLException {
+    performTest(new CSV.Format().useReadConversions());
+  }
+  
 }

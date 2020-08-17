@@ -37,8 +37,6 @@ import java.io.IOException;
  */
 public final class CSV {
 
-
-
   /**
    * Line separator setting.
    * @see Format#lineSeparator(LineSeparator)
@@ -162,7 +160,7 @@ public final class CSV {
     }
 
     /**
-     * Indicates that type conversions should be used in 
+     * Indicates that string conversions should be used in 
      * conjunction with {@link CSV#read(DataSource, Format, File)}.
      * 
      * @return The object instance (to facilitate chained calls).
@@ -238,7 +236,7 @@ public final class CSV {
             o = CSVInputConversion.INSTANCE.convert(md.getType(i), s);
           } 
           else {
-            o = values[i];
+            o = s;
           }
           data[i] = o;
         }
