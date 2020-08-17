@@ -65,3 +65,6 @@ A possible workaround is to issue a rollback statement before any further operat
 
 [sqlite does not support `TRUNCATE` statements](https://www.sqlite.org/lang.html), so `JDBDT.truncate` will not work.
 
+** LIMIT clause not supported **
+
+Derby does not support `LIMIT`, so `QueryBuilder.limit()` will not work.
