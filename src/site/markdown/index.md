@@ -96,7 +96,7 @@ can be used as data sources in association to a [database](DB.html).
 ### Programmatic definition of data sets
 
 [Data sets](DataSets.html) are defined programmatically, for instance using data set builders,
-without need to maintain external "data files".
+without need to maintain external "data files". Data sets can also be read from CSV files anyway if convenient. 
 
 
     DataSet data = 

@@ -137,8 +137,35 @@ set.
 A data set is marked read-only when defined as a [database snapshot](DBAssertions.html#Snapshots).
 Any attempt to modify it subsequently will cause an `InvalidOperationException`.
 
-<a name="SummaryOfMethods"></a>
 
+
+
+<a name="CSV"></a>
+## Importing / exporting data sets from/to CSV format
+
+Data sets can be imported / exported from/to CSV format. 
+
+*Illustration*
+
+    import static org.jdbdt.JDBDT.*;
+    import org.jdbdt.CSV;
+    import org.jdbdt.DB;
+    import org.jdbdt.Table;
+    import org.jdbdt.DataSet;
+    ...
+	DB db = ...;
+	Table table = table("USERS")
+	             .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED")
+	             .build(db);
+	CSV.Format format = new CSV.Format()
+	                   .separator(",")
+	                   .nullValue("NULL")
+	                   .useReadConversions();
+	DataSet ds = read(table, format, new File("mydata.csv") 
+	...
+	write(dataset, format, new File("mydata2.csv));
+     
+<a name="SummaryOfMethods"></a>
 ## Summary of API methods
 
 ### `JDBDT`
@@ -149,6 +176,11 @@ Object creation - for a [data source](DataSources.html) `s`:
 - `data(s, c)` creates a new typed data set with conversion function `c`.
 - `builder(s)` creates a data set builder with an underlying fresh data set.
 - `empty(s)` returns an empty & read-only data set that is unique for `s`. 
+
+CSV:
+
+- `read(s,f,inp)`: reads a data set for data source `s` with CSV format `f` from file `inp`.
+- `write(ds,f,out)`: writes data set `ds` using CSV format `f` onto file `out`.
 
 Debugging:
 
