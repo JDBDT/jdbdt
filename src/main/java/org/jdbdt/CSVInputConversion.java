@@ -52,27 +52,27 @@ enum CSVInputConversion  {
   /**
    * Convert string.
    * @param type JDBC type.
-   * @param s Input.
+   * @param text Input.
    * @return Converted object or <code>o</code> if no conversion is either possible or required. 
    */
-  public Object convert(JDBCType type, String s) {
+  public Object convert(JDBCType type, String text) {
     LinkedList<StringConversion> list = dataConv.get(type);
-    Object o = s;
+    Object object = text;
     if (list != null) {
       for (StringConversion conv : list) {
         try {
-          o = conv.convert(s);
+          object = conv.convert(text);
           break;
         }
         catch(IllegalArgumentException e) {
           // ignore deliberately
         }
         catch(RuntimeException e) {
-          throw new CSV.InvalidConversionException(s, e);
+          throw new InvalidCSVConversionException(text, e);
         }
       }
     }
-    return o;
+    return object;
   }
 
 
@@ -125,10 +125,6 @@ enum CSVInputConversion  {
     // TIMESTAMP
     init(JDBCType.TIMESTAMP, java.sql.Timestamp.class, java.sql.Timestamp::valueOf);
 
-//    // VARCHAR, LONGNVARCHAR, CHAR
-//    init(JDBCType.LONGNVARCHAR, String.class, s -> s);
-//    init(JDBCType.VARCHAR, String.class, s -> s);
-//    init(JDBCType.CHAR, String.class, s -> s);
   }
 }
 

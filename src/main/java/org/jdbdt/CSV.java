@@ -199,10 +199,10 @@ public final class CSV {
    * @param format CSV format specification.
    * @param file File.
    * @return Data set read from file.
-   * @throws IOException if an I/O error occurs.
+   * @throws InputOutputException if an I/O error occurs.
    */
-  public static DataSet 
-  read(DataSource source, Format format, File file) throws IOException {
+  static DataSet 
+  read(DataSource source, Format format, File file) throws InputOutputException {
     try(BufferedReader in = new BufferedReader(new FileReader(file))) {
       int lineCount = 1;
       format = format.clone();
@@ -223,7 +223,7 @@ public final class CSV {
         }
         String[] values = line.split(format.separator, columnCount);
         if (values.length != columnCount) {
-          throw new IOException("Invalid number of values at line " + lineCount + ".");
+          throw new InvalidCSVConversionException("Invalid number of values at line " + lineCount + ".");
         }
         Object[] data = new Object[columnCount];
         for (int i = 0; i < columnCount; i++) {
@@ -245,6 +245,9 @@ public final class CSV {
       }
       return dataSet;
     }
+    catch (IOException e) {
+      throw new InputOutputException(e);
+    }
   }
 
 
@@ -259,10 +262,10 @@ public final class CSV {
    * @param dataSet Data set.
    * @param format CSV format specification.
    * @param file Output file.
-   * @throws IOException if an I/O error occurs.
+   * @throws InputOutputException if an I/O error occurs.
    */
-  public static void 
-  write(DataSet dataSet, Format format, File file) throws IOException {
+  static void 
+  write(DataSet dataSet, Format format, File file) throws InputOutputException {
     try(BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
       final DataSource source = dataSet.getSource();
       final int colCount = source.getColumnCount(); 
@@ -292,6 +295,9 @@ public final class CSV {
         out.write(eol);
       }
     }
+    catch (IOException e) {
+      throw new InputOutputException(e);
+    }
   }
 
   @SuppressWarnings("javadoc")
@@ -300,22 +306,11 @@ public final class CSV {
     out.write(value == null ? format.nullValue : value.toString());
   }
 
+
   /**
-   * Exception thrown during CSV input conversion.
+   * Private constructor to prevent instantiation.
    */
-  public static class InvalidConversionException extends JDBDTRuntimeException {
-    /**
-     * Constructor.
-     * @param message Message.
-     * @param cause Original cause of exception.
-     */
-    public InvalidConversionException(String message, Throwable cause) {
-      super(message, cause);
-    }
-
-    @SuppressWarnings("javadoc")
-    private static final long serialVersionUID = 1L;
-
+  private CSV() {
+    
   }
-
 }
