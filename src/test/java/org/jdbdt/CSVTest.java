@@ -60,10 +60,10 @@ public class CSVTest extends DBTestCase {
     File f = new File("data_" + DBTestCase.gTestSuiteCounter  + "-" + testCounter + ".csv");
     format.useReadConversions();
     testCounter++;
-    CSV.write(initialDataSet, format, f);
+    JDBDT.write(initialDataSet, format, f);
     //dump(initialDataSet, System.out);
     getDAO().doDeleteAll();
-    DataSet readDataSet = CSV.read(table, format, f); 
+    DataSet readDataSet = JDBDT.read(table, format, f); 
     //dump(readDataSet, System.out);
     insert(readDataSet);
     DataSet dataSetInDB = executeQuery(table); 

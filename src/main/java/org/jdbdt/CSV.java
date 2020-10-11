@@ -29,6 +29,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.JDBCType;
+import java.util.IdentityHashMap;
+import java.util.LinkedList;
+import java.util.function.Function;
+
 
 /**
  * Support for reading/writing data sets from/to CSV format.
@@ -161,7 +167,7 @@ public final class CSV {
 
     /**
      * Indicates that string conversions should be used in 
-     * conjunction with {@link CSV#read(DataSource, Format, File)}.
+     * conjunction with {@link JDBDT#read(DataSource, Format, File)}.
      * 
      * @return The object instance (to facilitate chained calls).
      */
@@ -195,6 +201,7 @@ public final class CSV {
    * first line is skipped.
    * </p>
    * 
+   * @param callInfo Call info.
    * @param source Data source.
    * @param format CSV format specification.
    * @param file File.
@@ -202,7 +209,7 @@ public final class CSV {
    * @throws InputOutputException if an I/O error occurs.
    */
   static DataSet 
-  read(DataSource source, Format format, File file) throws InputOutputException {
+  read(CallInfo callInfo, DataSource source, Format format, File file) throws InputOutputException {
     try(BufferedReader in = new BufferedReader(new FileReader(file))) {
       int lineCount = 1;
       format = format.clone();
@@ -227,22 +234,22 @@ public final class CSV {
         }
         Object[] data = new Object[columnCount];
         for (int i = 0; i < columnCount; i++) {
-          String s = values[i];
-          Object o;
-          if (s.equals(format.nullValue)) {
-            o = null; 
+          String text = values[i];
+          Object object;
+          if (text.equals(format.nullValue)) {
+            object = null; 
           }
           else if (format.useReadConversions) {
-            o = CSVInputConversion.INSTANCE.convert(md.getType(i), s);
+            object = Conversions.INSTANCE.convert(md.getType(i), text);
           } 
           else {
-            o = s;
+            object = text;
           }
-          data[i] = o;
+          data[i] = object;
         }
-
         dataSet.addRow(new Row(data));
       }
+      source.getDB().logDataSetOperation(callInfo, dataSet);
       return dataSet;
     }
     catch (IOException e) {
@@ -259,13 +266,14 @@ public final class CSV {
    * names will be written in the first line of the output file.
    * </p>
    * 
+   * @param callInfo callInfo
    * @param dataSet Data set.
    * @param format CSV format specification.
    * @param file Output file.
    * @throws InputOutputException if an I/O error occurs.
    */
   static void 
-  write(DataSet dataSet, Format format, File file) throws InputOutputException {
+  write(CallInfo callInfo, DataSet dataSet, Format format, File file) throws InputOutputException {
     try(BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
       final DataSource source = dataSet.getSource();
       final int colCount = source.getColumnCount(); 
@@ -298,8 +306,129 @@ public final class CSV {
     catch (IOException e) {
       throw new InputOutputException(e);
     }
+    dataSet.getSource().getDB().logDataSetOperation(callInfo, dataSet);
   }
 
+  /**
+   * CSV input conversion helper class.
+   */
+  private enum Conversions  {
+
+    /** Singleton instance */
+    INSTANCE;
+
+    /**
+     * Functional interface for string conversion.
+     */
+    @FunctionalInterface
+    private interface StringConversion {
+      /**
+       * Convert a string onto an object.
+       * @param s String.
+       * @return An object.
+       * @throws IllegalArgumentException If the string format is invalid.
+       */
+      Object convert(String s) throws IllegalArgumentException;
+    }
+    
+
+
+    @SuppressWarnings("javadoc")
+    private final IdentityHashMap<JDBCType, LinkedList<StringConversion>> dataConv 
+    =  new IdentityHashMap<>();
+
+
+
+    @SuppressWarnings("javadoc")
+    private <T> void init(JDBCType type, Class<T> javaClass, Function<String,T> func) {
+      LinkedList<StringConversion> list = dataConv.get(type);
+      if (list == null) {
+        list = new LinkedList<>();
+        dataConv.put(type, list);
+      }
+      list.addLast(s -> func.apply(s));
+    }
+
+    /**
+     * Convert string.
+     * @param type JDBC type.
+     * @param text Input.
+     * @return Converted object or <code>o</code> if no conversion is either possible or required. 
+     */
+    public Object convert(JDBCType type, String text) {
+      LinkedList<StringConversion> list = dataConv.get(type);
+      Object object = text;
+      if (list != null) {
+        for (StringConversion conv : list) {
+          try {
+            object = conv.convert(text);
+            break;
+          }
+          catch(IllegalArgumentException e) {
+            // ignore deliberately
+          }
+          catch(RuntimeException e) {
+            throw new InvalidCSVConversionException(text, e);
+          }
+        }
+      }
+      return object;
+    }
+
+
+    /**
+     * Constructor.
+     */
+    Conversions() {
+
+      // BOOLEAN
+      init(JDBCType.BOOLEAN, Boolean.class, s -> Integer.parseInt(s) != 0);
+      init(JDBCType.BOOLEAN, Boolean.class, Boolean::parseBoolean);
+
+      // BIT
+      init(JDBCType.BIT, Boolean.class, s -> Integer.parseInt(s) != 0);
+      init(JDBCType.BIT, Boolean.class, Boolean::parseBoolean);
+
+      // TINYINT
+      init(JDBCType.TINYINT, Byte.class, Byte::parseByte);
+
+      // SMALLINT
+      init(JDBCType.SMALLINT, Short.class, Short::parseShort);
+
+      // INTEGER
+      init(JDBCType.INTEGER, Integer.class, Integer::parseInt);
+
+      // BIGINT
+      init(JDBCType.BIGINT, Long.class, Long::parseLong);
+
+      // REAL
+      init(JDBCType.REAL, Float.class, Float::parseFloat);
+
+      // FLOAT
+      init(JDBCType.FLOAT, Double.class, Double::parseDouble);
+
+      // DOUBLE
+      init(JDBCType.DOUBLE, Double.class, Double::parseDouble);
+
+      // DECIMAL
+      init(JDBCType.DECIMAL, BigDecimal.class, s -> BigDecimal.valueOf(Double.parseDouble(s)));
+
+      // NUMERIC
+      init(JDBCType.NUMERIC, BigDecimal.class, s -> BigDecimal.valueOf(Double.parseDouble(s)));
+
+      // DATE
+      init(JDBCType.DATE, java.sql.Date.class, java.sql.Date::valueOf);
+
+      // TIME
+      init(JDBCType.TIME, java.sql.Time.class, java.sql.Time::valueOf);
+
+      // TIMESTAMP
+      init(JDBCType.TIMESTAMP, java.sql.Timestamp.class, java.sql.Timestamp::valueOf);
+
+    }
+  }
+
+  
   @SuppressWarnings("javadoc")
   private static void 
   writeValue(BufferedWriter out, Format format, Object value) throws IOException {
