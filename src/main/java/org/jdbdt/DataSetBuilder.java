@@ -334,12 +334,13 @@ public final class DataSetBuilder {
 
   /**
    * Set a constant value filler for a column.
+   * @param <T> Type of object.
    * @param column Column name.
    * @param constant Value of the constant .
    * @return The builder instance (for chained calls).
    */
-  public DataSetBuilder value(String column, Object constant) {
-    return set(column, new ConstantFiller<Object>(constant)); 
+  public <T> DataSetBuilder value(String column, T constant) {
+    return set(column, new ConstantFiller<>(constant)); 
   }
   
   /**
@@ -381,7 +382,7 @@ public final class DataSetBuilder {
   public <T> DataSetBuilder sequence(String column, T initial, UnaryOperator<T> step) {
     ensureArgNotNull(initial);
     ensureArgNotNull(step);
-    return set(column, new StdSeqFiller<T>(initial, step));
+    return set(column, new StdSeqFiller<>(initial, step));
   }
 
   /**

@@ -66,40 +66,33 @@ public class RowTest {
   
   @Test
   public void testEquals1() {
-    assertTrue(theSUT.equals(theSUT));
+    assertEquals(theSUT, theSUT);
   }
   
   @Test
   public void testEquals2() {
-    assertTrue(theSUT.equals(new Row(DATA)));
+    assertEquals(theSUT , new Row(DATA));
   }
   
   @Test
   public void testEquals3() {
-    assertTrue(theSUT.equals(new Row(DATA.clone())));
+    assertEquals(theSUT, new Row(DATA.clone()));
   }
   
   @Test
   public void testEquals4() {
     Object[] d = DATA.clone();
-    d[2] = new int[] { 1, 2, 3};
-    assertFalse(theSUT.equals(new Row(d)));
+    d[2] = new int[] { 1, 2, 3 };
+    assertNotEquals(theSUT, new Row(d));
   }
-  
+
   @Test
   public void testEquals5() {
-    Object[] d = DATA.clone();
-    d[2] = new int[] { 1, 2, 3};
-    assertFalse(theSUT.equals(new Row(d)));
+    assertNotEquals(theSUT, null);
   }
   
   @Test
   public void testEquals6() {
-    assertFalse(theSUT.equals(null));
-  }
-  
-  @Test
-  public void testEquals7() {
-    assertFalse(theSUT.equals("X"));
+    assertNotEquals(theSUT, "X");
   }
 }

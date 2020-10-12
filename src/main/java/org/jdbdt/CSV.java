@@ -346,7 +346,7 @@ public final class CSV {
         list = new LinkedList<>();
         dataConv.put(type, list);
       }
-      list.addLast(s -> func.apply(s));
+      list.addLast(func::apply);
     }
 
     /**
