@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2019 Eduardo R. B. Marques
+ * Copyright (c) Eduardo R. B. Marques
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -69,6 +69,11 @@ public final class QueryBuilder  {
     },
     /** HAVING clause */
     HAVING,
+    /** 
+     * LIMIT clause 
+     * @since 1.3 
+     **/
+    LIMIT,
     /** ORDER BY clause */
     ORDER_BY {
       @Override
@@ -174,7 +179,6 @@ public final class QueryBuilder  {
     return this;
   }
 
-
   /**
    * Set GROUP BY clause for query.
    * @param fields GROUP BY fields.
@@ -190,9 +194,14 @@ public final class QueryBuilder  {
    * Set ORDER BY clause for query.
    * 
    * <p>
-   * Note that setting the ORDER BY clause will not affect 
+   * Note that setting the ORDER BY clause will not generally affect 
    * the result of database assertions by JDBDT, since these
-   * do not attend to the order of query results.
+   * do not attend to the order of query results. Setting
+   * LIMIT in combination with ORDER BY will affect the
+   * query results but the order of returned rows (even
+   * if limited in number) will not be verified.
+   * </p>
+   * <p>
    * Setting the ORDER BY clause will also likely impact 
    * on the performance of query execution, but may be useful 
    * for debugging purposes.
@@ -214,6 +223,20 @@ public final class QueryBuilder  {
    */
   public final QueryBuilder having(String clause) {
     set(Param.HAVING, clause);
+    return this;
+  }
+  
+  /**
+   * Set LIMIT clause for query.
+   * @param n Query limit.
+   * @return The query builder instance for chained calls.
+   * @throws InvalidOperationException for an invalid LIMIT value (lower or equal than 0).
+   */
+  public final QueryBuilder limit(int n) {
+    if ( n <= 0) {
+       throw new InvalidOperationException("Invalid LIMIT value: " + n);
+    }
+    set(Param.LIMIT, Integer.toString(n));
     return this;
   }
   
@@ -249,6 +272,7 @@ public final class QueryBuilder  {
     build(sql, Param.GROUP_BY);
     build(sql, Param.HAVING);
     build(sql, Param.ORDER_BY);
+    build(sql, Param.LIMIT);
     return sql.toString();
   }
   

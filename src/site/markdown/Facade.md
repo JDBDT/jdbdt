@@ -74,10 +74,13 @@ may be convenient to refer to the API methods concisely.
 			<code>data</code><br/>
 			<code>dump</code><br/>
 			<code>empty</code><br/>
+			<code>read</code><br/>
+			<code>write</code><br/>
 		</td>
 		<td align="left">
 		    <code>Conversion</code><br/>
 		    <code>ColumnFiller</code><br/>
+		    <code>CSV.Format</code><br/>
 			<code>DataSet</code><br/>
 			<code>DataSetBuilder</code><br/>
 			<code>TypedDataSet</code><br/>

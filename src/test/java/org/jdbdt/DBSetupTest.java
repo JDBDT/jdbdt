@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2019 Eduardo R. B. Marques
+ * Copyright (c) Eduardo R. B. Marques
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -165,7 +165,7 @@ public class DBSetupTest extends DBTestCase {
   private void testDataSetUpdate() throws SQLException {
     User[] users = INITIAL_DATA.clone();    
     for (int i = 0; i < users.length; i++) {
-      User u = users[i];
+      User u = users[i].clone();
       u.setPassword("p#" + i);
       u.setName("u#" + i);
       u.setCreated(Date.valueOf(String.format("2017-12-%02d", i+1)));

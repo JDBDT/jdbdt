@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2019 Eduardo R. B. Marques
+ * Copyright (c) Eduardo R. B. Marques
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,7 @@ public class IntegrationTest extends DBTestCase {
   static final int USER_COUNT = 10;
   
   @BeforeClass
-  public static void doSetup() throws SQLException {
+  public static void doSetup()  {
     DBTestCase.useCustomInit();
     table = table(UserDAO.TABLE_NAME)
             .columns(UserDAO.COLUMNS)
@@ -68,14 +68,14 @@ public class IntegrationTest extends DBTestCase {
     }
     initialData = dsb.generate(USER_COUNT).data();
     // getDB().enableFullLogging();
-    getDB().getConnection().setAutoCommit(true);
+    getDB().setAutoCommit(true);
     populate(initialData);
-    getDB().getConnection().setAutoCommit(false);
+    getDB().setAutoCommit(false);
   }
   
   @AfterClass
-  public static void restoreAutoCommit() throws SQLException {
-    getDB().getConnection().setAutoCommit(true);
+  public static void restoreAutoCommit() {
+    getDB().setAutoCommit(true);
   }
 
   @Before

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2019 Eduardo R. B. Marques
+ * Copyright (c) Eduardo R. B. Marques
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,6 @@
 package org.jdbdt;
 
 import java.io.File;
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 
@@ -78,9 +77,8 @@ public class DBTestCase {
     DBConfig cfg = DBConfig.getConfig();
     Class.forName(cfg.getDriver());
     gDB = JDBDT.database(cfg.getURL());
-    Connection c = gDB.getConnection();
-    c.setAutoCommit(true);
-    gDAO = new UserDAO(c);
+    gDB.setAutoCommit(true);
+    gDAO = new UserDAO(gDB.getConnection());
     gConversion = cfg.isDateSupported() ? STD_CONVERSION : ALT_CONVERSION;
     if (!cfg.reuseStatements()) {
       gDB.disable(DB.Option.REUSE_STATEMENTS);
@@ -129,16 +127,16 @@ public class DBTestCase {
       new User("linus", "Linus Torvalds", "linux", Date.valueOf("2015-01-01")),
       new User("steve", "Steve Jobs", "macos", Date.valueOf("2015-12-31")),
       new User("bill", "Bill Gates", "windows", Date.valueOf("2015-09-12")),
-      new User("alanis", "Alanis ", "xyz", Date.valueOf("2015-01-01")),
-      new User("blanis", "Blanis ", "xyz", Date.valueOf("2015-01-02")),
-      new User("clanis", "Clanis ", "xyz", Date.valueOf("2015-01-03")),
-      new User("dlanis", "Dlanis ", "xyz", Date.valueOf("2015-01-04")),
-      new User("elanis", "Elanis ", "xyz", Date.valueOf("2015-01-05")),
-      new User("flanis", "Flanis ", "xyz", Date.valueOf("2015-01-06")),
-      new User("glanis", "Glanis ", "xyz", Date.valueOf("2015-01-07")),
-      new User("hlanis", "Hlanis ", "xyz", Date.valueOf("2015-01-08")),
-      new User("ilanis", "Ilanis ", "xyz", Date.valueOf("2015-01-09")),
-      new User("jlanis", "Jlanis ", "xyz", Date.valueOf("2015-01-10"))
+      new User("alanis", "Alanis", "xyz", Date.valueOf("2015-01-01")),
+      new User("blanis", "Blanis", "xyz", Date.valueOf("2015-01-02")),
+      new User("clanis", "Clanis", "xyz", Date.valueOf("2015-01-03")),
+      new User("dlanis", "Dlanis", "xyz", null),
+      new User("elanis", "Elanis", "xyz", Date.valueOf("2015-01-05")),
+      new User("flanis", "Flanis", "xyz", Date.valueOf("2015-01-06")),
+      new User("glanis", "Glanis", "xyz", Date.valueOf("2015-01-07")),
+      new User("hlanis", "Hlanis", "xyz", Date.valueOf("2015-01-08")),
+      new User("ilanis", "Ilanis", "xyz", Date.valueOf("2015-01-09")),
+      new User("jlanis", "Jlanis", "xyz", null)
   };
 
   protected static final String EXISTING_DATA_ID1 =

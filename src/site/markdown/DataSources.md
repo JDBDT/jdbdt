@@ -72,9 +72,10 @@ The parameterization methods are the following:
 * `from`: defines the `FROM` clause;
 * `where`: defines a `WHERE` clause; 
 * `distinct`: defines a `DISTINCT` modifier for the query;
-* `orderBy`: defines an `ORDER BY` clause;
 * `groupBy`: defines  a `GROUP BY` clause;
-* `having`: defines a `HAVING` clause.
+* `having`: defines a `HAVING` clause;
+* `orderBy`: defines an `ORDER BY` clause;
+* `limit`: defines a `LIMIT` clause;
 * `arguments`: supply arguments for the query.
 
 Note to `orderBy`: [database assertions](DBAssertions.html) are insensitive 
@@ -149,7 +150,7 @@ to the order of query results, but the use of `orderBy` may make it easier to in
 ### `QueryBuilder`
 
 * `columns(cols)` sets the query columns to `cols`.
-* `from`, `where`, `distinct`, `groupBy`, `orderBy`, `having`, `arguments`: query parameterization methods (see [above](DataSources.html#QueryBuilder)).
+* `from`, `where`, `distinct`, `groupBy`, `having`, `orderBy`, `limit`, `arguments`: query parameterization methods (see [above](DataSources.html#QueryBuilder)).
 * `build(db)` builds the desired `Query` for database `db`.
 
 

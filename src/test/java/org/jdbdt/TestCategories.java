@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2019 Eduardo R. B. Marques
+ * Copyright (c) Eduardo R. B. Marques
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,4 +34,8 @@ public interface TestCategories {
   interface StatementReuse { }
  
   interface CaseSensitive { }
+  
+  interface SupportForLimit { }
+  
+  interface CSVSupport { }
 }

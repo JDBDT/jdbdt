@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2019 Eduardo R. B. Marques
+ * Copyright (c) Eduardo R. B. Marques
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,6 +40,7 @@ import static org.junit.Assert.*;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runners.MethodSorters;
 
 @SuppressWarnings("javadoc")
@@ -264,5 +265,24 @@ public class QueryBuilderTest extends DBTestCase {
     }
     DataSet actual = executeQuery(q);
     assertDataSet(expected, actual);
+  }
+
+  @Test @Category(TestCategories.SupportForLimit.class)
+  public void testExecWithOrderByAndLimit() {
+    Query q =
+        select(UserDAO.COLUMNS)
+        .from(UserDAO.TABLE_NAME)
+        .orderBy("login")
+        .limit(2)
+        .build(getDB());
+    DataSet actual = executeQuery(q);
+    User[] sortedUsers = INITIAL_DATA.clone();
+    Arrays.sort(sortedUsers, 
+        (a,b) -> a.getLogin().compareTo(b.getLogin()));
+    DataSet expected = 
+        data(q, getConversion())
+        .rows(sortedUsers[0], sortedUsers[1]);
+    assertDataSet(expected, actual);
+    assertTrue(expected.sameDataAs(actual));
   }
 }

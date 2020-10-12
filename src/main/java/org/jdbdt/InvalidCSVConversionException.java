@@ -24,44 +24,32 @@
 
 package org.jdbdt;
 
-
 /**
- * Exception thrown due to an unexpected internal error.
+ * Exception thrown for a CSV input conversion error.
  * 
- * <p>
- * Exceptions of this kind should never happen in principle.
- * If they do, there is either likely a bug in JDBDT or 
- * an abnormal condition in the JVM environment.
- * </p>
- * 
- * @since 1.0
+ * @since 1.3
  */
-public final class InternalErrorException extends JDBDTRuntimeException {
+public class InvalidCSVConversionException extends JDBDTRuntimeException {
   /**
-   * Constructs exception with empty message.
+   * Constructor with supplied message.
+   * @param message Message.
    */
-  public InternalErrorException() {
-    super("Internal error!");
-  }
-  
-  /**
-   * Constructs exception using supplied message.
-   * @param message Error message. 
-   */
-  public InternalErrorException(String message) {
+  public InvalidCSVConversionException(String message) {
     super(message);
   }
   
   /**
-   * Constructs exception with given cause.
-   * @param cause Cause for the exception.
+   * Constructor with supplied message and cause.
+   * @param message Message.
+   * @param cause Original cause of exception.
    */
-  public InternalErrorException(Throwable cause) {
-    super("Unexpected internal error", cause);
+  public InvalidCSVConversionException(String message, Throwable cause) {
+    super(message, cause);
   }
 
-  /**
-   * Serial version UID.
-   */
+ 
+
+  @SuppressWarnings("javadoc")
   private static final long serialVersionUID = 1L;
+
 }

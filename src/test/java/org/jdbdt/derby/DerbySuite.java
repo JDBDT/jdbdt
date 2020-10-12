@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2019 Eduardo R. B. Marques
+ * Copyright (c) Eduardo R. B. Marques
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,9 +26,17 @@ package org.jdbdt.derby;
 
 import org.jdbdt.DBConfig;
 import org.jdbdt.DBEngineTestSuite;
+import org.jdbdt.TestCategories;
 import org.junit.BeforeClass;
+import org.junit.experimental.categories.Categories;
+import org.junit.experimental.categories.Categories.ExcludeCategory;
+import org.junit.runner.RunWith;
 
 
+@RunWith(Categories.class)
+@ExcludeCategory({
+  TestCategories.SupportForLimit.class,
+})
 @SuppressWarnings("javadoc")
 public class DerbySuite extends DBEngineTestSuite {
   @BeforeClass 

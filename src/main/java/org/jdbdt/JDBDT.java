@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2019 Eduardo R. B. Marques
+ * Copyright (c) Eduardo R. B. Marques
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +32,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.function.Function;
+
 
 /**
  * JDBDT facade.
@@ -1359,6 +1360,46 @@ public final class JDBDT {
     } 
   }
 
+  /**
+   * Read data set from CSV file.
+   * 
+   * <p>
+   * If the header option is set for the CSV format specification, the 
+   * first line is skipped.
+   * </p>
+   * 
+   * @param source Data source.
+   * @param format CSV format specification.
+   * @param file File.
+   * @return Data set read from file.
+   * @throws InputOutputException if an I/O error occurs.
+   * @throws InvalidCSVConversionException if a CSV conversion error occurs.
+   */
+  public static DataSet 
+  read(DataSource source, CSV.Format format, File file) 
+  throws InputOutputException, InvalidCSVConversionException {
+     return CSV.read(CallInfo.create(), source, format, file);
+  }
+  
+  /**
+   * Write data set to CSV file.
+   * 
+   * <p>
+   * If the header option is set for the CSV format specification, column
+   * names will be written in the first line of the output file.
+   * </p>
+   * 
+   * @param dataSet Data set.
+   * @param format CSV format specification.
+   * @param file Output file.
+   * @throws InputOutputException if an I/O error occurs.
+   */
+  public static void 
+  write(DataSet dataSet, CSV.Format format, File file) 
+  throws InputOutputException {
+    CSV.write(CallInfo.create(), dataSet, format, file);
+  }
+  
   /**
    * Auxiliary type for {@code JDBDT#varArgsCall(VAHandler)}.
    *

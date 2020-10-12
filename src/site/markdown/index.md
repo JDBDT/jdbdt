@@ -40,12 +40,12 @@ JDBDT is available from [Maven Central](http://search.maven.org/#search%7Cga%7C1
 	<dependency>
 		<groupId>org.jdbdt</groupId>
         <artifactId>jdbdt</artifactId>
-        <version>1.2.5-SNAPSHOT</version>
+        <version>1.3.0-SNAPSHOT</version>
     </dependency>
 
 *Gradle setup*
 
-     compile 'org.jdbdt:jdbdt:1.2.5-SNAPSHOT'
+     compile 'org.jdbdt:jdbdt:1.3.0-SNAPSHOT'
 
 Setup instructions for other build systems are available [here](dependency-info.html) .
     
@@ -95,9 +95,8 @@ can be used as data sources in association to a [database](DB.html).
 
 ### Programmatic definition of data sets
 
-[Data sets](DataSets.html) are defined programmatically,
-without need to maintain external "data files",
-for instance using data set builders.
+[Data sets](DataSets.html) are defined programmatically, for instance using data set builders,
+without need to maintain external "data files". Data sets can also be read from CSV files anyway if convenient. 
 
 
     DataSet data = 

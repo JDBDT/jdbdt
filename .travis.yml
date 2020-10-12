@@ -21,7 +21,7 @@ addons:
   postgresql: '9.5'
 matrix:
   include:
-  - os: linux
+  - dist: trusty
     jdk: oraclejdk8
     services:
     - mysql

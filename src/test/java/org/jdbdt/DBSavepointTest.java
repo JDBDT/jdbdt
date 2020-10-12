@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2016-2019 Eduardo R. B. Marques
+ * Copyright (c) Eduardo R. B. Marques
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -43,14 +43,14 @@ public class DBSavepointTest extends DBTestCase {
     boolean autoCommitInitialSetting;
 
     SaveRestoreTestHelper(boolean enableAC) throws SQLException {
-      autoCommitInitialSetting = getDB().getConnection().getAutoCommit();
-      getDB().getConnection().setAutoCommit(enableAC);
+      autoCommitInitialSetting = getDB().getAutoCommit();
+      getDB().setAutoCommit(enableAC);
       query();
     }
     
     @Override
-    public void close() throws SQLException {
-      getDB().getConnection().setAutoCommit(autoCommitInitialSetting);
+    public void close() {
+      getDB().setAutoCommit(autoCommitInitialSetting);
     }
     
     void update(String name) throws SQLException {
