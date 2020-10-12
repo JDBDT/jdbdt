@@ -41,6 +41,15 @@ Commands:
 
 # Change Log
 
+
+## 1.3.x
+
+Features:
+
+- [#61 - CSV data set import / export](https://github.com/JDBDT/jdbdt/issues/61)
+- [#60 - getAutocommit() / setAutoCommit() convenience methods](https://github.com/JDBDT/jdbdt/issues/60)
+- [#56 - LIMIT support for QueryBuilder](https://github.com/JDBDT/jdbdt/issues/56)
+
 ## 1.2.x 
 
 Features:
