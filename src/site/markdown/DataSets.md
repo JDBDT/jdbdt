@@ -163,7 +163,7 @@ Data sets can be imported / exported from/to CSV format.
 	                   .useReadConversions();
 	DataSet ds = read(table, format, new File("mydata.csv") 
 	...
-	write(dataset, format, new File("mydata2.csv));
+	write(ds, format, new File("mydata2.csv));
      
 <a name="SummaryOfMethods"></a>
 ## Summary of API methods
