@@ -84,27 +84,27 @@ public class CSVTest extends DBTestCase {
   
   @Test
   public void test3() throws IOException, SQLException {
-    performTest(new CSV.Format().separator("\t"));
+    performTest(new CSV.Format().separator('\t'));
   }
   
   @Test
   public void test4() throws IOException, SQLException {
-    performTest(new CSV.Format().separator("\t").hasHeader());
+    performTest(new CSV.Format().separator('\t').hasHeader());
   }
   
   @Test
   public void test5() throws IOException, SQLException {
-    performTest(new CSV.Format().separator("\t").hasHeader().nullValue("NULL"));
+    performTest(new CSV.Format().separator('\t').hasHeader().nullValue("NULL"));
   }
   
   @Test
   public void test6() throws IOException, SQLException {
-    performTest(new CSV.Format().separator(";").nullValue("NULL"));
+    performTest(new CSV.Format().separator(';').nullValue("NULL"));
   }
   
   @Test
   public void test7() throws IOException, SQLException {
-    performTest(new CSV.Format().separator("\t").nullValue("NULL").lineComment("---"));
+    performTest(new CSV.Format().separator('\t').nullValue("NULL").lineComment("---"));
   }
   
   @Test
@@ -128,4 +128,13 @@ public class CSVTest extends DBTestCase {
     performTest(new CSV.Format().useReadConversions());
   }
   
+  @Test
+  public void test12() throws IOException, SQLException {
+    performTest(new CSV.Format().alwaysEscapeOutput());
+  }
+  
+  @Test
+  public void test13() throws IOException, SQLException {
+    performTest(new CSV.Format().useReadConversions().alwaysEscapeOutput());
+  }
 }

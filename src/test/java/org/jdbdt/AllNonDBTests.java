@@ -38,7 +38,8 @@ import org.junit.runners.Suite.SuiteClasses;
   RowTest.class,
   WrappedStatementTest.class,
   DataSetBuilderSequenceFillersTest.class,
-  DataSetBuilderRandomFillersTest.class
+  DataSetBuilderRandomFillersTest.class,
+  CSVParseTest.class
 })
 public class AllNonDBTests {
   

@@ -90,10 +90,13 @@ public final class CSV {
 
   /**
    * CSV format specification.
+   * @since 1.3
    */
   public static final class Format implements Cloneable { 
     /** Separator. */
-    private String separator = ",";
+    private char separator = ',';
+    /** Quote character. */
+    private char escapeCh = '"';
     /** Comment sequence. */
     private String lineCommentSequence = "";
     /** Line separator. */
@@ -104,6 +107,8 @@ public final class CSV {
     private String nullValue = "";
     /** Read conversions flag. */
     private boolean useReadConversions = false;
+    /** Always escape during ouput. */
+    private boolean alwaysEscapeOutput = false;
 
     /** Constructor. Default values will be set. */
     public Format() { }
@@ -113,10 +118,36 @@ public final class CSV {
      * By default the separator is formed by the comma character alone (<code>","</code>).
      * @param s Separator string (usually formed by just one character).
      * @return The object instance (to facilitate chained calls).
+     * @deprecated As of release 1.4, replaced by {@link #separator(char)}.
      */
+    @Deprecated
     public Format separator(String s) {
-      validateSequence(s);
+      if (s == null || s.length() != 1) {
+        throw new InvalidOperationException("Separator can only contain one character.");
+      }
+      return separator(s.charAt(0));
+    }
+
+    /**
+     * Set separator.
+     * By default the separator is the comma character (<code>','</code>).
+     * @param s Separator character to use.
+     * @return The object instance (to facilitate chained calls).
+     * @since 1.4
+     */
+    public Format separator(char s) {
       separator = s;
+      return this;
+    }
+
+    /**
+     * Set escape character.
+     * By default the separator is the double quote character (<code>"</code>).
+     * @param e Character to use as espace character.
+     * @return The object instance (to facilitate chained calls).
+     */
+    public Format escape(char e) {
+      escapeCh = e;
       return this;
     }
 
@@ -175,6 +206,22 @@ public final class CSV {
       useReadConversions = true;
       return this;
     }
+    
+    /**
+     * Indicates that the escape sequence should always be
+     * used when writing values. 
+     * 
+     * If not set (the default) escape sequences will be 
+     * written only when necessary.
+     * 
+     * @return The object instance (to facilitate chained calls).
+     * @since 1.4
+     */
+    public Format alwaysEscapeOutput() {
+      alwaysEscapeOutput = true;
+      return this;
+    }
+
 
     @Override
     public Format clone() {
@@ -190,6 +237,193 @@ public final class CSV {
       if (s == null || s.length() == 0) {
         throw new InvalidOperationException("Argument must be a non-empty string.");
       }   
+    }
+
+    /**
+     * Parse a CSV file.
+     * @param source Data Source.
+     * @param file Input file.
+     * @return Parsed data set.
+     * @throws InputOutputException if an I/O error occurs.
+     */
+    DataSet read(DataSource source, File file) {
+      try(BufferedReader in = new BufferedReader(new FileReader(file))) {
+        int lineCount = 1;
+        if (header) {
+          in.readLine();
+          lineCount ++;
+        }
+        final DataSet dataSet = new DataSet(source);
+        final int columnCount = source.getColumnCount();
+        final MetaData md = source.getMetaData();
+
+        final boolean commentSeqDefined = lineCommentSequence.length() > 0;
+        String line;
+        while ((line = in.readLine()) != null) {
+          lineCount++;
+          if (commentSeqDefined && line.startsWith(lineCommentSequence)) {
+            continue;
+          }
+          Object[] data = new Object[columnCount];
+          if (! read(line, data)) {
+            throw new InvalidCSVConversionException("Invalid input at line " + lineCount + ".");
+          }
+          for (int i = 0; i < columnCount; i++) {
+            String text = (String) data[i];
+            if (text.equals(nullValue)) {
+              data[i] = null; 
+            }
+            else if (useReadConversions) {
+              data[i] = Conversions.INSTANCE.convert(md.getType(i), text);
+            } 
+          }
+          dataSet.addRow(new Row(data));
+        }
+        return dataSet;
+      }
+      catch (IOException e) {
+        throw new InputOutputException(e);
+      }
+    }
+    
+    /**
+     * Parse a single CSV line.
+     * @param line The line to parse.
+     * @param fields CSV field array.
+     * @return {@code true} if all fields could be parsed (not more, not fewer).
+     */
+    boolean read(String line, Object[] fields) {
+      int fieldCount = 0;
+      int beg = 0;
+      int end = -1;
+      int len = line.length();
+      int state = 0; // begin fields
+      for (int pos = 0; pos < len; pos++) {
+        char c = line.charAt(pos);
+        switch (state) {
+          case 0:
+            if (c == escapeCh) {
+              state = 2;
+              beg = pos + 1;
+            }
+            else if (c == separator) {
+              beg = end = pos;
+            } else {
+              state = 1;
+              beg = pos;
+            }
+            break;
+          case 1:
+            if (c == separator) {
+              end = pos;
+              state = 0;
+            }
+            break;
+          case 2:
+            if (c == escapeCh) {
+              end = pos;
+              state = 3;
+            }
+            break;
+          case 3:
+            if (c != separator) {
+              return false;
+            }
+            state = 0;
+            break;
+        }
+        if (state == 0) {
+          if (fieldCount == fields.length) {
+            return false; // too many fields
+          }
+          fields[fieldCount] = line.substring(beg, end);
+          //System.out.println(fieldCount + " " + beg + " " + end + " \"" + fields[fieldCount] + "\"");
+          fieldCount++;
+        } 
+      }
+      switch (state) {
+        case 0:
+          beg = end = len;
+          break;
+        case 1:
+          end = len;
+          break;
+        case 2:
+          return false;
+        case 3:
+          break;
+      }
+      if (fieldCount == fields.length) {
+        return false;
+      }
+      fields[fieldCount] = line.substring(beg, end);
+      //System.out.println(fieldCount + " " + beg + " " + end + " \"" + fields[fieldCount] + "\"");
+      fieldCount++;
+      return fieldCount == fields.length;
+    }
+
+    /**
+     * Write dataset to CSV file.
+     * @param dataSet Data set.
+     * @param file Output file.
+     * @throws InputOutputException if an I/O error occurs.
+     */
+    void write(DataSet dataSet, File file) {
+      try(BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
+        final DataSource source = dataSet.getSource();
+        final int colCount = source.getColumnCount(); 
+        final String eol =  lineSeparator.separator();
+        if (lineCommentSequence.length() > 0) {
+          out.write(lineCommentSequence);
+          out.write(" CSV data file generated using JDBDT ");
+          out.write(VersionInfo.ID); 
+          out.write(eol);
+        }
+        if (header) {
+          out.write(source.getColumnName(0));
+          for (int i = 1; i < colCount; i++) {
+            out.write(separator);
+            out.write(source.getColumnName(i));
+          }
+          out.write(eol);
+        }
+        for (Row r : dataSet.getRows()) {
+          Object[] values = r.data();
+          write(out, values[0]);
+          for (int i = 1; i < colCount; i++) {
+            out.write(separator);
+            write(out, values[i]);
+          }
+          out.write(eol);
+        }
+      }
+      catch (IOException e) {
+        throw new InputOutputException(e);
+      }
+    }
+    /**
+     * Write value.
+     * @param out Output stream.
+     * @param value Value to write.
+     */
+    void write(BufferedWriter out, Object value) {
+      try {
+        if (value == null) {
+          out.write(nullValue);
+        } else {
+          String str = value.toString();
+          if (alwaysEscapeOutput || str.indexOf(separator) != -1) {
+            out.write(escapeCh);
+            out.write(str);
+            out.write(escapeCh);
+          } else {
+            out.write(str);
+          }
+        }
+      } 
+      catch(IOException e) {
+        throw new InputOutputException(e);
+      }
     }
   }
 
@@ -210,53 +444,10 @@ public final class CSV {
    */
   static DataSet 
   read(CallInfo callInfo, DataSource source, Format format, File file) throws InputOutputException {
-    try(BufferedReader in = new BufferedReader(new FileReader(file))) {
-      int lineCount = 1;
-      format = format.clone();
-      if (format.header) {
-        in.readLine();
-        lineCount ++;
-      }
-      final DataSet dataSet = new DataSet(source);
-      final int columnCount = source.getColumnCount();
-      final MetaData md = source.getMetaData();
-
-      final boolean commentSeqDefined = format.lineCommentSequence.length() > 0;
-      String line;
-      while ((line = in.readLine()) != null) {
-        lineCount++;
-        if (commentSeqDefined && line.startsWith(format.lineCommentSequence)) {
-          continue;
-        }
-        String[] values = line.split(format.separator, columnCount);
-        if (values.length != columnCount) {
-          throw new InvalidCSVConversionException("Invalid number of values at line " + lineCount + ".");
-        }
-        Object[] data = new Object[columnCount];
-        for (int i = 0; i < columnCount; i++) {
-          String text = values[i];
-          Object object;
-          if (text.equals(format.nullValue)) {
-            object = null; 
-          }
-          else if (format.useReadConversions) {
-            object = Conversions.INSTANCE.convert(md.getType(i), text);
-          } 
-          else {
-            object = text;
-          }
-          data[i] = object;
-        }
-        dataSet.addRow(new Row(data));
-      }
-      source.getDB().logDataSetOperation(callInfo, dataSet);
-      return dataSet;
-    }
-    catch (IOException e) {
-      throw new InputOutputException(e);
-    }
+    DataSet d = format.read(source, file);
+    source.getDB().logDataSetOperation(callInfo, d);
+    return d;
   }
-
 
   /**
    * Write data set to CSV file.
@@ -274,38 +465,7 @@ public final class CSV {
    */
   static void 
   write(CallInfo callInfo, DataSet dataSet, Format format, File file) throws InputOutputException {
-    try(BufferedWriter out = new BufferedWriter(new FileWriter(file))) {
-      final DataSource source = dataSet.getSource();
-      final int colCount = source.getColumnCount(); 
-      final String eol = format.lineSeparator.separator();
-      format = format.clone();
-      if (format.lineCommentSequence.length() > 0) {
-        out.write(format.lineCommentSequence);
-        out.write(" CSV data file generated using JDBDT ");
-        out.write(VersionInfo.ID); 
-        out.write(eol);
-      }
-      if (format.header) {
-        out.write(source.getColumnName(0));
-        for (int i = 1; i < colCount; i++) {
-          out.write(format.separator);
-          out.write(source.getColumnName(i));
-        }
-        out.write(eol);
-      }
-      for (Row r : dataSet.getRows()) {
-        Object[] values = r.data();
-        writeValue(out, format, values[0]);
-        for (int i = 1; i < colCount; i++) {
-          out.write(format.separator);
-          writeValue(out, format, values[i]);
-        }
-        out.write(eol);
-      }
-    }
-    catch (IOException e) {
-      throw new InputOutputException(e);
-    }
+    format.write(dataSet, file);
     dataSet.getSource().getDB().logDataSetOperation(callInfo, dataSet);
   }
 
@@ -330,7 +490,7 @@ public final class CSV {
        */
       Object convert(String s) throws IllegalArgumentException;
     }
-    
+
 
 
     @SuppressWarnings("javadoc")
@@ -428,18 +588,10 @@ public final class CSV {
     }
   }
 
-  
-  @SuppressWarnings("javadoc")
-  private static void 
-  writeValue(BufferedWriter out, Format format, Object value) throws IOException {
-    out.write(value == null ? format.nullValue : value.toString());
-  }
-
-
   /**
    * Private constructor to prevent instantiation.
    */
   private CSV() {
-    
+
   }
 }
