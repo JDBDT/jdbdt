@@ -48,19 +48,20 @@ public class CSVParseTest {
 
   
   @Test
-  public void fai11() {
+  public void fail1() {
     mustFail("", 2); 
     mustFail("\"\"", 2); 
+    mustFail("\"\"\"",1);
   }
   
   @Test
-  public void fai12() {
+  public void fail2() {
     mustFail("x", 2); 
     mustFail("\"x\"", 2); 
   }
   
   @Test
-  public void fai13() {
+  public void fail3() {
     mustFail("x,y,z", 2); 
     mustFail("x,y,\"z\"", 2); 
     mustFail(",,", 2); 
@@ -69,8 +70,14 @@ public class CSVParseTest {
   
   
   @Test
-  public void fai14() {
+  public void fail4() {
     mustFail("\"x", 1); 
+    mustFail("x,\"y", 2); 
+  }
+  
+  @Test
+  public void fail5() {
+    mustFail("\"\"x", 1); 
     mustFail("x,\"y", 2); 
   }
 
@@ -93,22 +100,22 @@ public class CSVParseTest {
   }
 
   @Test
-  public void test1c() {
-    test("x", "x");
-  }
-
-  @Test
   public void test1d() {
-    test("\"x,y\"", "x,y");
+    test("\"\"\"\"", "\"");
   }
 
   @Test
   public void test1e() {
-    test(",", "","");
+    test("\"x,y\"", "x,y");
   }
 
   @Test
   public void test1f() {
+    test(",", "","");
+  }
+
+  @Test
+  public void test1g() {
     test("\"\",\"\"", "","");
   }
 
@@ -143,11 +150,11 @@ public class CSVParseTest {
   }
   @Test
   public void test3c() {
-    test("a,b,\"c,d\"", "a", "b", "c,d");
+    test("a,b,\",c\"", "a", "b", ",c");
   }
   @Test
   public void test3d() {
-    test("a,\"b,c\",d", "a", "b,c", "d");
+    test("a,\"b,\",c", "a", "b,", "c");
   }
   @Test
   public void test3e() {
@@ -175,8 +182,17 @@ public class CSVParseTest {
   }
   @Test
   public void test4f() {
-    test("a,b,\"\",,,\"c,d\"", "a", "b", "", "", "", "c,d");
+    test("a,b,\"\",,,\"c,d\"\"\"", "a", "b", "", "", "", "c,d\"");
   }
+  @Test
+  public void test5a() {
+    test("\"a\"\"\",b,\"cx,\r\n\n,\"\"yz\"", "a\"", "b", "cx,\r\n\n,\"yz");
+  }
+  @Test
+  public void test5b() {
+    test("\"\"\"\",\"\"\"b\"\"\",c", "\"", "\"b\"", "c");
+  }
+  
   @Test
   public void testRandom() {
     Random rng = new Random(0);

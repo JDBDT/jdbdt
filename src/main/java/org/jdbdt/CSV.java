@@ -292,7 +292,7 @@ public final class CSV {
      * @param fields CSV field array.
      * @return {@code true} if all fields could be parsed (not more, not fewer).
      */
-    boolean read(String line, Object[] fields) {
+    boolean read0(String line, Object[] fields) {
       int fieldCount = 0;
       int beg = 0;
       int end = -1;
@@ -362,6 +362,71 @@ public final class CSV {
       return fieldCount == fields.length;
     }
 
+    /**
+     * Parse a single CSV line.
+     * @param line The line to parse.
+     * @param fields CSV field array.
+     * @return {@code true} if all fields could be parsed (not more, not fewer).
+     */
+    boolean read(String line, Object[] fields) {
+      int fieldCount = 0;
+      int len = line.length();
+      int state = 0; // begin fields
+      StringBuilder out = new StringBuilder();
+      for (int pos = 0; pos < len; pos++) {
+        char c = line.charAt(pos);
+        switch (state) {
+          case 0:
+            if (c == escapeCh) {
+              state = 2;
+            } else if (c != separator) {
+              out.append(c);
+              state = 1;
+            }
+            break;
+          case 1:
+            if (c == separator) {
+              state = 0;
+            } else {
+              out.append(c);
+            }
+            break;
+          case 2:
+            if (c == escapeCh) {
+              state = 3;
+            } else { 
+              out.append(c);
+            }
+            break;
+          case 3:
+            if (c == separator) {
+              state = 0;
+            } else if (c == escapeCh){
+              out.append(c);
+              state = 2;
+            } else {
+              return false;
+            }
+            break;
+        }
+        if (state == 0) {
+          if (fieldCount == fields.length) {
+            return false; // too many fields
+          }
+          fields[fieldCount] = out.toString();
+          out = new StringBuilder();
+          fieldCount++;
+        }
+      }
+      if (fieldCount == fields.length || state == 2) {
+        return false;
+      }
+      fields[fieldCount] = out.toString();
+      //System.out.println(fieldCount + " " + beg + " " + end + " \"" + fields[fieldCount] + "\"");
+      fieldCount++;
+      return fieldCount == fields.length;
+    }
+    
     /**
      * Write dataset to CSV file.
      * @param dataSet Data set.
