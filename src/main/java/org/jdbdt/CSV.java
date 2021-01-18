@@ -45,7 +45,7 @@ public final class CSV {
 
   /**
    * Line separator setting.
-   * @see Format#lineSeparator(LineSeparator)
+   * @see CSV.Format#lineSeparator(LineSeparator)
    * @see BufferedWriter#newLine()
    * @see BufferedReader#readLine()
    * @since 1.3
@@ -142,10 +142,12 @@ public final class CSV {
 
     /**
      * Set escape character.
+     * <p>
      * By default the separator is the double quote character (<code>"</code>).
-     * Note that escaping follows the <a <a href="https://www.ietf.org/rfc/rfc4180.txt" target="_top">RFC-4180</a> 
+     * Note that escaping follows the <a href="https://www.ietf.org/rfc/rfc4180.txt" target="_top">RFC-4180</a> 
      * convention, except for the possibility of having line breaks and carriage returns within
      * escaped sequences.
+     * </p>
      * @param e Character to use as escape character.
      * @return The object instance (to facilitate chained calls).
      */
