@@ -28,6 +28,7 @@ import static org.jdbdt.JDBDT.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
 
 import org.jdbdt.CSV.LineSeparator;
@@ -52,7 +53,9 @@ public class CSVTest extends DBTestCase {
            .columns(UserDAO.COLUMNS)
            .key(UserDAO.PRIMARY_KEY)
            .build(getDB());
-    initialDataSet = data(table, getConversion()).rows(INITIAL_DATA);
+    initialDataSet = data(table, getConversion())
+                    .rows(INITIAL_DATA)
+                    .row(new User("bond,007", "\"James Bond\"", ",xyz,", Date.valueOf("2015-01-09")));
     testCounter = 0;
   }
   
@@ -122,19 +125,10 @@ public class CSVTest extends DBTestCase {
   public void test10() throws IOException, SQLException {
     performTest(new CSV.Format().lineSeparator(LineSeparator.CR_LF));
   }
-
-  @Test
-  public void test11() throws IOException, SQLException {
-    performTest(new CSV.Format().useReadConversions());
-  }
   
   @Test
-  public void test12() throws IOException, SQLException {
+  public void test11() throws IOException, SQLException {
     performTest(new CSV.Format().alwaysEscapeOutput());
   }
   
-  @Test
-  public void test13() throws IOException, SQLException {
-    performTest(new CSV.Format().useReadConversions().alwaysEscapeOutput());
-  }
 }

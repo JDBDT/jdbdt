@@ -143,7 +143,10 @@ public final class CSV {
     /**
      * Set escape character.
      * By default the separator is the double quote character (<code>"</code>).
-     * @param e Character to use as espace character.
+     * Note that escaping follows the <a <a href="https://www.ietf.org/rfc/rfc4180.txt" target="_top">RFC-4180</a> 
+     * convention, except for the possibility of having line breaks and carriage returns within
+     * escaped sequences.
+     * @param e Character to use as escape character.
      * @return The object instance (to facilitate chained calls).
      */
     public Format escape(char e) {
@@ -155,12 +158,12 @@ public final class CSV {
      * Set line comment sequence.
      * Lines starting with the specified sequence will be ignored.
      * By default no comment sequence is set.
-     * @param s Line comment sequence.
+     * @param lcs Line comment sequence.
      * @return The object instance (to facilitate chained calls).
      */
-    public Format lineComment(String s) {
-      validateSequence(s);
-      lineCommentSequence = s;
+    public Format lineComment(String lcs) {
+      validateSequence(lcs);
+      lineCommentSequence = lcs;
       return this;
     }
 
@@ -206,7 +209,7 @@ public final class CSV {
       useReadConversions = true;
       return this;
     }
-    
+
     /**
      * Indicates that the escape sequence should always be
      * used when writing values. 
@@ -285,7 +288,7 @@ public final class CSV {
         throw new InputOutputException(e);
       }
     }
-
+    
     /**
      * Parse a single CSV line.
      * @param line The line to parse.
@@ -350,7 +353,7 @@ public final class CSV {
       fieldCount++;
       return fieldCount == fields.length;
     }
-    
+
     /**
      * Write dataset to CSV file.
      * @param dataSet Data set.
@@ -397,24 +400,45 @@ public final class CSV {
      */
     void write(BufferedWriter out, Object value) {
       try {
-        if (value == null) {
-          out.write(nullValue);
-        } else {
-          String str = value.toString();
-          if (alwaysEscapeOutput || str.indexOf(separator) != -1) {
-            out.write(escapeCh);
-            out.write(str);
-            out.write(escapeCh);
-          } else {
-            out.write(str);
-          }
-        }
+        out.write(toOutputFormat(value));
       } 
       catch(IOException e) {
         throw new InputOutputException(e);
       }
     }
+    
+    /**
+     * Convert to output format.
+     * @param value Value to convert.
+     * @return String in output format.
+     */
+    private String toOutputFormat(Object value) {
+      if (value == null) {
+        return nullValue;
+      } 
+      final String str = value.toString();
+      final int n = str.length();
+      final StringBuilder out = new StringBuilder();
+      boolean escape = alwaysEscapeOutput;
+      for (int i = 0; i < n; i++) {
+        char c = str.charAt(i);
+        if (c == escapeCh) {
+          escape = true;
+          out.append(escapeCh);
+        } else  if (c == separator || c == '\r' || c == '\n') {
+          escape = true;
+        }
+        out.append(c);
+      }
+      if (escape) {
+        out.insert(0, escapeCh);
+        out.append(escapeCh);
+      }
+      System.out.println(out);
+      return out.toString();
+    } 
   }
+
 
   /**
    * Read data set from CSV file.
