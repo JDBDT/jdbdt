@@ -201,8 +201,7 @@ public final class CSV {
 
     /**
      * Indicates that string conversions should be used in 
-     * conjunction with {@link JDBDT#read(DataSource, Format, File)}.
-     * 
+     * conjunction with {@link JDBDT#read(DataSource,CSV.Format,File)}.
      * @return The object instance (to facilitate chained calls).
      */
     public Format useReadConversions() {
@@ -434,7 +433,6 @@ public final class CSV {
         out.insert(0, escapeCh);
         out.append(escapeCh);
       }
-      System.out.println(out);
       return out.toString();
     } 
   }
