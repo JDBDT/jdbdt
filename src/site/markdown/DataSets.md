@@ -144,6 +144,9 @@ Any attempt to modify it subsequently will cause an `InvalidOperationException`.
 ## Importing / exporting data sets from/to CSV format
 
 Data sets can be imported / exported from/to CSV format. 
+The format supported complies with [RFC-4180](https://www.ietf.org/rfc/rfc4180.txt) except for the possibility of line breaks or carriage returns within escaped sequences. 
+The CSV separator (comma by default) and escape (double-quote by default) characters
+are configurable as well as other aspects.
 
 *Illustration*
 
@@ -158,10 +161,9 @@ Data sets can be imported / exported from/to CSV format.
 	             .columns("ID", "LOGIN", "NAME", "PASSWORD", "CREATED")
 	             .build(db);
 	CSV.Format format = new CSV.Format()
-	                   .separator(",")
-	                   .nullValue("NULL")
+	                   .separator('\t')
 	                   .useReadConversions();
-	DataSet ds = read(table, format, new File("mydata.csv") 
+	DataSet ds = read(table, format, new File("mydata.csv")); 
 	...
 	write(ds, format, new File("mydata2.csv));
      
