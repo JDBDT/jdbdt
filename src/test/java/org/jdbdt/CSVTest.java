@@ -55,7 +55,7 @@ public class CSVTest extends DBTestCase {
            .build(getDB());
     initialDataSet = data(table, getConversion())
                     .rows(INITIAL_DATA)
-                    .row(new User("bond,007", "\"James Bond\"", ",xyz,", Date.valueOf("2015-01-09")));
+                    .row(new User("bond,007", "\"James Bond,Bond,James\"", ",xyz,", Date.valueOf("2015-01-09")));
     testCounter = 0;
   }
   
@@ -77,8 +77,6 @@ public class CSVTest extends DBTestCase {
   public void test1() throws IOException, SQLException {
     performTest(new CSV.Format());
   }
-  
-
   
   @Test
   public void test2() throws IOException, SQLException {
@@ -107,7 +105,7 @@ public class CSVTest extends DBTestCase {
   
   @Test
   public void test7() throws IOException, SQLException {
-    performTest(new CSV.Format().separator('\t').nullValue("NULL").lineComment("---"));
+    performTest(new CSV.Format().separator('\t').nullValue("NULL").lineComment('#'));
   }
   
   @Test

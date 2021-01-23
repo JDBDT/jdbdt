@@ -97,8 +97,8 @@ public final class CSV {
     private char separator = ',';
     /** Quote character. */
     private char escapeCh = '"';
-    /** Comment sequence. */
-    private String lineCommentSequence = "";
+    /** Comment sequence character. */
+    private char lineCommentChar = 0;
     /** Line separator. */
     private LineSeparator lineSeparator = LineSeparator.SYSTEM_DEFAULT;
     /** Header flag. */
@@ -157,15 +157,30 @@ public final class CSV {
     }
 
     /**
-     * Set line comment sequence.
-     * Lines starting with the specified sequence will be ignored.
-     * By default no comment sequence is set.
-     * @param lcs Line comment sequence.
+     * Set line comment character.
+     * Lines starting with the specified character will be ignored.
+     * By default no comment character is set.
+     * @param lcs Line comment sequence (should contain one character, call has been deprecated).
      * @return The object instance (to facilitate chained calls).
+     * @Deprecated As of release 1.4, replaced by {@link #lineComment(char)}.
      */
     public Format lineComment(String lcs) {
-      validateSequence(lcs);
-      lineCommentSequence = lcs;
+      if (lcs == null || lcs.length() != 1) {
+        throw new InvalidOperationException("Line comment sequence is defined by one character.");
+      }
+      lineComment(lcs.charAt(0));
+      return this;
+    }
+    
+    /**
+     * Set line comment character.
+     * Lines starting with the specified character will be ignored.
+     * By default no comment character is set.
+     * @param lcc Line comment character.
+     * @return The object instance (to facilitate chained calls).
+     */
+    public Format lineComment(char lcc) {
+      lineCommentChar = lcc;
       return this;
     }
 
@@ -261,11 +276,10 @@ public final class CSV {
         final int columnCount = source.getColumnCount();
         final MetaData md = source.getMetaData();
 
-        final boolean commentSeqDefined = lineCommentSequence.length() > 0;
         String line;
         while ((line = in.readLine()) != null) {
           lineCount++;
-          if (commentSeqDefined && line.startsWith(lineCommentSequence)) {
+          if (lineCommentChar != 0 && line.charAt(0) == lineCommentChar) {
             continue;
           }
           Object[] data = new Object[columnCount];
@@ -366,8 +380,8 @@ public final class CSV {
         final DataSource source = dataSet.getSource();
         final int colCount = source.getColumnCount(); 
         final String eol =  lineSeparator.separator();
-        if (lineCommentSequence.length() > 0) {
-          out.write(lineCommentSequence);
+        if (lineCommentChar != 0) {
+          out.write(lineCommentChar);
           out.write(" CSV data file generated using JDBDT ");
           out.write(VersionInfo.ID); 
           out.write(eol);
