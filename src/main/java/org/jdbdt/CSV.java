@@ -162,8 +162,9 @@ public final class CSV {
      * By default no comment character is set.
      * @param lcs Line comment sequence (should contain one character, call has been deprecated).
      * @return The object instance (to facilitate chained calls).
-     * @Deprecated As of release 1.4, replaced by {@link #lineComment(char)}.
+     * @deprecated As of release 1.4, replaced by {@link #lineComment(char)}.
      */
+    @Deprecated
     public Format lineComment(String lcs) {
       if (lcs == null || lcs.length() != 1) {
         throw new InvalidOperationException("Line comment sequence is defined by one character.");
