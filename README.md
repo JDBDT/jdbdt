@@ -42,6 +42,12 @@ Commands:
 # Change Log
 
 
+## 1.4.x
+
+Features:
+
+- [#68 - Improved CSV support](https://github.com/JDBDT/jdbdt/issues/68)
+
 ## 1.3.x
 
 Features:
