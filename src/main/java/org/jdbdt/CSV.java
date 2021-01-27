@@ -351,6 +351,8 @@ public final class CSV {
               return false;
             }
             break;
+          default:
+            throw new InternalErrorException();
         }
         if (state == 0) {
           if (fieldCount == fields.length) {
@@ -365,7 +367,6 @@ public final class CSV {
         return false;
       }
       fields[fieldCount] = out.toString();
-      //System.out.println(fieldCount + " " + beg + " " + end + " \"" + fields[fieldCount] + "\"");
       fieldCount++;
       return fieldCount == fields.length;
     }
