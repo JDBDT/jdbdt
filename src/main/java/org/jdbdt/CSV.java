@@ -56,15 +56,15 @@ public final class CSV {
      */
     SYSTEM_DEFAULT(System.getProperty("line.separator")),
     /**
-     * Carriage return (<code>\r\n</code>).
+     * Carriage return (<code>'\r'</code>).
      */
     CR("\r"),
     /** 
-     * Line feed. (<code>\n</code>). 
+     * Line feed. (<code>'\n'</code>). 
      */
     LF("\n"),
     /** 
-     * Carriage return and line feed (<code>\r\n</code>).
+     * Carriage return and line feed (<code>'\r\n'</code>).
      */
     CR_LF("\r\n");
 
