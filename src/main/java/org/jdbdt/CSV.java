@@ -39,6 +39,9 @@ import java.util.function.Function;
 /**
  * Support for reading/writing data sets from/to CSV format.
  * 
+ * @see JDBDT#read(DataSource,CSV.Format,java.io.File)
+ * @see JDBDT#write(DataSet,CSV.Format,java.io.File)
+ * 
  * @since 1.3
  */
 public final class CSV {
