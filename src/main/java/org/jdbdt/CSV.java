@@ -603,10 +603,10 @@ public final class CSV {
       init(JDBCType.DOUBLE, Double.class, Double::parseDouble);
 
       // DECIMAL
-      init(JDBCType.DECIMAL, BigDecimal.class, s -> BigDecimal.valueOf(Double.parseDouble(s)));
+      init(JDBCType.DECIMAL, BigDecimal.class, s -> new BigDecimal(s));
 
       // NUMERIC
-      init(JDBCType.NUMERIC, BigDecimal.class, s -> BigDecimal.valueOf(Double.parseDouble(s)));
+      init(JDBCType.NUMERIC, BigDecimal.class, s -> new BigDecimal(s));
 
       // DATE
       init(JDBCType.DATE, java.sql.Date.class, java.sql.Date::valueOf);
