@@ -108,8 +108,8 @@ public final class CSV {
     private boolean header = false;
     /** Null value string. */
     private String nullValue = "";
-    /** Read conversions flag. */
-    private boolean useReadConversions = false;
+    /** Read conversions object. */
+    private Conversions readConversions = null;
     /** Always escape during ouput. */
     private boolean alwaysEscapeOutput = false;
 
@@ -223,10 +223,42 @@ public final class CSV {
     /**
      * Indicates that string conversions should be used in 
      * conjunction with {@link JDBDT#read(DataSource,CSV.Format,File)}.
+     * 
+     * <p>
+     * Standard built-in conversions will be used, which may be
+     * overridden for specific JDBC types with {@link CSV.Format#overrideConversion}
+     * </p>
+     * 
+     * <p>
+     * If this option is not set, then data rows read from a CSV file 
+     * will consist only of values of type {@link java.lang.String}, without
+     * any conversion being performed.  
+     * </p>
+     * 
      * @return The object instance (to facilitate chained calls).
      */
     public Format useReadConversions() {
-      useReadConversions = true;
+      readConversions = new Conversions();
+      return this;
+    }
+    
+    /**
+     * Override input conversion for given JDBC type.
+     * 
+     * @param type JDBC type.
+     * @param conv Conversion function.
+     * @return The object instance (to facilitate chained calls).
+     * @see #useReadConversions()
+     * @since 1.4.1
+     */
+    public Format overrideConversion(JDBCType type, Function<String,?> conv) {
+      if (readConversions == null) {
+        throw new InvalidOperationException("Read conversions are not active!");
+      }
+      if (conv == null) {
+        throw new InvalidOperationException("Null conversion function!");
+      }
+      readConversions.set(type, Object.class, conv::apply);
       return this;
     }
 
@@ -295,8 +327,8 @@ public final class CSV {
             if (text.equals(nullValue)) {
               data[i] = null; 
             }
-            else if (useReadConversions) {
-              data[i] = Conversions.INSTANCE.convert(md.getType(i), text);
+            else if (readConversions != null) {
+              data[i] = readConversions.convert(md.getType(i), text);
             } 
           }
           dataSet.addRow(new Row(data));
@@ -504,16 +536,13 @@ public final class CSV {
   /**
    * CSV input conversion helper class.
    */
-  private enum Conversions  {
-
-    /** Singleton instance */
-    INSTANCE;
+  private static class Conversions  {
 
     /**
      * Functional interface for string conversion.
      */
     @FunctionalInterface
-    private interface StringConversion {
+    private interface SC {
       /**
        * Convert a string onto an object.
        * @param s String.
@@ -526,21 +555,28 @@ public final class CSV {
 
 
     @SuppressWarnings("javadoc")
-    private final IdentityHashMap<JDBCType, LinkedList<StringConversion>> dataConv 
+    private final IdentityHashMap<JDBCType, LinkedList<SC>> dataConv 
     =  new IdentityHashMap<>();
 
 
 
-    @SuppressWarnings("javadoc")
-    private <T> void init(JDBCType type, Class<T> javaClass, Function<String,T> func) {
-      LinkedList<StringConversion> list = dataConv.get(type);
+    
+    /**
+     * Set conversion.
+     * @param <T> Type of objects
+     * @param type JDBC type.
+     * @param javaClass Java class.
+     * @param func Function.
+     */
+    <T> void set(JDBCType type, Class<T> javaClass, Function<String,T> func) {
+      LinkedList<SC> list = dataConv.get(type);
       if (list == null) {
         list = new LinkedList<>();
         dataConv.put(type, list);
       }
-      list.addLast(func::apply);
+      list.addFirst(func::apply);
     }
-
+    
     /**
      * Convert string.
      * @param type JDBC type.
@@ -548,10 +584,10 @@ public final class CSV {
      * @return Converted object or <code>o</code> if no conversion is either possible or required. 
      */
     public Object convert(JDBCType type, String text) {
-      LinkedList<StringConversion> list = dataConv.get(type);
+      LinkedList<SC> list = dataConv.get(type);
       Object object = text;
       if (list != null) {
-        for (StringConversion conv : list) {
+        for (SC conv : list) {
           try {
             object = conv.convert(text);
             break;
@@ -574,48 +610,48 @@ public final class CSV {
     Conversions() {
 
       // BOOLEAN
-      init(JDBCType.BOOLEAN, Boolean.class, s -> Integer.parseInt(s) != 0);
-      init(JDBCType.BOOLEAN, Boolean.class, Boolean::parseBoolean);
+      set(JDBCType.BOOLEAN, Boolean.class, s -> Integer.parseInt(s) != 0);
+      set(JDBCType.BOOLEAN, Boolean.class, Boolean::parseBoolean);
 
       // BIT
-      init(JDBCType.BIT, Boolean.class, s -> Integer.parseInt(s) != 0);
-      init(JDBCType.BIT, Boolean.class, Boolean::parseBoolean);
+      set(JDBCType.BIT, Boolean.class, s -> Integer.parseInt(s) != 0);
+      set(JDBCType.BIT, Boolean.class, Boolean::parseBoolean);
 
       // TINYINT
-      init(JDBCType.TINYINT, Byte.class, Byte::parseByte);
+      set(JDBCType.TINYINT, Byte.class, Byte::parseByte);
 
       // SMALLINT
-      init(JDBCType.SMALLINT, Short.class, Short::parseShort);
+      set(JDBCType.SMALLINT, Short.class, Short::parseShort);
 
       // INTEGER
-      init(JDBCType.INTEGER, Integer.class, Integer::parseInt);
+      set(JDBCType.INTEGER, Integer.class, Integer::parseInt);
 
       // BIGINT
-      init(JDBCType.BIGINT, Long.class, Long::parseLong);
+      set(JDBCType.BIGINT, Long.class, Long::parseLong);
 
       // REAL
-      init(JDBCType.REAL, Float.class, Float::parseFloat);
+      set(JDBCType.REAL, Float.class, Float::parseFloat);
 
       // FLOAT
-      init(JDBCType.FLOAT, Double.class, Double::parseDouble);
+      set(JDBCType.FLOAT, Double.class, Double::parseDouble);
 
       // DOUBLE
-      init(JDBCType.DOUBLE, Double.class, Double::parseDouble);
+      set(JDBCType.DOUBLE, Double.class, Double::parseDouble);
 
       // DECIMAL
-      init(JDBCType.DECIMAL, BigDecimal.class, s -> new BigDecimal(s));
+      set(JDBCType.DECIMAL, BigDecimal.class, s -> new BigDecimal(s));
 
       // NUMERIC
-      init(JDBCType.NUMERIC, BigDecimal.class, s -> new BigDecimal(s));
+      set(JDBCType.NUMERIC, BigDecimal.class, s -> new BigDecimal(s));
 
       // DATE
-      init(JDBCType.DATE, java.sql.Date.class, java.sql.Date::valueOf);
+      set(JDBCType.DATE, java.sql.Date.class, java.sql.Date::valueOf);
 
       // TIME
-      init(JDBCType.TIME, java.sql.Time.class, java.sql.Time::valueOf);
+      set(JDBCType.TIME, java.sql.Time.class, java.sql.Time::valueOf);
 
       // TIMESTAMP
-      init(JDBCType.TIMESTAMP, java.sql.Timestamp.class, java.sql.Timestamp::valueOf);
+      set(JDBCType.TIMESTAMP, java.sql.Timestamp.class, java.sql.Timestamp::valueOf);
 
     }
   }
