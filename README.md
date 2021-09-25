@@ -45,9 +45,16 @@ Commands:
 ## 1.4.x
 
 Features:
-
 - [#68 - Improved CSV support](https://github.com/JDBDT/jdbdt/issues/68)
+- [#72 - CSV custom conversions per JDBC type](https://github.com/JDBDT/jdbdt/issues/72) (1.4.1)
 
+Bug fixes:
+- [#71 - CSV bug fix for JDBC types mapped to BigDecimal](https://github.com/JDBDT/jdbdt/issues/71) (1.4.1)
+
+Maintenance:
+- Standard maintenance tasks (dependency updates, minor adjustments, etc) 
+	* [#69 - 1.4.1](https://github.com/JDBDT/jdbdt/issues/69)
+  
 ## 1.3.x
 
 Features:
